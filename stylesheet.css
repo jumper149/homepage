@@ -1,0 +1,74 @@
+:root {
+	/* colors from ~/.Xresources */
+	
+	/* black */
+	--color0:         #282a2e;
+	--color8:         #373b41;
+
+	/* red */         
+	--color1:         #a54242;
+	--color9:         #cc6666;
+
+	/* green */       
+	--color2:         #8c9440;
+	--colora:         #b5bd68;
+
+	/* yellow */      
+	--color3:         #de935f;
+	--colorb:         #f0c674;
+
+	/* blue */        
+	--color4:         #5f819d;
+	--colorc:         #81a2be;
+
+	/* magenta */     
+	--color5:         #85678f;
+	--colord:         #b294bb;
+
+	/* cyan */        
+	--color6:         #5e8d87;
+	--colore:         #8abeb7;
+
+	/* white */       
+	--color7:         #707880;
+	--colorf:         #c5c8c6;
+
+	--fg:             var(--colorf);
+	--fg-alt:         var(--color7);
+	--bg:             var(--color0);
+	--bg-alt:         var(--color8);
+	--link:           var(--color6);
+	--link-alt:       var(--colore);
+}
+
+html {
+	background-color: var(--color0);
+	color:            var(--colorf);
+	font-family:      sans-serif
+}
+
+body {
+	max-width:     800px;
+	margin-left:   auto;
+	margin-right:  auto;
+	padding-left:  20px;
+	padding-right: 20px;
+
+	margin-top:    25px;
+	margin-bottom: 25px;
+}
+
+h1 {
+	color:       var(--color2);
+	font-weight: normal;
+}
+
+
+h2 {
+	color:       var(--color3);
+	font-weight: normal;
+}
+
+a {
+	color: var(--color6);
+}
