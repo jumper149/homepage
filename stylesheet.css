@@ -71,4 +71,5 @@ h2 {
 
 a {
 	color: var(--color6);
+	text-decoration: none;
 }
