@@ -32,13 +32,6 @@
 	/* white */       
 	--color7:         #707880;
 	--colorf:         #c5c8c6;
-
-	--fg:             var(--colorf);
-	--fg-alt:         var(--color7);
-	--bg:             var(--color0);
-	--bg-alt:         var(--color8);
-	--link:           var(--color6);
-	--link-alt:       var(--colore);
 }
 
 html {
@@ -70,6 +63,11 @@ h2 {
 }
 
 a {
-	color: var(--color6);
+	color:           var(--color6);
+	text-decoration: none;
+}
+
+a:hover {
+	color:           var(--colore);
 	text-decoration: none;
 }
