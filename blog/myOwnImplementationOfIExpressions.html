@@ -46,14 +46,13 @@
             <figcaption>I-Expressions:</figcaption>
             <div class='codecontainer'>
                 <pre>
-define
-  f
-    lambda
-      x
-      let
-          y
-            * x x
-        + y 1</pre>
+define f
+  lambda
+    x
+    let
+        y
+          * x x
+      + y 1</pre>
         </div>
         </figure>
         As you can see I-Expression use a lot of lines and readability is not very good since there is very little information per line.
@@ -61,11 +60,10 @@ define
             <figcaption>S-Expressions:</figcaption>
             <div class='codecontainer'>
                 <pre>
-(define
-  (f
-    (lambda (x)
-      (let ((y (* x x)))
-        (+ y 1)))))</pre>
+(define f
+  (lambda (x)
+    (let ((y (* x x)))
+      (+ y 1)))))</pre>
         </div>
         </figure>
         S-Expression are much more readable and most people will be kind of comfortable with them, but when you get to the end of the definition you cant distinguish which parantheses belong to each other.
@@ -73,12 +71,11 @@ define
             <figcaption>mixed I- and S-Expressions:</figcaption>
             <div class='codecontainer'>
                 <pre>
-define
-  f
-    lambda (x)
-      let
-          y (* x x)
-        + y 1</pre>
+define f
+  lambda (x)
+    let
+        y (* x x)
+      + y 1</pre>
         </figure>
         </div>
         Once you mix indented and symbolic expressions you get the best of both worlds.
