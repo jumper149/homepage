@@ -106,6 +106,31 @@ a:hover {
     background-color: var(--color2);
 }
 
+.title {
+    margin-bottom: -15px;
+}
+
+.title h1 {
+    padding-left: 10px;
+    display:      inline-block;
+}
+
+.title span {
+    float:         right;
+    padding-top:   20px;
+    padding-right: 10px;
+}
+
+.title span a {
+    color:           var(--color7);
+    text-decoration: none;
+}
+
+.title span a:hover {
+    color:           var(--color2);
+    text-decoration: none;
+}
+
 code, pre {
     font-family:      monospace;
     font-size:        15px;
