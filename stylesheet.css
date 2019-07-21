@@ -85,7 +85,7 @@ a:hover {
 .bar a {
     float:       left;
     padding:     10px 18px;
-    margin:      0px 5px;
+    margin:      0px 0px;
     text-align:  center;
     font-size:   18px;
     color:       var(--color7);
@@ -106,29 +106,22 @@ a:hover {
     background-color: var(--color2);
 }
 
-.title {
-    margin-bottom: -15px;
-}
-
-.title h1 {
-    padding-left: 10px;
-    display:      inline-block;
-}
-
-.title span {
+.bar span {
     float:         right;
-    padding-top:   20px;
-    padding-right: 10px;
 }
 
-.title span a {
-    color:           var(--color7);
-    text-decoration: none;
+.bar span a {
+    margin:           10px 18px;
+    padding:          0px 0px;
+    font-size:        16px;
+    color:            var(--color7);
+    background-color: var(--color0);
 }
 
-.title span a:hover {
-    color:           var(--color2);
-    text-decoration: none;
+.bar span a:hover {
+    color:            var(--color2);
+    background-color: var(--color0);
+    text-decoration:  none;
 }
 
 code, pre {
