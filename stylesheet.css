@@ -73,7 +73,9 @@ a:hover {
 }
 
 .bar {
+    min-width:           500px;
     overflow:            hidden;
+    white-space:         nowrap;
     border-bottom-style: solid;
     border-bottom-color: var(--color7);
 }
@@ -107,7 +109,7 @@ a:hover {
 }
 
 .bar span {
-    float:         right;
+    float: right;
 }
 
 .bar span a {
