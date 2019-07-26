@@ -77,6 +77,33 @@ hr {
     border-color: var(--color7);
 }
 
+code, pre {
+    font-family:      monospace;
+    font-size:        15px;
+}
+
+code {
+    color:            var(--colorb);
+}
+
+pre {
+    width:            100%;
+    padding:          20px;
+    border:           2px solid var(--color2);
+
+    color:            var(--colorb);
+    background-color: var(--color8);
+}
+
+.codecontainer {
+    text-align: center;
+}
+
+.codecontainer pre {
+    display:    inline-block;
+    text-align: left;
+}
+
 .bar {
     overflow:            hidden;
     white-space:         nowrap;
@@ -128,31 +155,4 @@ hr {
     color:            var(--color2);
     background-color: var(--color0);
     text-decoration:  none;
-}
-
-code, pre {
-    font-family:      monospace;
-    font-size:        15px;
-}
-
-code {
-    color:            var(--colorb);
-}
-
-pre {
-    width:            100%;
-    padding:          20px;
-    border:           2px solid var(--color2);
-
-    color:            var(--colorb);
-    background-color: var(--color8);
-}
-
-.codecontainer {
-    text-align: center;
-}
-
-.codecontainer pre {
-    display:    inline-block;
-    text-align: left;
 }
