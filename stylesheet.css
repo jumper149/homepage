@@ -52,15 +52,20 @@ body {
     margin-bottom: 25px;
 }
 
-h1 {
-    color:       var(--color2);
+h1, h2, h3 {
     font-weight: normal;
 }
 
+h1 {
+    color: var(--color2);
+}
 
 h2 {
-    color:       var(--color3);
-    font-weight: normal;
+    color: var(--color3);
+}
+
+h3 {
+    color: var(--color5);
 }
 
 a {
@@ -78,12 +83,12 @@ hr {
 }
 
 code, pre {
-    font-family:      monospace;
-    font-size:        15px;
+    font-family: monospace;
+    font-size:   15px;
 }
 
 code {
-    color:            var(--colorb);
+    color: var(--colorb);
 }
 
 pre {
@@ -116,12 +121,12 @@ pre {
 }
 
 .bar a {
-    float:       left;
-    padding:     10px 18px;
-    margin:      0px 0px;
-    text-align:  center;
-    font-size:   18px;
-    color:       var(--color7);
+    float:      left;
+    padding:    10px 18px;
+    margin:     0px 0px;
+    text-align: center;
+    font-size:  18px;
+    color:      var(--color7);
 }
 
 .bar a:hover {
