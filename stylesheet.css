@@ -73,6 +73,10 @@ a:hover {
     text-decoration: none;
 }
 
+hr {
+    border-color: var(--color7);
+}
+
 .bar {
     overflow:            hidden;
     white-space:         nowrap;
