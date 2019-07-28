@@ -53,15 +53,21 @@ body {
     font-size:     16px;
 }
 
-h1 {
-    color:       var(--color2);
+h1, h2, h3 {
     font-weight: normal;
+    margin-bottom: -10px;
 }
 
+h1 {
+    color: var(--color2);
+}
 
 h2 {
-    color:       var(--color3);
-    font-weight: normal;
+    color: var(--color3);
+}
+
+h3 {
+    color: var(--color5);
 }
 
 a {
@@ -72,6 +78,36 @@ a {
 a:hover {
     color:           var(--colore);
     text-decoration: none;
+}
+
+hr {
+    border-color: var(--color7);
+}
+
+code, pre {
+    font-family: monospace;
+}
+
+code {
+    color: var(--colorb);
+}
+
+pre {
+    width:            100%;
+    padding:          20px;
+    border:           2px solid var(--color2);
+
+    color:            var(--colorb);
+    background-color: var(--color8);
+}
+
+.codecontainer {
+    text-align: center;
+}
+
+.codecontainer pre {
+    display:    inline-block;
+    text-align: left;
 }
 
 .bar {
@@ -86,12 +122,12 @@ a:hover {
 }
 
 .bar a {
-    float:       left;
-    padding:     10px 18px;
-    margin:      0px 0px;
-    text-align:  center;
-    font-size:   18px;
-    color:       var(--color7);
+    float:      left;
+    padding:    10px 18px;
+    margin:     0px 0px;
+    text-align: center;
+    font-size:  18px;
+    color:      var(--color7);
 }
 
 .bar a:hover {
@@ -125,30 +161,4 @@ a:hover {
     color:            var(--color2);
     background-color: var(--color0);
     text-decoration:  none;
-}
-
-code, pre {
-    font-family:      monospace;
-}
-
-code {
-    color:            var(--colorb);
-}
-
-pre {
-    width:            100%;
-    padding:          20px;
-    border:           2px solid var(--color2);
-
-    color:            var(--colorb);
-    background-color: var(--color8);
-}
-
-.codecontainer {
-    text-align: center;
-}
-
-.codecontainer pre {
-    display:    inline-block;
-    text-align: left;
 }
