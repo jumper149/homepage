@@ -85,11 +85,8 @@ hr {
 }
 
 code, pre {
+    color:       var(--colorb);
     font-family: monospace;
-}
-
-code {
-    color: var(--colorb);
 }
 
 pre {
@@ -97,7 +94,6 @@ pre {
     padding:          20px;
     border:           2px solid var(--color2);
 
-    color:            var(--colorb);
     background-color: var(--color8);
 }
 
