@@ -106,6 +106,12 @@ pre {
     text-align: left;
 }
 
+.options {
+    font-size: 14px;
+    color:     var(--color7);
+    cursor:    default;
+}
+
 .bar {
     overflow:            hidden;
     white-space:         nowrap;
