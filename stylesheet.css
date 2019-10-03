@@ -88,6 +88,10 @@ hr {
     border-color: var(--color7);
 }
 
+figure {
+    width: 85%;
+}
+
 code, pre {
     color:       var(--colorb);
     font-family: monospace;
@@ -99,6 +103,7 @@ pre {
     border:           2px solid var(--color2);
 
     background-color: var(--color8);
+    text-align: left;
 }
 
 .center {
@@ -107,11 +112,6 @@ pre {
 
 .codecontainer {
     text-align: center;
-}
-
-.codecontainer pre {
-    display:    inline-block;
-    text-align: left;
 }
 
 .options {
