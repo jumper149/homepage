@@ -8,15 +8,15 @@
         <link rel='icon' href='favicon.png'>
         <link rel='stylesheet' type='text/css' href='stylesheet.css'>
     </head>
-    <header>
-        <div class="bar">
-            <a href='../index.html'>Home</a>
-            <a href='../projects.html'>Projects</a>
-            <a class="active" href='../blog.html'>Blog</a>
-            <span><a href=http://felixspringer.xyz/>felixspringer.xyz</a></span>
-        </div>
-    </header>
     <body>
+        <header>
+            <div class="bar">
+                <a href='../index.html'>Home</a>
+                <a href='../projects.html'>Projects</a>
+                <a class="active" href='../blog.html'>Blog</a>
+                <span><a href=http://felixspringer.xyz/>felixspringer.xyz</a></span>
+            </div>
+        </header>
         <h2>
             my Way to Coreboot
         </h2>
@@ -41,6 +41,7 @@
         <p>
         So I kept looking for cheap usable Thinkpads, until I was able to find 2 X220 for only 150 Euros.
         This time I pulled through and got everything working:
+        </p>
         <ul>
             <li>32-bit ArchLinux ARM</li>
             <li>Cross-Compiler</li>
@@ -50,7 +51,6 @@
             <li>compiling the new BIOS with coreboot and SeaBios as a payload</li>
             <li>flashing new BIOS with flashrom</li>
         </ul>
-        </p>
         <p>
         The only problem I had, was using the same binary blobs for both X220, especially the GigabitEngine (GBE).
         This resulted in both laptops having the same MAC-address on the ethernet port.
