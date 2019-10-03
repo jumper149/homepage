@@ -101,6 +101,10 @@ pre {
     background-color: var(--color8);
 }
 
+.center {
+    text-align: center;
+}
+
 .codecontainer {
     text-align: center;
 }
