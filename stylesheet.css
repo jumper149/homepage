@@ -92,6 +92,14 @@ figure {
     width: 85%;
 }
 
+.portrait {
+    float: right;
+    width: 30%;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
 code, pre {
     color:       var(--colorb);
     font-family: monospace;
