@@ -5,6 +5,7 @@ cabal-version:       >= 1.10
 
 library
   exposed-modules:     Homepage
+                     , Configuration
                      , Server.Err404
                      , Server.Route.Home
   build-depends:       base
