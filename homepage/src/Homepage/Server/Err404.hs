@@ -1,4 +1,4 @@
-module Server.Err404 where
+module Homepage.Server.Err404 where
 
 import Servant
 import Network.HTTP.Types.Status

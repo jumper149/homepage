@@ -1,4 +1,4 @@
-module Server.Route.Home where
+module Homepage.Server.Route.Home where
 
 handler :: Monad m
         => m String

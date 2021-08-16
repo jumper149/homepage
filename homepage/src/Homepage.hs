@@ -1,8 +1,8 @@
 module Homepage where
 
-import           Configuration
-import           Server.Err404
-import qualified Server.Route.Home
+import           Homepage.Configuration
+import           Homepage.Server.Err404
+import qualified Homepage.Server.Route.Home
 
 import GHC.Generics
 import Servant
@@ -33,7 +33,7 @@ data Routes route = Routes
 routes :: MonadConfigured m
        => Routes (AsServerT m)
 routes = Routes
-    { routeHome = Server.Route.Home.handler
+    { routeHome = Homepage.Server.Route.Home.handler
     , routeBlog = return "blog" :<|> serveDirectoryWith (defaultFileServerSettings ".") { ss404Handler = Just application404 } -- TODO: Use 'Configuration'.
     , routeDonate = return "donate" :<|> return "donate/thankYou"
     , routeFiles = return "files" :<|> undefined -- TODO

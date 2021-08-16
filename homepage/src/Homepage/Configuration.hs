@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Configuration where
+module Homepage.Configuration where
 
 import Control.Monad.Base
 import Control.Monad.Trans.Class

@@ -5,9 +5,9 @@ cabal-version:       >= 1.10
 
 library
   exposed-modules:     Homepage
-                     , Configuration
-                     , Server.Err404
-                     , Server.Route.Home
+                     , Homepage.Configuration
+                     , Homepage.Server.Err404
+                     , Homepage.Server.Route.Home
   build-depends:       base
                      , bytestring
                      , containers
