@@ -1,0 +1,7 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:homepage"
+
+    - path: "./Main.hs"
+      component: "homepage:exe:homepage"
