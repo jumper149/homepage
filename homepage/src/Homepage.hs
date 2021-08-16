@@ -17,7 +17,8 @@ data Configuration = Configuration
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
 
--- -- TODO: Serve HTML.
+-- TODO: Serve HTML.
+-- TODO: Serve favicon and CSS.
 data Routes route = Routes
     { routeHome :: route :- Get '[JSON] String
     , routeBlog :: route :- "blog" :> (Get '[JSON] String :<|> Raw)
@@ -31,7 +32,7 @@ data Routes route = Routes
 routes :: Routes AsServer
 routes = Routes
     { routeHome = Server.Route.Home.handler
-    , routeBlog = return "blog" :<|> serveDirectoryWith (defaultFileServerSettings ".") { ss404Handler = Just application404 } -- TODO: User 'Configuration'.
+    , routeBlog = return "blog" :<|> serveDirectoryWith (defaultFileServerSettings ".") { ss404Handler = Just application404 } -- TODO: Use 'Configuration'.
     , routeDonate = return "donate" :<|> return "donate/thankYou"
     , routeFiles = return "files" :<|> undefined -- TODO
     , routeProjects = return "projects"
