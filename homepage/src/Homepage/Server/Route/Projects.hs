@@ -1,4 +1,4 @@
-module Homepage.Server.Route.Home where
+module Homepage.Server.Route.Projects where
 
 import Servant
 
@@ -6,4 +6,4 @@ type API = Get '[JSON] String
 
 handler :: Monad m
         => ServerT API m
-handler = pure ""
+handler = pure "projects"

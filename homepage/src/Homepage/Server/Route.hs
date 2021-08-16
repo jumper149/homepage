@@ -1,24 +1,25 @@
 module Homepage.Server.Route where
 
 import           Homepage.Configuration
-import           Homepage.Server.Err404
+import qualified Homepage.Server.Route.Blog
+import qualified Homepage.Server.Route.Donate
+import qualified Homepage.Server.Route.Files
 import qualified Homepage.Server.Route.Home
+import qualified Homepage.Server.Route.Projects
 
 import GHC.Generics
 import Servant
 import Servant.API.Generic
 import Servant.Server.Generic
-import WaiAppStatic.Storage.Filesystem
-import WaiAppStatic.Types
 
 -- TODO: Serve HTML.
 -- TODO: Serve favicon and CSS.
 data Routes route = Routes
-    { routeHome :: route :- Get '[JSON] String
-    , routeBlog :: route :- "blog" :> (Get '[JSON] String :<|> Raw)
-    , routeDonate :: route :- "donate" :> (Get '[JSON] String :<|> "thankYou" :> Get '[JSON] String)
-    , routeFiles :: route :- "files" :> (Get '[JSON] String :<|> Raw)
-    , routeProjects :: route :- "projects" :> Get '[JSON] String
+    { routeHome :: route :- Homepage.Server.Route.Home.API
+    , routeBlog :: route :- "blog" :> Homepage.Server.Route.Blog.API
+    , routeDonate :: route :- "donate" :> Homepage.Server.Route.Donate.API
+    , routeFiles :: route :- "files" :> Homepage.Server.Route.Files.API
+    , routeProjects :: route :- "projects" :> Homepage.Server.Route.Projects.API
     }
   deriving stock (Generic)
 
@@ -27,8 +28,8 @@ routes :: MonadConfigured m
        => Routes (AsServerT m)
 routes = Routes
     { routeHome = Homepage.Server.Route.Home.handler
-    , routeBlog = return "blog" :<|> serveDirectoryWith (defaultFileServerSettings ".") { ss404Handler = Just application404 } -- TODO: Use 'Configuration'.
-    , routeDonate = return "donate" :<|> return "donate/thankYou"
-    , routeFiles = return "files" :<|> undefined -- TODO
-    , routeProjects = return "projects"
+    , routeBlog = Homepage.Server.Route.Blog.handler
+    , routeDonate = Homepage.Server.Route.Donate.handler
+    , routeFiles = Homepage.Server.Route.Files.handler
+    , routeProjects = Homepage.Server.Route.Projects.handler
     }

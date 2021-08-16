@@ -8,7 +8,11 @@ library
                      , Homepage.Configuration
                      , Homepage.Server.Err404
                      , Homepage.Server.Route
+                     , Homepage.Server.Route.Blog
+                     , Homepage.Server.Route.Donate
+                     , Homepage.Server.Route.Files
                      , Homepage.Server.Route.Home
+                     , Homepage.Server.Route.Projects
   build-depends:       base
                      , bytestring
                      , containers
