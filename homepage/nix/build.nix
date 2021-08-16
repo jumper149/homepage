@@ -6,6 +6,7 @@ rec {
   homepageShell = { rnix-lsp, haskellPackages, nix-gitignore }:
     haskellPackages.shellFor {
       buildInputs = with haskellPackages; [
+        blaze-from-html
         haskell-language-server
         hlint
         hnix

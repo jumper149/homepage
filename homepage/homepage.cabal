@@ -14,12 +14,14 @@ library
                      , Homepage.Server.Route.Home
                      , Homepage.Server.Route.Projects
   build-depends:       base
+                     , blaze-html
                      , bytestring
                      , containers
                      , http-types
                      , lifted-base
                      , monad-control
                      , servant
+                     , servant-blaze
                      , servant-server
                      , text
                      , time
