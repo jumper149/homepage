@@ -1,5 +1,7 @@
 module Homepage.Server.Route.Home where
 
+import Homepage.Server.Header
+
 import Servant
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
@@ -21,11 +23,7 @@ handler = pure $
           link ! rel "icon" ! href "favicon.png"
           link ! rel "stylesheet" ! type_ "text/css" ! href "stylesheet.css"
       body $ do
-          header $ H.div ! class_ "bar" $ do
-              a ! class_ "active" ! href "index.html" $ "Home"
-              a ! href "projects.html" $ "Projects"
-              a ! href "blog.html" $ "Blog"
-              H.span $ a ! href "https://felixspringer.xyz/" $ "felixspringer.xyz"
+          headerTabs $ Just TabHome
           img ! src "files/portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
           h1 "Felix Springer"
           h2 "Welcome"
