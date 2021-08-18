@@ -1,4 +1,4 @@
-module Homepage.Server.Header where
+module Homepage.Server.Html.Header where
 
 import Data.Foldable
 import GHC.Generics

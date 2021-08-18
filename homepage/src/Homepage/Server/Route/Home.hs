@@ -1,6 +1,6 @@
 module Homepage.Server.Route.Home where
 
-import Homepage.Server.Header
+import Homepage.Server.Html.Header
 
 import Servant
 import Servant.HTML.Blaze
