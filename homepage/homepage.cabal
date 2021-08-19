@@ -6,6 +6,7 @@ cabal-version:       >= 1.10
 library
   exposed-modules:     Homepage
                      , Homepage.Configuration
+                     , Homepage.Server.Html.Document
                      , Homepage.Server.Html.Header
                      , Homepage.Server.Err404
                      , Homepage.Server.Route

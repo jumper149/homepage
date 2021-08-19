@@ -1,6 +1,9 @@
+{-# LANGUAGE NamedFieldPuns #-}
+
 module Homepage.Server.Html.Header where
 
 import Data.Foldable
+import qualified Data.Text as T
 import GHC.Generics
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
@@ -12,18 +15,38 @@ data HeaderTab =
     | TabProjects
   deriving stock (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
+data TabDescription = TabDescription
+    { tabName :: T.Text
+    , tabPath :: T.Text
+    , pageName :: T.Text
+    }
+  deriving stock (Eq, Generic, Ord, Read, Show)
+
+describeTab :: HeaderTab -> TabDescription
+describeTab TabHome = TabDescription
+  { tabName = "Home"
+  , tabPath = ""
+  , pageName = "Homepage"
+  }
+describeTab TabBlog = TabDescription
+  { tabName = "Blog"
+  , tabPath = "blog"
+  , pageName = "Blog"
+  }
+describeTab TabProjects = TabDescription
+  { tabName = "Projects"
+  , tabPath = "projects"
+  , pageName = "Projects"
+  }
+
 headerTab :: HeaderTab
           -> Bool -- ^ active
           -> Html
-headerTab tab active =
-  case tab of
-    TabHome -> addStyle "Home" ""
-    TabBlog -> addStyle "Blog" "blog"
-    TabProjects -> addStyle "Projects" "projects"
-  where addStyle identifier path =
-          if active
-             then a ! class_ "active" ! href path $ identifier
-             else a ! href path $ identifier
+headerTab tab active = a ! href (toValue tabPath) ! classActive $ toMarkup tabName
+  where TabDescription { tabName, tabPath } = describeTab tab
+        classActive = if active
+                         then class_ "active"
+                         else mempty
 
 headerTabsHelper :: Maybe HeaderTab
                  -> Html
