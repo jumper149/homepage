@@ -3,15 +3,13 @@
 module Homepage.Server.Html.Document where
 
 import Homepage.Server.Html.Header
+import Homepage.Server.Tab
 
-import Data.Maybe
-import Servant
-import Servant.HTML.Blaze
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
 import qualified Text.Blaze.Html5 as H
 
-document :: Maybe HeaderTab -> Html -> Html
+document :: Maybe Tab -> Html -> Html
 document activeTab x =
   docTypeHtml ! lang "en" $ do
       H.head $ do

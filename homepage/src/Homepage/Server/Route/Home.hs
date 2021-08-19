@@ -1,13 +1,12 @@
 module Homepage.Server.Route.Home where
 
 import Homepage.Server.Html.Document
-import Homepage.Server.Html.Header
+import Homepage.Server.Tab
 
 import Servant
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
-import qualified Text.Blaze.Html5 as H
 
 type API = Get '[HTML] Html
 
