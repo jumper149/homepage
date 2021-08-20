@@ -18,7 +18,7 @@
 
     devShell.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).homepageShell { inherit rnix-lsp haskellPackages nix-gitignore; };
+      (import ./nix/build.nix).homepageShell { inherit asciidoctor rnix-lsp haskellPackages nix-gitignore; };
 
   };
 }

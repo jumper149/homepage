@@ -3,9 +3,10 @@ rec {
     let src = nix-gitignore.gitignoreSource [] ../.;
     in haskellPackages.callCabal2nix "homepage" src {};
 
-  homepageShell = { rnix-lsp, haskellPackages, nix-gitignore }:
+  homepageShell = { asciidoctor, rnix-lsp, haskellPackages, nix-gitignore }:
     haskellPackages.shellFor {
       buildInputs = with haskellPackages; [
+        asciidoctor
         blaze-from-html
         haskell-language-server
         hlint
