@@ -17,6 +17,7 @@ instance Monad m => MonadConfigured (ConfiguredT m) where
 data Configuration = Configuration
     { configDirectoryBlog :: FilePath
     , configDirectoryFiles :: FilePath
+    , configDirectoryStatic :: FilePath
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
 
