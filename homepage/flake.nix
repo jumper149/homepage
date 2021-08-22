@@ -14,11 +14,11 @@
 
     defaultPackage.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).homepage { inherit nix-gitignore haskellPackages; };
+      (import ./nix/build.nix).homepage { inherit haskellPackages nix-gitignore; };
 
     devShell.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).homepageShell { inherit asciidoctor rnix-lsp haskellPackages nix-gitignore; };
+      (import ./nix/build.nix).homepageShell { inherit asciidoctor haskellPackages nix-gitignore rnix-lsp; };
 
   };
 }

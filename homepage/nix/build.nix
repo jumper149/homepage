@@ -3,7 +3,7 @@ rec {
     let src = nix-gitignore.gitignoreSource [] ../.;
     in haskellPackages.callCabal2nix "homepage" src {};
 
-  homepageShell = { asciidoctor, rnix-lsp, haskellPackages, nix-gitignore }:
+  homepageShell = { asciidoctor, haskellPackages, nix-gitignore, rnix-lsp }:
     haskellPackages.shellFor {
       buildInputs = with haskellPackages; [
         asciidoctor
