@@ -6,6 +6,7 @@ import qualified Homepage.Server.Route.Donate
 import qualified Homepage.Server.Route.Files
 import qualified Homepage.Server.Route.Home
 import qualified Homepage.Server.Route.Projects
+import qualified Homepage.Server.Route.Static
 
 import GHC.Generics
 import Servant
@@ -20,6 +21,7 @@ data Routes route = Routes
     , routeDonate :: route :- "donate" :> Homepage.Server.Route.Donate.API
     , routeFiles :: route :- "files" :> Homepage.Server.Route.Files.API
     , routeProjects :: route :- "projects" :> Homepage.Server.Route.Projects.API
+    , routeStatic :: route :- Homepage.Server.Route.Static.API
     }
   deriving stock (Generic)
 
@@ -32,4 +34,5 @@ routes = Routes
     , routeDonate = Homepage.Server.Route.Donate.handler
     , routeFiles = Homepage.Server.Route.Files.handler
     , routeProjects = Homepage.Server.Route.Projects.handler
+    , routeStatic = Homepage.Server.Route.Static.handler
     }

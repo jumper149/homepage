@@ -6,4 +6,4 @@ import Network.Wai
 
 application404 :: Application
 application404 _ rsp = rsp $
-    responseBuilder status404 [] "You got lost you dumbass." -- TODO
+  responseBuilder status404 [] "You got lost you dumbass." -- TODO

@@ -21,11 +21,11 @@ headerTab tab active = a ! href (toValue tabPath) ! classActive $ toMarkup tabNa
 headerTabsHelper :: Maybe Tab
                  -> Html
 headerTabsHelper activeTab = traverse_ f [ minBound .. maxBound ]
-    where f :: Tab -> Html
-          f tab = let active = case activeTab of
-                                 Just activeTab' -> tab == activeTab'
-                                 _ -> False
-                   in headerTab tab active
+  where f :: Tab -> Html
+        f tab = let active = case activeTab of
+                               Just activeTab' -> tab == activeTab'
+                               _ -> False
+                 in headerTab tab active
 
 headerTabs :: Maybe Tab
            -> Html

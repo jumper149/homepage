@@ -27,5 +27,5 @@ overviewHandler = pure $
 articlesHandler :: MonadConfigured m
                 => ServerT RawM m
 articlesHandler = do
-    path <- configDirectoryBlog <$> configuration
-    serveDirectoryWith (defaultFileServerSettings path) { ss404Handler = Just application404 }
+  path <- configDirectoryBlog <$> configuration
+  serveDirectoryWith (defaultFileServerSettings path) { ss404Handler = Just application404 }

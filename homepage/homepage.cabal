@@ -16,6 +16,7 @@ library
                      , Homepage.Server.Route.Files
                      , Homepage.Server.Route.Home
                      , Homepage.Server.Route.Projects
+                     , Homepage.Server.Route.Static
                      , Homepage.Server.Tab
   build-depends:       base
                      , blaze-html
