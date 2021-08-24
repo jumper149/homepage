@@ -24,25 +24,92 @@
 
     packages.x86_64-linux.homepage =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).homepage { inherit haskellPackages nix-gitignore; };
+      let src = nix-gitignore.gitignoreSource [] ./.;
+      in haskellPackages.callCabal2nix "homepage" src {};
 
     packages.x86_64-linux.blog =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).blog { inherit asciidoctor stdenv; };
+      stdenv.mkDerivation {
+        name = "blog"; # TODO: Necessary to avoid segmentation fault.
+        src = ./static/blog;
+        buildPhase = ''
+          mkdir -p static
+          asciidoctor myWayToCoreboot.adoc -o blog/myWayToCoreboot.html
+          asciidoctor myOwnImplementationOfIExpressions.adoc -o blog/myOwnImplementationOfIExpressions.html
+        '';
+        installPhase = ''
+          mkdir -p $out/static
+          cp --recursive blog $out/static
+        '';
+        buildInputs = [
+        ];
+        nativeBuildInputs = [
+          asciidoctor
+        ];
+      };
 
     # TODO
     packages.x86_64-linux.files =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).blog { inherit asciidoctor stdenv; };
+      stdenv.mkDerivation {
+        name = "blog"; # TODO: Necessary to avoid segmentation fault.
+        src = ./static/blog;
+        buildPhase = ''
+          mkdir -p static
+          asciidoctor myWayToCoreboot.adoc -o blog/myWayToCoreboot.html
+          asciidoctor myOwnImplementationOfIExpressions.adoc -o blog/myOwnImplementationOfIExpressions.html
+        '';
+        installPhase = ''
+          mkdir -p $out/static
+          cp --recursive blog $out/static
+        '';
+        buildInputs = [
+        ];
+        nativeBuildInputs = [
+          asciidoctor
+        ];
+      };
 
     # TODO
     packages.x86_64-linux.static =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).static { inherit imagemagick stdenv; };
+      stdenv.mkDerivation {
+        name = "static"; # TODO: Necessary to avoid segmentation fault.
+        src = ./static/static;
+        buildPhase = ''
+          mkdir -p static
+          convert favicon.xpm favicon.png
+        '';
+        installPhase = ''
+          mkdir -p $out
+          cp favicon.png $out/favicon.png
+          cp stylesheet.css $out/stylesheet.css
+          cp asciidoctor.css $out/asciidoctor.css
+        '';
+        buildInputs = [
+        ];
+        nativeBuildInputs = [
+          imagemagick
+        ];
+      };
 
     devShell.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
-      (import ./nix/build.nix).homepageShell { inherit asciidoctor haskellPackages nix-gitignore rnix-lsp; };
+      haskellPackages.shellFor {
+        buildInputs = with haskellPackages; [
+          asciidoctor
+          blaze-from-html
+          haskell-language-server
+          hlint
+          hnix
+          implicit-hie
+          rnix-lsp
+        ];
+        packages = haskellPackages: [
+          self.packages.x86_64-linux.homepage
+        ];
+        withHoogle = true;
+      };
 
   };
 }
