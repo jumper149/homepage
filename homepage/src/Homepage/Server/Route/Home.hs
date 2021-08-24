@@ -18,11 +18,11 @@ handler = pure $
     h1 "Felix Springer"
     h2 "Welcome"
     p $ do
-        "I am living in Germany and working as a Software Engineer at"
+        "I am living in Germany and working as a Software Engineer at "
         a ! href "https://www.possehl-analytics.com/" $ "Possehl Analytics"
-        "in Augsburg."
+        " in Augsburg."
     p $ do
-        "I recently completed my Bachelor's degree in Physics with a minor in Computer Science, which I studied for at"
+        "I recently completed my Bachelor's degree in Physics with a minor in Computer Science, which I studied for at "
         a ! href "https://www.uni-hannover.de/en/" $ "Leibniz Universität Hannover"
         "."
     p $ do
@@ -33,31 +33,31 @@ handler = pure $
     h2 "current Projects"
     ul $ do
         li $ do
-            "A blue light filter in the style of XMonad:"
+            "A blue light filter in the style of XMonad: "
             a ! href "https://github.com/jumper149/blucontrol" $ "blucontrol"
-            "replaces blugon for my personal usage"
+            " replaces blugon for my personal usage"
         li $ do
-            "The game"
+            "The game "
             a ! href "https://github.com/jumper149/go" $ "go"
-            "providing a smooth multiplayer browser experience with a webserver"
+            " providing a smooth multiplayer browser experience with a webserver"
         li $ do
-            "A simple Blue Light Filter for X:"
+            "A simple Blue Light Filter for X: "
             a ! href "https://github.com/jumper149/blugon" $ "blugon"
         li $ do
-            "The"
+            "The "
             a ! href "https://github.com/jumper149/dotfiles" $ "dotfiles"
-            "to configure my ArchLinux-Systems"
+            " to configure my ArchLinux-Systems"
     h2 "recent Blog"
     ul $ do
         li $ do
-            "30/06/19 -"
+            "30/06/19 - "
             a ! href "blog/myOwnImplementationOfIExpressions.html" $ "my own Implementation of I-Expressions"
         li $ do
-            "04/04/19 -"
+            "04/04/19 - "
             a ! href "blog/myWayToCoreboot.html" $ "my Way to Coreboot"
     h2 "shared Files"
     p $ do
-        "You can download some of my shared files"
+        "You can download some of my shared files "
         a ! href "files.html" $ "here"
         "."
     h2 "Contact"
@@ -68,6 +68,6 @@ handler = pure $
         li $ a ! href "https://github.com/jumper149" $ "GitHub"
     h2 "Donate"
     p $ do
-        "If you want to support me, you can donate to me"
+        "If you want to support me, you can donate to me "
         a ! href "donate/donate.html" $ "here"
         "."
