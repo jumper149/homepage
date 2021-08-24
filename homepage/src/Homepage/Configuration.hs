@@ -6,6 +6,7 @@ import Control.Monad.Base
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Reader
+import qualified Data.Text as T
 import Data.Word
 import GHC.Generics
 
@@ -20,6 +21,7 @@ data Configuration = Configuration
     , configDirectoryFiles :: FilePath
     , configDirectoryStatic :: FilePath
     , configPort :: Word16
+    , configBaseUrl :: T.Text
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
 

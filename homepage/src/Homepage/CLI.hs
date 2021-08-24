@@ -25,6 +25,7 @@ controlOptions [ DirectoryBlog configDirectoryBlog, DirectoryFiles configDirecto
       , configDirectoryFiles
       , configDirectoryStatic
       , configPort = 8008
+      , configBaseUrl = "http://localhost:8008"
       }
 controlOptions _ = error "Configure all options in order"
 
