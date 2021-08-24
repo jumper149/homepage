@@ -13,9 +13,9 @@ data Flag =
   deriving (Eq, Generic, Ord, Read, Show)
 
 options :: [OptDescr Flag]
-options = [ Option [] ["directory-blog"] (ReqArg undefined "DIR") "Set blog directory"
-          , Option [] ["directory-files"] (ReqArg undefined "DIR") "Set files directory"
-          , Option [] ["directory-static"] (ReqArg undefined "DIR") "Set static directory"
+options = [ Option [] ["directory-blog"] (ReqArg DirectoryBlog "DIR") "Set blog directory"
+          , Option [] ["directory-files"] (ReqArg DirectoryFiles "DIR") "Set files directory"
+          , Option [] ["directory-static"] (ReqArg DirectoryStatic "DIR") "Set static directory"
           ]
 
 controlOptions :: [Flag] -> Configuration
