@@ -1,5 +1,3 @@
-{-# LANGUAGE NamedFieldPuns #-}
-
 module Homepage.Server.Html.Header where
 
 import Homepage.Server.Tab

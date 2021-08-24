@@ -1,5 +1,3 @@
-{-# LANGUAGE NamedFieldPuns #-}
-
 module Homepage.Server.Html.Document where
 
 import Homepage.Server.Html.Header
