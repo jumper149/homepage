@@ -12,4 +12,4 @@ main = do
   config <- launch
   let runStack :: ConfiguredT m a -> m a
       runStack x = runConfiguredT x config
-  run 8081 $ genericServeT runStack routes
+  run (fromEnum $ configPort config) $ genericServeT runStack routes

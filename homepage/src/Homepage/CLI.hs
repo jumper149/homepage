@@ -20,7 +20,12 @@ options = [ Option [] ["directory-blog"] (ReqArg DirectoryBlog "DIR") "Set blog 
 
 controlOptions :: [Flag] -> Configuration
 controlOptions [ DirectoryBlog configDirectoryBlog, DirectoryFiles configDirectoryFiles, DirectoryStatic configDirectoryStatic ] =
-    Configuration { configDirectoryBlog, configDirectoryFiles, configDirectoryStatic }
+    Configuration
+      { configDirectoryBlog
+      , configDirectoryFiles
+      , configDirectoryStatic
+      , configPort = 8008
+      }
 controlOptions _ = error "Configure all options in order"
 
 launch :: IO Configuration

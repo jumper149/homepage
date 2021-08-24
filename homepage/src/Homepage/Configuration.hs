@@ -6,6 +6,7 @@ import Control.Monad.Base
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Reader
+import Data.Word
 import GHC.Generics
 
 class Monad m => MonadConfigured m where
@@ -18,6 +19,7 @@ data Configuration = Configuration
     { configDirectoryBlog :: FilePath
     , configDirectoryFiles :: FilePath
     , configDirectoryStatic :: FilePath
+    , configPort :: Word16
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
 
