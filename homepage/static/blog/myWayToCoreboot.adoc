@@ -32,13 +32,13 @@ There were some more hurdles like setting read/write permissions in the coreboot
 
 To this day I am using coreboot on every one of my notebooks (even that shitty chromebook, I already tried to get rid off, runs coreboot out of the box).
 At the moment I am using a Thinkpad X200 that I got for a steal and have grub2 as a payload.
-That means I have the <code>grub.cfg</code> within the BIOS and I dont need any bootloader at all on my harddrive.
+That means I have the `grub.cfg` within the BIOS and I dont need any bootloader at all on my harddrive.
 I am living a happy life now completely without IME and a super quick startup.
 
 I am also still planning to get SeaBios working as a secondary payload.
 Because the only problem I have with running grub is, that it is kind of a pain to boot from USB.
 
 If you are also thinking about using coreboot, I would say go for it as long as you don't have a problem with fiddling around for a while until you get it working!
-Obviously tho, the time spent on compiling coreboot etc. will not be saved by quicker startups in the next few months but it's still fun and also about being <i>free</i>.
+Obviously tho, the time spent on compiling coreboot etc. will not be saved by quicker startups in the next few months but it's still fun and also about being _free_.
 
 https://giant.gfycat.com/PepperyTepidAnhinga.webm[Video of my X200 booting up]

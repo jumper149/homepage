@@ -10,6 +10,7 @@ rec {
       buildPhase = ''
         mkdir -p static
         asciidoctor myWayToCoreboot.adoc -o blog/myWayToCoreboot.html
+        asciidoctor myOwnImplementationOfIExpressions.adoc -o blog/myOwnImplementationOfIExpressions.html
       '';
       installPhase = ''
         mkdir -p $out/static
