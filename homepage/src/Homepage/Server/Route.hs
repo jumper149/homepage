@@ -8,13 +8,12 @@ import qualified Homepage.Server.Route.Home
 import qualified Homepage.Server.Route.Projects
 import qualified Homepage.Server.Route.Static
 
+import Control.Monad.Base
 import GHC.Generics
 import Servant
 import Servant.API.Generic
 import Servant.Server.Generic
 
--- TODO: Serve HTML.
--- TODO: Serve favicon and CSS.
 data Routes route = Routes
     { routeHome :: route :- Homepage.Server.Route.Home.API
     , routeBlog :: route :- "blog" :> Homepage.Server.Route.Blog.API
@@ -25,8 +24,7 @@ data Routes route = Routes
     }
   deriving stock (Generic)
 
--- TODO: Serve HTML.
-routes :: MonadConfigured m
+routes :: (MonadBase IO m, MonadConfigured m)
        => Routes (AsServerT m)
 routes = Routes
     { routeHome = Homepage.Server.Route.Home.handler

@@ -1,5 +1,6 @@
 module Homepage.CLI where
 
+import Homepage.Blog
 import Homepage.Configuration
 
 import GHC.Generics
@@ -24,6 +25,7 @@ controlOptions [ DirectoryBlog configDirectoryBlog, DirectoryFiles configDirecto
       { configDirectoryBlog
       , configDirectoryFiles
       , configDirectoryStatic
+      , configBlogEntries = blogEntries
       , configPort = 8008
       , configBaseUrl = "http://localhost:8008"
       }

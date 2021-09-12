@@ -99,11 +99,13 @@
         buildInputs = with haskellPackages; [
           asciidoctor
           blaze-from-html
+          ghcid
           haskell-language-server
           hlint
           hnix
           implicit-hie
           rnix-lsp
+          weeder
         ];
         packages = haskellPackages: [
           self.packages.x86_64-linux.homepage

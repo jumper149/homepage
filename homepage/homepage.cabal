@@ -1,12 +1,14 @@
-name:                homepage
-version:             0.1.0.0
-build-type:          Simple
-cabal-version:       >= 1.10
+cabal-version: 3.0
+name: homepage
+version: 0.0.0.0
 
 library
   exposed-modules:     Homepage
+                     , Homepage.Blog
                      , Homepage.CLI
                      , Homepage.Configuration
+                     , Homepage.Server.Html.AsciiDoc
+                     , Homepage.Server.Html.Blog
                      , Homepage.Server.Html.Document
                      , Homepage.Server.Html.Header
                      , Homepage.Server.Err404
@@ -20,8 +22,10 @@ library
                      , Homepage.Server.Tab
   build-depends:       base
                      , blaze-html
+                     , blaze-markup
                      , bytestring
                      , containers
+                     , feed
                      , http-types
                      , lifted-base
                      , monad-control

@@ -2,6 +2,8 @@
 
 module Homepage.Configuration where
 
+import Homepage.Blog
+
 import Control.Monad.Base
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Control
@@ -20,6 +22,7 @@ data Configuration = Configuration
     { configDirectoryBlog :: FilePath
     , configDirectoryFiles :: FilePath
     , configDirectoryStatic :: FilePath
+    , configBlogEntries :: BlogEntries
     , configPort :: Word16
     , configBaseUrl :: T.Text
     }
