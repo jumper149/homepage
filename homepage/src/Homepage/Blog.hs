@@ -20,7 +20,12 @@ lookupBlog k = M.lookup k . unBlogEntries
 
 blogEntries :: BlogEntries
 blogEntries = BlogEntries $ M.fromList
-  [ (,) "myOwnImplementationOfIExpressions" $ BlogEntry
+  [ (,) "myWayToCoreboot" $ BlogEntry
+      { blogContent = "myWayToCoreboot"
+      , blogTitle = "my Way to Coreboot"
+      , blogTimestamp = fromGregorian 2019 04 04
+      }
+  , (,) "myOwnImplementationOfIExpressions" $ BlogEntry
       { blogContent = "myOwnImplementationOfIExpressions"
       , blogTitle = "my own Implementation of I-Expressions"
       , blogTimestamp = fromGregorian 2019 06 30

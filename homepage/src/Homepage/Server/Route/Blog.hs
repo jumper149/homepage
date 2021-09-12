@@ -30,7 +30,7 @@ overviewHandler :: MonadConfigured m
                 => m Html
 overviewHandler = do
   blogs <- configBlogEntries <$> configuration
-  pure $ document (Just TabBlog) $ do
+  pure $ document 0 (Just TabBlog) $ do
     h2 "my Blog"
     blogList blogs
 
@@ -49,5 +49,5 @@ htmlHandler articleKey = do
     Nothing -> undefined
     Just blog -> do
         content <- liftBase $ T.readFile $ dir <> "/" <> T.unpack (blogContent blog) <> ".html"
-        pure $ document (Just TabBlog) $
+        pure $ document 1 (Just TabBlog) $
           toMarkup $ AsciiDocHtml content

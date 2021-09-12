@@ -13,7 +13,7 @@ type API = Get '[HTML] Html
 handler :: Monad m
         => ServerT API m
 handler = pure $
-  document (Just TabHome) $ do
+  document 0 (Just TabHome) $ do
     img ! src "files/portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
     h1 "Felix Springer"
     h2 "Welcome"

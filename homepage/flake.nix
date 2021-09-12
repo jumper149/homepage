@@ -34,8 +34,8 @@
         src = ./static/blog;
         buildPhase = ''
           mkdir -p static
-          asciidoctor myWayToCoreboot.adoc -o blog/myWayToCoreboot.html
-          asciidoctor myOwnImplementationOfIExpressions.adoc -o blog/myOwnImplementationOfIExpressions.html
+          asciidoctor myWayToCoreboot.adoc --backend html5 --doctype article --out-file blog/myWayToCoreboot.html --safe-mode secure --no-header-footer
+          asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file blog/myOwnImplementationOfIExpressions.html --safe-mode secure --no-header-footer
         '';
         installPhase = ''
           mkdir -p $out/static

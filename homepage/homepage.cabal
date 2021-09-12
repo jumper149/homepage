@@ -9,6 +9,7 @@ library
                      , Homepage.Configuration
                      , Homepage.Server.Html.AsciiDoc
                      , Homepage.Server.Html.Blog
+                     , Homepage.Server.Html.Depth
                      , Homepage.Server.Html.Document
                      , Homepage.Server.Html.Header
                      , Homepage.Server.Err404
