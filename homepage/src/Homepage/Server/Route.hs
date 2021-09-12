@@ -6,6 +6,7 @@ import qualified Homepage.Server.Route.Donate
 import qualified Homepage.Server.Route.Files
 import qualified Homepage.Server.Route.Home
 import qualified Homepage.Server.Route.Projects
+import qualified Homepage.Server.Route.Rss
 import qualified Homepage.Server.Route.Static
 
 import Control.Monad.Base
@@ -17,6 +18,7 @@ import Servant.Server.Generic
 data Routes route = Routes
     { routeHome :: route :- Homepage.Server.Route.Home.API
     , routeBlog :: route :- "blog" :> Homepage.Server.Route.Blog.API
+    , routeRss :: route :- "rss" :> Homepage.Server.Route.Rss.API
     , routeDonate :: route :- "donate" :> Homepage.Server.Route.Donate.API
     , routeFiles :: route :- "files" :> Homepage.Server.Route.Files.API
     , routeProjects :: route :- "projects" :> Homepage.Server.Route.Projects.API
@@ -29,6 +31,7 @@ routes :: (MonadBase IO m, MonadConfigured m)
 routes = Routes
     { routeHome = Homepage.Server.Route.Home.handler
     , routeBlog = Homepage.Server.Route.Blog.handler
+    , routeRss = Homepage.Server.Route.Rss.handler
     , routeDonate = Homepage.Server.Route.Donate.handler
     , routeFiles = Homepage.Server.Route.Files.handler
     , routeProjects = Homepage.Server.Route.Projects.handler
