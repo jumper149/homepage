@@ -1,6 +1,9 @@
 module Homepage.Server.Route.Home where
 
+import Homepage.Configuration
+import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Document
+import Homepage.Server.Html.Depth
 import Homepage.Server.Tab
 
 import Servant
@@ -10,10 +13,11 @@ import Text.Blaze.Html5.Attributes
 
 type API = Get '[HTML] Html
 
-handler :: Monad m
+handler :: MonadConfigured m
         => ServerT API m
-handler = pure $
-  document 0 (Just TabHome) $ do
+handler = do
+  blogs <- configBlogEntries <$> configuration
+  pure $ document 0 (Just TabHome) $ do
     img ! src "files/portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
     h1 "Felix Springer"
     h2 "Welcome"
@@ -48,17 +52,11 @@ handler = pure $
             a ! href "https://github.com/jumper149/dotfiles" $ "dotfiles"
             " to configure my ArchLinux-Systems"
     h2 "recent Blog"
-    ul $ do
-        li $ do
-            "30/06/19 - "
-            a ! href "blog/myOwnImplementationOfIExpressions.html" $ "my own Implementation of I-Expressions"
-        li $ do
-            "04/04/19 - "
-            a ! href "blog/myWayToCoreboot.html" $ "my Way to Coreboot"
+    blogList 0 blogs
     h2 "shared Files"
     p $ do
         "You can download some of my shared files "
-        a ! href "files.html" $ "here"
+        a ! hrefWithDepth 0 "files" $ "here"
         "."
     h2 "Contact"
     ul $ do
@@ -69,5 +67,5 @@ handler = pure $
     h2 "Donate"
     p $ do
         "If you want to support me, you can donate to me "
-        a ! href "donate/donate.html" $ "here"
+        a ! hrefWithDepth 0 "donate" $ "here"
         "."
