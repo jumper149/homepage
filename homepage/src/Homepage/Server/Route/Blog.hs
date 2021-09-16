@@ -32,7 +32,7 @@ overviewHandler = do
   blogs <- configBlogEntries <$> configuration
   pure $ document 0 (Just TabBlog) $ do
     h2 "my Blog"
-    blogList blogs
+    blogList 0 blogs
 
 articlesHandler :: (MonadBase IO m, MonadConfigured m)
                 => T.Text
