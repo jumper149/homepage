@@ -9,7 +9,10 @@ import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
 import qualified Text.Blaze.Html5 as H
 
-document :: Natural -> Maybe Tab -> Html -> Html
+document :: Natural -- ^ depth
+         -> Maybe Tab -- ^ current tab
+         -> Html -- ^ body
+         -> Html
 document depth activeTab x =
   docTypeHtml ! lang "en" $ do
       H.head $ do

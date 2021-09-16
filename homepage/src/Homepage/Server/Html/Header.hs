@@ -29,7 +29,7 @@ headerTabsHelper depth activeTab = traverse_ f [ minBound .. maxBound ]
                                _ -> False
                  in headerTab depth tab active
 
-headerTabs :: Natural
+headerTabs :: Natural -- ^ depth
            -> Maybe Tab
            -> Html
 headerTabs depth activeTab =
