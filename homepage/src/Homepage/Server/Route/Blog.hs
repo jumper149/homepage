@@ -37,7 +37,7 @@ overviewHandler = do
 articlesHandler :: (MonadBase IO m, MonadConfigured m)
                 => T.Text
                 -> (m Html :<|> m Html :<|> m Html)
-articlesHandler article = htmlHandler article :<|> undefined :<|> undefined
+articlesHandler articleKey = htmlHandler articleKey :<|> undefined :<|> undefined
 
 htmlHandler :: (MonadBase IO m, MonadConfigured m)
             => T.Text
