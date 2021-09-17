@@ -35,66 +35,71 @@ handler :: (MonadConfigured m, MonadThrow m)
         => ServerT API m
 handler = do
   blogs <- configBlogEntries <$> configuration
-  let entryList = take 20 $ sortOn (Down . blogTimestamp) $ snd <$> M.toList (unBlogEntries blogs)
-      feed = Feed.AtomFeed $ atomFeed $ atomEntry "" <$> entryList -- TODO
+  let entryList = take 20 $ sortOn (Down . blogTimestamp . snd) $ M.toList (unBlogEntries blogs)
+  entries <- traverse (uncurry atomEntry) entryList
+  feed <- Feed.AtomFeed <$> atomFeed entries
   case Feed.textFeed feed of
     Nothing -> throwM err500 { errBody = "Failed to serialize feed." }
     Just text -> pure $ AtomFeed text
 
-atomFeed :: [Atom.Entry] -> Atom.Feed
-atomFeed entries = Atom.Feed
-  { Atom.feedId = uriFelixSpringer <> "/blog/atom.xml"
-  , Atom.feedTitle = Atom.TextString "Felix Springer's Blog"
-  , Atom.feedUpdated = case entries of
-      [] -> "1997-09-14T12:00:00+01:00"
-      Atom.Entry { Atom.entryUpdated } : _ -> entryUpdated -- Expects sorted entries.
-  , Atom.feedAuthors = [ personFelixSpringer ]
-  , Atom.feedCategories = []
-  , Atom.feedContributors = []
-  , Atom.feedGenerator = Just Atom.Generator
-      { Atom.genURI = Just "https://github.com/jumper149/homepage"
-      , Atom.genVersion = Nothing
-      , Atom.genText = "Felix Springer's Homepage"
-      }
-  , Atom.feedIcon = Just $ uriFelixSpringer <> "/favicon.png"
-  , Atom.feedLinks = []
-  , Atom.feedLogo = Nothing
-  , Atom.feedRights = Just $ Atom.TextString "Attribution 4.0 International (CC BY 4.0)"
-  , Atom.feedSubtitle = Nothing
-  , Atom.feedEntries = entries
-  , Atom.feedAttrs = []
-  , Atom.feedOther = []
-  }
+atomFeed :: MonadConfigured m
+         => [Atom.Entry]
+         -> m Atom.Feed
+atomFeed entries = do
+  baseUrl <- configBaseUrl <$> configuration
+  pure Atom.Feed
+    { Atom.feedId = baseUrl <> "/blog/atom.xml"
+    , Atom.feedTitle = Atom.TextString "Felix Springer's Blog"
+    , Atom.feedUpdated = case entries of
+        [] -> "1997-09-14T12:00:00+01:00"
+        Atom.Entry { Atom.entryUpdated } : _ -> entryUpdated -- Expects sorted entries.
+    , Atom.feedAuthors = [ personFelixSpringer ]
+    , Atom.feedCategories = []
+    , Atom.feedContributors = []
+    , Atom.feedGenerator = Just Atom.Generator
+        { Atom.genURI = Just "https://github.com/jumper149/homepage"
+        , Atom.genVersion = Nothing
+        , Atom.genText = "Felix Springer's Homepage"
+        }
+    , Atom.feedIcon = Just $ baseUrl <> "/favicon.png"
+    , Atom.feedLinks = []
+    , Atom.feedLogo = Nothing
+    , Atom.feedRights = Just $ Atom.TextString "Attribution 4.0 International (CC BY 4.0)"
+    , Atom.feedSubtitle = Nothing
+    , Atom.feedEntries = entries
+    , Atom.feedAttrs = []
+    , Atom.feedOther = []
+    }
 
-atomEntry :: T.Text -- ^ URI
+atomEntry :: MonadConfigured m
+          => T.Text -- ^ Blog ID
           -> BlogEntry
-          -> Atom.Entry
-atomEntry uri BlogEntry { blogContent , blogTitle , blogTimestamp } = Atom.Entry
-  { Atom.entryId = uri
-  , Atom.entryTitle = Atom.TextString blogTitle
-  , Atom.entryUpdated = T.pack $ T.formatTime T.defaultTimeLocale "%0Y-%0m-%0dT12:00:00+01:00" blogTimestamp
-  , Atom.entryAuthors = [ personFelixSpringer ]
-  , Atom.entryCategories = []
-  , Atom.entryContent = Just $ Atom.TextContent blogContent -- TODO
-  , Atom.entryContributor = []
-  , Atom.entryLinks = []
-  , Atom.entryPublished = Nothing
-  , Atom.entryRights = Nothing
-  , Atom.entrySource = Nothing
-  , Atom.entrySummary = Nothing
-  , Atom.entryInReplyTo = Nothing
-  , Atom.entryInReplyTotal = Nothing
-  , Atom.entryAttrs = []
-  , Atom.entryOther = []
-  }
+          -> m Atom.Entry
+atomEntry blogId BlogEntry { blogContent , blogTitle , blogTimestamp } = do
+  baseUrl <- configBaseUrl <$> configuration
+  pure Atom.Entry
+    { Atom.entryId = baseUrl <> "/blog/" <> blogId
+    , Atom.entryTitle = Atom.TextString blogTitle
+    , Atom.entryUpdated = T.pack $ T.formatTime T.defaultTimeLocale "%0Y-%0m-%0dT12:00:00+01:00" blogTimestamp
+    , Atom.entryAuthors = [ personFelixSpringer ]
+    , Atom.entryCategories = []
+    , Atom.entryContent = Just $ Atom.TextContent blogContent -- TODO
+    , Atom.entryContributor = []
+    , Atom.entryLinks = []
+    , Atom.entryPublished = Nothing
+    , Atom.entryRights = Nothing
+    , Atom.entrySource = Nothing
+    , Atom.entrySummary = Nothing
+    , Atom.entryInReplyTo = Nothing
+    , Atom.entryInReplyTotal = Nothing
+    , Atom.entryAttrs = []
+    , Atom.entryOther = []
+    }
 
 personFelixSpringer :: Atom.Person
 personFelixSpringer = Atom.Person
   { Atom.personName = "Felix Springer"
-  , Atom.personURI = Just uriFelixSpringer
+  , Atom.personURI = Just "https://felixspringer.xyz"
   , Atom.personEmail = Just "felixspringer149@gmail.com"
   , Atom.personOther = []
   }
-
-uriFelixSpringer :: T.Text
-uriFelixSpringer = "https://felixspringer.xyz"
