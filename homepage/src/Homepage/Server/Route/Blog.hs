@@ -5,26 +5,30 @@ import Homepage.Configuration
 import Homepage.Server.Html.AsciiDoc
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Document
+import qualified Homepage.Server.Route.Blog.Atom as Atom
 import Homepage.Server.Tab
 
 import Control.Monad.Base
+import Control.Monad.Catch
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import Servant hiding (serveDirectoryWith)
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
 
-type API = Get '[HTML] Html
+type API = "atom.xml" :> Atom.API
       :<|> Capture "article" T.Text :>
         (    Get '[HTML] Html
         :<|> (    "adoc" :> Get '[HTML] Html
              :<|> "pdf" :> Get '[HTML] Html
              )
         )
+      :<|> Get '[HTML] Html
 
-handler :: (MonadBase IO m, MonadConfigured m) => ServerT API m
-handler = overviewHandler
+handler :: (MonadBase IO m, MonadConfigured m, MonadThrow m) => ServerT API m
+handler = Atom.handler
      :<|> articlesHandler
+     :<|> overviewHandler
 
 overviewHandler :: MonadConfigured m
                 => m Html

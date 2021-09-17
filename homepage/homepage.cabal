@@ -14,12 +14,12 @@ library
                      , Homepage.Server.Html.Header
                      , Homepage.Server.Err404
                      , Homepage.Server.Route
+                     , Homepage.Server.Route.Blog.Atom
                      , Homepage.Server.Route.Blog
                      , Homepage.Server.Route.Donate
                      , Homepage.Server.Route.Files
                      , Homepage.Server.Route.Home
                      , Homepage.Server.Route.Projects
-                     , Homepage.Server.Route.Rss
                      , Homepage.Server.Route.Static
                      , Homepage.Server.Tab
   build-depends:       base

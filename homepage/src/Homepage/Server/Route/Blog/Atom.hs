@@ -1,10 +1,11 @@
-module Homepage.Server.Route.Rss where
+module Homepage.Server.Route.Blog.Atom where
 
 import Homepage.Blog
 import Homepage.Configuration
 
 import Control.Monad.Catch
 import Data.List
+import Data.Ord
 import qualified Data.Map as M
 import qualified Data.Text as T
 import qualified Data.Text.Lazy as LT
@@ -34,7 +35,7 @@ handler :: (MonadConfigured m, MonadThrow m)
         => ServerT API m
 handler = do
   blogs <- configBlogEntries <$> configuration
-  let entryList = take 20 $ sortOn blogTimestamp $ snd <$> M.toList (unBlogEntries blogs)
+  let entryList = take 20 $ sortOn (Down . blogTimestamp) $ snd <$> M.toList (unBlogEntries blogs)
       feed = Feed.AtomFeed $ atomFeed $ atomEntry "" <$> entryList -- TODO
   case Feed.textFeed feed of
     Nothing -> throwM err500 { errBody = "Failed to serialize feed." }
@@ -42,7 +43,7 @@ handler = do
 
 atomFeed :: [Atom.Entry] -> Atom.Feed
 atomFeed entries = Atom.Feed
-  { Atom.feedId = uriFelixSpringer <> "/atom"
+  { Atom.feedId = uriFelixSpringer <> "/blog/atom.xml"
   , Atom.feedTitle = Atom.TextString "Felix Springer's Blog"
   , Atom.feedUpdated = case entries of
       [] -> "1997-09-14T12:00:00+01:00"
