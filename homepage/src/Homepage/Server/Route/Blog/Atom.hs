@@ -3,11 +3,13 @@ module Homepage.Server.Route.Blog.Atom where
 import Homepage.Blog
 import Homepage.Configuration
 
+import Control.Monad.Base
 import Control.Monad.Catch
 import Data.List
 import Data.Ord
 import qualified Data.Map as M
 import qualified Data.Text as T
+import qualified Data.Text.IO as T
 import qualified Data.Text.Lazy as LT
 import qualified Data.Text.Lazy.Encoding as LT
 import qualified Data.Time as T
@@ -31,7 +33,7 @@ newtype AtomFeed = AtomFeed { unAtomFeed :: LT.Text }
 instance MimeRender Atom AtomFeed where
   mimeRender _ (AtomFeed text) = LT.encodeUtf8 text
 
-handler :: (MonadConfigured m, MonadThrow m)
+handler :: (MonadBase IO m, MonadConfigured m, MonadThrow m)
         => ServerT API m
 handler = do
   blogs <- configBlogEntries <$> configuration
@@ -71,19 +73,21 @@ atomFeed entries = do
     , Atom.feedOther = []
     }
 
-atomEntry :: MonadConfigured m
+atomEntry :: (MonadBase IO m, MonadConfigured m)
           => T.Text -- ^ Blog ID
           -> BlogEntry
           -> m Atom.Entry
 atomEntry blogId BlogEntry { blogContent , blogTitle , blogTimestamp } = do
   baseUrl <- configBaseUrl <$> configuration
+  dir <- configDirectoryBlog <$> configuration
+  content <- liftBase $ T.readFile $ dir <> "/" <> T.unpack blogContent <> ".html"
   pure Atom.Entry
     { Atom.entryId = baseUrl <> "/blog/" <> blogId
     , Atom.entryTitle = Atom.TextString blogTitle
     , Atom.entryUpdated = T.pack $ T.formatTime T.defaultTimeLocale "%0Y-%0m-%0dT12:00:00+01:00" blogTimestamp
     , Atom.entryAuthors = [ personFelixSpringer ]
     , Atom.entryCategories = []
-    , Atom.entryContent = Just $ Atom.TextContent blogContent -- TODO
+    , Atom.entryContent = Just $ Atom.HTMLContent content
     , Atom.entryContributor = []
     , Atom.entryLinks = []
     , Atom.entryPublished = Nothing
