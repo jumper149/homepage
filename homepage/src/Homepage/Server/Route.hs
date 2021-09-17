@@ -10,6 +10,7 @@ import qualified Homepage.Server.Route.Rss
 import qualified Homepage.Server.Route.Static
 
 import Control.Monad.Base
+import Control.Monad.Catch
 import GHC.Generics
 import Servant
 import Servant.API.Generic
@@ -26,7 +27,7 @@ data Routes route = Routes
     }
   deriving stock (Generic)
 
-routes :: (MonadBase IO m, MonadConfigured m)
+routes :: (MonadBase IO m, MonadThrow m, MonadConfigured m)
        => Routes (AsServerT m)
 routes = Routes
     { routeHome = Homepage.Server.Route.Home.handler

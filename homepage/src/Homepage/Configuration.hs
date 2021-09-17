@@ -5,6 +5,7 @@ module Homepage.Configuration where
 import Homepage.Blog
 
 import Control.Monad.Base
+import Control.Monad.Catch
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Reader
@@ -29,7 +30,7 @@ data Configuration = Configuration
   deriving stock (Eq, Generic, Ord, Read, Show)
 
 newtype ConfiguredT m a = ConfiguredT { unConfiguredT :: ReaderT Configuration m a }
-  deriving newtype (Functor, Applicative, Monad, MonadTrans, MonadTransControl, MonadBase b, MonadBaseControl b)
+  deriving newtype (Functor, Applicative, Monad, MonadTrans, MonadTransControl, MonadBase b, MonadBaseControl b, MonadThrow, MonadCatch)
 
 runConfiguredT :: ConfiguredT m a -> Configuration -> m a
 runConfiguredT = runReaderT . unConfiguredT
