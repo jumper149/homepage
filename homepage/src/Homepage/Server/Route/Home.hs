@@ -63,6 +63,8 @@ handler = do
         li $ do
             a ! href "mailto:felixspringer@gmail.com" $ "E-Mail"
             ": felixspringer149@gmail.com"
+        li "Matrix: @jumper149:matrix.org"
+        li "IRC (Libera Chat): jumper149"
         li $ a ! href "https://github.com/jumper149" $ "GitHub"
     h2 "Donate"
     p $ do
