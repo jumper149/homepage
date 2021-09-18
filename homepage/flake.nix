@@ -113,7 +113,9 @@
         withHoogle = true;
       };
 
-      nixosModule = { config, lib }: {
+      nixosModule = { config, lib }:
+      let cfg = config.services.homepage;
+      in {
         options = {
           services.homepage = {
             enable = lib.mkOption {
@@ -126,7 +128,7 @@
           };
         };
         config = {
-          config = lib.mkIf config.services.homepage.enable {
+          config = lib.mkIf cfg.enable {
             systemd.services.homepage = {
               wantedBy = [ "multi-user.target" ];
               after = [ "network.target" ];
