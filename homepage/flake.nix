@@ -113,5 +113,32 @@
         withHoogle = true;
       };
 
+      nixosModule = { config, lib }: {
+        options = {
+          services.homepage = {
+            enable = lib.mkOption {
+              default = false;
+              type = with lib.types; bool;
+              description = ''
+                Felix Springer's Homepage.
+              '';
+            };
+          };
+        };
+        config = {
+          config = lib.mkIf config.services.homepage.enable {
+            systemd.services.homepage = {
+              wantedBy = [ "multi-user.target" ];
+              after = [ "network.target" ];
+              description = "Homepage";
+              serviceConfig = {
+                DynamicUser = true;
+                ExecStart = "${self.defaultPackage.x86_64-linux}/homepage-full";
+              };
+            };
+          };
+        };
+      };
+
   };
 }
