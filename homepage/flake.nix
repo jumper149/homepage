@@ -127,16 +127,14 @@
             };
           };
         };
-        config = {
-          config = lib.mkIf cfg.enable {
-            systemd.services.homepage = {
-              wantedBy = [ "multi-user.target" ];
-              after = [ "network.target" ];
-              description = "Homepage";
-              serviceConfig = {
-                DynamicUser = true;
-                ExecStart = "${self.defaultPackage.x86_64-linux}/homepage-full";
-              };
+        config = lib.mkIf cfg.enable {
+          systemd.services.homepage = {
+            wantedBy = [ "multi-user.target" ];
+            after = [ "network.target" ];
+            description = "Homepage";
+            serviceConfig = {
+              DynamicUser = true;
+              ExecStart = "${self.defaultPackage.x86_64-linux}/homepage-full";
             };
           };
         };
