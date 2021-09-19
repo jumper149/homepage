@@ -113,7 +113,7 @@
         withHoogle = true;
       };
 
-      nixosModule = { config, lib }:
+      nixosModules.homepage = { config, lib }:
       let cfg = config.services.homepage;
       in {
         options = {
