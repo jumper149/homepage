@@ -11,14 +11,15 @@ import Data.Time.Calendar
 import Numeric.Natural
 import Text.Blaze.Html5
 
-blogList :: Natural -- ^ depth
+blogList :: T.Text -- ^ base URL
+         -> Maybe Natural -- ^ depth
          -> BlogEntries
          -> Html
-blogList depth blogs = ul $
+blogList baseUrl depth blogs = ul $
   toMarkup $ entryToMarkup <$> sortOn (Down . blogTimestamp . snd) (M.toList (unBlogEntries blogs))
   where
     entryToMarkup (blogKey, BlogEntry { blogTitle, blogTimestamp }) =
       li $ p $ do
         toMarkup $ T.pack (showGregorian blogTimestamp)
         " - "
-        a ! hrefWithDepth depth (textValue $ "blog/" <> blogKey) $ toMarkup blogTitle
+        a ! hrefWithDepth baseUrl depth (textValue $ "blog/" <> blogKey) $ toMarkup blogTitle

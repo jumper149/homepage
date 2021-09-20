@@ -4,7 +4,7 @@ import Homepage.Blog
 import Homepage.Configuration
 
 import Control.Monad.Base
-import Control.Monad.Catch
+import Control.Monad.Error.Class
 import Data.List
 import Data.Ord
 import qualified Data.Map as M
@@ -33,7 +33,7 @@ newtype AtomFeed = AtomFeed { unAtomFeed :: LT.Text }
 instance MimeRender Atom AtomFeed where
   mimeRender _ (AtomFeed text) = LT.encodeUtf8 text
 
-handler :: (MonadBase IO m, MonadConfigured m, MonadThrow m)
+handler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m)
         => ServerT API m
 handler = do
   blogs <- configBlogEntries <$> configuration
@@ -41,7 +41,7 @@ handler = do
   entries <- traverse (uncurry atomEntry) entryList
   feed <- Feed.AtomFeed <$> atomFeed entries
   case Feed.textFeed feed of
-    Nothing -> throwM err500 { errBody = "Failed to serialize feed." }
+    Nothing -> throwError err500 { errBody = "Failed to serialize feed." }
     Just text -> pure $ AtomFeed text
 
 atomFeed :: MonadConfigured m

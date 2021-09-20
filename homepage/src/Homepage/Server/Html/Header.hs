@@ -4,35 +4,39 @@ import Homepage.Server.Tab
 import Homepage.Server.Html.Depth
 
 import Data.Foldable
+import qualified Data.Text as T
 import Numeric.Natural
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
 import qualified Text.Blaze.Html5 as H
 
-headerTab :: Natural -- ^ depth
+headerTab :: T.Text -- ^ base URL
+          -> Maybe Natural -- ^ depth
           -> Tab
           -> Bool -- ^ active
           -> Html
-headerTab depth tab active = a ! hrefWithDepth depth (toValue tabPath) ! classActive $ toMarkup tabName
+headerTab baseUrl depth tab active = a ! hrefWithDepth baseUrl depth (toValue tabPath) ! classActive $ toMarkup tabName
   where TabDescription { tabName, tabPath } = describeTab tab
         classActive = if active
                          then class_ "active"
                          else mempty
 
-headerTabsHelper :: Natural -- ^ depth
+headerTabsHelper :: T.Text -- ^ base URL
+                 -> Maybe Natural -- ^ depth
                  -> Maybe Tab
                  -> Html
-headerTabsHelper depth activeTab = traverse_ f [ minBound .. maxBound ]
+headerTabsHelper baseUrl depth activeTab = traverse_ f [ minBound .. maxBound ]
   where f :: Tab -> Html
         f tab = let active = case activeTab of
                                Just activeTab' -> tab == activeTab'
                                _ -> False
-                 in headerTab depth tab active
+                 in headerTab baseUrl depth tab active
 
-headerTabs :: Natural -- ^ depth
+headerTabs :: T.Text -- ^ base URL
+           -> Maybe Natural -- ^ depth
            -> Maybe Tab
            -> Html
-headerTabs depth activeTab =
+headerTabs baseUrl depth activeTab =
   header $ H.div ! class_ "bar" $ do
-    headerTabsHelper depth activeTab
-    H.span $ a ! href "https://felixspringer.xyz/" $ "felixspringer.xyz"
+    headerTabsHelper baseUrl depth activeTab
+    H.span $ a ! href (textValue baseUrl) $ "felixspringer.xyz" -- TODO: base URL naming is hardcoded

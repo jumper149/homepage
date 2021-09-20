@@ -16,8 +16,9 @@ type API = Get '[HTML] Html
 handler :: MonadConfigured m
         => ServerT API m
 handler = do
+  baseUrl <- configBaseUrl <$> configuration
   blogs <- configBlogEntries <$> configuration
-  pure $ document 0 (Just TabHome) $ do
+  pure $ document baseUrl (Just 0) (Just TabHome) $ do
     img ! src "files/portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
     h1 "Felix Springer"
     h2 "Welcome"
@@ -52,11 +53,11 @@ handler = do
             a ! href "https://github.com/jumper149/dotfiles" $ "dotfiles"
             " to configure my ArchLinux-Systems"
     h2 "recent Blog"
-    blogList 0 blogs
+    blogList baseUrl (Just 0) blogs
     h2 "shared Files"
     p $ do
         "You can download some of my shared files "
-        a ! hrefWithDepth 0 "files" $ "here"
+        a ! hrefWithDepth baseUrl (Just 0) "files" $ "here"
         "."
     h2 "Contact"
     ul $ do
@@ -69,5 +70,5 @@ handler = do
     h2 "Donate"
     p $ do
         "If you want to support me, you can donate to me "
-        a ! hrefWithDepth 0 "donate" $ "here"
+        a ! hrefWithDepth baseUrl (Just 0) "donate" $ "here"
         "."

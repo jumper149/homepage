@@ -33,6 +33,7 @@ library
                      , http-types
                      , lifted-base
                      , monad-control
+                     , mtl
                      , servant
                      , servant-blaze
                      , servant-rawm
