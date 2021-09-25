@@ -5,6 +5,7 @@ version: 0.0.0.0
 library
   exposed-modules:     Homepage
                      , Homepage.Application
+                     , Homepage.Application.Configured
                      , Homepage.Blog
                      , Homepage.CLI
                      , Homepage.Configuration

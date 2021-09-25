@@ -1,6 +1,7 @@
 module Homepage where
 
 import Homepage.Application
+import Homepage.Application.Configured
 import Homepage.Configuration
 import Homepage.Server.Route
 

@@ -1,5 +1,6 @@
 module Homepage.Server.Route.Projects where
 
+import Homepage.Application.Configured
 import Homepage.Server.Html.Document
 import Homepage.Configuration
 import Homepage.Server.Tab

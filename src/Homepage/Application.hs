@@ -3,7 +3,7 @@
 module Homepage.Application where
 
 import Homepage.CLI
-import Homepage.Configuration
+import Homepage.Application.Configured
 
 import Control.Monad.Base
 import Control.Monad.Catch

@@ -1,5 +1,6 @@
 module Homepage.Server.Route.Home where
 
+import Homepage.Application.Configured
 import Homepage.Configuration
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth

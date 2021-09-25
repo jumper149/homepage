@@ -1,5 +1,6 @@
 module Homepage.Server.Route.Blog.Atom where
 
+import Homepage.Application.Configured
 import Homepage.Blog
 import Homepage.Configuration
 
