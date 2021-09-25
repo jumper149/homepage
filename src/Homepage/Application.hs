@@ -19,11 +19,11 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: (ConfiguredT |. Logg
 instance Monad m => MonadConfigured (ApplicationT m) where
   configuration = ApplicationT $ ComposeT configuration
 
-runApplication :: (MonadBase IO m, MonadIO m)
+runApplication :: MonadIO m
                => ApplicationT m a
                -> m a
 runApplication app = do
-  config <- liftBase launch
+  config <- liftIO launch
   let
     runConfiguredT' tma = runConfiguredT tma config
   runConfiguredT' |.| runStdoutLoggingT $ unApplicationT app

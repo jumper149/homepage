@@ -1,4 +1,4 @@
-{-# LANGUAGE QuantifiedConstraints, UndecidableInstances #-}
+{-# LANGUAGE QuantifiedConstraints, UndecidableInstances, TupleSections #-}
 
 module Homepage.Application.Compose where
 
@@ -19,10 +19,7 @@ newtype ComposeT
   (m :: Type -> Type)
   (a :: Type)
     = ComposeT { unComposeT :: t1 (t2 m) a }
-  deriving newtype (Applicative, Functor, Monad, MonadIO)
-  deriving newtype (MonadBase b, MonadBaseControl b)
-  deriving newtype (MonadThrow, MonadCatch)
-  deriving newtype (MonadError e, MonadReader r, MonadState s, MonadWriter w)
+  deriving newtype (Applicative, Functor, Monad)
 
 instance (forall m. Monad m => Monad (t2 m), MonadTrans t1, MonadTrans t2) => MonadTrans (ComposeT t1 t2) where
   lift = ComposeT . lift . lift
@@ -31,6 +28,40 @@ instance (forall m. Monad m => Monad (t2 m), MonadTransControl t1, MonadTransCon
   type StT (ComposeT t1 t2) a = StT t2 (StT t1 a)
   liftWith f = defaultLiftWith2 ComposeT unComposeT $ \x -> f x
   restoreT = defaultRestoreT2 ComposeT
+
+instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadIO m) => MonadIO (ComposeT t1 t2 m) where
+  liftIO = lift . liftIO
+
+instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadBase b m) => MonadBase b (ComposeT t1 t2 m) where
+  liftBase = lift . liftBase
+
+instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadBaseControl b m) => MonadBaseControl b (ComposeT t1 t2 m) where
+  type StM (ComposeT t1 t2 m) a = StM m (StT (ComposeT t1 t2) a)
+  liftBaseWith f = liftWith $ \ runT -> liftBaseWith $ \ runInBase -> f $ runInBase . runT
+  restoreM = restoreT . restoreM
+
+instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadThrow m) => MonadThrow (ComposeT t1 t2 m) where
+  throwM = lift . throwM
+
+instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadCatch m) => MonadCatch (ComposeT t1 t2 m) where
+  catch throwing catching = restoreT . pure =<< liftWith (\ runT -> catch (runT throwing) (runT . catching))
+
+instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadError e m) => MonadError e (ComposeT t1 t2 m) where
+  throwError = lift . throwError
+  catchError throwing catching = restoreT . pure =<< liftWith (\ runT -> catchError (runT throwing) (runT . catching))
+
+instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadReader r m) => MonadReader r (ComposeT t1 t2 m) where
+  ask = lift ask
+  local f tma = restoreT . pure =<< liftWith (\ runT -> Control.Monad.Reader.Class.local f $ runT tma)
+
+instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadState s m) => MonadState s (ComposeT t1 t2 m) where
+  get = lift get
+  put = lift . put
+
+instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadWriter w m) => MonadWriter w (ComposeT t1 t2 m) where
+  tell = lift . tell
+  listen tma = (\ (sta, w) -> (, w) <$> restoreT (pure sta)) =<< liftWith (\ runT -> listen $ runT tma)
+  pass = undefined -- TODO
 
 runComposeT :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
             -> (forall a. t2 m a -> m (StT t2 a))
