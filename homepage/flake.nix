@@ -17,7 +17,7 @@
       writeScript "homepage-full" ''
         #!${pkgs.bash}/bin/bash
         ${self.packages.x86_64-linux.homepage}/bin/homepage \
-          --directory-blog ${self.packages.x86_64-linux.blog}/static/blog \
+          --directory-blog ${self.packages.x86_64-linux.blog} \
           --directory-files ${self.packages.x86_64-linux.files} \
           --directory-static ${self.packages.x86_64-linux.static}
       '';
@@ -34,12 +34,11 @@
         src = ./static/blog;
         buildPhase = ''
           mkdir -p static
-          asciidoctor myWayToCoreboot.adoc --backend html5 --doctype article --out-file blog/myWayToCoreboot.html --safe-mode secure --no-header-footer
-          asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file blog/myOwnImplementationOfIExpressions.html --safe-mode secure --no-header-footer
+          asciidoctor myWayToCoreboot.adoc --backend html5 --doctype article --out-file static/myWayToCoreboot.html --safe-mode secure --no-header-footer
+          asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file static/myOwnImplementationOfIExpressions.html --safe-mode secure --no-header-footer
         '';
         installPhase = ''
-          mkdir -p $out/static
-          cp --recursive blog $out/static
+          cp --recursive static $out
         '';
         buildInputs = [
         ];
@@ -48,20 +47,15 @@
         ];
       };
 
-    # TODO
     packages.x86_64-linux.files =
       with import nixpkgs { system = "x86_64-linux"; };
       stdenv.mkDerivation {
-        name = "blog"; # TODO: Necessary to avoid segmentation fault.
-        src = ./static/blog;
+        name = "files"; # TODO: Necessary to avoid segmentation fault.
+        src = ./static/files;
         buildPhase = ''
-          mkdir -p static
-          asciidoctor myWayToCoreboot.adoc -o blog/myWayToCoreboot.html
-          asciidoctor myOwnImplementationOfIExpressions.adoc -o blog/myOwnImplementationOfIExpressions.html
         '';
         installPhase = ''
-          mkdir -p $out/static
-          cp --recursive blog $out/static
+          cp --recursive . $out
         '';
         buildInputs = [
         ];
@@ -70,14 +64,12 @@
         ];
       };
 
-    # TODO
     packages.x86_64-linux.static =
       with import nixpkgs { system = "x86_64-linux"; };
       stdenv.mkDerivation {
         name = "static"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/static;
         buildPhase = ''
-          mkdir -p static
           convert favicon.xpm favicon.png
         '';
         installPhase = ''
