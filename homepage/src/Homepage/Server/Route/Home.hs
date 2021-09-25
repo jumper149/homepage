@@ -2,8 +2,8 @@ module Homepage.Server.Route.Home where
 
 import Homepage.Configuration
 import Homepage.Server.Html.Blog
-import Homepage.Server.Html.Document
 import Homepage.Server.Html.Depth
+import Homepage.Server.Html.Document
 import Homepage.Server.Tab
 
 import Servant

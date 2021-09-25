@@ -9,7 +9,13 @@ hrefWithDepth :: T.Text -- ^ base URL
               -> Maybe Natural -- ^ depth
               -> AttributeValue
               -> Attribute
-hrefWithDepth baseUrl Nothing ref = href $ textValue baseUrl <> "/" <> ref
-hrefWithDepth _ (Just 0) ref = href $ "./" <> ref
-hrefWithDepth _ (Just 1) ref = href $ "../" <> ref
-hrefWithDepth baseUrl (Just n) ref = hrefWithDepth baseUrl (Just $ pred n) $  "../" <> ref
+hrefWithDepth baseUrl depth ref = href $ withDepth baseUrl depth ref
+
+withDepth :: T.Text -- ^ base URL
+          -> Maybe Natural -- ^ depth
+          -> AttributeValue
+          -> AttributeValue
+withDepth baseUrl Nothing ref = textValue baseUrl <> "/" <> ref
+withDepth _ (Just 0) ref = "./" <> ref
+withDepth _ (Just 1) ref = "../" <> ref
+withDepth baseUrl (Just n) ref = withDepth baseUrl (Just $ pred n) $  "../" <> ref
