@@ -71,12 +71,11 @@
         src = ./static/static;
         buildPhase = ''
           convert favicon.xpm favicon.png
+          rm favicon.xpm
         '';
         installPhase = ''
           mkdir -p $out
-          cp favicon.png $out/favicon.png
-          cp stylesheet.css $out/stylesheet.css
-          cp asciidoctor.css $out/asciidoctor.css
+          cp --recursive . $out
         '';
         buildInputs = [
         ];
@@ -126,7 +125,7 @@
             description = "Homepage";
             serviceConfig = {
               DynamicUser = true;
-              ExecStart = "${self.defaultPackage.x86_64-linux}/homepage-full";
+              ExecStart = "${self.defaultPackage.x86_64-linux}";
             };
           };
         };
