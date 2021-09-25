@@ -1,15 +1,15 @@
 module Homepage where
 
+import Homepage.Application
 import Homepage.Configuration
-import Homepage.CLI
 import Homepage.Server.Route
 
-import Servant.Server.Generic
+import Control.Monad.Trans.Control
 import Network.Wai.Handler.Warp
+import Servant.Server.Generic
 
 main :: IO ()
-main = do
-  config <- launch
-  let runStack :: ConfiguredT m a -> m a
-      runStack x = runConfiguredT x config
-  run (fromEnum $ configPort config) $ genericServeT runStack routes
+main = runApplication $ do
+  port <- configPort <$> configuration
+  liftWith $ \ runT ->
+    run (fromEnum port) $ genericServeT runT routes
