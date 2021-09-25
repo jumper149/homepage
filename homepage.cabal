@@ -5,6 +5,7 @@ version: 0.0.0.0
 library
   exposed-modules:     Homepage
                      , Homepage.Application
+                     , Homepage.Application.Compose
                      , Homepage.Application.Configured
                      , Homepage.Blog
                      , Homepage.CLI
@@ -35,6 +36,7 @@ library
                      , http-types
                      , lifted-base
                      , monad-control
+                     , monad-logger
                      , mtl
                      , servant
                      , servant-blaze
