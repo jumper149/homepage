@@ -14,13 +14,14 @@ import Control.Monad.Logger
 import Control.Monad.Trans.Control
 
 newtype ApplicationT m a = ApplicationT { unApplicationT :: (LoggingT |. ConfiguredT |. IdentityT) m a }
-  deriving newtype (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl, MonadThrow, MonadCatch, MonadError e)
+  deriving newtype (Applicative, Functor, Monad)
+  deriving newtype (MonadBase b, MonadBaseControl b)
+  deriving newtype (MonadTrans, MonadTransControl)
+  deriving newtype (MonadThrow, MonadCatch)
+  deriving newtype (MonadLogger)
+  deriving newtype (MonadError e)
+  deriving newtype (MonadConfigured)
 
-instance Monad m => MonadConfigured (ApplicationT m) where
-  configuration = ApplicationT . ComposeT . lift . ComposeT $ configuration
-
-instance MonadIO m => MonadLogger (ApplicationT m) where
-  monadLoggerLog loc logSource logLevel = ApplicationT . ComposeT . monadLoggerLog loc logSource logLevel
 
 runApplication :: MonadIO m
                => ApplicationT m a
