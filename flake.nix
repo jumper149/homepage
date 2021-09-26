@@ -12,16 +12,6 @@
 
   outputs = { self, nixpkgs }: {
 
-    defaultPackage.x86_64-linux =
-      with import nixpkgs { system = "x86_64-linux"; };
-      writeScript "homepage-full" ''
-        #!${pkgs.bash}/bin/bash
-        ${self.packages.x86_64-linux.homepage}/bin/homepage \
-          --directory-blog ${self.packages.x86_64-linux.blog} \
-          --directory-files ${self.packages.x86_64-linux.files} \
-          --directory-static ${self.packages.x86_64-linux.static}
-      '';
-
     packages.x86_64-linux.homepage =
       with import nixpkgs { system = "x86_64-linux"; };
       let src = nix-gitignore.gitignoreSource [] ./.;
@@ -104,8 +94,30 @@
         withHoogle = true;
       };
 
-      nixosModule = { config, lib, ... }:
-      let cfg = config.services.homepage;
+    nixosModule = { config, lib, ... }:
+      let
+        cfg = config.services.homepage;
+        homepageConfig = {
+          configDirectoryBlog = "${self.packages.x86_64-linux.blog}";
+          configDirectoryFiles = "${self.packages.x86_64-linux.files}";
+          configDirectoryStatic = "${self.packages.x86_64-linux.static}";
+          configPort = 8008;
+          configBaseUrl = "localhost:8008";
+          configBlogEntries = {
+            unBlogEntries = {
+              myWayToCoreboot = {
+                blogContent = "myWayToCoreboot";
+                blogTimestamp = "2019-04-04";
+                blogTitle = "my Way to Coreboot";
+              };
+              myOwnImplementationOfIExpressions = {
+                blogContent = "myOwnImplementationOfIExpressions";
+                blogTimestamp = "2019-06-30";
+                blogTitle = "my own Implementation of I-Expressions";
+              };
+            };
+          };
+        } // cfg.extraConfig;
       in {
         options = {
           services.homepage = {
@@ -116,16 +128,32 @@
                 Felix Springer's Homepage.
               '';
             };
+            extraConfig = lib.mkOption {
+              default = { };
+              type = with lib.types; attrsOf anything;
+              description = ''
+                Configuration, that will be merged with default options and serialized to JSON.
+              '';
+            };
           };
         };
         config = lib.mkIf cfg.enable {
+          environment = {
+            etc."homepage.json".text = builtins.toJSON homepageConfig;
+          };
           systemd.services.homepage = {
             wantedBy = [ "multi-user.target" ];
             after = [ "network.target" ];
             description = "Homepage";
+            environment = {
+              HOMEPAGE_CONFIG_FILE = "/etc/homepage.json";
+            };
+            restartTriggers = [
+              config.environment.etc."homepage.json".source
+            ];
             serviceConfig = {
               DynamicUser = true;
-              ExecStart = "${self.defaultPackage.x86_64-linux}";
+              ExecStart = "${self.packages.x86_64-linux.homepage}/bin/homepage";
             };
           };
         };
