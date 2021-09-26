@@ -12,6 +12,7 @@ import Control.Monad.Except
 import Control.Monad.Identity
 import Control.Monad.Logger
 import Control.Monad.Trans.Control
+import Data.Foldable
 
 newtype ApplicationT m a = ApplicationT { unApplicationT :: (LoggingT |. ConfiguredT |. IdentityT) m a }
   deriving newtype (Applicative, Functor, Monad)
@@ -29,5 +30,13 @@ runApplication :: MonadIO m
 runApplication app = do
   config <- liftIO launch
   let
+
     runConfiguredT' tma = runConfiguredT tma config
-  runStdoutLoggingT |.| runConfiguredT' |.| runIdentityT $ unApplicationT app
+
+    configLog = [] :: [LogLine] -- TODO: Acquire together with config.
+    runLoggingT' tma = runStdoutLoggingT $ do
+      traverse_ (\ (loc, logSource, logLevel, logStr) ->
+        monadLoggerLog loc logSource logLevel logStr) configLog
+      tma
+
+  runLoggingT' |.| runConfiguredT' |.| runIdentityT $ unApplicationT app
