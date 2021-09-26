@@ -4,6 +4,7 @@ module Homepage.Application where
 
 import Homepage.Application.Compose
 import Homepage.Application.Configured
+import Homepage.Configuration
 import Homepage.Configuration.Acquisition
 
 import Control.Monad.Base
@@ -24,7 +25,7 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: (LoggingT |. Configu
   deriving newtype (MonadConfigured)
 
 
-runApplication :: MonadIO m
+runApplication :: (MonadIO m, MonadBaseControl IO m)
                => ApplicationT m a
                -> m a
 runApplication app = do
@@ -40,9 +41,11 @@ runApplication app = do
 
     runConfiguredT' tma = runConfiguredT tma config
 
-    runLoggingT' tma = runStdoutLoggingT $ do
-      traverse_ (\ (loc, logSource, logLevel, logStr) ->
-        monadLoggerLog loc logSource logLevel logStr) configLog
-      tma
+    runLoggingT' tma = do
+      logFile <- configLogFile <$> configuration
+      runFileLoggingT logFile $ do
+        traverse_ (\ (loc, logSource, logLevel, logStr) ->
+          monadLoggerLog loc logSource logLevel logStr) configLog
+        tma
 
   runLoggingT' |.| runConfiguredT' |.| runIdentityT $ unApplicationT app
