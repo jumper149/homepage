@@ -12,16 +12,15 @@ import Control.Monad.Except
 import Control.Monad.Identity
 import Control.Monad.Logger
 import Control.Monad.Trans.Control
-import Control.Monad.Trans.Reader
 
-newtype ApplicationT m a = ApplicationT { unApplicationT :: (ConfiguredT |. LoggingT |. IdentityT) m a }
+newtype ApplicationT m a = ApplicationT { unApplicationT :: (LoggingT |. ConfiguredT |. IdentityT) m a }
   deriving newtype (Applicative, Functor, Monad, MonadBase b, MonadBaseControl b, MonadTrans, MonadTransControl, MonadThrow, MonadCatch, MonadError e)
 
 instance Monad m => MonadConfigured (ApplicationT m) where
-  configuration = ApplicationT $ ComposeT configuration
+  configuration = ApplicationT . ComposeT . lift . ComposeT $ configuration
 
 instance MonadIO m => MonadLogger (ApplicationT m) where
-  monadLoggerLog loc logSource logLevel = ApplicationT . ComposeT . lift . ComposeT . monadLoggerLog loc logSource logLevel
+  monadLoggerLog loc logSource logLevel = ApplicationT . ComposeT . monadLoggerLog loc logSource logLevel
 
 runApplication :: MonadIO m
                => ApplicationT m a
@@ -30,4 +29,4 @@ runApplication app = do
   config <- liftIO launch
   let
     runConfiguredT' tma = runConfiguredT tma config
-  runConfiguredT' |.| runStdoutLoggingT |.| runIdentityT $ unApplicationT app
+  runStdoutLoggingT |.| runConfiguredT' |.| runIdentityT $ unApplicationT app
