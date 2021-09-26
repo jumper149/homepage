@@ -14,7 +14,7 @@ data Configuration = Configuration
     , configBlogEntries :: BlogEntries
     , configPort :: Word16
     , configBaseUrl :: T.Text
-    , configLogFile :: FilePath
+    , configLogFile :: Maybe FilePath
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving anyclass (A.FromJSON, A.ToJSON)

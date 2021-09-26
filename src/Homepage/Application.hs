@@ -42,8 +42,9 @@ runApplication app = do
     runConfiguredT' tma = runConfiguredT tma config
 
     runLoggingT' tma = do
-      logFile <- configLogFile <$> configuration
-      runFileLoggingT logFile $ do
+      maybeLogFile <- configLogFile <$> configuration
+      let runMaybeFileLoggingT = maybe runStdoutLoggingT runFileLoggingT maybeLogFile
+      runMaybeFileLoggingT $ do
         traverse_ (\ (loc, logSource, logLevel, logStr) ->
           monadLoggerLog loc logSource logLevel logStr) configLog
         tma

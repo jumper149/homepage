@@ -17,5 +17,5 @@
 , "configBaseUrl": "localhost:8008"
 , "configPort": 8008
 , "configDirectoryStatic": "./static/static"
-, "configLogFile": "./homepage.log"
+, "configLogFile": null
 }
