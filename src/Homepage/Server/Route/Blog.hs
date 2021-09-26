@@ -8,6 +8,7 @@ import Homepage.Configuration
 import Homepage.Server.Err404
 import Homepage.Server.Html.AsciiDoc
 import Homepage.Server.Html.Blog
+import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import qualified Homepage.Server.Route.Blog.Atom as Atom
 import Homepage.Server.Tab
@@ -44,6 +45,10 @@ overviewHandler = do
   $logInfo "Serve blog overview."
   pure $ document baseUrl (Just 0) (Just TabBlog) $ do
     h2 "my Blog"
+    p $ do
+      "My blog is available as an "
+      a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ "Atom Feed"
+      "."
     blogList baseUrl (Just 0) blogs
 
 articlesHandler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
