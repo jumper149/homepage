@@ -2,9 +2,9 @@
 
 module Homepage.Application where
 
-import Homepage.CLI
 import Homepage.Application.Compose
 import Homepage.Application.Configured
+import Homepage.Configuration.Acquisition
 
 import Control.Monad.Base
 import Control.Monad.Catch
@@ -28,12 +28,18 @@ runApplication :: MonadIO m
                => ApplicationT m a
                -> m a
 runApplication app = do
-  config <- liftIO launch
+  (maybeConfig, configLog) <- runWriterLoggingT acquireConfig
+
+  config <- case maybeConfig of
+              Nothing -> do
+                liftIO $ traverse_ print configLog
+                error "No configuration."
+              Just c -> pure c
+
   let
 
     runConfiguredT' tma = runConfiguredT tma config
 
-    configLog = [] :: [LogLine] -- TODO: Acquire together with config.
     runLoggingT' tma = runStdoutLoggingT $ do
       traverse_ (\ (loc, logSource, logLevel, logStr) ->
         monadLoggerLog loc logSource logLevel logStr) configLog

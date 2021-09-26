@@ -1,0 +1,20 @@
+{ "configDirectoryBlog": "./static/blog"
+, "configBlogEntries":
+  { "unBlogEntries":
+    { "myWayToCoreboot":
+      { "blogContent": "myWayToCoreboot"
+      , "blogTimestamp": "2019-04-04"
+      , "blogTitle": "my Way to Coreboot"
+      }
+    , "myOwnImplementationOfIExpressions":
+      { "blogContent": "myOwnImplementationOfIExpressions"
+      , "blogTimestamp": "2019-06-30"
+      , "blogTitle": "my own Implementation of I-Expressions"
+      }
+    }
+  }
+, "configDirectoryFiles": "./static/files"
+, "configBaseUrl": "localhost:8008"
+, "configPort": 8008
+, "configDirectoryStatic": "./static/static"
+}

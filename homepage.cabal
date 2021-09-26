@@ -8,8 +8,8 @@ library
                      , Homepage.Application.Compose
                      , Homepage.Application.Configured
                      , Homepage.Blog
-                     , Homepage.CLI
                      , Homepage.Configuration
+                     , Homepage.Configuration.Acquisition
                      , Homepage.Server.Html.AsciiDoc
                      , Homepage.Server.Html.Blog
                      , Homepage.Server.Html.Depth
@@ -25,7 +25,8 @@ library
                      , Homepage.Server.Route.Projects
                      , Homepage.Server.Route.Static
                      , Homepage.Server.Tab
-  build-depends:       base
+  build-depends:       aeson
+                     , base
                      , blaze-html
                      , blaze-markup
                      , bytestring
@@ -57,6 +58,7 @@ library
   default-extensions:  BangPatterns
                        ConstraintKinds
                        DataKinds
+                       DeriveAnyClass
                        DeriveFoldable
                        DeriveFunctor
                        DeriveGeneric

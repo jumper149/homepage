@@ -2,6 +2,7 @@ module Homepage.Configuration where
 
 import Homepage.Blog
 
+import qualified Data.Aeson as A
 import qualified Data.Text as T
 import Data.Word
 import GHC.Generics
@@ -15,3 +16,4 @@ data Configuration = Configuration
     , configBaseUrl :: T.Text
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
+  deriving anyclass (A.FromJSON, A.ToJSON)
