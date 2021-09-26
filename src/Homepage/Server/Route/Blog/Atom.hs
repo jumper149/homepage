@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Homepage.Server.Route.Blog.Atom where
 
 import Homepage.Application.Configured
@@ -6,6 +8,7 @@ import Homepage.Configuration
 
 import Control.Monad.Base
 import Control.Monad.Error.Class
+import Control.Monad.Logger
 import Data.List
 import Data.Ord
 import qualified Data.Map as M
@@ -34,7 +37,7 @@ newtype AtomFeed = AtomFeed { unAtomFeed :: LT.Text }
 instance MimeRender Atom AtomFeed where
   mimeRender _ (AtomFeed text) = LT.encodeUtf8 text
 
-handler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m)
+handler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
         => ServerT API m
 handler = do
   blogs <- configBlogEntries <$> configuration
@@ -42,8 +45,12 @@ handler = do
   entries <- traverse (uncurry atomEntry) entryList
   feed <- Feed.AtomFeed <$> atomFeed entries
   case Feed.textFeed feed of
-    Nothing -> throwError err500 { errBody = "Failed to serialize feed." }
-    Just text -> pure $ AtomFeed text
+    Nothing -> do
+      $logError "Failed to serve Atom feed."
+      throwError err500 { errBody = "Failed to serialize feed." }
+    Just text -> do
+      $logInfo "Serve Atom feed."
+      pure $ AtomFeed text
 
 atomFeed :: MonadConfigured m
          => [Atom.Entry]
@@ -74,14 +81,16 @@ atomFeed entries = do
     , Atom.feedOther = []
     }
 
-atomEntry :: (MonadBase IO m, MonadConfigured m)
+atomEntry :: (MonadBase IO m, MonadConfigured m, MonadLogger m)
           => T.Text -- ^ Blog ID
           -> BlogEntry
           -> m Atom.Entry
 atomEntry blogId BlogEntry { blogContent , blogTitle , blogTimestamp } = do
   baseUrl <- configBaseUrl <$> configuration
   dir <- configDirectoryBlog <$> configuration
-  content <- liftBase $ T.readFile $ dir <> "/" <> T.unpack blogContent <> ".html"
+  let file = dir <> "/" <> T.unpack blogContent <> ".html"
+  $logInfo $ "Read blog article from file: " <> T.pack (show file)
+  content <- liftBase $ T.readFile file
   pure Atom.Entry
     { Atom.entryId = baseUrl <> "/blog/" <> blogId
     , Atom.entryTitle = Atom.TextString blogTitle

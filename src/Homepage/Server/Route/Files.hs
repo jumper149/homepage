@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Homepage.Server.Route.Files where
 
 import Homepage.Application.Configured
@@ -6,6 +8,7 @@ import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import Homepage.Server.Err404
 
+import Control.Monad.Logger
 import Servant
 import Servant.HTML.Blaze
 import qualified Servant.RawM.Server as RawM
@@ -18,14 +21,15 @@ import WaiAppStatic.Types
 type API = Get '[HTML] Html
       :<|> RawM.RawM
 
-handler :: MonadConfigured m
+handler :: (MonadConfigured m, MonadLogger m)
         => ServerT API m
 handler = overviewHandler :<|> filesHandler
 
-overviewHandler :: MonadConfigured m
+overviewHandler :: (MonadConfigured m, MonadLogger m)
                 => m Html
 overviewHandler = do
   baseUrl <- configBaseUrl <$> configuration
+  $logInfo "Serve files overview."
   pure $ document baseUrl (Just 0) Nothing $ do
     h2 "my Files"
     ul $ do
@@ -51,8 +55,9 @@ overviewHandler = do
           " ]"
 
 
-filesHandler :: MonadConfigured m
+filesHandler :: (MonadConfigured m, MonadLogger m)
              => ServerT RawM.RawM m
 filesHandler = do
   directory <- configDirectoryFiles <$> configuration
+  $logInfo "Serve file download."
   RawM.serveDirectoryWith (defaultFileServerSettings directory) { ss404Handler = Just application404 }

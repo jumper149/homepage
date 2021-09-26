@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Homepage.Server.Route.Blog where
 
 import Homepage.Application.Configured
@@ -12,6 +14,7 @@ import Homepage.Server.Tab
 
 import Control.Monad.Base
 import Control.Monad.Error.Class
+import Control.Monad.Logger
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
 import Servant hiding (serveDirectoryWith)
@@ -27,26 +30,28 @@ type API = "atom.xml" :> Atom.API
         )
       :<|> Get '[HTML] Html
 
-handler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m) => ServerT API m
+handler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+        => ServerT API m
 handler = Atom.handler
      :<|> articlesHandler
      :<|> overviewHandler
 
-overviewHandler :: MonadConfigured m
+overviewHandler :: (MonadConfigured m, MonadLogger m)
                 => m Html
 overviewHandler = do
   baseUrl <- configBaseUrl <$> configuration
   blogs <- configBlogEntries <$> configuration
+  $logInfo "Serve blog overview."
   pure $ document baseUrl (Just 0) (Just TabBlog) $ do
     h2 "my Blog"
     blogList baseUrl (Just 0) blogs
 
-articlesHandler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m)
+articlesHandler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
                 => T.Text
                 -> (m Html :<|> m Html :<|> m Html)
 articlesHandler articleKey = htmlHandler articleKey :<|> undefined :<|> undefined
 
-htmlHandler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m)
+htmlHandler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
             => T.Text
             -> m Html
 htmlHandler articleKey = do
@@ -54,8 +59,13 @@ htmlHandler articleKey = do
   blogs <- configBlogEntries <$> configuration
   dir <- configDirectoryBlog <$> configuration
   case lookupBlog articleKey blogs of
-    Nothing -> servantError404
+    Nothing -> do
+        $logError $ "Failed to serve blog article: " <> T.pack (show articleKey)
+        servantError404
     Just blog -> do
-        content <- liftBase $ T.readFile $ dir <> "/" <> T.unpack (blogContent blog) <> ".html"
+        let file = dir <> "/" <> T.unpack (blogContent blog) <> ".html"
+        $logInfo $ "Read blog article from file: " <> T.pack (show file)
+        content <- liftBase $ T.readFile file
+        $logInfo $ "Serve HTML blog article: " <> T.pack (show articleKey)
         pure $ document baseUrl (Just 1) (Just TabBlog) $
           toMarkup $ AsciiDocHtml content

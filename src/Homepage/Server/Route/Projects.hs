@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Homepage.Server.Route.Projects where
 
 import Homepage.Application.Configured
@@ -5,6 +7,7 @@ import Homepage.Server.Html.Document
 import Homepage.Configuration
 import Homepage.Server.Tab
 
+import Control.Monad.Logger
 import Servant
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
@@ -12,10 +15,11 @@ import Text.Blaze.Html5.Attributes
 
 type API = Get '[HTML] Html
 
-handler :: MonadConfigured m
+handler :: (MonadConfigured m, MonadLogger m)
         => ServerT API m
 handler = do
   baseUrl <- configBaseUrl <$> configuration
+  $logInfo "Serve projects overview."
   pure $ document baseUrl (Just 0) (Just TabProjects) $ do
     h2 "my Projects"
     ul $ do

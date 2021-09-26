@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Homepage.Server.Route.Donate where
 
 import Homepage.Application.Configured
@@ -5,6 +7,7 @@ import Homepage.Configuration
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 
+import Control.Monad.Logger
 import Servant
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
@@ -15,14 +18,16 @@ import qualified Text.Blaze.Html5.Attributes as HA
 type API = Get '[HTML] Html
       :<|> "thankYou" :> Get '[HTML] Html
 
-handler :: MonadConfigured m => ServerT API m
+handler :: (MonadConfigured m, MonadLogger m)
+        => ServerT API m
 handler = donateHandler
      :<|> thankYouHandler
 
-donateHandler :: MonadConfigured m
+donateHandler :: (MonadConfigured m, MonadLogger m)
               => m Html
 donateHandler = do
   baseUrl <- configBaseUrl <$> configuration
+  $logInfo "Serve donation page."
   pure $ document baseUrl (Just 0) Nothing $ do
     h2 "Donate to me"
     h3 "Reasons to donate"
@@ -61,10 +66,11 @@ donateHandler = do
             ! HA.style "width:128px;height:128px;"
 
 -- TODO: Make sure that people are actually redirected here.
-thankYouHandler :: MonadConfigured m
-              => m Html
+thankYouHandler :: (MonadConfigured m, MonadLogger m)
+                => m Html
 thankYouHandler = do
   baseUrl <- configBaseUrl <$> configuration
+  $logInfo "Serve thankful donation page."
   pure $ document baseUrl (Just 1) Nothing $ do
     h2 "Thank you"
     p "I just want to let you know, that you are an awesome human being and I am very grateful for your support!"

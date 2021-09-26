@@ -1,3 +1,5 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Homepage.Server.Route.Home where
 
 import Homepage.Application.Configured
@@ -7,6 +9,7 @@ import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import Homepage.Server.Tab
 
+import Control.Monad.Logger
 import Servant
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
@@ -14,11 +17,12 @@ import Text.Blaze.Html5.Attributes
 
 type API = Get '[HTML] Html
 
-handler :: MonadConfigured m
+handler :: (MonadConfigured m, MonadLogger m)
         => ServerT API m
 handler = do
   baseUrl <- configBaseUrl <$> configuration
   blogs <- configBlogEntries <$> configuration
+  $logInfo "Serve main page."
   pure $ document baseUrl (Just 0) (Just TabHome) $ do
     img ! src "files/portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
     h1 "Felix Springer"
