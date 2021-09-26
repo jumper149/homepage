@@ -14,7 +14,7 @@
     }
   }
 , "configDirectoryFiles": "./static/files"
-, "configBaseUrl": "localhost:8008"
+, "configBaseUrl": "http://localhost:8008"
 , "configPort": 8008
 , "configDirectoryStatic": "./static/static"
 , "configLogFile": null
