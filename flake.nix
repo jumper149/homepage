@@ -26,6 +26,7 @@
           mkdir -p static
           asciidoctor myWayToCoreboot.adoc --backend html5 --doctype article --out-file static/myWayToCoreboot.html --safe-mode secure --no-header-footer
           asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file static/myOwnImplementationOfIExpressions.html --safe-mode secure --no-header-footer
+          asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 --doctype article --out-file static/aSmallShowcaseOfBlucontrol.html --safe-mode secure --no-header-footer
         '';
         installPhase = ''
           cp --recursive static $out
