@@ -3,6 +3,7 @@
 module Homepage.Application.Compose where
 
 import Homepage.Application.Configured
+import Homepage.Application.Logging
 
 import Control.Monad.Base
 import Control.Monad.Catch
@@ -75,7 +76,7 @@ instance {-# OVERLAPPING #-} Monad (t2 m) => MonadConfigured (ComposeT Configure
 instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadLogger (t2 m)) => MonadLogger (ComposeT t1 t2 m) where
   monadLoggerLog loc logSource logLevel = ComposeT . lift . monadLoggerLog loc logSource logLevel
 
-instance {-# OVERLAPPING #-} MonadIO (t2 m) => MonadLogger (ComposeT LoggingT t2 m) where
+instance {-# OVERLAPPING #-} MonadIO (t2 m) => MonadLogger (ComposeT LoggingT' t2 m) where
   monadLoggerLog loc logSource logLevel = ComposeT . monadLoggerLog loc logSource logLevel
 
 runComposeT :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))

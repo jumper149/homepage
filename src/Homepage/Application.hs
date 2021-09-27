@@ -4,6 +4,7 @@ module Homepage.Application where
 
 import Homepage.Application.Compose
 import Homepage.Application.Configured
+import Homepage.Application.Logging
 import Homepage.Configuration
 import Homepage.Configuration.Acquisition
 
@@ -15,7 +16,7 @@ import Control.Monad.Logger
 import Control.Monad.Trans.Control
 import Data.Foldable
 
-newtype ApplicationT m a = ApplicationT { unApplicationT :: (LoggingT |. ConfiguredT |. IdentityT) m a }
+newtype ApplicationT m a = ApplicationT { unApplicationT :: (LoggingT' |. ConfiguredT |. IdentityT) m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadTrans, MonadTransControl)
@@ -41,12 +42,11 @@ runApplication app = do
 
     runConfiguredT' tma = runConfiguredT tma config
 
-    runLoggingT' tma = do
+    runLoggingT'' tma = do
       maybeLogFile <- configLogFile <$> configuration
-      let runMaybeFileLoggingT = maybe runStdoutLoggingT runFileLoggingT maybeLogFile
-      runMaybeFileLoggingT $ do
+      runLoggingT' maybeLogFile $ do
         traverse_ (\ (loc, logSource, logLevel, logStr) ->
           monadLoggerLog loc logSource logLevel logStr) configLog
         tma
 
-  runLoggingT' |.| runConfiguredT' |.| runIdentityT $ unApplicationT app
+  runLoggingT'' |.| runConfiguredT' |.| runIdentityT $ unApplicationT app
