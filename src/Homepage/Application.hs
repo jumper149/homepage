@@ -33,7 +33,7 @@ runApplication app = do
 
   config <- case maybeConfig of
               Nothing -> do
-                liftIO $ traverse_ print configLog
+                runLoggingT' Nothing $ traverse_ logDelayed configLog
                 error "No configuration."
               Just c -> pure c
 
@@ -44,8 +44,7 @@ runApplication app = do
     runLoggingT'' tma = do
       maybeLogFile <- configLogFile <$> configuration
       runLoggingT' maybeLogFile $ do
-        traverse_ (\ (loc, logSource, logLevel, logStr) ->
-          monadLoggerLog loc logSource logLevel logStr) configLog
+        traverse_ logDelayed configLog
         tma
 
   runLoggingT'' |.| runConfiguredT' |.| runIdentityT $ unApplicationT app
