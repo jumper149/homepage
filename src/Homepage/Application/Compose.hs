@@ -2,10 +2,6 @@
 
 module Homepage.Application.Compose where
 
-import Homepage.Application.Configurable
-import Homepage.Application.Configured
-import Homepage.Application.Logging
-
 import Control.Monad.Base
 import Control.Monad.Catch
 import Control.Monad.Error.Class
@@ -68,23 +64,8 @@ instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadWriter w m
   listen tma = (\ (sta, w) -> (, w) <$> restoreT (pure sta)) =<< liftWith (\ runT -> listen $ runT tma)
   pass tma = lift . pass . pure =<< tma
 
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadConfigurable (t2 m)) => MonadConfigurable (ComposeT t1 t2 m) where
-  preConfiguration = ComposeT . lift $ preConfiguration
-
-instance {-# OVERLAPPING #-} Monad (t2 m) => MonadConfigurable (ComposeT ConfigurableT t2 m) where
-  preConfiguration = ComposeT preConfiguration
-
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadConfigured (t2 m)) => MonadConfigured (ComposeT t1 t2 m) where
-  configuration = ComposeT . lift $ configuration
-
-instance {-# OVERLAPPING #-} Monad (t2 m) => MonadConfigured (ComposeT ConfiguredT t2 m) where
-  configuration = ComposeT configuration
-
 instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadLogger (t2 m)) => MonadLogger (ComposeT t1 t2 m) where
   monadLoggerLog loc logSource logLevel = ComposeT . lift . monadLoggerLog loc logSource logLevel
-
-instance {-# OVERLAPPING #-} MonadIO (t2 m) => MonadLogger (ComposeT LoggingT' t2 m) where
-  monadLoggerLog loc logSource logLevel = ComposeT . monadLoggerLog loc logSource logLevel
 
 runComposeT :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
             -> (forall a. t2 m a -> m (StT t2 a))

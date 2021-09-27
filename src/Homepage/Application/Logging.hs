@@ -1,6 +1,9 @@
 {-# LANGUAGE UndecidableInstances #-}
 
 module Homepage.Application.Logging where
+
+import Homepage.Application.Compose
+
 import Control.Monad.Except
 import Control.Monad.Logger
 import Control.Monad.Trans.Control
@@ -16,6 +19,9 @@ instance MonadIO m => MonadLogger (LoggingT' m) where
     time <- lift $ liftIO T.getCurrentTime
     LoggingT' $ monadLoggerLog loc logSource logLevel $
       toLogStr $ B.pack (show time) <> " | " <> fromLogStr (toLogStr logStr)
+
+instance {-# OVERLAPPING #-} MonadIO (t2 m) => MonadLogger (ComposeT LoggingT' t2 m) where
+  monadLoggerLog loc logSource logLevel = ComposeT . monadLoggerLog loc logSource logLevel
 
 runLoggingT' :: (MonadIO m, MonadBaseControl IO m)
              => Maybe FilePath
