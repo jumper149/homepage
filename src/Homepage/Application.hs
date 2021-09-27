@@ -25,7 +25,6 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: (LoggingT' |. Config
   deriving newtype (MonadError e)
   deriving newtype (MonadConfigured)
 
-
 runApplication :: (MonadIO m, MonadBaseControl IO m)
                => ApplicationT m a
                -> m a
