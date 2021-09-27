@@ -115,6 +115,11 @@
                 blogTimestamp = "2019-06-30";
                 blogTitle = "my own Implementation of I-Expressions";
               };
+              aSmallShowcaseOfBlucontrol = {
+                blogContent = "aSmallShowcaseOfBlucontrol";
+                blogTimestamp = "2021-09-27";
+                blogTitle = "a small Showcase of blucontrol";
+              };
             };
           };
         } // cfg.extraConfig;
