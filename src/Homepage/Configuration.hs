@@ -18,3 +18,10 @@ data Configuration = Configuration
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving anyclass (A.FromJSON, A.ToJSON)
+
+data PreConfiguration = PreConfiguration
+    { preConfigConfigFile :: FilePath
+    , preConfigLogFile :: Maybe FilePath
+    }
+  deriving stock (Eq, Generic, Ord, Read, Show)
+  deriving anyclass (A.FromJSON, A.ToJSON)

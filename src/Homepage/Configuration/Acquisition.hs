@@ -11,30 +11,45 @@ import qualified Data.Text as T
 import System.Environment
 import System.Posix.Files
 
-configFileDefault :: FilePath
-configFileDefault = "./homepage.json"
-
 configFileEnvironmentVariable :: String
 configFileEnvironmentVariable = "HOMEPAGE_CONFIG_FILE"
 
-acquireConfig :: (MonadIO m, MonadLogger m)
-              => m (Maybe Configuration)
-acquireConfig = do
-  $logInfo $ "Lookup environment variable: " <> T.pack (show configFileEnvironmentVariable)
-  maybeFilePath <- liftIO $ lookupEnv configFileEnvironmentVariable
-  filePath <- case maybeFilePath of
+logFileEnvironmentVariable :: String
+logFileEnvironmentVariable = "HOMEPAGE_LOG_FILE"
+
+acquirePreConfig :: (MonadIO m, MonadLogger m)
+                 => m PreConfiguration
+acquirePreConfig = do
+
+  $logInfo $ "Looking up environment variable: " <> T.pack (show configFileEnvironmentVariable)
+  maybeConfigFilePath <- liftIO $ lookupEnv configFileEnvironmentVariable
+  preConfigConfigFile <- case maybeConfigFilePath of
     Nothing -> do
-      $logInfo $ "Using default configuration file: " <> T.pack (show configFileDefault)
+      let configFileDefault = "./homepage.json"
+      $logWarn $ "Using default configuration file: " <> T.pack (show configFileDefault)
       pure configFileDefault
     Just fp -> do
       $logInfo $ "Using configuration file: " <> T.pack (show fp)
       pure fp
+
+  $logInfo $ "Looking up environment variable: " <> T.pack (show logFileEnvironmentVariable)
+  preConfigLogFile <- liftIO $ lookupEnv logFileEnvironmentVariable
+  case preConfigLogFile of
+    Nothing -> $logInfo "Using no log file."
+    Just fp -> $logInfo $ "Using log file: " <> T.pack (show fp)
+
+  pure PreConfiguration { preConfigConfigFile, preConfigLogFile }
+
+acquireConfig :: (MonadIO m, MonadLogger m)
+              => PreConfiguration
+              -> m (Maybe Configuration)
+acquireConfig PreConfiguration { preConfigConfigFile }= do
   $logInfo "Checking configuration file."
-  exists <- liftIO $ fileExist filePath
+  exists <- liftIO $ fileExist preConfigConfigFile
   if exists
      then do
        $logInfo "Reading configuration file."
-       eitherContent <- liftIO $ A.eitherDecodeFileStrict filePath
+       eitherContent <- liftIO $ A.eitherDecodeFileStrict preConfigConfigFile
        case eitherContent of
          Left err -> do
            $logError $ "Failed to read/parse configuration file: " <> T.pack (show err)

@@ -6,6 +6,7 @@ library
   exposed-modules:     Homepage
                      , Homepage.Application
                      , Homepage.Application.Compose
+                     , Homepage.Application.Configurable
                      , Homepage.Application.Configured
                      , Homepage.Application.Logging
                      , Homepage.Blog

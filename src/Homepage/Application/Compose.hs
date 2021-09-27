@@ -2,6 +2,7 @@
 
 module Homepage.Application.Compose where
 
+import Homepage.Application.Configurable
 import Homepage.Application.Configured
 import Homepage.Application.Logging
 
@@ -66,6 +67,12 @@ instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadWriter w m
   tell = lift . tell
   listen tma = (\ (sta, w) -> (, w) <$> restoreT (pure sta)) =<< liftWith (\ runT -> listen $ runT tma)
   pass tma = lift . pass . pure =<< tma
+
+instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadConfigurable (t2 m)) => MonadConfigurable (ComposeT t1 t2 m) where
+  preConfiguration = ComposeT . lift $ preConfiguration
+
+instance {-# OVERLAPPING #-} Monad (t2 m) => MonadConfigurable (ComposeT ConfigurableT t2 m) where
+  preConfiguration = ComposeT preConfiguration
 
 instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadConfigured (t2 m)) => MonadConfigured (ComposeT t1 t2 m) where
   configuration = ComposeT . lift $ configuration

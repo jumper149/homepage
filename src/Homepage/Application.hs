@@ -3,6 +3,7 @@
 module Homepage.Application where
 
 import Homepage.Application.Compose
+import Homepage.Application.Configurable
 import Homepage.Application.Configured
 import Homepage.Application.Logging
 import Homepage.Configuration
@@ -16,7 +17,7 @@ import Control.Monad.Logger
 import Control.Monad.Trans.Control
 import Data.Foldable
 
-newtype ApplicationT m a = ApplicationT { unApplicationT :: (LoggingT' |. ConfiguredT |. IdentityT) m a }
+newtype ApplicationT m a = ApplicationT { unApplicationT :: (ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT) m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadTrans, MonadTransControl)
@@ -29,22 +30,22 @@ runApplication :: (MonadIO m, MonadBaseControl IO m)
                => ApplicationT m a
                -> m a
 runApplication app = do
-  (maybeConfig, configLog) <- runWriterLoggingT acquireConfig
-
-  config <- case maybeConfig of
-              Nothing -> do
-                runLoggingT' Nothing $ traverse_ logDelayed configLog
-                error "No configuration."
-              Just c -> pure c
+  (preConfig, preConfigLog) <- runWriterLoggingT acquirePreConfig
 
   let
 
-    runConfiguredT' tma = runConfiguredT tma config
+    runConfigurableT' tma = runConfigurableT tma preConfig
 
     runLoggingT'' tma = do
-      maybeLogFile <- configLogFile <$> configuration
+      maybeLogFile <- preConfigLogFile <$> preConfiguration
       runLoggingT' maybeLogFile $ do
-        traverse_ logDelayed configLog
+        traverse_ logDelayed preConfigLog
         tma
 
-  runLoggingT'' |.| runConfiguredT' |.| runIdentityT $ unApplicationT app
+    runConfiguredT' tma = do
+      maybeConfig <- acquireConfig =<< preConfiguration
+      case maybeConfig of
+        Nothing -> error "No configuration."
+        Just config -> runConfiguredT tma config
+
+  runConfiguredT' |.| runLoggingT'' |.| runConfigurableT' |.| runIdentityT $ unApplicationT app
