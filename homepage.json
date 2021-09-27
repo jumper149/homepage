@@ -1,4 +1,8 @@
 { "configDirectoryBlog": "./static/blog"
+, "configDirectoryFiles": "./static/files"
+, "configDirectoryStatic": "./static/static"
+, "configPort": 8008
+, "configBaseUrl": "http://localhost:8008"
 , "configBlogEntries":
   { "unBlogEntries":
     { "myWayToCoreboot":
@@ -13,8 +17,4 @@
       }
     }
   }
-, "configDirectoryFiles": "./static/files"
-, "configBaseUrl": "http://localhost:8008"
-, "configPort": 8008
-, "configDirectoryStatic": "./static/static"
 }
