@@ -64,7 +64,7 @@ instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadState s m) => Mon
 instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadWriter w m) => MonadWriter w (ComposeT t1 t2 m) where
   tell = lift . tell
   listen tma = (\ (sta, w) -> (, w) <$> restoreT (pure sta)) =<< liftWith (\ runT -> listen $ runT tma)
-  pass = undefined -- TODO
+  pass tma = lift . pass . pure =<< tma
 
 instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadConfigured (t2 m)) => MonadConfigured (ComposeT t1 t2 m) where
   configuration = ComposeT . lift $ configuration
