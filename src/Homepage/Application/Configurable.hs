@@ -18,7 +18,7 @@ instance Monad m => MonadConfigurable (ConfigurableT m) where
 instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadConfigurable (t2 m)) => MonadConfigurable (ComposeT t1 t2 m) where
   preConfiguration = ComposeT . lift $ preConfiguration
 
-instance {-# OVERLAPPING #-} Monad (t2 m) => MonadConfigurable (ComposeT ConfigurableT t2 m) where
+instance Monad (t2 m) => MonadConfigurable (ComposeT ConfigurableT t2 m) where
   preConfiguration = ComposeT preConfiguration
 
 newtype ConfigurableT m a = ConfigurableT { unConfigurableT :: ReaderT PreConfiguration m a }
