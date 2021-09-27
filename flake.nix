@@ -103,7 +103,6 @@
           configDirectoryStatic = "${self.packages.x86_64-linux.static}";
           configPort = 8008;
           configBaseUrl = "localhost:8008";
-          configLogFile = "/var/log/homepage/access.log";
           configBlogEntries = {
             unBlogEntries = {
               myWayToCoreboot = {
@@ -148,6 +147,7 @@
             description = "Homepage";
             environment = {
               HOMEPAGE_CONFIG_FILE = "/etc/homepage.json";
+              HOMEPAGE_LOG_FILE = "/var/log/homepage/access.log";
             };
             restartTriggers = [
               config.environment.etc."homepage.json".source
