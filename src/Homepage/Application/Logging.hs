@@ -4,8 +4,8 @@ module Homepage.Application.Logging where
 
 import Homepage.Application.Compose
 
-import Control.Monad.Except
 import Control.Monad.Logger
+import Control.Monad.Trans
 import Control.Monad.Trans.Control
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Time as T
