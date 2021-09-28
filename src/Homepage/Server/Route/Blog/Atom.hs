@@ -2,18 +2,17 @@
 
 module Homepage.Server.Route.Blog.Atom where
 
+import Homepage.Application.Blog
 import Homepage.Application.Configured
 import Homepage.Blog
 import Homepage.Configuration
 
-import Control.Monad.Base
 import Control.Monad.Error.Class
 import Control.Monad.Logger
 import Data.List
 import Data.Ord
 import qualified Data.Map as M
 import qualified Data.Text as T
-import qualified Data.Text.IO as T
 import qualified Data.Text.Lazy as LT
 import qualified Data.Text.Lazy.Encoding as LT
 import qualified Data.Time as T
@@ -37,7 +36,7 @@ newtype AtomFeed = AtomFeed { unAtomFeed :: LT.Text }
 instance MimeRender Atom AtomFeed where
   mimeRender _ (AtomFeed text) = LT.encodeUtf8 text
 
-handler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+handler :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
         => ServerT API m
 handler = do
   blogs <- configBlogEntries <$> configuration
@@ -81,16 +80,14 @@ atomFeed entries = do
     , Atom.feedOther = []
     }
 
-atomEntry :: (MonadBase IO m, MonadConfigured m, MonadLogger m)
+atomEntry :: (MonadBlog m, MonadConfigured m, MonadLogger m)
           => T.Text -- ^ Blog ID
           -> BlogEntry
           -> m Atom.Entry
-atomEntry blogId BlogEntry { blogContent , blogTitle , blogTimestamp } = do
+atomEntry blogId blog@BlogEntry { blogTitle , blogTimestamp } = do
   baseUrl <- configBaseUrl <$> configuration
-  dir <- configDirectoryBlog <$> configuration
-  let file = dir <> "/" <> T.unpack blogContent <> ".html"
-  $logInfo $ "Read blog article from file: " <> T.pack (show file)
-  content <- liftBase $ T.readFile file
+  $logInfo $ "Read blog article from file: " <> T.pack (show blog)
+  content <- readBlogEntry BlogFormatHTML blog
   pure Atom.Entry
     { Atom.entryId = baseUrl <> "/blog/" <> blogId
     , Atom.entryTitle = Atom.TextString blogTitle

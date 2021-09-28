@@ -2,6 +2,7 @@
 
 module Homepage.Application where
 
+import Homepage.Application.Blog
 import Homepage.Application.Compose
 import Homepage.Application.Configurable
 import Homepage.Application.Configured
@@ -17,7 +18,7 @@ import Control.Monad.Logger
 import Control.Monad.Trans.Control
 import Data.Foldable
 
-newtype ApplicationT m a = ApplicationT { unApplicationT :: (ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT) m a }
+newtype ApplicationT m a = ApplicationT { unApplicationT :: (BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT) m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadTrans, MonadTransControl)
@@ -25,6 +26,7 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: (ConfiguredT |. Logg
   deriving newtype (MonadLogger)
   deriving newtype (MonadError e)
   deriving newtype (MonadConfigured)
+  deriving newtype (MonadBlog)
 
 runApplication :: (MonadIO m, MonadBaseControl IO m)
                => ApplicationT m a
@@ -48,4 +50,4 @@ runApplication app = do
         Nothing -> error "No configuration."
         Just config -> runConfiguredT tma config
 
-  runConfiguredT' |.| runLoggingT'' |.| runConfigurableT' |.| runIdentityT $ unApplicationT app
+  runBlogT |.| runConfiguredT' |.| runLoggingT'' |.| runConfigurableT' |.| runIdentityT $ unApplicationT app

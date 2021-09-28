@@ -2,6 +2,7 @@
 
 module Homepage.Server.Route.Blog where
 
+import Homepage.Application.Blog
 import Homepage.Application.Configured
 import Homepage.Blog
 import Homepage.Configuration
@@ -13,11 +14,9 @@ import Homepage.Server.Html.Document
 import qualified Homepage.Server.Route.Blog.Atom as Atom
 import Homepage.Server.Tab
 
-import Control.Monad.Base
 import Control.Monad.Error.Class
 import Control.Monad.Logger
 import qualified Data.Text as T
-import qualified Data.Text.IO as T
 import Servant hiding (serveDirectoryWith)
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
@@ -31,7 +30,7 @@ type API = "atom.xml" :> Atom.API
         )
       :<|> Get '[HTML] Html
 
-handler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+handler :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
         => ServerT API m
 handler = Atom.handler
      :<|> articlesHandler
@@ -51,26 +50,24 @@ overviewHandler = do
       "."
     blogList baseUrl (Just 0) blogs
 
-articlesHandler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+articlesHandler :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
                 => T.Text
                 -> (m Html :<|> m Html :<|> m Html)
 articlesHandler articleKey = htmlHandler articleKey :<|> undefined :<|> undefined
 
-htmlHandler :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+htmlHandler :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
             => T.Text
             -> m Html
 htmlHandler articleKey = do
   baseUrl <- configBaseUrl <$> configuration
   blogs <- configBlogEntries <$> configuration
-  dir <- configDirectoryBlog <$> configuration
   case lookupBlog articleKey blogs of
     Nothing -> do
         $logError $ "Failed to serve blog article: " <> T.pack (show articleKey)
         servantError404
     Just blog -> do
-        let file = dir <> "/" <> T.unpack (blogContent blog) <> ".html"
-        $logInfo $ "Read blog article from file: " <> T.pack (show file)
-        content <- liftBase $ T.readFile file
+        $logInfo $ "Read blog article from file: " <> T.pack (show blog)
+        content <- readBlogEntry BlogFormatHTML blog
         $logInfo $ "Serve HTML blog article: " <> T.pack (show articleKey)
         pure $ document baseUrl (Just 1) (Just TabBlog) $
           toMarkup $ AsciiDocHtml content

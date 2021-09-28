@@ -1,5 +1,6 @@
 module Homepage.Server.Route where
 
+import           Homepage.Application.Blog
 import           Homepage.Application.Configured
 import qualified Homepage.Server.Route.Blog
 import qualified Homepage.Server.Route.Donate
@@ -8,7 +9,6 @@ import qualified Homepage.Server.Route.Home
 import qualified Homepage.Server.Route.Projects
 import qualified Homepage.Server.Route.Static
 
-import Control.Monad.Base
 import Control.Monad.Error.Class
 import Control.Monad.Logger
 import GHC.Generics
@@ -26,7 +26,7 @@ data Routes route = Routes
     }
   deriving stock (Generic)
 
-routes :: (MonadBase IO m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+routes :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
        => Routes (AsServerT m)
 routes = Routes
     { routeHome = Homepage.Server.Route.Home.handler
