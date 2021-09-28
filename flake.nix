@@ -104,25 +104,7 @@
           configDirectoryStatic = "${self.packages.x86_64-linux.static}";
           configPort = 8008;
           configBaseUrl = "localhost:8008";
-          configBlogEntries = {
-            unBlogEntries = {
-              myWayToCoreboot = {
-                blogContent = "myWayToCoreboot";
-                blogTimestamp = "2019-04-04";
-                blogTitle = "my Way to Coreboot";
-              };
-              myOwnImplementationOfIExpressions = {
-                blogContent = "myOwnImplementationOfIExpressions";
-                blogTimestamp = "2019-06-30";
-                blogTitle = "my own Implementation of I-Expressions";
-              };
-              aSmallShowcaseOfBlucontrol = {
-                blogContent = "aSmallShowcaseOfBlucontrol";
-                blogTimestamp = "2021-09-27";
-                blogTitle = "a small Showcase of blucontrol";
-              };
-            };
-          };
+          configBlogEntries = (builtins.fromJSON (builtins.readFile ./homepage.json)).configBlogEntries;
         } // cfg.extraConfig;
       in {
         options = {
