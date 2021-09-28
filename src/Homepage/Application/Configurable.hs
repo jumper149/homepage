@@ -13,7 +13,7 @@ class Monad m => MonadConfigurable m where
   preConfiguration :: m PreConfiguration
 
 instance Monad m => MonadConfigurable (ConfigurableT m) where
-  preConfiguration = ConfigurableT Control.Monad.Trans.Reader.ask
+  preConfiguration = ConfigurableT ask
 
 instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadConfigurable (t2 m)) => MonadConfigurable (ComposeT t1 t2 m) where
   preConfiguration = ComposeT . lift $ preConfiguration
