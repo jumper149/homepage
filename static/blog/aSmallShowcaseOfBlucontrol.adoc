@@ -1,5 +1,10 @@
+:nofooter:
+:stylesheet: ../../asciidoctor.css
 ## a Small Showcase of blucontrol
-Note: This article is written for blucontrol https://hackage.haskell.org/package/blucontrol-0.7.0.0[v0.7.0.0].
+[NOTE]
+====
+This article is written for blucontrol https://hackage.haskell.org/package/blucontrol-0.7.0.0[v0.7.0.0].
+====
 
 ### A customizable blue light filter
 The main structure of blucontrol is the split into 3 individual environments.
