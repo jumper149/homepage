@@ -1,5 +1,3 @@
-:nofooter:
-:stylesheet: ../../asciidoctor.css
 ## a Small Showcase of blucontrol
 [NOTE]
 ====

@@ -25,16 +25,17 @@
         buildPhase = ''
           mkdir -p static
 
-          sed -i '1s/^/:nofooter:\n/' myWayToCoreboot.adoc
+          sed -i '1s/^/:nofooter:\n:stylesheet: ../../asciidoctor.css\n/' myWayToCoreboot.adoc
           asciidoctor myWayToCoreboot.adoc --backend html5 --doctype article --out-file static/myWayToCoreboot.html --safe-mode secure
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myWayToCoreboot.html
           asciidoctor-pdf myWayToCoreboot.adoc --doctype article --out-file static/myWayToCoreboot.pdf --safe-mode secure
 
-          sed -i '1s/^/:nofooter:\n/' myOwnImplementationOfIExpressions.adoc
+          sed -i '1s/^/:nofooter:\n:stylesheet: ../../asciidoctor.css\n/' myOwnImplementationOfIExpressions.adoc
           asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file static/myOwnImplementationOfIExpressions.html --safe-mode secure
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myOwnImplementationOfIExpressions.html
           asciidoctor-pdf myOwnImplementationOfIExpressions.adoc --doctype article --out-file static/myOwnImplementationOfIExpressions.pdf --safe-mode secure
 
+          sed -i '1s/^/:nofooter:\n:stylesheet: ../../asciidoctor.css\n/' aSmallShowcaseOfBlucontrol.adoc
           sed -i '1s/^/:nofooter:\n/' aSmallShowcaseOfBlucontrol.adoc
           asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 --doctype article --out-file static/aSmallShowcaseOfBlucontrol.html --safe-mode secure
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/aSmallShowcaseOfBlucontrol.html
