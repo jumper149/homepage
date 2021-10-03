@@ -30,7 +30,6 @@ instance (MonadConfigured m, MonadIO m) => MonadBlog (BlogT m) where
                       BlogFormatHTML -> "html"
                       BlogFormatPDF -> "pdf"
         file = dir <> "/" <> T.unpack (blogContent entry) <> "." <> extension
---    $logInfo $ "Read blog article from file: " <> T.pack (show file)
     BlogT $ lift $ liftIO $ T.readFile file
 
 instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadBlog (t2 m)) => MonadBlog (ComposeT t1 t2 m) where
