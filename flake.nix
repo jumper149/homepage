@@ -129,7 +129,7 @@
     nixosModule = { config, lib, ... }:
       let
         cfg = config.services.homepage;
-        homepageConfig = builtins.fromJSON self.packages.x86_64-linux.config // cfg.extraConfig;
+        homepageConfig = builtins.fromJSON (builtins.readFile self.packages.x86_64-linux.config) // cfg.extraConfig;
       in {
         options = {
           services.homepage = {
