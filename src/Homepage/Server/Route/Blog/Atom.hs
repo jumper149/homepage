@@ -71,7 +71,28 @@ atomFeed entries = do
         , Atom.genText = "Felix Springer's Homepage"
         }
     , Atom.feedIcon = Just $ baseUrl <> "/favicon.png"
-    , Atom.feedLinks = []
+    , Atom.feedLinks =
+        [ Atom.Link
+            { Atom.linkHref = baseUrl <> "/blog/atom.xml"
+            , Atom.linkRel = Just $ Left "self"
+            , Atom.linkType = Nothing -- TODO
+            , Atom.linkHrefLang = Nothing
+            , Atom.linkTitle = Nothing -- TODO
+            , Atom.linkLength = Nothing
+            , Atom.linkAttrs = []
+            , Atom.linkOther = []
+            }
+        , Atom.Link
+            { Atom.linkHref = baseUrl <> "/blog"
+            , Atom.linkRel = Nothing
+            , Atom.linkType = Nothing -- TODO
+            , Atom.linkHrefLang = Nothing
+            , Atom.linkTitle = Nothing -- TODO
+            , Atom.linkLength = Nothing
+            , Atom.linkAttrs = []
+            , Atom.linkOther = []
+            }
+        ]
     , Atom.feedLogo = Nothing
     , Atom.feedRights = Just $ Atom.TextString "Attribution 4.0 International (CC BY 4.0)"
     , Atom.feedSubtitle = Nothing
@@ -96,7 +117,18 @@ atomEntry blogId blog@BlogEntry { blogTitle , blogTimestamp } = do
     , Atom.entryCategories = []
     , Atom.entryContent = Just $ Atom.HTMLContent content
     , Atom.entryContributor = []
-    , Atom.entryLinks = []
+    , Atom.entryLinks =
+        [ Atom.Link
+            { Atom.linkHref = baseUrl <> "/blog/" <> blogId
+            , Atom.linkRel = Nothing
+            , Atom.linkType = Nothing -- TODO
+            , Atom.linkHrefLang = Nothing
+            , Atom.linkTitle = Nothing -- TODO
+            , Atom.linkLength = Nothing
+            , Atom.linkAttrs = []
+            , Atom.linkOther = []
+            }
+        ]
     , Atom.entryPublished = Nothing
     , Atom.entryRights = Nothing
     , Atom.entrySource = Nothing
