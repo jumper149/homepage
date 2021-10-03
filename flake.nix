@@ -27,6 +27,9 @@
           asciidoctor myWayToCoreboot.adoc --backend html5 --doctype article --out-file static/myWayToCoreboot.html --safe-mode secure
           asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file static/myOwnImplementationOfIExpressions.html --safe-mode secure
           asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 --doctype article --out-file static/aSmallShowcaseOfBlucontrol.html --safe-mode secure
+          asciidoctor-pdf myWayToCoreboot.adoc --doctype article --out-file static/myWayToCoreboot.pdf --safe-mode secure
+          asciidoctor-pdf myOwnImplementationOfIExpressions.adoc --doctype article --out-file static/myOwnImplementationOfIExpressions.pdf --safe-mode secure
+          asciidoctor-pdf aSmallShowcaseOfBlucontrol.adoc --doctype article --out-file static/aSmallShowcaseOfBlucontrol.pdf --safe-mode secure
         '';
         installPhase = ''
           cp --recursive static $out
