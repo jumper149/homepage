@@ -123,14 +123,7 @@
     nixosModule = { config, lib, ... }:
       let
         cfg = config.services.homepage;
-        homepageConfig = {
-          configDirectoryBlog = "${self.packages.x86_64-linux.blog}";
-          configDirectoryFiles = "${self.packages.x86_64-linux.files}";
-          configDirectoryStatic = "${self.packages.x86_64-linux.static}";
-          configPort = 8008;
-          configBaseUrl = "localhost:8008";
-          configBlogEntries = (builtins.fromJSON (builtins.readFile ./homepage.json)).configBlogEntries;
-        } // cfg.extraConfig;
+        homepageConfig = builtins.fromJSON self.packages.x86_64-linux.config // cfg.extraConfig;
       in {
         options = {
           services.homepage = {
