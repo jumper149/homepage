@@ -17,6 +17,18 @@
       let src = nix-gitignore.gitignoreSource [] ./.;
       in haskellPackages.callCabal2nix "homepage" src {};
 
+    packages.x86_64-linux.config =
+      with import nixpkgs { system = "x86_64-linux"; };
+      let config = {
+        configDirectoryBlog = "${self.packages.x86_64-linux.blog}";
+        configDirectoryFiles = "${self.packages.x86_64-linux.files}";
+        configDirectoryStatic = "${self.packages.x86_64-linux.static}";
+        configPort = 8008;
+        configBaseUrl = "localhost:8008";
+        configBlogEntries = (builtins.fromJSON (builtins.readFile ./homepage.json)).configBlogEntries;
+      };
+      in writeText "homepage.json" (builtins.toJSON config);
+
     packages.x86_64-linux.blog =
       with import nixpkgs { system = "x86_64-linux"; };
       stdenv.mkDerivation {
@@ -25,17 +37,17 @@
         buildPhase = ''
           mkdir -p static
 
-          sed -i '1s/^/:nofooter:\n:stylesheet: ../../asciidoctor.css\n/' myWayToCoreboot.adoc
+          sed -i '1s|^|:nofooter:\n:stylesheet: ../../asciidoctor.css\n|' myWayToCoreboot.adoc
           asciidoctor myWayToCoreboot.adoc --backend html5 --doctype article --out-file static/myWayToCoreboot.html --safe-mode secure
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myWayToCoreboot.html
           asciidoctor-pdf myWayToCoreboot.adoc --doctype article --out-file static/myWayToCoreboot.pdf --safe-mode secure
 
-          sed -i '1s/^/:nofooter:\n:stylesheet: ../../asciidoctor.css\n/' myOwnImplementationOfIExpressions.adoc
+          sed -i '1s|^|:nofooter:\n:stylesheet: ../../asciidoctor.css\n|' myOwnImplementationOfIExpressions.adoc
           asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file static/myOwnImplementationOfIExpressions.html --safe-mode secure
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myOwnImplementationOfIExpressions.html
           asciidoctor-pdf myOwnImplementationOfIExpressions.adoc --doctype article --out-file static/myOwnImplementationOfIExpressions.pdf --safe-mode secure
 
-          sed -i '1s/^/:nofooter:\n:stylesheet: ../../asciidoctor.css\n/' aSmallShowcaseOfBlucontrol.adoc
+          sed -i '1s|^|:nofooter:\n:stylesheet: ../../asciidoctor.css\n|' aSmallShowcaseOfBlucontrol.adoc
           sed -i '1s/^/:nofooter:\n/' aSmallShowcaseOfBlucontrol.adoc
           asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 --doctype article --out-file static/aSmallShowcaseOfBlucontrol.html --safe-mode secure
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/aSmallShowcaseOfBlucontrol.html
