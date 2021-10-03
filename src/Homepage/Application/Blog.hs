@@ -15,6 +15,7 @@ import qualified Data.Text.IO as T
 import GHC.Generics
 
 data BlogFormat = BlogFormatHTML
+                | BlogFormatPDF
   deriving stock (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
 class Monad m => MonadBlog m where
@@ -23,9 +24,12 @@ class Monad m => MonadBlog m where
 
 instance (MonadConfigured m, MonadIO m) => MonadBlog (BlogT m) where
   blogEntries = BlogT $ lift $ configBlogEntries <$> configuration
-  readBlogEntry BlogFormatHTML entry = do
+  readBlogEntry format entry = do
     dir <- BlogT $ lift $ configDirectoryBlog <$> configuration
-    let file = dir <> "/" <> T.unpack (blogContent entry) <> ".html"
+    let extension = case format of
+                      BlogFormatHTML -> "html"
+                      BlogFormatPDF -> "pdf"
+        file = dir <> "/" <> T.unpack (blogContent entry) <> "." <> extension
 --    $logInfo $ "Read blog article from file: " <> T.pack (show file)
     BlogT $ lift $ liftIO $ T.readFile file
 
