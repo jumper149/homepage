@@ -19,7 +19,7 @@ blogList baseUrl depth blogs = ul $
   toMarkup $ entryToMarkup <$> sortOn (Down . blogTimestamp . snd) (M.toList (unBlogEntries blogs))
   where
     entryToMarkup (blogKey, BlogEntry { blogTitle, blogTimestamp }) =
-      li $ p $ do
+      li $ do
         toMarkup $ T.pack (showGregorian blogTimestamp)
         " - "
         a ! hrefWithDepth baseUrl depth (textValue $ "blog/" <> blogKey) $ toMarkup blogTitle
