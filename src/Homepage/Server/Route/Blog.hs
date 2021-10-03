@@ -20,7 +20,6 @@ import qualified Data.Text as T
 import Servant hiding (serveDirectoryWith)
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
-import Text.Blaze.Html5.Attributes
 import qualified Text.Blaze.Html5.Attributes as H
 
 type API = "atom.xml" :> Atom.API
@@ -81,15 +80,15 @@ wrapperHandler articleKey = do
             a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/" <> articleKey <> "/adoc") $ "ADOC"
           p "Preview below."
           hr
-          script ! type_ "text/javascript" $
+          script ! H.type_ "text/javascript" $
             "function resizeIframe(iframe) {\
             \  iframe.height = iframe.contentWindow.document.body.scrollHeight + \"px\";\
             \}"
-          iframe ! src (textValue $ "./" <> articleKey <> "/html")
-                 ! name "blog article (HTML)"
-                 ! width "100%"
+          iframe ! H.src (textValue $ "./" <> articleKey <> "/html")
+                 ! H.name "blog article (HTML)"
+                 ! H.width "100%"
                  ! H.onload "resizeIframe(this)"
-                 ! target "_parent"
+                 ! H.target "_parent"
                  ! H.style "border: none;"
                  $ mempty
 
@@ -97,7 +96,6 @@ htmlHandler :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadL
             => T.Text
             -> m Html
 htmlHandler articleKey = do
-  baseUrl <- configBaseUrl <$> configuration
   blogs <- configBlogEntries <$> configuration
   case lookupBlog articleKey blogs of
     Nothing -> do
