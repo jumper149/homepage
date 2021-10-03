@@ -24,11 +24,17 @@
         src = ./static/blog;
         buildPhase = ''
           mkdir -p static
+
           asciidoctor myWayToCoreboot.adoc --backend html5 --doctype article --out-file static/myWayToCoreboot.html --safe-mode secure
-          asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file static/myOwnImplementationOfIExpressions.html --safe-mode secure
-          asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 --doctype article --out-file static/aSmallShowcaseOfBlucontrol.html --safe-mode secure
+          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myWayToCoreboot.html
           asciidoctor-pdf myWayToCoreboot.adoc --doctype article --out-file static/myWayToCoreboot.pdf --safe-mode secure
+
+          asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file static/myOwnImplementationOfIExpressions.html --safe-mode secure
+          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myOwnImplementationOfIExpressions.html
           asciidoctor-pdf myOwnImplementationOfIExpressions.adoc --doctype article --out-file static/myOwnImplementationOfIExpressions.pdf --safe-mode secure
+
+          asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 --doctype article --out-file static/aSmallShowcaseOfBlucontrol.html --safe-mode secure
+          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/aSmallShowcaseOfBlucontrol.html
           asciidoctor-pdf aSmallShowcaseOfBlucontrol.adoc --doctype article --out-file static/aSmallShowcaseOfBlucontrol.pdf --safe-mode secure
         '';
         installPhase = ''
