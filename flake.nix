@@ -43,21 +43,19 @@
         buildPhase = ''
           mkdir -p static
 
-          sed -i '1s|^|:nofooter:\n:stylesheet: ../../asciidoctor.css\n|' myWayToCoreboot.adoc
-          asciidoctor myWayToCoreboot.adoc --backend html5 --doctype article --out-file static/myWayToCoreboot.html --safe-mode secure
+          ASCIIDOCTOR_FLAGS="--doctype article --safe-mode server --attribute nofooter --attribute source-highlighter=rouge"
+
+          asciidoctor myWayToCoreboot.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/myWayToCoreboot.html
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myWayToCoreboot.html
-          asciidoctor-pdf myWayToCoreboot.adoc --doctype article --out-file static/myWayToCoreboot.pdf --safe-mode secure
+          asciidoctor-pdf myWayToCoreboot.adoc $ASCIIDOCTOR_FLAGS --out-file static/myWayToCoreboot.pdf
 
-          sed -i '1s|^|:nofooter:\n:stylesheet: ../../asciidoctor.css\n|' myOwnImplementationOfIExpressions.adoc
-          asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 --doctype article --out-file static/myOwnImplementationOfIExpressions.html --safe-mode secure
+          asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/myOwnImplementationOfIExpressions.html
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myOwnImplementationOfIExpressions.html
-          asciidoctor-pdf myOwnImplementationOfIExpressions.adoc --doctype article --out-file static/myOwnImplementationOfIExpressions.pdf --safe-mode secure
+          asciidoctor-pdf myOwnImplementationOfIExpressions.adoc $ASCIIDOCTOR_FLAGS --out-file static/myOwnImplementationOfIExpressions.pdf
 
-          sed -i '1s|^|:nofooter:\n:stylesheet: ../../asciidoctor.css\n|' aSmallShowcaseOfBlucontrol.adoc
-          sed -i '1s/^/:nofooter:\n/' aSmallShowcaseOfBlucontrol.adoc
-          asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 --doctype article --out-file static/aSmallShowcaseOfBlucontrol.html --safe-mode secure
+          asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/aSmallShowcaseOfBlucontrol.html
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/aSmallShowcaseOfBlucontrol.html
-          asciidoctor-pdf aSmallShowcaseOfBlucontrol.adoc --doctype article --out-file static/aSmallShowcaseOfBlucontrol.pdf --safe-mode secure
+          asciidoctor-pdf aSmallShowcaseOfBlucontrol.adoc $ASCIIDOCTOR_FLAGS --out-file static/aSmallShowcaseOfBlucontrol.pdf
         '';
         installPhase = ''
           cp --recursive static $out
