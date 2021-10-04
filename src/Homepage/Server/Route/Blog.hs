@@ -73,7 +73,7 @@ articleHandler articleKey = do
           hr
           script ! H.type_ "text/javascript" $
             "function resizeIframe(iframe) {\
-            \  iframe.height = iframe.contentWindow.document.body.scrollHeight + \"px\";\
+            \  iframe.height = `${iframe.contentWindow.document.body.scrollHeight + 30}` + \"px\";\
             \}"
           iframe ! H.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> articleKey <> ".html")
                  ! H.name "blog article (HTML)"
