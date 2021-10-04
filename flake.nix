@@ -148,7 +148,7 @@
             };
             baseUrl = lib.mkOption {
               default = "http://localhost:${cfg.port}";
-              type = with lib.types; ints.between 0 65535;
+              type = with lib.types; str;
               description = ''
                 Base URL, that is necessary for some features, when serving on a domain or behind a reverse-proxy.
               '';
