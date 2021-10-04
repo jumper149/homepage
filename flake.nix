@@ -25,14 +25,12 @@
 
     packages.x86_64-linux.config =
       with import nixpkgs { system = "x86_64-linux"; };
-      let config = {
-        configDirectoryBlog = "${self.packages.x86_64-linux.blog}";
-        configDirectoryFiles = "${self.packages.x86_64-linux.files}";
-        configDirectoryStatic = "${self.packages.x86_64-linux.static}";
-        configPort = 8008;
-        configBaseUrl = "http://localhost:8008";
-        configBlogEntries = (builtins.fromJSON (builtins.readFile ./homepage.json)).configBlogEntries;
-      };
+      let
+        config = builtins.fromJSON (builtins.readFile ./homepage.json) // {
+          configDirectoryBlog = "${self.packages.x86_64-linux.blog}";
+          configDirectoryFiles = "${self.packages.x86_64-linux.files}";
+          configDirectoryStatic = "${self.packages.x86_64-linux.static}";
+        };
       in writeText "homepage.json" (builtins.toJSON config);
 
     packages.x86_64-linux.blog =
@@ -128,8 +126,10 @@
       let
         cfg = config.services.homepage;
         homepageConfig = builtins.fromJSON (builtins.readFile self.packages.x86_64-linux.config)
-          // { port = cfg.port; baseUrl = cfg.baseUrl; }
-          // cfg.extraConfig;
+        // {
+          port = cfg.port;
+          baseUrl = cfg.baseUrl;
+        } // cfg.extraConfig;
       in {
         options = {
           services.homepage = {
