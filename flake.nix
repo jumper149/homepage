@@ -30,7 +30,7 @@
         configDirectoryFiles = "${self.packages.x86_64-linux.files}";
         configDirectoryStatic = "${self.packages.x86_64-linux.static}";
         configPort = 8008;
-        configBaseUrl = "localhost:8008";
+        configBaseUrl = "http://localhost:8008";
         configBlogEntries = (builtins.fromJSON (builtins.readFile ./homepage.json)).configBlogEntries;
       };
       in writeText "homepage.json" (builtins.toJSON config);
@@ -129,7 +129,9 @@
     nixosModule = { config, lib, ... }:
       let
         cfg = config.services.homepage;
-        homepageConfig = builtins.fromJSON (builtins.readFile self.packages.x86_64-linux.config) // cfg.extraConfig;
+        homepageConfig = builtins.fromJSON (builtins.readFile self.packages.x86_64-linux.config)
+          // { port = cfg.port; baseUrl = cfg.baseUrl; }
+          // cfg.extraConfig;
       in {
         options = {
           services.homepage = {
@@ -138,6 +140,20 @@
               type = with lib.types; bool;
               description = ''
                 Felix Springer's Homepage.
+              '';
+            };
+            port = lib.mkOption {
+              default = 8008;
+              type = with lib.types; ints.between 0 65535;
+              description = ''
+                Port to listen on.
+              '';
+            };
+            baseUrl = lib.mkOption {
+              default = "http://localhost:${cfg.port}";
+              type = with lib.types; ints.between 0 65535;
+              description = ''
+                Base URL, that is necessary for some features, when serving on a domain or behind a reverse-proxy.
               '';
             };
             extraConfig = lib.mkOption {
