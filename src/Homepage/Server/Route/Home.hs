@@ -40,6 +40,13 @@ handler = do
       \I am spending most of my time with functional languages like Haskell.\n\
       \If I want to take a break from the computer I enjoy playing guitar or badminton.\n\
       \I also love green tea."
+    h2 "recent Blog"
+    blogList baseUrl (Just 0) blogs
+    h2 "shared Files"
+    p $ do
+        "You can download some of my shared files "
+        a ! hrefWithDepth baseUrl (Just 0) "files" $ "here"
+        "."
     h2 "current Projects"
     ul $ do
         li $ do
@@ -57,13 +64,6 @@ handler = do
             "The "
             a ! href "https://github.com/jumper149/dotfiles" $ "dotfiles"
             " to configure my ArchLinux-Systems"
-    h2 "recent Blog"
-    blogList baseUrl (Just 0) blogs
-    h2 "shared Files"
-    p $ do
-        "You can download some of my shared files "
-        a ! hrefWithDepth baseUrl (Just 0) "files" $ "here"
-        "."
     h2 "Contact"
     ul $ do
         li $ do
