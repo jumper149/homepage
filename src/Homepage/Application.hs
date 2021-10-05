@@ -23,8 +23,8 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: (BlogT |. Configured
   deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadTrans, MonadTransControl)
   deriving newtype (MonadThrow, MonadCatch)
-  deriving newtype (MonadLogger)
   deriving newtype (MonadError e)
+  deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
 
