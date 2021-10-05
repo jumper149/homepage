@@ -13,7 +13,6 @@ library
                      , Homepage.Blog
                      , Homepage.Configuration
                      , Homepage.Configuration.Acquisition
-                     , Homepage.Server.Html.AsciiDoc
                      , Homepage.Server.Html.Blog
                      , Homepage.Server.Html.Depth
                      , Homepage.Server.Html.Document
