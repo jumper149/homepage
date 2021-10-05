@@ -4,6 +4,7 @@ module Homepage.Server.Route.Files where
 
 import Homepage.Application.Configured
 import Homepage.Configuration
+import Homepage.Server.Tab
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import Homepage.Server.Err404
@@ -30,7 +31,7 @@ overviewHandler :: (MonadConfigured m, MonadLogger m)
 overviewHandler = do
   baseUrl <- configBaseUrl <$> configuration
   $logInfo "Serve files overview."
-  pure $ document baseUrl (Just 0) Nothing $ do
+  pure $ document baseUrl (Just 0) (Just TabFiles) $ do
     h2 "my Files"
     ul $ do
       li $ do

@@ -6,6 +6,7 @@ import GHC.Generics
 data Tab =
       TabHome
     | TabBlog
+    | TabFiles
     | TabProjects
   deriving stock (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
@@ -26,6 +27,11 @@ describeTab TabBlog = TabDescription
     { tabName = "Blog"
     , tabPath = "blog"
     , pageName = "Blog"
+    }
+describeTab TabFiles = TabDescription
+    { tabName = "Files"
+    , tabPath = "files"
+    , pageName = "Files"
     }
 describeTab TabProjects = TabDescription
     { tabName = "Projects"
