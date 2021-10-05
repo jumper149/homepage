@@ -126,8 +126,8 @@
       let
         cfg = config.services.homepage;
         homepageConfig = builtins.fromJSON (builtins.readFile self.packages.x86_64-linux.config) // {
-          port = cfg.port;
-          baseUrl = cfg.baseUrl;
+          configPort = cfg.port;
+          configBaseUrl = cfg.baseUrl;
         } // cfg.extraConfig;
       in {
         options = {
