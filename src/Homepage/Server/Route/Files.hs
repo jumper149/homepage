@@ -60,5 +60,6 @@ filesHandler :: (MonadConfigured m, MonadLogger m)
              => ServerT RawM.RawM m
 filesHandler = do
   directory <- configDirectoryFiles <$> configuration
+  fallbackApplication <- application404
   $logInfo "Serve file download."
-  RawM.serveDirectoryWith (defaultFileServerSettings directory) { ss404Handler = Just application404 }
+  RawM.serveDirectoryWith (defaultFileServerSettings directory) { ss404Handler = Just fallbackApplication }

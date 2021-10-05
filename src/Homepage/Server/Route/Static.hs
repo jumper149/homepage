@@ -18,5 +18,6 @@ handler :: (MonadConfigured m, MonadLogger m)
         => ServerT API m
 handler = do
   path <- configDirectoryStatic <$> configuration
+  fallbackApplication <- application404
   $logInfo "Serve static file download."
-  RawM.serveDirectoryWith (defaultFileServerSettings path) { ss404Handler = Just application404 }
+  RawM.serveDirectoryWith (defaultFileServerSettings path) { ss404Handler = Just fallbackApplication }
