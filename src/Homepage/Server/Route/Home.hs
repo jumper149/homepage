@@ -3,6 +3,7 @@
 module Homepage.Server.Route.Home where
 
 import Homepage.Application.Configured
+import Homepage.Blog
 import Homepage.Configuration
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth
@@ -45,7 +46,11 @@ handler = do
       "You can stay up to date by subscribing to this "
       a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ "Atom Feed"
       "."
-    blogList baseUrl (Just 0) blogs
+    blogList baseUrl (Just 0) $ recentBlogEntries 5 blogs
+    p $ do
+      "... all blog articles can be accessed "
+      a ! hrefWithDepth baseUrl (Just 0) "blog" $ "here"
+      "."
     h2 "shared Files"
     p $ do
         "You can download some of my shared files "
