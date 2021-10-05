@@ -108,7 +108,7 @@ atomEntry :: (MonadBlog m, MonadConfigured m, MonadLogger m)
 atomEntry blogId blog@BlogEntry { blogTitle , blogTimestamp } = do
   baseUrl <- configBaseUrl <$> configuration
   $logInfo $ "Read blog article from file: " <> T.pack (show blog)
-  content <- readBlogEntry BlogFormatHTML blog
+  content <- readBlogEntryHtml blog
   pure Atom.Entry
     { Atom.entryId = baseUrl <> "/blog/" <> blogId
     , Atom.entryTitle = Atom.TextString blogTitle
