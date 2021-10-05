@@ -27,9 +27,9 @@
       with import nixpkgs { system = "x86_64-linux"; };
       let
         config = builtins.fromJSON (builtins.readFile ./homepage.json) // {
-          configDirectoryBlog = "${self.packages.x86_64-linux.blog}";
-          configDirectoryFiles = "${self.packages.x86_64-linux.files}";
-          configDirectoryStatic = "${self.packages.x86_64-linux.static}";
+          directory-blog = "${self.packages.x86_64-linux.blog}";
+          directory-files = "${self.packages.x86_64-linux.files}";
+          directory-static = "${self.packages.x86_64-linux.static}";
         };
       in writeText "homepage.json" (builtins.toJSON config);
 
@@ -126,8 +126,8 @@
       let
         cfg = config.services.homepage;
         homepageConfig = builtins.fromJSON (builtins.readFile self.packages.x86_64-linux.config) // {
-          configPort = cfg.port;
-          configBaseUrl = cfg.baseUrl;
+          port = cfg.port;
+          base-url = cfg.baseUrl;
         } // cfg.extraConfig;
       in {
         options = {

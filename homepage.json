@@ -1,25 +1,23 @@
-{ "configDirectoryBlog": "./static/blog"
-, "configDirectoryFiles": "./static/files"
-, "configDirectoryStatic": "./static/static"
-, "configPort": 8008
-, "configBaseUrl": "http://localhost:8008"
-, "configBlogEntries":
-  { "unBlogEntries":
-    { "myWayToCoreboot":
-      { "blogContent": "myWayToCoreboot"
-      , "blogTimestamp": "2019-04-04"
-      , "blogTitle": "my Way to Coreboot"
-      }
-    , "myOwnImplementationOfIExpressions":
-      { "blogContent": "myOwnImplementationOfIExpressions"
-      , "blogTimestamp": "2019-06-30"
-      , "blogTitle": "my own Implementation of I-Expressions"
-      }
-    , "aSmallShowcaseOfBlucontrol":
-      { "blogContent": "aSmallShowcaseOfBlucontrol"
-      , "blogTimestamp": "2021-09-27"
-      , "blogTitle": "a small Showcase of blucontrol"
-      }
+{ "directory-blog": "./static/blog"
+, "directory-files": "./static/files"
+, "directory-static": "./static/static"
+, "port": 8008
+, "base-url": "http://localhost:8008"
+, "blog-entries":
+  { "myWayToCoreboot":
+    { "content": "myWayToCoreboot"
+    , "timestamp": "2019-04-04"
+    , "title": "my Way to Coreboot"
+    }
+  , "myOwnImplementationOfIExpressions":
+    { "content": "myOwnImplementationOfIExpressions"
+    , "timestamp": "2019-06-30"
+    , "title": "my own Implementation of I-Expressions"
+    }
+  , "aSmallShowcaseOfBlucontrol":
+    { "content": "aSmallShowcaseOfBlucontrol"
+    , "timestamp": "2021-09-27"
+    , "title": "a small Showcase of blucontrol"
     }
   }
 }
