@@ -80,7 +80,15 @@ handler = do
             ": felixspringer149@gmail.com"
         li "Matrix: @jumper149:matrix.org"
         li "IRC (Libera Chat): jumper149"
-        li $ a ! href "https://github.com/jumper149" $ "GitHub"
+        li $ do
+          a ! href "https://github.com/jumper149" $ "GitHub"
+          ": jumper149"
+        li $ do
+          a ! href "https://hackage.haskell.org/user/jumper149" $ "Hackage"
+          ": jumper149"
+        li $ do
+          a ! href "https://aur.archlinux.org/packages/?K=jumper149&SeB=m" $ "AUR"
+          ": jumper149"
     h2 "Donate"
     p $ do
         "If you want to support me, you can donate to me "
