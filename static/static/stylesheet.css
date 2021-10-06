@@ -37,7 +37,8 @@
 html {
     background-color: var(--color0);
     color:            var(--colorf);
-    font-family:      sans-serif
+    font-family:      sans-serif;
+    overflow-y:       overlay;
 }
 
 body {
