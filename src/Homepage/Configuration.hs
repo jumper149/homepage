@@ -8,7 +8,6 @@ import qualified Deriving.Aeson as A
 import Data.Word
 import GHC.Generics
 
-
 data Configuration = Configuration
     { configDirectoryBlog :: FilePath
     , configDirectoryFiles :: FilePath
