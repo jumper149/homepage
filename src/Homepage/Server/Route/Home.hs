@@ -25,7 +25,7 @@ handler = do
   blogs <- configBlogEntries <$> configuration
   $logInfo "Serve main page."
   pure $ document baseUrl (Just 0) (Just TabHome) $ do
-    img ! src "files/portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
+    img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
     h1 "Felix Springer"
     h2 "Welcome"
     p $ do
