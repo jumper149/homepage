@@ -48,7 +48,7 @@ handler = do
       "."
     blogList baseUrl (Just 0) $ recentBlogEntries 5 blogs
     p $ do
-      "... all blog articles can be accessed "
+      "The full list of blog articles can be accessed "
       a ! hrefWithDepth baseUrl (Just 0) "blog" $ "here"
       "."
     h2 "shared Files"
