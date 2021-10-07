@@ -1,6 +1,7 @@
 module Homepage.Configuration where
 
 import Homepage.Blog
+import Homepage.Files
 
 import qualified Data.Aeson as A
 import qualified Data.Text as T
@@ -17,6 +18,7 @@ data Configuration = Configuration
     , configBlogEntries :: BlogEntries
     , configAtomPersonName :: T.Text
     , configAtomPersonEmail :: Maybe T.Text
+    , configFileEntries :: FileEntries
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving (A.FromJSON, A.ToJSON) via

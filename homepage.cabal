@@ -13,9 +13,11 @@ library
                      , Homepage.Blog
                      , Homepage.Configuration
                      , Homepage.Configuration.Acquisition
+                     , Homepage.Files
                      , Homepage.Server.Html.Blog
                      , Homepage.Server.Html.Depth
                      , Homepage.Server.Html.Document
+                     , Homepage.Server.Html.Files
                      , Homepage.Server.Html.Header
                      , Homepage.Server.Err404
                      , Homepage.Server.Route
