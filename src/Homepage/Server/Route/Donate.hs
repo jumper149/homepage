@@ -53,7 +53,8 @@ donateHandler = do
          i "PP"
     hr
     br
-    let paypalUrl = "https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=6BWNN8HJXF88L&source=url"
+    -- TODO: This URL includes redirection after donation and should be configured instead of hardcoded.
+    let paypalUrl = "https://www.paypal.com/donate?hosted_button_id=3LZQ9DCDDFFWU"
     H.div ! HA.style "text-align: center;" $
       b $ do
         a ! href paypalUrl $ "Donate"
@@ -65,7 +66,6 @@ donateHandler = do
             ! src (withDepth baseUrl (Just 0) "donatePayPalQR.png")
             ! HA.style "width: 128px; height: 128px;"
 
--- TODO: Make sure that people are actually redirected here.
 thankYouHandler :: (MonadConfigured m, MonadLogger m)
                 => m Html
 thankYouHandler = do
