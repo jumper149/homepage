@@ -19,8 +19,8 @@ data FileFormat = FileFormat
 
 data FileEntry = FileEntry
     { fileIdentifier :: T.Text
-    , fileName :: T.Text
     , fileFormats :: [FileFormat]
+    , fileName :: T.Text
     , fileTimestamp :: Day
     }
   deriving stock (Eq, Generic, Ord, Read, Show)

@@ -24,30 +24,30 @@
 , "atom-person-email": "felixspringer149@gmail.com"
 , "file-entries":
   [ { "identifier": "Felix_Springer-cv"
-    , "name": "curriculum vitae"
     , "formats":
       [ { "name": "PDF"
         , "extension": "pdf"
         }
       ]
+    , "name": "curriculum vitae"
     , "timestamp": "2021-06-24"
     }
   , { "identifier": "Felix_Springer-publickey-mail"
-    , "name": "mail signing key"
     , "formats":
       [ { "name": "GPG"
         , "extension": "gpg"
         }
       ]
+    , "name": "mail signing key"
     , "timestamp": "2020-09-02"
     }
   , { "identifier": "Felix_Springer-Storage_Register_Design_for_an_Ion_Trap_Quantum_Processor"
-    , "name": "Storage Register Design for an Ion Trap Quantum Processor"
     , "formats":
       [ { "name": "PDF"
         , "extension": "pdf"
         }
       ]
+    , "name": "Storage Register Design for an Ion Trap Quantum Processor"
     , "timestamp": "2021-04-07"
     }
   ]
