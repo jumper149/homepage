@@ -30,6 +30,7 @@
         }
       ]
     , "name": "curriculum vitae"
+    , "section": null
     , "timestamp": "2021-06-24"
     }
   , { "identifier": "Felix_Springer-publickey-mail"
@@ -39,6 +40,7 @@
         }
       ]
     , "name": "mail signing key"
+    , "section": null
     , "timestamp": "2020-09-02"
     }
   , { "identifier": "Felix_Springer-Storage_Register_Design_for_an_Ion_Trap_Quantum_Processor"
@@ -48,6 +50,7 @@
         }
       ]
     , "name": "Storage Register Design for an Ion Trap Quantum Processor"
+    , "section": "Publications"
     , "timestamp": "2021-04-07"
     }
   ]

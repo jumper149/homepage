@@ -5,7 +5,6 @@ module Homepage.Server.Route.Files where
 import Homepage.Application.Configured
 import Homepage.Configuration
 import Homepage.Server.Tab
-import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import Homepage.Server.Html.Files
 import Homepage.Server.Err404

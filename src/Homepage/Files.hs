@@ -1,8 +1,7 @@
 module Homepage.Files where
 
 import qualified Data.Aeson as A
-import qualified Data.List as L
-import Data.Ord
+import qualified Data.Map as M
 import qualified Data.Set as S
 import qualified Data.Text as T
 import qualified Deriving.Aeson as A
@@ -21,6 +20,7 @@ data FileEntry = FileEntry
     { fileIdentifier :: T.Text
     , fileFormats :: [FileFormat]
     , fileName :: T.Text
+    , fileSection :: Maybe T.Text
     , fileTimestamp :: Day
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
@@ -31,3 +31,9 @@ newtype FileEntries = FileEntries { unFileEntries :: S.Set FileEntry }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving (A.FromJSON, A.ToJSON) via
     A.CustomJSON '[A.UnwrapUnaryRecords, A.RejectUnknownFields] FileEntries
+
+groupFiles :: S.Set FileEntry -> M.Map (Maybe T.Text) (S.Set FileEntry)
+groupFiles entries = M.fromList $ sectionGroup <$> S.toList sections
+  where
+    sections = S.map fileSection entries
+    sectionGroup section = (section, S.filter ((section ==). fileSection) entries)

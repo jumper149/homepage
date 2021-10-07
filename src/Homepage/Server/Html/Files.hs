@@ -3,7 +3,10 @@ module Homepage.Server.Html.Files where
 import Homepage.Files
 import Homepage.Server.Html.Depth
 
+import Data.Foldable
 import Data.List
+import qualified Data.Map as M
+import Data.Maybe
 import Data.Ord
 import qualified Data.Set as S
 import qualified Data.Text as T
@@ -15,9 +18,17 @@ fileList :: T.Text -- ^ base URL
          -> Maybe Natural -- ^ depth
          -> FileEntries
          -> Html
-fileList baseUrl depth files = ul $
-  toMarkup $ fileToMarkup <$> sortOn (Down . fileTimestamp) (S.toList (unFileEntries files))
+fileList baseUrl depth files = do
+  markupEntries topLevelEntries
+  traverse_ markupSection $ M.toList otherEntries
   where
+    entryGroups = groupFiles $ unFileEntries files
+    topLevelEntries = fromMaybe mempty $ M.lookup Nothing entryGroups
+    otherEntries = M.mapKeys fromJust . M.delete Nothing $ entryGroups
+    markupSection (sectionName, entrySet) = do
+      h2 $ toMarkup $ "my " <> sectionName
+      markupEntries entrySet
+    markupEntries entrySet = ul $ toMarkup $ fileToMarkup <$> sortOn (Down . fileTimestamp) (S.toList entrySet)
     fileToMarkup file@FileEntry { fileName, fileTimestamp } =
       li $ do
         toMarkup $ T.pack (showGregorian fileTimestamp)
