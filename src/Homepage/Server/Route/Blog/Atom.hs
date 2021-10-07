@@ -56,13 +56,15 @@ atomFeed :: MonadConfigured m
          -> m Atom.Feed
 atomFeed entries = do
   baseUrl <- configBaseUrl <$> configuration
+  personName <- configAtomPersonName <$> configuration
+  person <- atomPerson
   pure Atom.Feed
     { Atom.feedId = baseUrl <> "/blog/atom.xml"
-    , Atom.feedTitle = Atom.TextString "Felix Springer's Blog"
+    , Atom.feedTitle = Atom.TextString $ personName <> "'s Blog"
     , Atom.feedUpdated = case entries of
-        [] -> "1997-09-14T12:00:00+01:00"
+        [] -> "1997-09-14T12:00:00+01:00" -- This is just a fallback in case there aren't any entries.
         Atom.Entry { Atom.entryUpdated } : _ -> entryUpdated -- Expects sorted entries.
-    , Atom.feedAuthors = [ personFelixSpringer ]
+    , Atom.feedAuthors = [ person ]
     , Atom.feedCategories = []
     , Atom.feedContributors = []
     , Atom.feedGenerator = Just Atom.Generator
@@ -107,13 +109,14 @@ atomEntry :: (MonadBlog m, MonadConfigured m, MonadLogger m)
           -> m Atom.Entry
 atomEntry blogId blog@BlogEntry { blogTitle , blogTimestamp } = do
   baseUrl <- configBaseUrl <$> configuration
+  person <- atomPerson
   $logInfo $ "Read blog article from file: " <> T.pack (show blog)
   content <- readBlogEntryHtml blog
   pure Atom.Entry
     { Atom.entryId = baseUrl <> "/blog/" <> blogId
     , Atom.entryTitle = Atom.TextString blogTitle
     , Atom.entryUpdated = T.pack $ T.formatTime T.defaultTimeLocale "%0Y-%0m-%0dT12:00:00+01:00" blogTimestamp
-    , Atom.entryAuthors = [ personFelixSpringer ]
+    , Atom.entryAuthors = [ person ]
     , Atom.entryCategories = []
     , Atom.entryContent = Just $ Atom.HTMLContent content
     , Atom.entryContributor = []
@@ -139,10 +142,15 @@ atomEntry blogId blog@BlogEntry { blogTitle , blogTimestamp } = do
     , Atom.entryOther = []
     }
 
-personFelixSpringer :: Atom.Person
-personFelixSpringer = Atom.Person
-  { Atom.personName = "Felix Springer"
-  , Atom.personURI = Just "https://felixspringer.xyz"
-  , Atom.personEmail = Just "felixspringer149@gmail.com"
-  , Atom.personOther = []
-  }
+atomPerson :: MonadConfigured m
+           => m Atom.Person
+atomPerson = do
+  baseUrl <- configBaseUrl <$> configuration
+  personName <- configAtomPersonName <$> configuration
+  maybePersonEmail <- configAtomPersonEmail <$> configuration
+  pure Atom.Person
+    { Atom.personName = personName
+    , Atom.personURI = Just baseUrl
+    , Atom.personEmail = maybePersonEmail
+    , Atom.personOther = []
+    }

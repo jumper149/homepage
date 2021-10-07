@@ -15,6 +15,8 @@ data Configuration = Configuration
     , configPort :: Word16
     , configBaseUrl :: T.Text
     , configBlogEntries :: BlogEntries
+    , configAtomPersonName :: T.Text
+    , configAtomPersonEmail :: Maybe T.Text
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving (A.FromJSON, A.ToJSON) via
