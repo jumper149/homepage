@@ -177,6 +177,9 @@
             restartTriggers = [
               config.environment.etc."homepage.json".source
             ];
+            path = [
+              self.packages.x86_64-linux.config # Included, because it is otherwise not seen as "buildInputs" to this service.
+            ];
             serviceConfig = {
               DynamicUser = true;
               ExecStart = "${self.packages.x86_64-linux.homepage}/bin/homepage";
