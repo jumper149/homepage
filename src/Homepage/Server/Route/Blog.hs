@@ -17,24 +17,38 @@ import Control.Monad.Error.Class
 import Control.Monad.Logger
 import qualified Data.Text as T
 import Servant hiding (serveDirectoryWith)
+import Servant.API.Generic
 import Servant.HTML.Blaze
 import qualified Servant.RawM.Server as RawM
+import Servant.Server.Generic
 import Text.Blaze.Html5
 import qualified Text.Blaze.Html5.Attributes as H
 import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 
-type API = "atom.xml" :> Atom.API
-      :<|> "raw" :> RawM.RawM
-      :<|> Capture "article" T.Text :> Get '[HTML] Html
-      :<|> Get '[HTML] Html
+data Routes route = Routes
+    { routeRaw :: route
+               :- "raw"
+               :> RawM.RawM
+    , routeFeed :: route
+                :- "atom.xml"
+                :> Atom.API
+    , routeArticle :: route
+                   :- Capture "article" T.Text
+                   :> Get '[HTML] Html
+    , routeOverview :: route
+                    :- Get '[HTML] Html
+    }
+  deriving Generic
 
-handler :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
-        => ServerT API m
-handler = Atom.handler
-     :<|> rawHandler
-     :<|> articleHandler
-     :<|> overviewHandler
+routes :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+       => Routes (AsServerT m)
+routes = Routes
+    { routeRaw = rawHandler
+    , routeFeed = Atom.handler
+    , routeArticle = articleHandler
+    , routeOverview = overviewHandler
+    }
 
 overviewHandler :: (MonadConfigured m, MonadLogger m)
                 => m Html

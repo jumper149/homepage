@@ -9,19 +9,29 @@ import Homepage.Server.Html.Document
 
 import Control.Monad.Logger
 import Servant
+import Servant.API.Generic
 import Servant.HTML.Blaze
+import Servant.Server.Generic
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as HA
 
-type API = Get '[HTML] Html
-      :<|> "thankYou" :> Get '[HTML] Html
+data Routes route = Routes
+    { routeDonate :: route
+                  :- Get '[HTML] Html
+    , routeThankYou :: route
+                    :- "thankYou"
+                    :> Get '[HTML] Html
+    }
+  deriving Generic
 
-handler :: (MonadConfigured m, MonadLogger m)
-        => ServerT API m
-handler = donateHandler
-     :<|> thankYouHandler
+routes :: (MonadConfigured m, MonadLogger m)
+       => Routes (AsServerT m)
+routes = Routes
+    { routeDonate = donateHandler
+    , routeThankYou = thankYouHandler
+    }
 
 donateHandler :: (MonadConfigured m, MonadLogger m)
               => m Html

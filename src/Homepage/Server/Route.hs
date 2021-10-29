@@ -18,9 +18,9 @@ import Servant.Server.Generic
 
 data Routes route = Routes
     { routeHome :: route :- Homepage.Server.Route.Home.API
-    , routeBlog :: route :- "blog" :> Homepage.Server.Route.Blog.API
-    , routeDonate :: route :- "donate" :> Homepage.Server.Route.Donate.API
-    , routeFiles :: route :- "files" :> Homepage.Server.Route.Files.API
+    , routeBlog :: route :- "blog" :> ToServantApi Homepage.Server.Route.Blog.Routes
+    , routeDonate :: route :- "donate" :> ToServantApi Homepage.Server.Route.Donate.Routes
+    , routeFiles :: route :- "files" :> ToServantApi Homepage.Server.Route.Files.Routes
     , routeProjects :: route :- "projects" :> Homepage.Server.Route.Projects.API
     , routeStatic :: route :- Homepage.Server.Route.Static.API
     }
@@ -30,9 +30,9 @@ routes :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger
        => Routes (AsServerT m)
 routes = Routes
     { routeHome = Homepage.Server.Route.Home.handler
-    , routeBlog = Homepage.Server.Route.Blog.handler
-    , routeDonate = Homepage.Server.Route.Donate.handler
-    , routeFiles = Homepage.Server.Route.Files.handler
+    , routeBlog = toServant Homepage.Server.Route.Blog.routes
+    , routeDonate = toServant Homepage.Server.Route.Donate.routes
+    , routeFiles = toServant Homepage.Server.Route.Files.routes
     , routeProjects = Homepage.Server.Route.Projects.handler
     , routeStatic = Homepage.Server.Route.Static.handler
     }
