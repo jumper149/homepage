@@ -56,23 +56,6 @@ handler = do
         "You can download some of my shared files "
         a ! hrefWithDepth baseUrl (Just 0) "files" $ "here"
         "."
-    h2 "current Projects"
-    ul $ do
-        li $ do
-            "A blue light filter in the style of XMonad: "
-            a ! href "https://github.com/jumper149/blucontrol" $ "blucontrol"
-            " replaces blugon for my personal usage"
-        li $ do
-            "The game "
-            a ! href "https://github.com/jumper149/go" $ "go"
-            " providing a smooth multiplayer browser experience with a webserver"
-        li $ do
-            "A simple Blue Light Filter for X: "
-            a ! href "https://github.com/jumper149/blugon" $ "blugon"
-        li $ do
-            "The "
-            a ! href "https://github.com/jumper149/dotfiles" $ "dotfiles"
-            " to configure my ArchLinux-Systems"
     h2 "Contact"
     ul $ do
         li $ do

@@ -6,7 +6,6 @@ import qualified Homepage.Server.Route.Blog
 import qualified Homepage.Server.Route.Donate
 import qualified Homepage.Server.Route.Files
 import qualified Homepage.Server.Route.Home
-import qualified Homepage.Server.Route.Projects
 import qualified Homepage.Server.Route.Static
 
 import Control.Monad.Error.Class
@@ -21,7 +20,6 @@ data Routes route = Routes
     , routeBlog :: route :- "blog" :> ToServantApi Homepage.Server.Route.Blog.Routes
     , routeDonate :: route :- "donate" :> ToServantApi Homepage.Server.Route.Donate.Routes
     , routeFiles :: route :- "files" :> ToServantApi Homepage.Server.Route.Files.Routes
-    , routeProjects :: route :- "projects" :> Homepage.Server.Route.Projects.API
     , routeStatic :: route :- Homepage.Server.Route.Static.API
     }
   deriving stock (Generic)
@@ -33,6 +31,5 @@ routes = Routes
     , routeBlog = toServant Homepage.Server.Route.Blog.routes
     , routeDonate = toServant Homepage.Server.Route.Donate.routes
     , routeFiles = toServant Homepage.Server.Route.Files.routes
-    , routeProjects = Homepage.Server.Route.Projects.handler
     , routeStatic = Homepage.Server.Route.Static.handler
     }

@@ -7,7 +7,6 @@ data Tab =
       TabHome
     | TabBlog
     | TabFiles
-    | TabProjects
   deriving stock (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
 data TabDescription = TabDescription
@@ -32,9 +31,4 @@ describeTab TabFiles = TabDescription
     { tabName = "Files"
     , tabPath = "files"
     , pageName = "Files"
-    }
-describeTab TabProjects = TabDescription
-    { tabName = "Projects"
-    , tabPath = "projects"
-    , pageName = "Projects"
     }
