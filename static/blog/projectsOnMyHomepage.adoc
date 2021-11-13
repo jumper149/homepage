@@ -1,0 +1,56 @@
+== Projects on my Homepage
+
+To this date my website always featured a *_Projects_* tab.
+Now I decided to remove it.
+The reason is, that it is just a little annoying to keep up to date.
+
+I don't want to update it every time I drop a project and also some old projects don't really look good between the newer ones.
+It's not like I want to remove my history, but when someone finds my homepage they should see what I do _now_.
+
+Instead I will just write a blog post on everything that I find noteworthy.
+And with this post I should give a short heads up on what would go missing otherwise.
+
+So here are all the projects that you can't find via the projects page now.
+
+=== dotfiles
+Since May 2019 I have been managing my desktop/laptop/server configuration via a https://github.com/jumper149/dotfiles[dotfiles repository].
+It has gone through quite a few changes and I guess this is a good time to show off some of the highlights.
+
+* Different Linux distributions are managed with branches.
+  The `arch` and `nixos` branches are forks of the `master` branch.
+* I previously used https://i3wm.org/[i3], but now I have an extremely customized https://xmonad.org/[xmonad] configuration.
+  I also spent way too much time on https://xmobar.org/[xmobar].
+* Vi-like https://github.com/tmux/tmux[tmux] configuration.
+* http://www.mutt.org/[Mutt], http://www.offlineimap.org/[offlineimap] and https://marlam.de/msmtp/[msmtp] for my email.
+* Custom terminal color scheme.
+* I was using https://github.com/vim/vim[vim], but switched to https://github.com/neovim/neovim[neovim] lately.
+
+I have thought about switching to https://github.com/nix-community/home-manager[home-manager], since I mainly use https://nixos.org/[NixOS] nowadays, but didn't pull through yet.
+
+=== haskeme
+https://github.com/jumper149/haskeme[This] is a small program, that translates I-Expressions into S-Expressions for lisp-like languages.
+It's also a perfect example of a project I'm not particularly proud of now.
+It's advertised as a compiler, when it's really just a quick hack.
+If I were to do it again, then I would just write an actual tokenizer, parser and AST.
+
+=== blugon
+https://github.com/jumper149/blugon[Blugon] is probably my most popular project to this date.
+It's a blue light filter written in Python following the unix philosophy of doing just one thing.
+It's also pretty easy to set up with a man-page and a nice readme.
+
+=== go
+One of the hardest project I tackled is an HTTP webserver with a javascript frontend using websockets to communicate with the server.
+I wrote the server with https://github.com/haskell-servant[servant] and the frontend using https://haskell-miso.org/[miso], which makes it a _100%_ Haskell project aside from CSS and nix deployment.
+
+It's a multiplayer game and is pretty much fully functional, it just lacks some minor improvements which I'm too lazy to do now.
+Ah, and it's sort of missing a scoring system...
+
+So if you want to play https://github.com/jumper149/go[go] feel free to try it out.
+You'll just need a machine runing NixOS.
+
+=== blucontrol
+I already wrote https://github.com/jumper149/blugon[blugon], but Python didn't feel like the right language.
+After diving deeper into Haskell, I noticed that it's quite a good fit.
+https://github.com/jumper149/blucontrol[This application] is abusing monads and makes pretty much every part configurable.
+It is configured similar to https://xmonad.org/[xmonad], but uses many newer features of GHC.
+I actually want to write a showcase on it, but didn't get to it yet.

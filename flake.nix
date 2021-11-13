@@ -54,6 +54,10 @@
           asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/aSmallShowcaseOfBlucontrol.html
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/aSmallShowcaseOfBlucontrol.html
           asciidoctor-pdf aSmallShowcaseOfBlucontrol.adoc $ASCIIDOCTOR_FLAGS --out-file static/aSmallShowcaseOfBlucontrol.pdf
+
+          asciidoctor projectsOnMyHomepage.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/projectsOnMyHomepage.html
+          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/projectsOnMyHomepage.html
+          asciidoctor-pdf projectsOnMyHomepage.adoc $ASCIIDOCTOR_FLAGS --out-file static/projectsOnMyHomepage.pdf
         '';
         installPhase = ''
           cp --recursive static $out

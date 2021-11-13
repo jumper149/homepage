@@ -19,6 +19,11 @@
     , "timestamp": "2021-09-27"
     , "title": "a small Showcase of blucontrol"
     }
+  , "projectsOnMyHomepage":
+    { "content": "projectsOnMyHomepage"
+    , "timestamp": "2021-11-13"
+    , "title": "Projects on my Homepage"
+    }
   }
 , "atom-person-name": "Felix Springer"
 , "atom-person-email": "felixspringer149@gmail.com"
