@@ -16,8 +16,10 @@ data Configuration = Configuration
     , configPort :: Word16
     , configBaseUrl :: T.Text
     , configBlogEntries :: BlogEntries
+    , configBlogPreviewMaxLength :: Maybe Word
     , configAtomPersonName :: T.Text
     , configAtomPersonEmail :: Maybe T.Text
+    , configAtomMaxLength :: Maybe Word
     , configFileEntries :: FileEntries
     }
   deriving stock (Eq, Generic, Ord, Read, Show)

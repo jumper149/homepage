@@ -40,7 +40,9 @@ handler :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogge
         => ServerT API m
 handler = do
   blogs <- configBlogEntries <$> configuration
-  let entryList = take 20 $ sortOn (Down . blogTimestamp . snd) $ M.toList (unBlogEntries blogs)
+  atomMaxLength <- configAtomMaxLength <$> configuration
+  let recentBlogs = recentBlogEntries atomMaxLength blogs
+  let entryList = sortOn (Down . blogTimestamp . snd) $ M.toList (unBlogEntries recentBlogs)
   entries <- traverse (uncurry atomEntry) entryList
   feed <- Feed.AtomFeed <$> atomFeed entries
   case Feed.textFeed feed of

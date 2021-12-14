@@ -26,5 +26,10 @@ newtype BlogEntries = BlogEntries { unBlogEntries :: M.Map T.Text BlogEntry }
 lookupBlog :: T.Text -> BlogEntries -> Maybe BlogEntry
 lookupBlog k = M.lookup k . unBlogEntries
 
-recentBlogEntries :: Word -> BlogEntries -> BlogEntries
-recentBlogEntries n = BlogEntries . M.fromList . take (fromIntegral n) . L.sortOn (Down . blogTimestamp . snd) . M.toList . unBlogEntries
+recentBlogEntries :: Maybe Word -> BlogEntries -> BlogEntries
+recentBlogEntries count = BlogEntries . M.fromList . takeMaxLength . L.sortOn (Down . blogTimestamp . snd) . M.toList . unBlogEntries
+  where
+    takeMaxLength :: [a] -> [a]
+    takeMaxLength = case count of
+                      Nothing -> id
+                      Just n -> take $ fromIntegral n

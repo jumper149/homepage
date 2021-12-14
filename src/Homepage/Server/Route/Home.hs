@@ -23,6 +23,7 @@ handler :: (MonadConfigured m, MonadLogger m)
 handler = do
   baseUrl <- configBaseUrl <$> configuration
   blogs <- configBlogEntries <$> configuration
+  blogPreviewMaxLength <- configBlogPreviewMaxLength <$> configuration
   $logInfo "Serve main page."
   pure $ document baseUrl (Just 0) (Just TabHome) $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
@@ -46,7 +47,7 @@ handler = do
       "You can stay up to date by subscribing to this "
       a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ "Atom Feed"
       "."
-    blogList baseUrl (Just 0) $ recentBlogEntries 5 blogs
+    blogList baseUrl (Just 0) $ recentBlogEntries blogPreviewMaxLength blogs
     p $ do
       "The full list of blog articles can be accessed "
       a ! hrefWithDepth baseUrl (Just 0) "blog" $ "here"

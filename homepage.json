@@ -25,8 +25,10 @@
     , "title": "Projects on my Homepage"
     }
   }
+, "blog-preview-max-length": 5
 , "atom-person-name": "Felix Springer"
 , "atom-person-email": "felixspringer149@gmail.com"
+, "atom-max-length": null
 , "file-entries":
   [ { "identifier": "Felix_Springer-cv"
     , "formats":
