@@ -20,7 +20,9 @@ document baseUrl depth activeTab x =
       H.head $ do
           meta ! charset "UTF-8"
           meta ! name "author" ! content "Felix Springer"
-          meta ! name "description" ! content "I am some guy, live somewhere, like some stuff, spend some time, have some projects and you want to know about me."
+          case descriptionContent of
+            Just description -> meta ! name "description" ! content description
+            _ -> pure ()
           meta ! name "viewport" ! content "width=500"
           H.title $ "Felix Springer's " <> toMarkup titleName
           link ! rel "icon" ! hrefWithDepth baseUrl depth "favicon.png"
@@ -28,4 +30,6 @@ document baseUrl depth activeTab x =
       body $ do
         headerTabs baseUrl depth activeTab
         x
-  where titleName = maybe "Homepage" (pageName . describeTab) activeTab
+  where
+    titleName = maybe "Homepage" (pageName . describeTab) activeTab
+    descriptionContent = textValue <$> (metaDescription . describeTab =<< activeTab)
