@@ -20,7 +20,7 @@ document baseUrl depth activeTab x =
       H.head $ do
           meta ! charset "UTF-8"
           meta ! name "author" ! content "Felix Springer"
-          case descriptionContent of
+          case maybeDescription of
             Just description -> meta ! name "description" ! content description
             _ -> pure ()
           meta ! name "viewport" ! content "width=500"
@@ -31,5 +31,5 @@ document baseUrl depth activeTab x =
         headerTabs baseUrl depth activeTab
         x
   where
-    titleName = maybe "Homepage" (pageName . describeTab) activeTab
-    descriptionContent = textValue <$> (metaDescription . describeTab =<< activeTab)
+    titleName = maybe "Homepage" (tabPageName . describeTab) activeTab
+    maybeDescription = textValue <$> (tabMetaDescription . describeTab =<< activeTab)

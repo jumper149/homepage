@@ -12,8 +12,8 @@ data Tab =
 data TabDescription = TabDescription
     { tabName :: T.Text
     , tabPath :: T.Text
-    , pageName :: T.Text
-    , metaDescription :: Maybe T.Text
+    , tabPageName :: T.Text
+    , tabMetaDescription :: Maybe T.Text
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
 
@@ -21,18 +21,18 @@ describeTab :: Tab -> TabDescription
 describeTab TabHome = TabDescription
     { tabName = "Home"
     , tabPath = ""
-    , pageName = "Homepage"
-    , metaDescription = Just "I am some guy, live somewhere, like some stuff, spend some time, have some projects and you want to know about me."
+    , tabPageName = "Homepage"
+    , tabMetaDescription = Just "I am some guy, live somewhere, like some stuff, spend some time, have some projects and you want to know about me."
     }
 describeTab TabBlog = TabDescription
     { tabName = "Blog"
     , tabPath = "blog"
-    , pageName = "Blog"
-    , metaDescription = Nothing
+    , tabPageName = "Blog"
+    , tabMetaDescription = Nothing
     }
 describeTab TabFiles = TabDescription
     { tabName = "Files"
     , tabPath = "files"
-    , pageName = "Files"
-    , metaDescription = Nothing
+    , tabPageName = "Files"
+    , tabMetaDescription = Nothing
     }
