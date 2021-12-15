@@ -14,6 +14,7 @@ import Control.Monad.Logger
 import Servant
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
+import Text.Blaze.Html5.Extra
 import Text.Blaze.Html5.Attributes
 
 type API = Get '[HTML] Html
@@ -45,7 +46,7 @@ handler = do
     h2 "recent Blog"
     p $ do
       "You can stay up to date by subscribing to this "
-      a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ "Atom Feed"
+      a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ s "RSS" <> "/Atom Feed"
       "."
     blogList baseUrl (Just 0) $ recentBlogEntries blogPreviewMaxLength blogs
     p $ do

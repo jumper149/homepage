@@ -22,6 +22,7 @@ import Servant.HTML.Blaze
 import qualified Servant.RawM.Server as RawM
 import Servant.Server.Generic
 import Text.Blaze.Html5
+import Text.Blaze.Html5.Extra
 import qualified Text.Blaze.Html5.Attributes as H
 import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
@@ -60,7 +61,7 @@ overviewHandler = do
     h2 "my Blog"
     p $ do
       "My blog is available as an "
-      a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ "Atom Feed"
+      a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ s "RSS" <> "/Atom Feed"
       "."
     blogList baseUrl (Just 0) blogs
 
@@ -83,7 +84,6 @@ articleHandler articleKey = do
             a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> articleKey <> ".html") $ "HTML"
             " | "
             a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> articleKey <> ".pdf") $ "PDF"
-          p "Preview below."
           hr
           script ! H.type_ "text/javascript" $
             "function resizeIframe(iframe) {\
