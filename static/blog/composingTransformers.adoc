@@ -87,23 +87,23 @@ instance (MonadIO m) => MonadDatabase (DatabaseT m) where
 
 ==== Naive `AppT` implementation
 To hide away implementation details, it might be of interest to wrap your environment with a newtype `AppT`.
-
-One thing you can't avoid is choosing the order of your transformer stack.
-When everything is just a `ReaderT`, this doesn't matter, but be careful, when you set up a transformer stack with monadic state.
+We will also add `MonadTrans` and `MonadTransControl` instances have to be defined manually, but can help when implementing other instances like `MonadIO` or https://hackage.haskell.org/package/mtl[mtl] type classes.
 
 [source,haskell]
 ----
 newtype AppT m a = AppT { unAppT :: DatabaseT (ReaderT Configuration (LoggingT m)) a }
-  deriving stock (Functor, Applicative, Monad)
+  deriving newtype (Functor, Applicative, Monad)
 
 instance MonadTrans AppT where
   lift = AppT . lift . lift . lift
 
--- TODO
 instance MonadTransControl AppT where
   type StT AppT a = StT LoggingT (StT (ReaderT Configuration) (StT DatabaseT a))
-  liftWith f = AppT $ f $ liftWith . unAppT
-  restoreT = AppT . restoreT
+  liftWith f = AppT $ liftWith $ \ run ->
+                        liftWith $ \ run' ->
+                          liftWith $ \ run'' ->
+                            f $ run'' . run' . run . unAppT
+  restoreT = AppT . restoreT . restoreT . restoreT
 ----
 
 To use this you will also need a "`runner`" function.
@@ -114,8 +114,6 @@ This function will initialize the environment for your application.
 runAppT :: MonadIO m => Configuration -> AppT m a -> m a
 runAppT config app = runStdOutLogging $ runReaderT (runDatabaseT config (unAppT app)) config
 ----
-
-TODO: typeclass `MonadConfiguration`
 
 If you look closely, you might say that this is not all of the initialization.
 We still need to read the `Configuration` and connecting to the database was left to `runDatabaseT`.
@@ -139,10 +137,10 @@ runApplication :: MonadIO m => AppT m a -> m a
 runApplication app = do
   runStdOutLogging $ do
     config <- liftIO acquireConfiguration
-    $logInfo $ "Acquired configuration: " <> T.pack (show config)
+    $logInfo $ "Acquired configuration: " <> T.pack (show config) -- yeah, we can log
     (\ tma -> runReaderT tma config) $ do
       runDatabaseT config $ do
-        lift . lift $ $logInfo $ "Connected to database."
+        lift . lift $ $logInfo $ "Connected to database." -- we can also log here
         unAppT app
 
 acquireConfiguration :: IO Configuration
@@ -155,7 +153,7 @@ This is already looking pretty good, but we can do even better.
 Let me show you, where this can be improved.
 
 ===== ``AppT``'s instances
-To use the environment you will have to provide a few class instances.
+To use the environment you will have to provide a few instances.
 
 [source,haskell]
 ----
@@ -163,8 +161,8 @@ instance (MonadIO m) => MonadLogger (AppT m) where
   monadLoggerLog loc src level msg = AppT . lift . lift $ monadLoggerLog loc src level msg
 
 instance (Monad m) => MonadReader Configuration (AppT m) where
-  ask = AppT . lift . queryDatabase
-  local = undefined -- TODO: Implement using `MonadTransControl`.
+  ask = AppT $ lift ask
+  local f ma = AppT $ liftWith $ \ run -> local f $ run $ unAppT ma
 
 instance (Monad m) => MonadDatabase (AppT m) where
   queryDatabase = AppT . queryDatabase
@@ -250,8 +248,8 @@ Let's reimplement our initialization.
 [source,haskell]
 ----
 (|.) :: (t1 (t2 m) a -> t2 m a)
-      -> (t2 m a -> m a)
-      -> ((t1 |. t2) m a -> m a)
+     -> (t2 m a -> m a)
+     -> ((t1 |. t2) m a -> m a)
 (|.) runT1 runT2 = runT2 . runT1 . unComposeT
 
 runApplication :: (MonadIO m, MonadBaseControl IO m) => AppT m a -> m a
