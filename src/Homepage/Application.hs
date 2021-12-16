@@ -17,16 +17,18 @@ import Control.Monad.Identity
 import Control.Monad.Logger
 import Control.Monad.Trans.Control
 import Data.Foldable
+import qualified Servant
 
 newtype ApplicationT m a = ApplicationT { unApplicationT :: (BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT) m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadTrans, MonadTransControl)
   deriving newtype (MonadThrow, MonadCatch)
-  deriving newtype (MonadError e)
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
+
+deriving newtype instance MonadError Servant.ServerError m => MonadError Servant.ServerError (ApplicationT m)
 
 runApplication :: (MonadIO m, MonadBaseControl IO m)
                => ApplicationT m a

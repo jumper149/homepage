@@ -28,7 +28,8 @@ library
                      , Homepage.Server.Route.Home
                      , Homepage.Server.Route.Static
                      , Homepage.Server.Tab
-  other-modules:       Text.Blaze.Html5.Extra
+  other-modules:       Control.Monad.Trans.Compose
+                     , Text.Blaze.Html5.Extra
   build-depends:       aeson
                      , base
                      , blaze-html

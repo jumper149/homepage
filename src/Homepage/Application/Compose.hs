@@ -1,4 +1,4 @@
-{-# LANGUAGE QuantifiedConstraints, UndecidableInstances, TupleSections #-}
+{-# LANGUAGE QuantifiedConstraints, UndecidableInstances #-}
 
 module Homepage.Application.Compose where
 
@@ -10,85 +10,57 @@ import Control.Monad.Logger
 import Control.Monad.Reader.Class
 import Control.Monad.State.Class
 import Control.Monad.Trans
+import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Writer.Class
 import Data.Kind
 
-newtype ComposeT
+newtype (|.)
   (t1 :: (Type -> Type) -> Type -> Type)
   (t2 :: (Type -> Type) -> Type -> Type)
   (m :: Type -> Type)
   (a :: Type)
-    = ComposeT { unComposeT :: t1 (t2 m) a }
+    = ComposeT' { unComposeT' :: ComposeT t1 t2 m a }
   deriving newtype (Applicative, Functor, Monad)
+  deriving newtype (MonadThrow, MonadCatch)
+  deriving newtype (MonadError e, MonadReader r, MonadState s, MonadWriter w)
+  deriving newtype (MonadLogger)
 
-instance (forall m. Monad m => Monad (t2 m), MonadTrans t1, MonadTrans t2) => MonadTrans (ComposeT t1 t2) where
-  lift = ComposeT . lift . lift
+deriving newtype instance ( forall m. Monad m => Monad (t2 m)
+                          , MonadTrans t1
+                          , MonadTrans t2
+                          ) => MonadTrans (t1 |. t2)
 
-instance (forall m. Monad m => Monad (t2 m), MonadTransControl t1, MonadTransControl t2) => MonadTransControl (ComposeT t1 t2) where
-  type StT (ComposeT t1 t2) a = StT t2 (StT t1 a)
-  liftWith f = defaultLiftWith2 ComposeT unComposeT $ \x -> f x
-  restoreT = defaultRestoreT2 ComposeT
+deriving newtype instance ( forall m. Monad m => Monad (t2 m)
+                          , MonadTransControl t1
+                          , MonadTransControl t2
+                          ) => MonadTransControl (t1 |. t2)
 
-instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadIO m) => MonadIO (ComposeT t1 t2 m) where
-  liftIO = lift . liftIO
+deriving newtype instance ( Monad (t1 (t2 m))
+                          , MonadTrans (ComposeT t1 t2)
+                          , MonadIO m
+                          ) => MonadIO ((t1 |. t2) m)
 
-instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadBase b m) => MonadBase b (ComposeT t1 t2 m) where
-  liftBase = lift . liftBase
+deriving newtype instance ( Monad (t1 (t2 m))
+                          , MonadTrans (ComposeT t1 t2)
+                          , MonadBase b m
+                          ) => MonadBase b ((t1 |. t2) m)
 
-instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadBaseControl b m) => MonadBaseControl b (ComposeT t1 t2 m) where
-  type StM (ComposeT t1 t2 m) a = StM m (StT (ComposeT t1 t2) a)
-  liftBaseWith f = liftWith $ \ runT -> liftBaseWith $ \ runInBase -> f $ runInBase . runT
-  restoreM = restoreT . restoreM
-
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadThrow (t2 m)) => MonadThrow (ComposeT t1 t2 m) where
-  throwM = ComposeT . lift . throwM
-
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTransControl t1, MonadCatch (t2 m)) => MonadCatch (ComposeT t1 t2 m) where
-  catch throwing catching = ComposeT $ restoreT . pure =<< liftWith (\ runT -> catch (runT $ unComposeT throwing) (runT . unComposeT . catching))
-
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTransControl t1, MonadError e (t2 m)) => MonadError e (ComposeT t1 t2 m) where
-  throwError = ComposeT . lift . throwError
-  catchError throwing catching = ComposeT $ restoreT . pure =<< liftWith (\ runT -> catchError (runT $ unComposeT throwing) (runT . unComposeT . catching))
-
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTransControl t1, MonadReader r (t2 m)) => MonadReader r (ComposeT t1 t2 m) where
-  ask = ComposeT $ lift ask
-  local f tma = ComposeT $ restoreT . pure =<< liftWith (\ runT -> Control.Monad.Reader.Class.local f $ runT $ unComposeT tma)
-
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadState s (t2 m)) => MonadState s (ComposeT t1 t2 m) where
-  get = ComposeT $ lift get
-  put = ComposeT . lift . put
-
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTransControl t1, MonadWriter w (t2 m)) => MonadWriter w (ComposeT t1 t2 m) where
-  tell = ComposeT . lift . tell
-  listen tma = ComposeT $ (\ (sta, w) -> (, w) <$> restoreT (pure sta)) =<< liftWith (\ runT -> listen $ runT $ unComposeT tma)
-  pass tma = ComposeT $ lift . pass . pure =<< unComposeT tma
-
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadLogger (t2 m)) => MonadLogger (ComposeT t1 t2 m) where
-  monadLoggerLog loc logSource logLevel = ComposeT . lift . monadLoggerLog loc logSource logLevel
-
-runComposeT :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
-            -> (forall a. t2 m a -> m (StT t2 a))
-            -> (forall a. ComposeT t1 t2 m a -> m (StT t2 (StT t1 a)))
-runComposeT runT1 runT2 = runT2 . runT1 . unComposeT
-
-type (|.) = ComposeT
+deriving newtype instance ( Monad (t1 (t2 m))
+                          , MonadTransControl (ComposeT t1 t2)
+                          , MonadBaseControl b m
+                          ) => MonadBaseControl b ((t1 |. t2) m)
 
 (|.) :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
      -> (forall a. t2 m a -> m (StT t2 a))
      -> (forall a. (t1 |. t2) m a -> m (StT t2 (StT t1 a)))
-(|.) = runComposeT
+(|.) runT1 runT2 = runComposeT runT1 runT2 . unComposeT'
 
 infixr 1 |.
-
-runComposeT' :: (t1 (t2 m) a -> t2 m a)
-             -> (t2 m a -> m a)
-             -> (ComposeT t1 t2 m a -> m a)
-runComposeT' runT1 runT2 = runT2 . runT1 . unComposeT
 
 (|.|) :: (t1 (t2 m) a -> t2 m a)
       -> (t2 m a -> m a)
       -> ((t1 |. t2) m a -> m a)
-(|.|) = runComposeT'
+(|.|) runT1 runT2 = runComposeT' runT1 runT2 . unComposeT'
 
 infixr 1 |.|
