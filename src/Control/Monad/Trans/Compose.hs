@@ -6,7 +6,6 @@ import Control.Monad.Base
 import Control.Monad.Catch
 import Control.Monad.Error.Class
 import Control.Monad.IO.Class
-import Control.Monad.Logger
 import Control.Monad.Reader.Class
 import Control.Monad.State.Class
 import Control.Monad.Trans
@@ -63,9 +62,6 @@ instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTransControl t1, MonadWri
   tell = ComposeT . lift . tell
   listen tma = ComposeT $ (\ (sta, w) -> (, w) <$> restoreT (pure sta)) =<< liftWith (\ runT -> listen $ runT $ unComposeT tma)
   pass tma = ComposeT $ lift . pass . pure =<< unComposeT tma
-
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadLogger (t2 m)) => MonadLogger (ComposeT t1 t2 m) where
-  monadLoggerLog loc logSource logLevel = ComposeT . lift . monadLoggerLog loc logSource logLevel
 
 runComposeT :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
             -> (forall a. t2 m a -> m (StT t2 a))

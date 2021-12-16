@@ -24,7 +24,6 @@ newtype (|.)
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadThrow, MonadCatch)
   deriving newtype (MonadError e, MonadReader r, MonadState s, MonadWriter w)
-  deriving newtype (MonadLogger)
 
 deriving newtype instance ( forall m. Monad m => Monad (t2 m)
                           , MonadTrans t1
@@ -50,6 +49,9 @@ deriving newtype instance ( Monad (t1 (t2 m))
                           , MonadTransControl (ComposeT t1 t2)
                           , MonadBaseControl b m
                           ) => MonadBaseControl b ((t1 |. t2) m)
+
+instance (Monad (t1 (t2 m)), MonadTrans t1, MonadLogger (t2 m)) => MonadLogger ((t1 |. t2) m) where
+  monadLoggerLog loc logSource logLevel = ComposeT' . ComposeT . lift . monadLoggerLog loc logSource logLevel
 
 (|.) :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
      -> (forall a. t2 m a -> m (StT t2 a))
