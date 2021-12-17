@@ -219,7 +219,7 @@ Some canonical instances would include `MonadTrans`, `MonadTransControl`, `Monad
 All of these canonical instances can be implemented, as long as `t1` and `t2` implement `MonadTransControl`.
 These instances just lift into the base monad `m`.
 
-TIP: You can find those canonical implementations https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Control/Monad/Trans/Compose.hs[here] for example.
+TIP: You can find those canonical implementations https://github.com/jumper149/homepage/blob/ce115f7aecb85830d9286ff7a6cba55fa9d39b0f/src/Control/Monad/Trans/Compose.hs[here] for example.
 
 Then there are also our own semantically important instances, which we have to be especially careful with.
 Let`'s look at the example of `MonadLogger`:
@@ -305,7 +305,7 @@ Since `ComposeT` has quite a few canonical instances, it would be sensible to ad
 
 CAUTION: https://hackage.haskell.org/package/mmorph[mmorph] also implements `ComposeT`, but the instances are a bit different!
 
-I am also using a standalone https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Control/Monad/Trans/Compose.hs[module] just for `ComposeT`.
-For the project specific instances I then use a https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Homepage/Application/Compose.hs#L18[newtype `(|.)`].
-I try to keep https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Homepage/Application/Configured.hs[class definitions] separated from the rest.
-And then finally I can spin up my https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Homepage/Application.hs[application].
+I am also using a standalone https://github.com/jumper149/homepage/blob/ce115f7aecb85830d9286ff7a6cba55fa9d39b0f/src/Control/Monad/Trans/Compose.hs[module] just for `ComposeT`.
+For the project specific instances I then use a https://github.com/jumper149/homepage/blob/ce115f7aecb85830d9286ff7a6cba55fa9d39b0f/src/Homepage/Application/Compose.hs#L18[newtype `(|.)`].
+I try to keep https://github.com/jumper149/homepage/blob/ce115f7aecb85830d9286ff7a6cba55fa9d39b0f/src/Homepage/Application/Configured.hs[class definitions] separated from the rest.
+And then finally I can spin up my https://github.com/jumper149/homepage/blob/ce115f7aecb85830d9286ff7a6cba55fa9d39b0f/src/Homepage/Application.hs[application].
