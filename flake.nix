@@ -58,6 +58,10 @@
           asciidoctor projectsOnMyHomepage.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/projectsOnMyHomepage.html
           sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/projectsOnMyHomepage.html
           asciidoctor-pdf projectsOnMyHomepage.adoc $ASCIIDOCTOR_FLAGS --out-file static/projectsOnMyHomepage.pdf
+
+          asciidoctor composingTransformers.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/composingTransformers.html
+          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/composingTransformers.html
+          asciidoctor-pdf composingTransformers.adoc $ASCIIDOCTOR_FLAGS --out-file static/composingTransformers.pdf
         '';
         installPhase = ''
           cp --recursive static $out

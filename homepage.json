@@ -24,6 +24,11 @@
     , "timestamp": "2021-11-13"
     , "title": "Projects on my Homepage"
     }
+  , "composingTransformers":
+    { "content": "composingTransformers"
+    , "timestamp": "2021-12-17"
+    , "title": "composing Transformers"
+    }
   }
 , "blog-preview-max-length": 5
 , "atom-person-name": "Felix Springer"
