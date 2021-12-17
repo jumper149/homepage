@@ -20,7 +20,7 @@ instance MonadTransControl ReaderT where
 ----
 
 === Why is `ReaderT` of interest?
-`ReaderT` in conjunction with an ``IO``-based Monad `m` can be used to build stateful applications, when using something like https://hackage.haskell.org/package/stm[stm]`'s ``TVar``s.
+`ReaderT` in conjunction with an ``IO``-based Monad `m` can be used to build stateful applications, when using something like https://hackage.haskell.org/package/stm[stm]'s ``TVar``s.
 `ReaderT` is special compared to other transformers, because it doesn`'t carry any monadic state `StT (ReaderT r) = a`, which is an associated type of the `MonadTransControl` class.
 This is also the reason, why it has an instance of `MonadUnliftIO`.
 
