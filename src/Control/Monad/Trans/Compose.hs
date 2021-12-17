@@ -40,25 +40,25 @@ instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadBaseContro
   liftBaseWith f = liftWith $ \ runT -> liftBaseWith $ \ runInBase -> f $ runInBase . runT
   restoreM = restoreT . restoreM
 
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadThrow (t2 m)) => MonadThrow (ComposeT t1 t2 m) where
+instance (Monad (t1 (t2 m)), MonadTrans t1, MonadThrow (t2 m)) => MonadThrow (ComposeT t1 t2 m) where
   throwM = ComposeT . lift . throwM
 
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTransControl t1, MonadCatch (t2 m)) => MonadCatch (ComposeT t1 t2 m) where
+instance (Monad (t1 (t2 m)), MonadTransControl t1, MonadCatch (t2 m)) => MonadCatch (ComposeT t1 t2 m) where
   catch throwing catching = ComposeT $ restoreT . pure =<< liftWith (\ runT -> catch (runT $ unComposeT throwing) (runT . unComposeT . catching))
 
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTransControl t1, MonadError e (t2 m)) => MonadError e (ComposeT t1 t2 m) where
+instance (Monad (t1 (t2 m)), MonadTransControl t1, MonadError e (t2 m)) => MonadError e (ComposeT t1 t2 m) where
   throwError = ComposeT . lift . throwError
   catchError throwing catching = ComposeT $ restoreT . pure =<< liftWith (\ runT -> catchError (runT $ unComposeT throwing) (runT . unComposeT . catching))
 
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTransControl t1, MonadReader r (t2 m)) => MonadReader r (ComposeT t1 t2 m) where
+instance (Monad (t1 (t2 m)), MonadTransControl t1, MonadReader r (t2 m)) => MonadReader r (ComposeT t1 t2 m) where
   ask = ComposeT $ lift ask
   local f tma = ComposeT $ restoreT . pure =<< liftWith (\ runT -> Control.Monad.Reader.Class.local f $ runT $ unComposeT tma)
 
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadState s (t2 m)) => MonadState s (ComposeT t1 t2 m) where
+instance (Monad (t1 (t2 m)), MonadTrans t1, MonadState s (t2 m)) => MonadState s (ComposeT t1 t2 m) where
   get = ComposeT $ lift get
   put = ComposeT . lift . put
 
-instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTransControl t1, MonadWriter w (t2 m)) => MonadWriter w (ComposeT t1 t2 m) where
+instance (Monad (t1 (t2 m)), MonadTransControl t1, MonadWriter w (t2 m)) => MonadWriter w (ComposeT t1 t2 m) where
   tell = ComposeT . lift . tell
   listen tma = ComposeT $ (\ (sta, w) -> (, w) <$> restoreT (pure sta)) =<< liftWith (\ runT -> listen $ runT $ unComposeT tma)
   pass tma = ComposeT $ lift . pass . pure =<< unComposeT tma
