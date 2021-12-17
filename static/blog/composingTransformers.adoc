@@ -1,9 +1,9 @@
 == composing Transformers
 
 There exists a certain kind of monad transformers.
-I'm talking about all transformers that have lawful instances of `MonadTransControl` from the https://hackage.haskell.org/package/monad-control[monad-control] library.
+I`'m talking about all transformers that have lawful instances of `MonadTransControl` from the https://hackage.haskell.org/package/monad-control[monad-control] library.
 In particular `ReaderT`, `StateT` and `ExceptT` have lawful instances.
-Let's stick to `ReaderT` for now.
+Let`'s stick to `ReaderT` for now.
 
 [source,haskell]
 ----
@@ -20,8 +20,8 @@ instance MonadTransControl ReaderT where
 ----
 
 === Why is `ReaderT` of interest?
-`ReaderT` in conjunction with an ``IO``-based Monad `m` can be used to build stateful applications, when using something like https://hackage.haskell.org/package/stm[stm]'s ``TVar``s.
-`ReaderT` is special compared to other transformers, because it doesn't carry any monadic state `StT (ReaderT r) = a`, which is an associated type of the `MonadTransControl` class.
+`ReaderT` in conjunction with an ``IO``-based Monad `m` can be used to build stateful applications, when using something like https://hackage.haskell.org/package/stm[stm]`'s ``TVar``s.
+`ReaderT` is special compared to other transformers, because it doesn`'t carry any monadic state `StT (ReaderT r) = a`, which is an associated type of the `MonadTransControl` class.
 This is also the reason, why it has an instance of `MonadUnliftIO`.
 
 NOTE: `MonadBaseControl IO m` should be a superclass of `MonadUnliftIO m`.
@@ -44,7 +44,7 @@ type ApplicationT m = Request -> (Response -> m ResponseReceived) -> m ResponseR
 ----
 
 === Building an application
-Now let's build an application using a `Configuration`, the ability to do logging and a database connection.
+Now let`'s build an application using a `Configuration`, the ability to do logging and a database connection.
 
 '''
 
@@ -75,7 +75,7 @@ When inspecting the type of `LoggingT`, one can see, that this is just a reader 
 
 '''
 
-For demonstration purposes let's add another transformer to our environment, that allows us to talk to a database.
+For demonstration purposes let`'s add another transformer to our environment, that allows us to talk to a database.
 Some implementation details are left to your imagination.
 
 [source,haskell]
@@ -161,7 +161,7 @@ This is already looking pretty good, but we can do even better.
 
 Let me show you, where this can be improved.
 
-===== ``AppT``'s instances
+===== ``AppT```'s instances
 To use the environment you will have to provide a few instances.
 
 [source,haskell]
@@ -211,7 +211,7 @@ All of these canonical instances can be implemented, as long as `t1` and `t2` im
 These instances just lift into the base monad `m`.
 
 Then there are also our own semantically important instances, which we have to be especially careful with.
-Let's look at the example of `MonadLogger`:
+Let`'s look at the example of `MonadLogger`:
 
 [source,haskell]
 ----
@@ -228,14 +228,14 @@ With this setup we can `lift` instances through our entire transformer stack, fr
 
 The same overlapping style, using ``MonadTrans``/``MonadTransControl`` should be used for `MonadReader Configuration` and `MonadDatabase`
 
-This recursive instance lookup will be useful to us, because now we don't have to keep track of `lift`/`liftWith` throughout our transfomer stack anymore.
+This recursive instance lookup will be useful to us, because now we don`'t have to keep track of `lift`/`liftWith` throughout our transformer stack anymore.
 
 ==== Deriving to the rescue
 We did all of this with the premise, that deriving would improve.
 After we have set up our `ComposeT`, we can derive everything we want for `AppT`.
 And now we can easily add another layer to our transformer stack without changing any of the other instances.
 
-We can also leave out some instances like `MonadIO` for example, that we needed during initialization, but don't want as part of our environment.
+We can also leave out some instances like `MonadIO` for example, that we needed during initialization, but don`'t want as part of our environment.
 
 NOTE: I am not a huge fan of `MonadIO`, because `MonadBase IO` does the job as well.
 
@@ -256,7 +256,7 @@ We need `IdentityT` at the end of our transformer stack, so that our "`non-defau
 
 ==== Initializing in style
 Now we can finally use any class, as soon as we want.
-Let's reimplement our initialization.
+Let`'s reimplement our initialization.
 
 [source,haskell]
 ----
@@ -286,3 +286,12 @@ runApplication app = do
 ----
 
 We finally arrived at a solution, that allows us to easily compose each step of initialization and also comfortably derives our instances for us.
+
+=== References
+I personally use this kind of transformer stack for my https://github.com/jumper149/homepage[homepage].
+
+Since `ComposeT` has quite a few canonical instances, it would be sensible to add `ComposeT` to the transformers library.
+I am also using a standalone https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Control/Monad/Trans/Compose.hs[module] just for `ComposeT`.
+For the project specific instances I then use a https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Homepage/Application/Compose.hs#L18[newtype `(|.)`].
+I try to keep https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Homepage/Application/Configured.hs[class definitions] separated from the rest.
+And then finally I can spin up my https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Homepage/Application.hs[application].
