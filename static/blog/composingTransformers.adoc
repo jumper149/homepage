@@ -46,6 +46,9 @@ type ApplicationT m = Request -> (Response -> m ResponseReceived) -> m ResponseR
 === Building an application
 Now let`'s build an application using a `Configuration`, the ability to do logging and a database connection.
 
+NOTE: You should be able to cover most of the required language extensions with `GHC2021`.
+You will also need `QuantifiedConstraints` and `UndecidableInstances`.
+
 '''
 
 `Configuration` is just a simple record.
@@ -84,7 +87,12 @@ newtype DatabaseT m a = DatabaseT { runDatabaseT :: ReaderT (TVar DatabaseConnec
   deriving (Functor, Applicative, Monad)
 
 -- and additional instances ...
+----
 
+And now we just need a type class to use as a constraint, when later on actually building the application logic.
+
+[source,haskell]
+----
 class Monad m => MonadDatabase m where
   queryDatabase :: DatabaseQuery -> m DatabaseResponse
 
@@ -178,7 +186,7 @@ instance (Monad m) => MonadDatabase (AppT m) where
 ----
 
 This is quite annoying.
-Especially if you add another transformer to the stack, because then you will have to manually add the ``lift``ing to each method.
+If you add another transformer to the stack, you will have to manually add the ``lift``ing to each method.
 Only instances of the outer most transformer can be used for deriving (`DatabaseT` in this case).
 
 ===== Using methods during initialization
@@ -188,6 +196,7 @@ Unfortunately we still have to remember to `lift` the method call, unless each t
 For a more complicated setup it might become hard to track all the ``lift``s and sometimes we might even need to use `liftWith` from `MonadTransControl`.
 
 It would be nice to also have a `MonadLogger m` constraint on `runDatabaseT`.
+So we basically want to be able to use the full power of each transformer, right after we set it up.
 
 === Actually composing transformers
 Until now, we have applied transformers on monads to generate a new monad from an existing one.
@@ -209,6 +218,8 @@ Now we have to be clever about adding some instances to `ComposeT`.
 Some canonical instances would include `MonadTrans`, `MonadTransControl`, `MonadIO`, `MonadBase`, `MonadBaseControl` and maybe a few more like `MonadThrow` and `MonadCatch`.
 All of these canonical instances can be implemented, as long as `t1` and `t2` implement `MonadTransControl`.
 These instances just lift into the base monad `m`.
+
+TIP: You can find those canonical implementations https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Control/Monad/Trans/Compose.hs[here] for example.
 
 Then there are also our own semantically important instances, which we have to be especially careful with.
 Let`'s look at the example of `MonadLogger`:
@@ -291,6 +302,9 @@ We finally arrived at a solution, that allows us to easily compose each step of 
 I personally use this kind of transformer stack for my https://github.com/jumper149/homepage[homepage].
 
 Since `ComposeT` has quite a few canonical instances, it would be sensible to add `ComposeT` to the transformers library.
+
+CAUTION: https://hackage.haskell.org/package/mmorph[mmorph] also implements `ComposeT`, but the instances are a bit different!
+
 I am also using a standalone https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Control/Monad/Trans/Compose.hs[module] just for `ComposeT`.
 For the project specific instances I then use a https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Homepage/Application/Compose.hs#L18[newtype `(|.)`].
 I try to keep https://github.com/jumper149/homepage/blob/cc1ae6fb717feeafa0f848c26b957b32af09477d/src/Homepage/Application/Configured.hs[class definitions] separated from the rest.
