@@ -44,7 +44,10 @@ type ApplicationT m = Request -> (Response -> m ResponseReceived) -> m ResponseR
 ----
 
 === Building an application
-Now let's build an application using a `Configuration` and the ability to do logging.
+Now let's build an application using a `Configuration`, the ability to do logging and a database connection.
+
+'''
+
 `Configuration` is just a simple record.
 
 [source,haskell]
@@ -55,6 +58,8 @@ data Configuration = Configuration
   , port :: Word8
   }
 ----
+
+'''
 
 For logging the https://hackage.haskell.org/package/monad-logger[monad-logger] library is used.
 
@@ -67,6 +72,8 @@ newtype LoggingT m a = LoggingT { runLoggingT :: (Loc -> LogSource -> LogLevel -
 ----
 
 When inspecting the type of `LoggingT`, one can see, that this is just a reader with access to the logging function.
+
+'''
 
 For demonstration purposes let's add another transformer to our environment, that allows us to talk to a database.
 Some implementation details are left to your imagination.
@@ -85,9 +92,11 @@ instance (MonadIO m) => MonadDatabase (DatabaseT m) where
   queryDatabase = undefined -- TODO: Implementation.
 ----
 
+'''
+
 ==== Naive `AppT` implementation
 To hide away implementation details, it might be of interest to wrap your environment with a newtype `AppT`.
-We will also add `MonadTrans` and `MonadTransControl` instances have to be defined manually, but can help when implementing other instances like `MonadIO` or https://hackage.haskell.org/package/mtl[mtl] type classes.
+We will also add `MonadTrans` and `MonadTransControl` instances, that have to be defined manually, but can help when implementing other instances like `MonadIO` or https://hackage.haskell.org/package/mtl[mtl] type classes.
 
 [source,haskell]
 ----
@@ -126,7 +135,7 @@ In our example that would mean:
 
 1. `LoggingT`
 2. `ReaderT Configuration`
-2. `DatabaseT`
+3. `DatabaseT`
 
 This even allows us to use parts of the environment `AppT`, that were already set up beforehand.
 In the following example we use the logger while reading in the configuration and connecting to the database.
@@ -135,12 +144,12 @@ In the following example we use the logger while reading in the configuration an
 ----
 runApplication :: MonadIO m => AppT m a -> m a
 runApplication app = do
-  runStdOutLogging $ do
+  runStdOutLogging $ do -- run `LoggingT`
     config <- liftIO acquireConfiguration
-    $logInfo $ "Acquired configuration: " <> T.pack (show config) -- yeah, we can log
-    (\ tma -> runReaderT tma config) $ do
-      runDatabaseT config $ do
-        lift . lift $ $logInfo $ "Connected to database." -- we can also log here
+    logInfoN $ "Acquired configuration: " <> T.pack (show config) -- we can log now
+    (\ tma -> runReaderT tma config) $ do -- run `ReaderT Configuration`
+      runDatabaseT config $ do -- run `DatabaseT`
+        lift . lift $ logInfoN $ "Connected to database." -- we can also log here
         unAppT app
 
 acquireConfiguration :: IO Configuration
@@ -173,7 +182,7 @@ Especially if you add another transformer to the stack, because then you will ha
 Only instances of the outer most transformer can be used for deriving (`DatabaseT` in this case).
 
 ===== Using methods during initialization
-We were able to use `logInfo` during the initialization.
+We were able to use `logInfoN` during the initialization.
 Unfortunately we still have to remember to `lift` the method call, unless each transformer in our stack provides a `MonadLogger` instance.
 
 For a more complicated setup it might become hard to track all the ``lift``s and sometimes we might even need to use `liftWith` from `MonadTransControl`.
@@ -181,7 +190,7 @@ For a more complicated setup it might become hard to track all the ``lift``s and
 It would be nice to also have a `MonadLogger m` constraint on `runDatabaseT`.
 
 === Actually composing transformers
-Until now, we have used transformers to generate a new monad from an existing one.
+Until now, we have applied transformers on monads to generate a new monad from an existing one.
 We can also compose two transformers and generate a new transformer with `ComposeT`.
 
 [source,haskell]
@@ -206,9 +215,11 @@ Let's look at the example of `MonadLogger`:
 
 [source,haskell]
 ----
+-- | Default instance.
 instance {-# OVERLAPPABLE #-} (Monad (t1 (t2 m)), MonadTrans t1, MonadLogger (t2 m)) => MonadLogger (ComposeT t1 t2 m) where
   monadLoggerLog loc logSource logLevel = ComposeT . lift . monadLoggerLog loc logSource logLevel
 
+-- | Override the default instance, whenever `LoggingT` is used in a transformer stack.
 instance {-# OVERLAPPING #-} MonadIO (t2 m) => MonadLogger (ComposeT LoggingT t2 m) where
   monadLoggerLog loc logSource logLevel = ComposeT . monadLoggerLog loc logSource logLevel
 ----
@@ -216,6 +227,8 @@ instance {-# OVERLAPPING #-} MonadIO (t2 m) => MonadLogger (ComposeT LoggingT t2
 With this setup we can `lift` instances through our entire transformer stack, from the point they are initialized at.
 
 The same overlapping style, using ``MonadTrans``/``MonadTransControl`` should be used for `MonadReader Configuration` and `MonadDatabase`
+
+This recursive instance lookup will be useful to us, because now we don't have to keep track of `lift`/`liftWith` throughout our transfomer stack anymore.
 
 ==== Deriving to the rescue
 We did all of this with the premise, that deriving would improve.
@@ -234,12 +247,12 @@ newtype AppT m a = AppT { unAppT :: (DatabaseT |. ReaderT Configuration |. Loggi
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadTrans, MonadTransControl)
-  deriving newtype (MonadThrow, MonadCatch)
-  deriving newtype (MonadError e)
   deriving newtype (MonadLogger)
-  deriving newtype (MonadConfigured)
+  deriving newtype (MonadReader Configuration)
   deriving newtype (MonadDatabase)
 ----
+
+We need `IdentityT` at the end of our transformer stack, so that our "`non-default`" instance of `LoggingT` is inferred.
 
 ==== Initializing in style
 Now we can finally use any class, as soon as we want.
@@ -258,18 +271,18 @@ runApplication app = do
   let
 
     runConfigured tma = do
-      $logInfo "Reading configuration."
+      logInfoN "Reading configuration."
       config <- liftIO acquireConfiguration
-      $logInfo $ "Acquired configuration: " <> T.pack (show config)
+      logInfoN $ "Acquired configuration: " <> T.pack (show config)
       runReaderT tma config
 
     runDatabaseT' tma = do
       config <- ask
-      $logInfo "Connect to the database."
+      logInfoN "Connect to the database."
       -- Now we can even have a `MonadLogger m` constraint on `runDatabaseT`.
       runDatabaseT config tma
 
   runDatabaseT' |. runConfigured |. runStdOutLogging |. runIdentityT $ unAppT app
 ----
 
-We finally arrived at a solution, that allows us to easily compose each step of initialization and also comfortably derives our instances.
+We finally arrived at a solution, that allows us to easily compose each step of initialization and also comfortably derives our instances for us.
