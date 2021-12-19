@@ -8,7 +8,6 @@ import Homepage.Application.Configured
 import Homepage.Application.Logging
 
 import Control.Monad.Base
-import Control.Monad.Catch
 import Control.Monad.Error.Class
 import Control.Monad.IO.Class
 import Control.Monad.Logger
@@ -29,7 +28,6 @@ newtype (|.)
   (a :: Type)
     = ComposeT' { unComposeT' :: ComposeT t1 t2 m a }
   deriving newtype (Applicative, Functor, Monad)
-  deriving newtype (MonadThrow, MonadCatch)
   deriving newtype (MonadError e, MonadReader r, MonadState s, MonadWriter w)
 
 deriving newtype

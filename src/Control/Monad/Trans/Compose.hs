@@ -1,9 +1,8 @@
-{-# LANGUAGE QuantifiedConstraints, UndecidableInstances, TupleSections #-}
+{-# LANGUAGE QuantifiedConstraints, UndecidableInstances #-}
 
 module Control.Monad.Trans.Compose where
 
 import Control.Monad.Base
-import Control.Monad.Catch
 import Control.Monad.Error.Class
 import Control.Monad.IO.Class
 import Control.Monad.Reader.Class
@@ -53,14 +52,6 @@ deriving via Elevator (ComposeT t1 t2) m
     , MonadTransControl (ComposeT t1 t2)
     , MonadBaseControl b m
     ) => MonadBaseControl b (ComposeT t1 t2 m)
-
--- | Elevated to `t2 m`.
-instance (Monad (t1 (t2 m)), MonadTrans t1, MonadThrow (t2 m)) => MonadThrow (ComposeT t1 t2 m) where
-  throwM = ComposeT . lift . throwM
-
--- | Elevated to `t2 m`.
-instance (Monad (t1 (t2 m)), MonadTransControl t1, MonadCatch (t2 m)) => MonadCatch (ComposeT t1 t2 m) where
-  catch throwing catching = ComposeT $ restoreT . pure =<< liftWith (\ runT -> catch (runT $ deComposeT throwing) (runT . deComposeT . catching))
 
 -- | Elevated to `t2 m`.
 deriving via Elevator t1 (t2 (m :: * -> *))

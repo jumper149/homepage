@@ -12,10 +12,12 @@ import Homepage.Configuration.Acquisition
 
 import Control.Monad.Base
 import Control.Monad.Catch
+import Control.Monad.Catch.OrphanInstances ()
 import Control.Monad.Except
 import Control.Monad.Identity
 import Control.Monad.Logger
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Elevator
 import Data.Foldable
 import qualified Servant
 
@@ -23,12 +25,15 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: (BlogT |. Configured
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadTrans, MonadTransControl)
-  deriving newtype (MonadThrow, MonadCatch)
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
+  deriving (MonadThrow, MonadCatch) via (Elevator (BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT) m)
 
-deriving newtype instance MonadError Servant.ServerError m => MonadError Servant.ServerError (ApplicationT m)
+deriving via Elevator (BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT) m
+  instance
+    ( MonadError Servant.ServerError m
+    ) => MonadError Servant.ServerError (ApplicationT m)
 
 runApplication :: (MonadIO m, MonadBaseControl IO m)
                => ApplicationT m a
