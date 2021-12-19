@@ -31,13 +31,28 @@ instance (forall m. Monad m => Monad (t2 m), MonadTransControl t1, MonadTransCon
   restoreT = defaultRestoreT2 ComposeT
 
 -- | Elevated to `m`.
-deriving via (Elevator (ComposeT t1 t2) m) instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadIO m) => MonadIO (ComposeT t1 t2 m)
+deriving via Elevator (ComposeT t1 t2) m
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTrans (ComposeT t1 t2)
+    , MonadIO m
+    ) => MonadIO (ComposeT t1 t2 m)
 
 -- | Elevated to `m`.
-deriving via (Elevator (ComposeT t1 t2) m) instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadBase b m) => MonadBase b (ComposeT t1 t2 m)
+deriving via Elevator (ComposeT t1 t2) m
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTrans (ComposeT t1 t2)
+    , MonadBase b m
+    ) => MonadBase b (ComposeT t1 t2 m)
 
 -- | Elevated to `m`.
-deriving via (Elevator (ComposeT t1 t2) m) instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadBaseControl b m) => MonadBaseControl b (ComposeT t1 t2 m)
+deriving via Elevator (ComposeT t1 t2) m
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTransControl (ComposeT t1 t2)
+    , MonadBaseControl b m
+    ) => MonadBaseControl b (ComposeT t1 t2 m)
 
 -- | Elevated to `t2 m`.
 instance (Monad (t1 (t2 m)), MonadTrans t1, MonadThrow (t2 m)) => MonadThrow (ComposeT t1 t2 m) where
