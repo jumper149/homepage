@@ -98,6 +98,7 @@
         buildPhase = ''
           convert favicon.xpm favicon.png
           rm favicon.xpm
+          ln -s favicon.png favicon.ico
         '';
         installPhase = ''
           mkdir -p $out
