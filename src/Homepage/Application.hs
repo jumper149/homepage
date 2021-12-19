@@ -21,16 +21,18 @@ import Control.Monad.Trans.Elevator
 import Data.Foldable
 import qualified Servant
 
-newtype ApplicationT m a = ApplicationT { unApplicationT :: (BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT) m a }
+type ApplicationStack = BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT
+
+newtype ApplicationT m a = ApplicationT { unApplicationT :: ApplicationStack m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadTrans, MonadTransControl)
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
-  deriving (MonadThrow, MonadCatch) via (Elevator (BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT) m)
+  deriving (MonadThrow, MonadCatch) via (Elevator ApplicationStack m)
 
-deriving via Elevator (BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT) m
+deriving via Elevator ApplicationStack m
   instance
     ( MonadError Servant.ServerError m
     ) => MonadError Servant.ServerError (ApplicationT m)
