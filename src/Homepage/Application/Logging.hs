@@ -21,8 +21,10 @@ instance MonadIO m => MonadLogger (LoggingT' m) where
     LoggingT' $ monadLoggerLog loc logSource logLevel $
       toLogStr $ B.pack (show time) <> " | " <> fromLogStr (toLogStr logStr)
 
-instance {-# OVERLAPPING #-} MonadIO (t2 m) => MonadLogger ((LoggingT' |. t2) m) where
-  monadLoggerLog loc logSource logLevel = ComposeT' . ComposeT . monadLoggerLog loc logSource logLevel
+deriving via LoggingT' (t2 (m :: * -> *))
+  instance {-# OVERLAPPING #-}
+    ( MonadIO (t2 m)
+    ) => MonadLogger ((LoggingT' |. t2) m)
 
 runLoggingT' :: (MonadIO m, MonadBaseControl IO m)
              => Maybe FilePath

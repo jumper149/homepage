@@ -7,11 +7,13 @@ import Control.Monad.Catch
 import Control.Monad.Error.Class
 import Control.Monad.IO.Class
 import Control.Monad.Logger
+import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Reader.Class
 import Control.Monad.State.Class
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Elevator
 import Control.Monad.Writer.Class
 import Data.Kind
 
@@ -50,8 +52,11 @@ deriving newtype instance ( Monad (t1 (t2 m))
                           , MonadBaseControl b m
                           ) => MonadBaseControl b ((t1 |. t2) m)
 
-instance (Monad (t1 (t2 m)), MonadTrans t1, MonadLogger (t2 m)) => MonadLogger ((t1 |. t2) m) where
-  monadLoggerLog loc logSource logLevel = ComposeT' . ComposeT . lift . monadLoggerLog loc logSource logLevel
+deriving via Elevator t1 (t2 (m :: * -> *))
+  instance ( Monad (t1 (t2 m))
+           , MonadTrans t1
+           , MonadLogger (t2 m)
+           ) => MonadLogger ((t1 |. t2) m)
 
 (|.) :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
      -> (forall a. t2 m a -> m (StT t2 a))

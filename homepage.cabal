@@ -28,7 +28,9 @@ library
                      , Homepage.Server.Route.Home
                      , Homepage.Server.Route.Static
                      , Homepage.Server.Tab
-  other-modules:       Control.Monad.Trans.Compose
+  other-modules:       Control.Monad.Logger.OrphanInstances
+                     , Control.Monad.Trans.Compose
+                     , Control.Monad.Trans.Elevator
                      , Text.Blaze.Html5.Extra
   build-depends:       aeson
                      , base

@@ -10,6 +10,7 @@ import Control.Monad.Reader.Class
 import Control.Monad.State.Class
 import Control.Monad.Trans
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Elevator
 import Control.Monad.Writer.Class
 import Data.Kind
 
@@ -29,16 +30,14 @@ instance (forall m. Monad m => Monad (t2 m), MonadTransControl t1, MonadTransCon
   liftWith f = defaultLiftWith2 ComposeT deComposeT $ \x -> f x
   restoreT = defaultRestoreT2 ComposeT
 
-instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadIO m) => MonadIO (ComposeT t1 t2 m) where
-  liftIO = lift . liftIO
+-- | Elevated.
+deriving via (Elevator (ComposeT t1 t2) m) instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadIO m) => MonadIO (ComposeT t1 t2 m)
 
-instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadBase b m) => MonadBase b (ComposeT t1 t2 m) where
-  liftBase = lift . liftBase
+-- | Elevated.
+deriving via (Elevator (ComposeT t1 t2) m) instance (Monad (t1 (t2 m)), MonadTrans (ComposeT t1 t2), MonadBase b m) => MonadBase b (ComposeT t1 t2 m)
 
-instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadBaseControl b m) => MonadBaseControl b (ComposeT t1 t2 m) where
-  type StM (ComposeT t1 t2 m) a = StM m (StT (ComposeT t1 t2) a)
-  liftBaseWith f = liftWith $ \ runT -> liftBaseWith $ \ runInBase -> f $ runInBase . runT
-  restoreM = restoreT . restoreM
+-- | Elevated.
+deriving via (Elevator (ComposeT t1 t2) m) instance (Monad (t1 (t2 m)), MonadTransControl (ComposeT t1 t2), MonadBaseControl b m) => MonadBaseControl b (ComposeT t1 t2 m)
 
 instance (Monad (t1 (t2 m)), MonadTrans t1, MonadThrow (t2 m)) => MonadThrow (ComposeT t1 t2 m) where
   throwM = ComposeT . lift . throwM
