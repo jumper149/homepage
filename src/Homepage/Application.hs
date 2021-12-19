@@ -50,7 +50,7 @@ runApplication app = do
     runLoggingT'' tma = do
       maybeLogFile <- preConfigLogFile <$> preConfiguration
       runLoggingT' maybeLogFile $ do
-        traverse_ logDelayed preConfigLog
+        traverse_ logLine preConfigLog
         tma
 
     runConfiguredT' tma = do

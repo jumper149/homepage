@@ -25,7 +25,7 @@ runLoggingT' :: (MonadIO m, MonadBaseControl IO m)
 runLoggingT' Nothing = runStdoutLoggingT . unLoggingT'
 runLoggingT' (Just filePath) = runFileLoggingT filePath . unLoggingT'
 
-logDelayed :: MonadLogger m
-           => LogLine
-           -> m ()
-logDelayed (loc, logSource, logLevel, logStr) = monadLoggerLog loc logSource logLevel logStr
+logLine :: MonadLogger m
+        => LogLine
+        -> m ()
+logLine (loc, logSource, logLevel, logStr) = monadLoggerLog loc logSource logLevel logStr
