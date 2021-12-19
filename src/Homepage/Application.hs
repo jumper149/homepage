@@ -45,18 +45,21 @@ runApplication app = do
 
   let
 
+    runConfigurableT' :: (MonadIO n) => ConfigurableT n a -> n a
     runConfigurableT' tma = runConfigurableT tma preConfig
 
+    runLoggingT'' :: (MonadBaseControl IO n, MonadConfigurable n, MonadIO n) => LoggingT' n a -> n a
     runLoggingT'' tma = do
       maybeLogFile <- preConfigLogFile <$> preConfiguration
       runLoggingT' maybeLogFile $ do
         traverse_ logLine preConfigLog
         tma
 
+    runConfiguredT' :: (MonadConfigurable n, MonadIO n, MonadLogger n) => ConfiguredT n a -> n a
     runConfiguredT' tma = do
       maybeConfig <- acquireConfig =<< preConfiguration
       case maybeConfig of
         Nothing -> error "No configuration."
         Just config -> runConfiguredT tma config
 
-  runBlogT |.| runConfiguredT' |.| runLoggingT'' |.| runConfigurableT' |.| runIdentityT $ unApplicationT app
+  runBlogT |. runConfiguredT' |. runLoggingT'' |. runConfigurableT' |. runIdentityT $ unApplicationT app

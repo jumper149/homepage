@@ -120,10 +120,3 @@ deriving via LoggingT' (t2 (m :: * -> *))
 (|.) runT1 runT2 = runComposeT runT1 runT2 . unComposeT'
 
 infixr 1 |.
-
-(|.|) :: (t1 (t2 m) a -> t2 m a)
-      -> (t2 m a -> m a)
-      -> ((t1 |. t2) m a -> m a)
-(|.|) runT1 runT2 = runComposeT' runT1 runT2 . unComposeT'
-
-infixr 1 |.|
