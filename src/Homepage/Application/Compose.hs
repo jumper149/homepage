@@ -2,6 +2,11 @@
 
 module Homepage.Application.Compose where
 
+import Homepage.Application.Blog
+import Homepage.Application.Configurable
+import Homepage.Application.Configured
+import Homepage.Application.Logging
+
 import Control.Monad.Base
 import Control.Monad.Catch
 import Control.Monad.Error.Class
@@ -66,8 +71,50 @@ deriving via Elevator t1 (t2 (m :: * -> *))
   instance
     ( Monad (t1 (t2 m))
     , MonadTrans t1
+    , MonadBlog (t2 m)
+    ) => MonadBlog ((t1 |. t2) m)
+
+deriving via BlogT (t2 (m :: * -> *))
+  instance {-# OVERLAPPING #-}
+    ( MonadConfigured (t2 m)
+    , MonadIO (t2 m)
+    ) => MonadBlog ((BlogT |. t2) m)
+
+deriving via Elevator t1 (t2 (m :: * -> *))
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTrans t1
+    , MonadConfigurable (t2 m)
+    ) => MonadConfigurable ((t1 |. t2) m)
+
+deriving via ConfigurableT (t2 (m :: * -> *))
+  instance {-# OVERLAPPING #-}
+    ( Monad (t2 m)
+    ) => MonadConfigurable ((ConfigurableT |. t2) m)
+
+deriving via Elevator t1 (t2 (m :: * -> *))
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTrans t1
+    , MonadConfigured (t2 m)
+    ) => MonadConfigured ((t1 |. t2) m)
+
+deriving via ConfiguredT (t2 (m :: * -> *))
+  instance {-# OVERLAPPING #-}
+    ( Monad (t2 m)
+    ) => MonadConfigured ((ConfiguredT |. t2) m)
+
+deriving via Elevator t1 (t2 (m :: * -> *))
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTrans t1
     , MonadLogger (t2 m)
     ) => MonadLogger ((t1 |. t2) m)
+
+deriving via LoggingT' (t2 (m :: * -> *))
+  instance {-# OVERLAPPING #-}
+    ( MonadIO (t2 m)
+    ) => MonadLogger ((LoggingT' |. t2) m)
 
 (|.) :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
      -> (forall a. t2 m a -> m (StT t2 a))

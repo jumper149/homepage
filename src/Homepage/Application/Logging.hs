@@ -2,11 +2,8 @@
 
 module Homepage.Application.Logging where
 
-import Homepage.Application.Compose
-
 import Control.Monad.Logger
 import Control.Monad.Trans
-import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import qualified Data.ByteString.Char8 as B
 import qualified Data.Time as T
@@ -20,11 +17,6 @@ instance MonadIO m => MonadLogger (LoggingT' m) where
     time <- lift $ liftIO T.getCurrentTime
     LoggingT' $ monadLoggerLog loc logSource logLevel $
       toLogStr $ B.pack (show time) <> " | " <> fromLogStr (toLogStr logStr)
-
-deriving via LoggingT' (t2 (m :: * -> *))
-  instance {-# OVERLAPPING #-}
-    ( MonadIO (t2 m)
-    ) => MonadLogger ((LoggingT' |. t2) m)
 
 runLoggingT' :: (MonadIO m, MonadBaseControl IO m)
              => Maybe FilePath
