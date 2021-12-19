@@ -27,36 +27,47 @@ newtype (|.)
   deriving newtype (MonadThrow, MonadCatch)
   deriving newtype (MonadError e, MonadReader r, MonadState s, MonadWriter w)
 
-deriving newtype instance ( forall m. Monad m => Monad (t2 m)
-                          , MonadTrans t1
-                          , MonadTrans t2
-                          ) => MonadTrans (t1 |. t2)
+deriving newtype
+  instance
+    ( forall m. Monad m => Monad (t2 m)
+    , MonadTrans t1
+    , MonadTrans t2
+    ) => MonadTrans (t1 |. t2)
 
-deriving newtype instance ( forall m. Monad m => Monad (t2 m)
-                          , MonadTransControl t1
-                          , MonadTransControl t2
-                          ) => MonadTransControl (t1 |. t2)
+deriving newtype
+  instance
+    ( forall m. Monad m => Monad (t2 m)
+    , MonadTransControl t1
+    , MonadTransControl t2
+    ) => MonadTransControl (t1 |. t2)
 
-deriving newtype instance ( Monad (t1 (t2 m))
-                          , MonadTrans (ComposeT t1 t2)
-                          , MonadIO m
-                          ) => MonadIO ((t1 |. t2) m)
+deriving newtype
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTrans (ComposeT t1 t2)
+    , MonadIO m
+    ) => MonadIO ((t1 |. t2) m)
 
-deriving newtype instance ( Monad (t1 (t2 m))
-                          , MonadTrans (ComposeT t1 t2)
-                          , MonadBase b m
-                          ) => MonadBase b ((t1 |. t2) m)
+deriving newtype
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTrans (ComposeT t1 t2)
+    , MonadBase b m
+    ) => MonadBase b ((t1 |. t2) m)
 
-deriving newtype instance ( Monad (t1 (t2 m))
-                          , MonadTransControl (ComposeT t1 t2)
-                          , MonadBaseControl b m
-                          ) => MonadBaseControl b ((t1 |. t2) m)
+deriving newtype
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTransControl (ComposeT t1 t2)
+    , MonadBaseControl b m
+    ) => MonadBaseControl b ((t1 |. t2) m)
 
 deriving via Elevator t1 (t2 (m :: * -> *))
-  instance ( Monad (t1 (t2 m))
-           , MonadTrans t1
-           , MonadLogger (t2 m)
-           ) => MonadLogger ((t1 |. t2) m)
+  instance
+    ( Monad (t1 (t2 m))
+    , MonadTrans t1
+    , MonadLogger (t2 m)
+    ) => MonadLogger ((t1 |. t2) m)
 
 (|.) :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
      -> (forall a. t2 m a -> m (StT t2 a))
