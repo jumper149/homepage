@@ -112,6 +112,9 @@
           convert favicon.xpm favicon.png
           rm favicon.xpm
           ln -s favicon.png favicon.ico
+
+          convert icons/feed.png -resize 128x128 icons/feed.png
+          convert icons/GitHub.png -resize 128x128 icons/GitHub.png
         '';
         installPhase = ''
           mkdir -p $out
@@ -134,6 +137,7 @@
           haskell-language-server
           hlint
           hnix
+          pkgs.imagemagick
           implicit-hie
           rnix-lsp
           weeder
