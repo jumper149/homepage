@@ -35,7 +35,7 @@ data Routes route = Routes
                 :- "atom.xml"
                 :> Atom.API
     , routeArticle :: route
-                   :- Capture "article" T.Text
+                   :- Capture "article" BlogId
                    :> Get '[HTML] Html
     , routeOverview :: route
                     :- Get '[HTML] Html
@@ -66,30 +66,30 @@ overviewHandler = do
     blogList baseUrl (Just 0) blogs
 
 articleHandler :: (MonadConfigured m, MonadError ServerError m, MonadLogger m)
-               => T.Text
+               => BlogId
                -> m Html
-articleHandler articleKey = do
+articleHandler blogId = do
   baseUrl <- configBaseUrl <$> configuration
   blogs <- configBlogEntries <$> configuration
-  case lookupBlog articleKey blogs of
+  case lookupBlog blogId blogs of
     Nothing -> do
-        $logError $ "Failed to serve blog article: " <> T.pack (show articleKey)
+        $logError $ "Failed to serve blog article: " <> T.pack (show blogId)
         servantError404
     Just blog -> do
-        $logInfo $ "Serve blog article: " <> T.pack (show articleKey)
+        $logInfo $ "Serve blog article: " <> T.pack (show blogId)
         pure $ document baseUrl (Just 1) (Just TabBlog) $ do
           h2 $ text $ blogTitle blog
           p $ do
             "View blog entry: "
-            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> articleKey <> ".html") $ "HTML"
+            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> unBlogId blogId <> ".html") $ "HTML"
             " | "
-            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> articleKey <> ".pdf") $ "PDF"
+            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> unBlogId blogId <> ".pdf") $ "PDF"
           hr
           script ! H.type_ "text/javascript" $
             "function resizeIframe(iframe) {\
             \  iframe.height = `${iframe.contentWindow.document.body.scrollHeight + 30}` + \"px\";\
             \}"
-          iframe ! H.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> articleKey <> ".html")
+          iframe ! H.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> unBlogId blogId <> ".html")
                  ! H.name "blog article (HTML)"
                  ! H.width "100%"
                  ! H.onload "resizeIframe(this)"

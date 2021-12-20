@@ -5,28 +5,23 @@
 , "base-url": "http://localhost:8008"
 , "blog-entries":
   { "myWayToCoreboot":
-    { "content": "myWayToCoreboot"
-    , "timestamp": "2019-04-04"
+    { "timestamp": "2019-04-04"
     , "title": "my Way to Coreboot"
     }
   , "myOwnImplementationOfIExpressions":
-    { "content": "myOwnImplementationOfIExpressions"
-    , "timestamp": "2019-06-30"
+    { "timestamp": "2019-06-30"
     , "title": "my own Implementation of I-Expressions"
     }
   , "aSmallShowcaseOfBlucontrol":
-    { "content": "aSmallShowcaseOfBlucontrol"
-    , "timestamp": "2021-09-27"
+    { "timestamp": "2021-09-27"
     , "title": "a small Showcase of blucontrol"
     }
   , "projectsOnMyHomepage":
-    { "content": "projectsOnMyHomepage"
-    , "timestamp": "2021-11-13"
+    { "timestamp": "2021-11-13"
     , "title": "Projects on my Homepage"
     }
   , "composingTransformers":
-    { "content": "composingTransformers"
-    , "timestamp": "2021-12-17"
+    { "timestamp": "2021-12-17"
     , "title": "composing Transformers"
     }
   }

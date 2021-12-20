@@ -106,16 +106,16 @@ atomFeed entries = do
     }
 
 atomEntry :: (MonadBlog m, MonadConfigured m, MonadLogger m)
-          => T.Text -- ^ Blog ID
+          => BlogId
           -> BlogEntry
           -> m Atom.Entry
-atomEntry blogId blog@BlogEntry { blogTitle , blogTimestamp } = do
+atomEntry blogId BlogEntry { blogTitle , blogTimestamp } = do
   baseUrl <- configBaseUrl <$> configuration
   person <- atomPerson
-  $logInfo $ "Read blog article from file: " <> T.pack (show blog)
-  content <- readBlogEntryHtml blog
+  $logInfo $ "Read blog article from file: " <> T.pack (show blogId)
+  content <- readBlogEntryHtml blogId
   pure Atom.Entry
-    { Atom.entryId = baseUrl <> "/blog/" <> blogId
+    { Atom.entryId = baseUrl <> "/blog/" <> unBlogId blogId
     , Atom.entryTitle = Atom.TextString blogTitle
     , Atom.entryUpdated = T.pack $ T.formatTime T.defaultTimeLocale "%0Y-%0m-%0dT12:00:00+01:00" blogTimestamp
     , Atom.entryAuthors = [ person ]
@@ -124,7 +124,7 @@ atomEntry blogId blog@BlogEntry { blogTitle , blogTimestamp } = do
     , Atom.entryContributor = []
     , Atom.entryLinks =
         [ Atom.Link
-            { Atom.linkHref = baseUrl <> "/blog/" <> blogId
+            { Atom.linkHref = baseUrl <> "/blog/" <> unBlogId blogId
             , Atom.linkRel = Nothing
             , Atom.linkType = Nothing -- TODO
             , Atom.linkHrefLang = Nothing

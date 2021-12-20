@@ -15,7 +15,7 @@ import qualified Data.Text.IO as T
 
 class Monad m => MonadBlog m where
   blogEntries :: m BlogEntries
-  readBlogEntryHtml :: BlogEntry -> m T.Text
+  readBlogEntryHtml :: BlogId -> m T.Text
 
 instance ( Monad (t m)
          , MonadTrans t
@@ -30,9 +30,9 @@ newtype BlogT m a = BlogT { unBlogT :: IdentityT m a }
 
 instance (MonadConfigured m, MonadIO m) => MonadBlog (BlogT m) where
   blogEntries = BlogT $ lift $ configBlogEntries <$> configuration
-  readBlogEntryHtml entry = do
+  readBlogEntryHtml blogId = do
     dir <- BlogT $ lift $ configDirectoryBlog <$> configuration
-    let file = dir <> "/" <> T.unpack (blogContent entry) <> ".html"
+    let file = dir <> "/" <> T.unpack (unBlogId blogId) <> ".html"
     BlogT $ lift $ liftIO $ T.readFile file
 
 runBlogT :: BlogT m a
