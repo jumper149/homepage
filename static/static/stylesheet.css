@@ -165,12 +165,12 @@ figure {
     height:  20px;
     padding: 0px 0px;
     margin:  0px 0px;
-    filter:  grayscale(100%) brightness(60%);
+    filter:  grayscale(100%) brightness(1000%) opacity(50%);
 }
 
 .bar span a.icon:hover img.icon {
     height:  20px;
     padding: 0px 0px;
     margin:  0px 0px;
-    filter:  brightness(70%);
+    filter:  grayscale(25%) opacity(75%);
 }
