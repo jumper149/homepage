@@ -104,6 +104,7 @@ figure {
 .bar {
     overflow:            hidden;
     white-space:         nowrap;
+    height:              40px;
     border-bottom-style: solid;
     border-bottom-color: var(--color7);
 }
@@ -114,7 +115,7 @@ figure {
 
 .bar a {
     float:      left;
-    padding:    10px 18px;
+    padding:    11px 18px;
     margin:     0px 0px;
     text-align: center;
     font-size:  18px;
@@ -141,7 +142,7 @@ figure {
 }
 
 .bar span a {
-    margin:           10px 18px;
+    margin:           12px 18px 12px 10px;
     padding:          0px 0px;
     font-size:        16px;
     color:            var(--color7);
@@ -152,4 +153,24 @@ figure {
     color:            var(--color2);
     background-color: transparent;
     text-decoration:  none;
+}
+
+.bar span a.icon {
+    font-size: 20px;
+    padding:   0px 0px;
+    margin:    10px 5px;
+}
+
+.bar span a.icon img.icon {
+    height:  20px;
+    padding: 0px 0px;
+    margin:  0px 0px;
+    filter:  grayscale(100%) brightness(60%);
+}
+
+.bar span a.icon:hover img.icon {
+    height:  20px;
+    padding: 0px 0px;
+    margin:  0px 0px;
+    filter:  brightness(70%);
 }

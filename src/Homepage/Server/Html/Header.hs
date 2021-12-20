@@ -39,4 +39,9 @@ headerTabs :: T.Text -- ^ base URL
 headerTabs baseUrl depth activeTab =
   header $ H.div ! class_ "bar" $ do
     headerTabsHelper baseUrl depth activeTab
-    H.span $ a ! href (textValue baseUrl) $ "felixspringer.xyz" -- TODO: base URL naming is hardcoded
+    H.span $ do
+      a ! hrefWithDepth baseUrl depth "blog/atom.xml" ! class_ "icon" $
+        img ! src (withDepth baseUrl depth "icons/feed.png") ! class_ "icon"
+      a ! href "https://github.com/jumper149" ! class_ "icon" $
+        img ! src (withDepth baseUrl depth "icons/GitHub.png") ! class_ "icon"
+      a ! href (textValue baseUrl) $ "felixspringer.xyz" -- TODO: base URL naming is hardcoded
