@@ -163,14 +163,12 @@ figure {
 
 .bar span a.icon img.icon {
     height:  20px;
+    width:   20px;
     padding: 0px 0px;
     margin:  0px 0px;
     filter:  grayscale(100%) brightness(1000%) opacity(50%);
 }
 
 .bar span a.icon:hover img.icon {
-    height:  20px;
-    padding: 0px 0px;
-    margin:  0px 0px;
     filter:  grayscale(25%) opacity(75%);
 }
