@@ -35,7 +35,8 @@
 
     packages.x86_64-linux.blog =
       with import nixpkgs { system = "x86_64-linux"; };
-      stdenv.mkDerivation {
+      let blogIds = builtins.attrNames (builtins.fromJSON (builtins.readFile ./homepage.json)).blog-entries;
+      in stdenv.mkDerivation {
         name = "blog"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/blog;
         buildPhase = ''
@@ -70,11 +71,10 @@
             fi
           }
 
-          compileArticle "myWayToCoreboot"
-          compileArticle "myOwnImplementationOfIExpressions"
-          compileArticle "aSmallShowcaseOfBlucontrol"
-          compileArticle "projectsOnMyHomepage"
-          compileArticle "composingTransformers"
+          for blogId in ${lib.strings.escapeShellArgs blogIds}
+          do
+            compileArticle "$blogId"
+          done
         '';
         installPhase = ''
           cp --recursive static $out
