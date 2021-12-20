@@ -43,25 +43,38 @@
 
           ASCIIDOCTOR_FLAGS="--doctype article --safe-mode server --attribute nofooter --attribute source-highlighter=rouge"
 
-          asciidoctor myWayToCoreboot.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/myWayToCoreboot.html
-          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myWayToCoreboot.html
-          asciidoctor-pdf myWayToCoreboot.adoc $ASCIIDOCTOR_FLAGS --out-file static/myWayToCoreboot.pdf
+          compileArticle() {
+            ARTICLE_NAME="$1"
 
-          asciidoctor myOwnImplementationOfIExpressions.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/myOwnImplementationOfIExpressions.html
-          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/myOwnImplementationOfIExpressions.html
-          asciidoctor-pdf myOwnImplementationOfIExpressions.adoc $ASCIIDOCTOR_FLAGS --out-file static/myOwnImplementationOfIExpressions.pdf
+            if [ -f "$ARTICLE_NAME.adoc" ]
+            then
+              echo "Article exists: '$ARTICLE_NAME'"
 
-          asciidoctor aSmallShowcaseOfBlucontrol.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/aSmallShowcaseOfBlucontrol.html
-          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/aSmallShowcaseOfBlucontrol.html
-          asciidoctor-pdf aSmallShowcaseOfBlucontrol.adoc $ASCIIDOCTOR_FLAGS --out-file static/aSmallShowcaseOfBlucontrol.pdf
+              echo "HTML: '$ARTICLE_NAME'"
+              asciidoctor "$ARTICLE_NAME.adoc" --backend html5 $ASCIIDOCTOR_FLAGS --out-file "static/$ARTICLE_NAME.html"
+              sed -i 's/^<head>$/<head>\n<base target="_parent">/' "static/$ARTICLE_NAME.html"
 
-          asciidoctor projectsOnMyHomepage.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/projectsOnMyHomepage.html
-          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/projectsOnMyHomepage.html
-          asciidoctor-pdf projectsOnMyHomepage.adoc $ASCIIDOCTOR_FLAGS --out-file static/projectsOnMyHomepage.pdf
+              echo "PDF: '$ARTICLE_NAME'"
+              asciidoctor-pdf "$ARTICLE_NAME.adoc" $ASCIIDOCTOR_FLAGS --out-file "static/$ARTICLE_NAME.pdf"
 
-          asciidoctor composingTransformers.adoc --backend html5 $ASCIIDOCTOR_FLAGS --out-file static/composingTransformers.html
-          sed -i 's/^<head>$/<head>\n<base target="_parent">/' static/composingTransformers.html
-          asciidoctor-pdf composingTransformers.adoc $ASCIIDOCTOR_FLAGS --out-file static/composingTransformers.pdf
+              if [ -d "$ARTICLE_NAME" ]
+              then
+                echo "Additional directory exists: '$ARTICLE_NAME'"
+                cp -r $ARTICLE_NAME static
+              else
+                echo "Additional directory doesn't exist: '$ARTICLE_NAME'"
+              fi
+              else
+                echo "Article doesn't exist: '$ARTICLE_NAME'"
+                exit 2
+            fi
+          }
+
+          compileArticle "myWayToCoreboot"
+          compileArticle "myOwnImplementationOfIExpressions"
+          compileArticle "aSmallShowcaseOfBlucontrol"
+          compileArticle "projectsOnMyHomepage"
+          compileArticle "composingTransformers"
         '';
         installPhase = ''
           cp --recursive static $out
