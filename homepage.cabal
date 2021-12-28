@@ -91,7 +91,9 @@ library
     TypeApplications
     TypeFamilies
     TypeOperators
-  ghc-options: -Wall
+  ghc-options:
+    -Wall
+    -Wredundant-constraints
 
 executable homepage
   main-is: Main.hs

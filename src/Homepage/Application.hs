@@ -45,7 +45,7 @@ runApplication app = do
 
   let
 
-    runConfigurableT' :: (MonadIO n) => ConfigurableT n a -> n a
+    runConfigurableT' :: ConfigurableT n a -> n a
     runConfigurableT' tma = runConfigurableT tma preConfig
 
     runLoggingT'' :: (MonadBaseControl IO n, MonadConfigurable n, MonadIO n) => LoggingT' n a -> n a
