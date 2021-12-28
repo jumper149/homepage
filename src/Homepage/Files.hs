@@ -36,4 +36,4 @@ groupFiles :: S.Set FileEntry -> M.Map (Maybe T.Text) (S.Set FileEntry)
 groupFiles entries = M.fromList $ sectionGroup <$> S.toList sections
   where
     sections = S.map fileSection entries
-    sectionGroup section = (section, S.filter ((section ==). fileSection) entries)
+    sectionGroup section = (section, S.filter ((section ==) . fileSection) entries)
