@@ -3,95 +3,99 @@ name: homepage
 version: 0.0.0.0
 
 library
-  exposed-modules:     Homepage
-                     , Homepage.Application
-                     , Homepage.Application.Blog
-                     , Homepage.Application.Compose
-                     , Homepage.Application.Configurable
-                     , Homepage.Application.Configured
-                     , Homepage.Application.Logging
-                     , Homepage.Blog
-                     , Homepage.Configuration
-                     , Homepage.Configuration.Acquisition
-                     , Homepage.Files
-                     , Homepage.Server.Html.Blog
-                     , Homepage.Server.Html.Depth
-                     , Homepage.Server.Html.Document
-                     , Homepage.Server.Html.Files
-                     , Homepage.Server.Html.Header
-                     , Homepage.Server.Err404
-                     , Homepage.Server.Route
-                     , Homepage.Server.Route.Blog.Atom
-                     , Homepage.Server.Route.Blog
-                     , Homepage.Server.Route.Donate
-                     , Homepage.Server.Route.Files
-                     , Homepage.Server.Route.Home
-                     , Homepage.Server.Route.Static
-                     , Homepage.Server.Tab
-  other-modules:       Control.Monad.Catch.OrphanInstances
-                     , Control.Monad.Logger.OrphanInstances
-                     , Control.Monad.Trans.Compose
-                     , Control.Monad.Trans.Elevator
-                     , Text.Blaze.Html5.Extra
-  build-depends:       aeson
-                     , base
-                     , blaze-html
-                     , blaze-markup
-                     , bytestring
-                     , containers
-                     , exceptions
-                     , deriving-aeson
-                     , feed
-                     , http-media
-                     , http-types
-                     , lifted-base
-                     , monad-control
-                     , monad-logger
-                     , mtl
-                     , servant
-                     , servant-blaze
-                     , servant-rawm
-                     , servant-rawm-server
-                     , servant-server
-                     , text
-                     , time
-                     , transformers
-                     , transformers-base
-                     , unix
-                     , wai
-                     , wai-app-static
-                     , wai-control
-                     , warp
-  hs-source-dirs:      src
-  default-language:    Haskell2010
-  default-extensions:  BangPatterns
-                       ConstraintKinds
-                       DataKinds
-                       DeriveAnyClass
-                       DeriveFoldable
-                       DeriveFunctor
-                       DeriveGeneric
-                       DeriveTraversable
-                       DerivingStrategies
-                       DerivingVia
-                       EmptyDataDeriving
-                       FlexibleContexts
-                       FlexibleInstances
-                       FunctionalDependencies
-                       GeneralizedNewtypeDeriving
-                       MultiParamTypeClasses
-                       NamedFieldPuns
-                       OverloadedStrings
-                       RankNTypes
-                       StandaloneDeriving
-                       TypeApplications
-                       TypeFamilies
-                       TypeOperators
-  ghc-options:         -Wall
+  exposed-modules:
+    , Homepage
+    , Homepage.Application
+    , Homepage.Application.Blog
+    , Homepage.Application.Compose
+    , Homepage.Application.Configurable
+    , Homepage.Application.Configured
+    , Homepage.Application.Logging
+    , Homepage.Blog
+    , Homepage.Configuration
+    , Homepage.Configuration.Acquisition
+    , Homepage.Files
+    , Homepage.Server.Html.Blog
+    , Homepage.Server.Html.Depth
+    , Homepage.Server.Html.Document
+    , Homepage.Server.Html.Files
+    , Homepage.Server.Html.Header
+    , Homepage.Server.Err404
+    , Homepage.Server.Route
+    , Homepage.Server.Route.Blog.Atom
+    , Homepage.Server.Route.Blog
+    , Homepage.Server.Route.Donate
+    , Homepage.Server.Route.Files
+    , Homepage.Server.Route.Home
+    , Homepage.Server.Route.Static
+    , Homepage.Server.Tab
+  other-modules:
+    , Control.Monad.Catch.OrphanInstances
+    , Control.Monad.Logger.OrphanInstances
+    , Control.Monad.Trans.Compose
+    , Control.Monad.Trans.Elevator
+    , Text.Blaze.Html5.Extra
+  build-depends:
+    , aeson
+    , base
+    , blaze-html
+    , blaze-markup
+    , bytestring
+    , containers
+    , exceptions
+    , deriving-aeson
+    , feed
+    , http-media
+    , http-types
+    , lifted-base
+    , monad-control
+    , monad-logger
+    , mtl
+    , servant
+    , servant-blaze
+    , servant-rawm
+    , servant-rawm-server
+    , servant-server
+    , text
+    , time
+    , transformers
+    , transformers-base
+    , unix
+    , wai
+    , wai-app-static
+    , wai-control
+    , warp
+  hs-source-dirs: src
+  default-language: Haskell2010
+  default-extensions:
+    BangPatterns
+    ConstraintKinds
+    DataKinds
+    DeriveAnyClass
+    DeriveFoldable
+    DeriveFunctor
+    DeriveGeneric
+    DeriveTraversable
+    DerivingStrategies
+    DerivingVia
+    EmptyDataDeriving
+    FlexibleContexts
+    FlexibleInstances
+    FunctionalDependencies
+    GeneralizedNewtypeDeriving
+    MultiParamTypeClasses
+    NamedFieldPuns
+    OverloadedStrings
+    RankNTypes
+    StandaloneDeriving
+    TypeApplications
+    TypeFamilies
+    TypeOperators
+  ghc-options: -Wall
 
 executable homepage
-  main-is:             Main.hs
-  build-depends:       base
-                     , homepage
-  default-language:    Haskell2010
-  ghc-options:         -Wall
+  main-is: Main.hs
+  build-depends:
+    , base
+    , homepage
+  default-language: Haskell2010
