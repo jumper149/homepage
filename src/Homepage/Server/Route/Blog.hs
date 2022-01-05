@@ -55,9 +55,10 @@ overviewHandler :: (MonadConfigured m, MonadLogger m)
                 => m Html
 overviewHandler = do
   baseUrl <- configBaseUrl <$> configuration
+  contactInformation <- configContactInformation <$> configuration
   blogs <- configBlogEntries <$> configuration
   $logInfo "Serve blog overview."
-  pure $ document baseUrl (Just 0) (Just TabBlog) $ do
+  pure $ document baseUrl (Just 0) (Just TabBlog) contactInformation $ do
     h2 "my Blog"
     p $ do
       "My blog is available as an "
@@ -76,8 +77,9 @@ articleHandler blogId = do
         $logWarn $ "Failed to serve blog article: " <> T.pack (show blogId)
         servantError404
     Just blog -> do
+        contactInformation <- configContactInformation <$> configuration
         $logInfo $ "Serve blog article: " <> T.pack (show blogId)
-        pure $ document baseUrl (Just 1) (Just TabBlog) $ do
+        pure $ document baseUrl (Just 1) (Just TabBlog) contactInformation $ do
           h2 $ text $ blogTitle blog
           p $ do
             "View blog entry: "

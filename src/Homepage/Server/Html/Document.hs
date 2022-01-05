@@ -1,5 +1,6 @@
 module Homepage.Server.Html.Document where
 
+import Homepage.Contact
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Header
 import Homepage.Server.Tab
@@ -13,9 +14,10 @@ import qualified Text.Blaze.Html5 as H
 document :: T.Text -- ^ base URL
          -> Maybe Natural -- ^ depth
          -> Maybe Tab -- ^ current tab
+         -> ContactInformation
          -> Html -- ^ body
          -> Html
-document baseUrl depth activeTab x =
+document baseUrl depth activeTab contactInformation x =
   docTypeHtml ! lang "en" $ do
       H.head $ do
           meta ! charset "UTF-8"
@@ -28,7 +30,7 @@ document baseUrl depth activeTab x =
           link ! rel "icon" ! hrefWithDepth baseUrl depth "favicon.png"
           link ! rel "stylesheet" ! type_ "text/css" ! hrefWithDepth baseUrl depth "stylesheet.css"
       body $ do
-        headerTabs baseUrl depth activeTab
+        headerTabs baseUrl depth activeTab contactInformation
         x
   where
     titleName = maybe "Homepage" (tabPageName . describeTab) activeTab

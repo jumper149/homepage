@@ -29,7 +29,7 @@ handler = do
   blogPreviewMaxLength <- configBlogPreviewMaxLength <$> configuration
   contactInformation <- configContactInformation <$> configuration
   $logInfo "Serve main page."
-  pure $ document baseUrl (Just 0) (Just TabHome) $ do
+  pure $ document baseUrl (Just 0) (Just TabHome) contactInformation $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
     h1 "Felix Springer"
     h2 "Welcome"

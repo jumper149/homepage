@@ -1,5 +1,6 @@
 module Homepage.Server.Html.Header where
 
+import Homepage.Contact
 import Homepage.Server.Tab
 import Homepage.Server.Html.Depth
 
@@ -36,13 +37,17 @@ headerTabsHelper baseUrl depth activeTab = traverse_ f [ minBound .. maxBound ]
 headerTabs :: T.Text -- ^ base URL
            -> Maybe Natural -- ^ depth
            -> Maybe Tab
+           -> ContactInformation
            -> Html
-headerTabs baseUrl depth activeTab =
+headerTabs baseUrl depth activeTab ContactInformation { contactGithubUsername } =
   header $ H.div ! class_ "bar" $ do
     headerTabsHelper baseUrl depth activeTab
     H.span $ do
       a ! hrefWithDepth baseUrl depth "blog/atom.xml" ! class_ "icon" $
         img ! src (withDepth baseUrl depth "icons/feed.png") ! A.title "Feed" ! class_ "icon"
-      a ! href "https://github.com/jumper149" ! class_ "icon" $
-        img ! src (withDepth baseUrl depth "icons/GitHub.png") ! A.title "GitHub" ! class_ "icon"
+      case contactGithubUsername of
+        Nothing -> mempty
+        Just githubUsername ->
+          a ! href ("https://github.com/" <> textValue githubUsername) ! class_ "icon" $
+            img ! src (withDepth baseUrl depth "icons/GitHub.png") ! A.title "GitHub" ! class_ "icon"
       a ! href (textValue baseUrl) $ "felixspringer.xyz" -- TODO: base URL naming is hardcoded
