@@ -14,6 +14,7 @@ library
     , Homepage.Blog
     , Homepage.Configuration
     , Homepage.Configuration.Acquisition
+    , Homepage.Contact
     , Homepage.Files
     , Homepage.Server.Html.Blog
     , Homepage.Server.Html.Depth

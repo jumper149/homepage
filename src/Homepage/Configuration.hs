@@ -1,6 +1,7 @@
 module Homepage.Configuration where
 
 import Homepage.Blog
+import Homepage.Contact
 import Homepage.Files
 
 import qualified Data.Aeson as A
@@ -15,7 +16,7 @@ data Configuration = Configuration
     , configDirectoryStatic :: FilePath
     , configPort :: Word16
     , configBaseUrl :: T.Text
-    , configEmailAddress :: T.Text
+    , configContactInformation :: ContactInformation
     , configBlogEntries :: BlogEntries
     , configBlogPreviewMaxLength :: Maybe Word
     , configAtomPersonName :: T.Text

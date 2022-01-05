@@ -3,7 +3,10 @@
 , "directory-static": "./static/static"
 , "port": 8008
 , "base-url": "http://localhost:8008"
-, "email-address": "contact@felixspringer.xyz"
+, "contact-information":
+  { "email-address": "contact@felixspringer.xyz"
+  , "matrix": "@jumper149:matrix.org"
+  }
 , "blog-entries":
   { "myWayToCoreboot":
     { "timestamp": "2019-04-04"

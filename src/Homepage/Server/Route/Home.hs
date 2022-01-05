@@ -5,12 +5,14 @@ module Homepage.Server.Route.Home where
 import Homepage.Application.Configured
 import Homepage.Blog
 import Homepage.Configuration
+import Homepage.Contact
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import Homepage.Server.Tab
 
 import Control.Monad.Logger
+import Data.Maybe
 import Servant
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
@@ -25,7 +27,7 @@ handler = do
   baseUrl <- configBaseUrl <$> configuration
   blogs <- configBlogEntries <$> configuration
   blogPreviewMaxLength <- configBlogPreviewMaxLength <$> configuration
-  emailAddress <- configEmailAddress <$> configuration
+  contactInformation <- configContactInformation <$> configuration
   $logInfo "Serve main page."
   pure $ document baseUrl (Just 0) (Just TabHome) $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
@@ -60,23 +62,37 @@ handler = do
         a ! hrefWithDepth baseUrl (Just 0) "files" $ "here"
         "."
     h2 "Contact"
-    ul $ do
-        li $ do
-            a ! href ("mailto:" <> textValue emailAddress) $ "E-Mail"
-            ": " <> toMarkup emailAddress
-        li "Matrix: @jumper149:matrix.org"
-        li "IRC (Libera Chat): jumper149"
-        li $ do
-          a ! href "https://github.com/jumper149" $ "GitHub"
-          ": jumper149"
-        li $ do
-          a ! href "https://hackage.haskell.org/user/jumper149" $ "Hackage"
-          ": jumper149"
-        li $ do
-          a ! href "https://aur.archlinux.org/packages/?K=jumper149&SeB=m" $ "AUR"
-          ": jumper149"
+    contactHtml contactInformation
     h2 "Donate"
     p $ do
         "If you want to support me, you can donate to me "
         a ! hrefWithDepth baseUrl (Just 0) "donate" $ "here"
         "."
+
+contactHtml :: ContactInformation -> Html
+contactHtml ContactInformation
+  { contactEmailAddress
+  , contactMatrix
+  } = ul $ toMarkup $ li <$> catMaybes
+    [ markupEmailAddress
+    , markupMatrix
+    , markupLiberaChat
+    , markupGitHub
+    , markupHackage
+    , markupAUR
+    ]
+    where
+      markupEmailAddress = Just $ do
+        a ! href ("mailto:" <> textValue contactEmailAddress) $ "E-Mail"
+        ": " <> toMarkup contactEmailAddress
+      markupMatrix = Just $ toMarkup $ "Matrix: " <> contactMatrix
+      markupLiberaChat = Just "IRC (Libera Chat): jumper149"
+      markupGitHub = Just $ toMarkup $ do
+        a ! href "https://github.com/jumper149" $ "GitHub"
+        ": jumper149"
+      markupHackage = Just $ do
+        a ! href "https://hackage.haskell.org/user/jumper149" $ "Hackage"
+        ": jumper149"
+      markupAUR = Just $ do
+        a ! href "https://aur.archlinux.org/packages/?K=jumper149&SeB=m" $ "AUR"
+        ": jumper149"
