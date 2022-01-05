@@ -8,6 +8,10 @@ import GHC.Generics
 data ContactInformation = ContactInformation
     { contactEmailAddress :: T.Text
     , contactMatrix :: T.Text
+    , contactLiberaChat :: T.Text
+    , contactGithubUsername :: T.Text
+    , contactHackageUsername :: T.Text
+    , contactAurUsername :: T.Text
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving (A.FromJSON, A.ToJSON) via

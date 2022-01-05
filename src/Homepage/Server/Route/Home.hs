@@ -73,6 +73,10 @@ contactHtml :: ContactInformation -> Html
 contactHtml ContactInformation
   { contactEmailAddress
   , contactMatrix
+  , contactLiberaChat
+  , contactGithubUsername
+  , contactHackageUsername
+  , contactAurUsername
   } = ul $ toMarkup $ li <$> catMaybes
     [ markupEmailAddress
     , markupMatrix
@@ -86,13 +90,13 @@ contactHtml ContactInformation
         a ! href ("mailto:" <> textValue contactEmailAddress) $ "E-Mail"
         ": " <> toMarkup contactEmailAddress
       markupMatrix = Just $ toMarkup $ "Matrix: " <> contactMatrix
-      markupLiberaChat = Just "IRC (Libera Chat): jumper149"
+      markupLiberaChat = Just $ "IRC (Libera Chat): " <> toMarkup contactLiberaChat
       markupGitHub = Just $ toMarkup $ do
-        a ! href "https://github.com/jumper149" $ "GitHub"
-        ": jumper149"
+        a ! href ("https://github.com/" <> textValue contactGithubUsername) $ "GitHub"
+        ": " <> toMarkup contactGithubUsername
       markupHackage = Just $ do
-        a ! href "https://hackage.haskell.org/user/jumper149" $ "Hackage"
-        ": jumper149"
+        a ! href ("https://hackage.haskell.org/user/" <> textValue contactHackageUsername) $ "Hackage"
+        ": " <> toMarkup contactHackageUsername
       markupAUR = Just $ do
-        a ! href "https://aur.archlinux.org/packages/?K=jumper149&SeB=m" $ "AUR"
-        ": jumper149"
+        a ! href ("https://aur.archlinux.org/packages/?K=" <> textValue contactAurUsername <> "&SeB=m") $ "AUR"
+        ": " <> toMarkup contactAurUsername

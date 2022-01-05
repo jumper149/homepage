@@ -6,6 +6,10 @@
 , "contact-information":
   { "email-address": "contact@felixspringer.xyz"
   , "matrix": "@jumper149:matrix.org"
+  , "libera-chat": "jumper149"
+  , "github-username": "jumper149"
+  , "hackage-username": "jumper149"
+  , "aur-username": "jumper149"
   }
 , "blog-entries":
   { "myWayToCoreboot":
