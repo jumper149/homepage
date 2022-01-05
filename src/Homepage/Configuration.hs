@@ -15,6 +15,7 @@ data Configuration = Configuration
     , configDirectoryStatic :: FilePath
     , configPort :: Word16
     , configBaseUrl :: T.Text
+    , configEmailAddress :: T.Text
     , configBlogEntries :: BlogEntries
     , configBlogPreviewMaxLength :: Maybe Word
     , configAtomPersonName :: T.Text

@@ -25,6 +25,7 @@ handler = do
   baseUrl <- configBaseUrl <$> configuration
   blogs <- configBlogEntries <$> configuration
   blogPreviewMaxLength <- configBlogPreviewMaxLength <$> configuration
+  emailAddress <- configEmailAddress <$> configuration
   $logInfo "Serve main page."
   pure $ document baseUrl (Just 0) (Just TabHome) $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
@@ -61,8 +62,8 @@ handler = do
     h2 "Contact"
     ul $ do
         li $ do
-            a ! href "mailto:felixspringer@gmail.com" $ "E-Mail"
-            ": felixspringer149@gmail.com"
+            a ! href ("mailto:" <> textValue emailAddress) $ "E-Mail"
+            ": " <> toMarkup emailAddress
         li "Matrix: @jumper149:matrix.org"
         li "IRC (Libera Chat): jumper149"
         li $ do
