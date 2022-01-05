@@ -26,7 +26,7 @@ instance (forall m. Monad m => Monad (t2 m), MonadTrans t1, MonadTrans t2) => Mo
 
 instance (forall m. Monad m => Monad (t2 m), MonadTransControl t1, MonadTransControl t2) => MonadTransControl (ComposeT t1 t2) where
   type StT (ComposeT t1 t2) a = StT t2 (StT t1 a)
-  liftWith f = defaultLiftWith2 ComposeT deComposeT $ \x -> f x
+  liftWith f = defaultLiftWith2 ComposeT deComposeT $ \ x -> f x
   restoreT = defaultRestoreT2 ComposeT
 
 -- | Elevated to `m`.
