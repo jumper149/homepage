@@ -78,25 +78,25 @@ contactHtml ContactInformation
   , contactHackageUsername
   , contactAurUsername
   } = ul $ toMarkup $ li <$> catMaybes
-    [ markupEmailAddress
-    , markupMatrix
-    , markupLiberaChat
-    , markupGitHub
-    , markupHackage
-    , markupAUR
+    [ markupEmailAddress <$> contactEmailAddress
+    , markupMatrix <$> contactMatrix
+    , markupLiberaChat <$> contactLiberaChat
+    , markupGitHub <$> contactGithubUsername
+    , markupHackage <$> contactHackageUsername
+    , markupAUR <$> contactAurUsername
     ]
     where
-      markupEmailAddress = Just $ do
-        a ! href ("mailto:" <> textValue contactEmailAddress) $ "E-Mail"
-        ": " <> toMarkup contactEmailAddress
-      markupMatrix = Just $ toMarkup $ "Matrix: " <> contactMatrix
-      markupLiberaChat = Just $ "IRC (Libera Chat): " <> toMarkup contactLiberaChat
-      markupGitHub = Just $ toMarkup $ do
-        a ! href ("https://github.com/" <> textValue contactGithubUsername) $ "GitHub"
-        ": " <> toMarkup contactGithubUsername
-      markupHackage = Just $ do
-        a ! href ("https://hackage.haskell.org/user/" <> textValue contactHackageUsername) $ "Hackage"
-        ": " <> toMarkup contactHackageUsername
-      markupAUR = Just $ do
-        a ! href ("https://aur.archlinux.org/packages/?K=" <> textValue contactAurUsername <> "&SeB=m") $ "AUR"
-        ": " <> toMarkup contactAurUsername
+      markupEmailAddress emailAddress = do
+        a ! href ("mailto:" <> textValue emailAddress) $ "E-Mail"
+        ": " <> toMarkup emailAddress
+      markupMatrix matrix = toMarkup $ "Matrix: " <> matrix
+      markupLiberaChat liberaChat = "IRC (Libera Chat): " <> toMarkup liberaChat
+      markupGitHub githubUsername = toMarkup $ do
+        a ! href ("https://github.com/" <> textValue githubUsername) $ "GitHub"
+        ": " <> toMarkup githubUsername
+      markupHackage hackageUsername = do
+        a ! href ("https://hackage.haskell.org/user/" <> textValue hackageUsername) $ "Hackage"
+        ": " <> toMarkup hackageUsername
+      markupAUR aurUsername = do
+        a ! href ("https://aur.archlinux.org/packages/?K=" <> textValue aurUsername <> "&SeB=m") $ "AUR"
+        ": " <> toMarkup aurUsername

@@ -6,12 +6,12 @@ import qualified Deriving.Aeson as A
 import GHC.Generics
 
 data ContactInformation = ContactInformation
-    { contactEmailAddress :: T.Text
-    , contactMatrix :: T.Text
-    , contactLiberaChat :: T.Text
-    , contactGithubUsername :: T.Text
-    , contactHackageUsername :: T.Text
-    , contactAurUsername :: T.Text
+    { contactEmailAddress :: Maybe T.Text
+    , contactMatrix :: Maybe T.Text
+    , contactLiberaChat :: Maybe T.Text
+    , contactGithubUsername :: Maybe T.Text
+    , contactHackageUsername :: Maybe T.Text
+    , contactAurUsername :: Maybe T.Text
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving (A.FromJSON, A.ToJSON) via
