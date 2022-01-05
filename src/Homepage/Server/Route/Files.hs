@@ -41,7 +41,7 @@ overviewHandler = do
   contactInformation <- configContactInformation <$> configuration
   fileEntries <- configFileEntries <$> configuration
   $logInfo "Serve files overview."
-  pure $ document baseUrl (Just 0) (Just TabFiles) contactInformation $ do
+  pure $ document baseUrl contactInformation (Just 0) (Just TabFiles) $ do
     h2 "my Files"
     fileList baseUrl (Just 0) fileEntries
 

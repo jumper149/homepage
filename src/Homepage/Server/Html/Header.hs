@@ -35,11 +35,11 @@ headerTabsHelper baseUrl depth activeTab = traverse_ f [ minBound .. maxBound ]
                  in headerTab baseUrl depth tab active
 
 headerTabs :: T.Text -- ^ base URL
+           -> ContactInformation
            -> Maybe Natural -- ^ depth
            -> Maybe Tab
-           -> ContactInformation
            -> Html
-headerTabs baseUrl depth activeTab ContactInformation { contactGithubUsername } =
+headerTabs baseUrl ContactInformation { contactGithubUsername } depth activeTab =
   header $ H.div ! class_ "bar" $ do
     headerTabsHelper baseUrl depth activeTab
     H.span $ do

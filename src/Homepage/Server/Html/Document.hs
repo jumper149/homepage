@@ -12,12 +12,12 @@ import Text.Blaze.Html5.Attributes
 import qualified Text.Blaze.Html5 as H
 
 document :: T.Text -- ^ base URL
+         -> ContactInformation
          -> Maybe Natural -- ^ depth
          -> Maybe Tab -- ^ current tab
-         -> ContactInformation
          -> Html -- ^ body
          -> Html
-document baseUrl depth activeTab contactInformation x =
+document baseUrl contactInformation depth activeTab x =
   docTypeHtml ! lang "en" $ do
       H.head $ do
           meta ! charset "UTF-8"
@@ -30,7 +30,7 @@ document baseUrl depth activeTab contactInformation x =
           link ! rel "icon" ! hrefWithDepth baseUrl depth "favicon.png"
           link ! rel "stylesheet" ! type_ "text/css" ! hrefWithDepth baseUrl depth "stylesheet.css"
       body $ do
-        headerTabs baseUrl depth activeTab contactInformation
+        headerTabs baseUrl contactInformation depth activeTab
         x
   where
     titleName = maybe "Homepage" (tabPageName . describeTab) activeTab

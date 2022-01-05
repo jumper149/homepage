@@ -36,7 +36,7 @@ servantError404 = do
 
 html404 :: T.Text -> ContactInformation -> Html
 html404 baseUrl contactInformation =
-  document baseUrl Nothing Nothing contactInformation $ do
+  document baseUrl contactInformation Nothing Nothing $ do
     h1 "404"
     h2 "You got lost?"
     p $ "My homepage is " <> (a ! hrefWithDepth baseUrl Nothing "" $ "here") <> "."

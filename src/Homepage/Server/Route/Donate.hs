@@ -39,7 +39,7 @@ donateHandler = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
   $logInfo "Serve donation page."
-  pure $ document baseUrl (Just 0) Nothing contactInformation $ do
+  pure $ document baseUrl contactInformation (Just 0) Nothing $ do
     h2 "Donate to me"
     h3 "Reasons to donate"
     ul $ do
@@ -83,7 +83,7 @@ thankYouHandler = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
   $logInfo "Serve thankful donation page."
-  pure $ document baseUrl (Just 1) Nothing contactInformation $ do
+  pure $ document baseUrl contactInformation (Just 1) Nothing $ do
     h2 "Thank you"
     p "I just want to let you know, that you are an awesome human being and I am very grateful for your support!"
     p ":)"
