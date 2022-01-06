@@ -8,7 +8,10 @@ import GHC.Generics
 
 displayBaseUrl :: BaseUrl -> T.Text
 displayBaseUrl BaseUrl { baseUrlScheme, baseUrlAuthority, baseUrlPath } =
-  baseUrlScheme <> ":" <> maybe "" displayBaseUrlAuthority baseUrlAuthority <> "/" <> T.intercalate "/" baseUrlPath
+  let absolutePath = case baseUrlPath of
+                       [] -> "/"
+                       segments -> "/" <> T.intercalate "/" segments <> "/"
+   in baseUrlScheme <> ":" <> maybe "" displayBaseUrlAuthority baseUrlAuthority <> absolutePath
 
 data BaseUrl = BaseUrl
     { baseUrlScheme :: T.Text
