@@ -1,5 +1,6 @@
 module Homepage.Configuration where
 
+import Homepage.BaseUrl
 import Homepage.Blog
 import Homepage.Contact
 import Homepage.Files
@@ -15,7 +16,7 @@ data Configuration = Configuration
     , configDirectoryFiles :: FilePath
     , configDirectoryStatic :: FilePath
     , configPort :: Word16
-    , configBaseUrl :: T.Text
+    , configBaseUrl :: BaseUrl
     , configContactInformation :: ContactInformation
     , configBlogEntries :: BlogEntries
     , configBlogPreviewMaxLength :: Maybe Word

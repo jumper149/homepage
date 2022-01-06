@@ -11,6 +11,7 @@ library
     , Homepage.Application.Configurable
     , Homepage.Application.Configured
     , Homepage.Application.Logging
+    , Homepage.BaseUrl
     , Homepage.Blog
     , Homepage.Configuration
     , Homepage.Configuration.Acquisition

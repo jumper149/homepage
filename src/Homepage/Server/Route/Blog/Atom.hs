@@ -4,6 +4,7 @@ module Homepage.Server.Route.Blog.Atom where
 
 import Homepage.Application.Blog
 import Homepage.Application.Configured
+import Homepage.BaseUrl
 import Homepage.Blog
 import Homepage.Configuration
 
@@ -61,7 +62,7 @@ atomFeed entries = do
   personName <- configAtomPersonName <$> configuration
   person <- atomPerson
   pure Atom.Feed
-    { Atom.feedId = baseUrl <> "/blog/atom.xml"
+    { Atom.feedId = displayBaseUrl baseUrl <> "blog/atom.xml"
     , Atom.feedTitle = Atom.TextString $ personName <> "'s Blog"
     , Atom.feedUpdated = case entries of
         [] -> "1997-09-14T12:00:00+01:00" -- This is just a fallback in case there aren't any entries.
@@ -74,10 +75,10 @@ atomFeed entries = do
         , Atom.genVersion = Nothing
         , Atom.genText = "Felix Springer's Homepage"
         }
-    , Atom.feedIcon = Just $ baseUrl <> "/favicon.png"
+    , Atom.feedIcon = Just $ displayBaseUrl baseUrl <> "favicon.png"
     , Atom.feedLinks =
         [ Atom.Link
-            { Atom.linkHref = baseUrl <> "/blog/atom.xml"
+            { Atom.linkHref = displayBaseUrl baseUrl <> "blog/atom.xml"
             , Atom.linkRel = Just $ Left "self"
             , Atom.linkType = Nothing -- TODO
             , Atom.linkHrefLang = Nothing
@@ -87,7 +88,7 @@ atomFeed entries = do
             , Atom.linkOther = []
             }
         , Atom.Link
-            { Atom.linkHref = baseUrl <> "/blog"
+            { Atom.linkHref = displayBaseUrl baseUrl <> "blog"
             , Atom.linkRel = Nothing
             , Atom.linkType = Nothing -- TODO
             , Atom.linkHrefLang = Nothing
@@ -115,7 +116,7 @@ atomEntry blogId BlogEntry { blogTitle , blogTimestamp } = do
   $logInfo $ "Read blog article from file: " <> T.pack (show blogId)
   content <- readBlogEntryHtml blogId
   pure Atom.Entry
-    { Atom.entryId = baseUrl <> "/blog/" <> unBlogId blogId
+    { Atom.entryId = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId
     , Atom.entryTitle = Atom.TextString blogTitle
     , Atom.entryUpdated = T.pack $ T.formatTime T.defaultTimeLocale "%0Y-%0m-%0dT12:00:00+01:00" blogTimestamp
     , Atom.entryAuthors = [ person ]
@@ -124,7 +125,7 @@ atomEntry blogId BlogEntry { blogTitle , blogTimestamp } = do
     , Atom.entryContributor = []
     , Atom.entryLinks =
         [ Atom.Link
-            { Atom.linkHref = baseUrl <> "/blog/" <> unBlogId blogId
+            { Atom.linkHref = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId
             , Atom.linkRel = Nothing
             , Atom.linkType = Nothing -- TODO
             , Atom.linkHrefLang = Nothing
@@ -152,7 +153,7 @@ atomPerson = do
   maybePersonEmail <- configAtomPersonEmail <$> configuration
   pure Atom.Person
     { Atom.personName = personName
-    , Atom.personURI = Just baseUrl
+    , Atom.personURI = Just $ displayBaseUrl baseUrl
     , Atom.personEmail = maybePersonEmail
     , Atom.personOther = []
     }

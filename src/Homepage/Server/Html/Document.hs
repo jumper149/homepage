@@ -1,17 +1,17 @@
 module Homepage.Server.Html.Document where
 
+import Homepage.BaseUrl
 import Homepage.Contact
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Header
 import Homepage.Server.Tab
 
-import qualified Data.Text as T
 import Numeric.Natural
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
 import qualified Text.Blaze.Html5 as H
 
-document :: T.Text -- ^ base URL
+document :: BaseUrl
          -> ContactInformation
          -> Maybe Natural -- ^ depth
          -> Maybe Tab -- ^ current tab

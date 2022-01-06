@@ -1,5 +1,6 @@
 module Homepage.Server.Html.Files where
 
+import Homepage.BaseUrl
 import Homepage.Files
 import Homepage.Server.Html.Depth
 
@@ -14,7 +15,7 @@ import Data.Time.Calendar
 import Numeric.Natural
 import Text.Blaze.Html5
 
-fileList :: T.Text -- ^ base URL
+fileList :: BaseUrl
          -> Maybe Natural -- ^ depth
          -> FileEntries
          -> Html
@@ -37,7 +38,7 @@ fileList baseUrl depth files = do
         " "
         fileFormatList baseUrl depth file
 
-fileFormatList :: T.Text -- ^ base URL
+fileFormatList :: BaseUrl
                -> Maybe Natural -- ^ depth
                -> FileEntry
                -> Html

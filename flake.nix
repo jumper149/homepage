@@ -172,12 +172,37 @@
                 Port to listen on.
               '';
             };
-            baseUrl = lib.mkOption {
-              default = "http://localhost:${cfg.port}";
-              type = with lib.types; str;
-              description = ''
-                Base URL, that is necessary for some features, when serving on a domain or behind a reverse-proxy.
-              '';
+            baseUrl = {
+              scheme = lib.mkOption {
+                default = "http";
+                type = with lib.types; str;
+                description = ''
+                  Base URL scheme.
+                '';
+              };
+              authority = {
+                host = lib.mkOption {
+                  default = "localhost";
+                  type = with lib.types; str;
+                  description = ''
+                    Base URL host.
+                  '';
+                };
+                port = lib.mkOption {
+                  default = cfg.port;
+                  type = with lib.types; nullOr (ints.between 0 65535);
+                  description = ''
+                    Base URL port.
+                  '';
+                };
+              };
+              path = lib.mkOption {
+                default = [];
+                type = with lib.types; listOf str;
+                description = ''
+                  Base URL path.
+                '';
+              };
             };
             extraConfig = lib.mkOption {
               default = { };

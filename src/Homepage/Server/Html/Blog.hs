@@ -1,5 +1,6 @@
 module Homepage.Server.Html.Blog where
 
+import Homepage.BaseUrl
 import Homepage.Blog
 import Homepage.Server.Html.Depth
 
@@ -11,7 +12,7 @@ import Data.Time.Calendar
 import Numeric.Natural
 import Text.Blaze.Html5
 
-blogList :: T.Text -- ^ base URL
+blogList :: BaseUrl
          -> Maybe Natural -- ^ depth
          -> BlogEntries
          -> Html

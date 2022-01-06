@@ -1,18 +1,18 @@
 module Homepage.Server.Html.Header where
 
+import Homepage.BaseUrl
 import Homepage.Contact
 import Homepage.Server.Tab
 import Homepage.Server.Html.Depth
 
 import Data.Foldable
-import qualified Data.Text as T
 import Numeric.Natural
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 
-headerTab :: T.Text -- ^ base URL
+headerTab :: BaseUrl
           -> Maybe Natural -- ^ depth
           -> Tab
           -> Bool -- ^ active
@@ -23,7 +23,7 @@ headerTab baseUrl depth tab active = a ! hrefWithDepth baseUrl depth (toValue ta
                          then class_ "active"
                          else mempty
 
-headerTabsHelper :: T.Text -- ^ base URL
+headerTabsHelper :: BaseUrl
                  -> Maybe Natural -- ^ depth
                  -> Maybe Tab
                  -> Html
@@ -34,7 +34,7 @@ headerTabsHelper baseUrl depth activeTab = traverse_ f [ minBound .. maxBound ]
                                _ -> False
                  in headerTab baseUrl depth tab active
 
-headerTabs :: T.Text -- ^ base URL
+headerTabs :: BaseUrl
            -> ContactInformation
            -> Maybe Natural -- ^ depth
            -> Maybe Tab
@@ -50,4 +50,6 @@ headerTabs baseUrl ContactInformation { contactGithubUsername } depth activeTab 
         Just githubUsername ->
           a ! href ("https://github.com/" <> textValue githubUsername) ! class_ "icon" $
             img ! src (withDepth baseUrl depth "icons/GitHub.png") ! A.title "GitHub" ! class_ "icon"
-      a ! href (textValue baseUrl) $ "felixspringer.xyz" -- TODO: base URL naming is hardcoded
+      case baseUrlAuthority baseUrl of
+        Nothing -> mempty
+        Just authority -> a ! href (textValue $ displayBaseUrl baseUrl) $ toMarkup $ baseUrlAuthorityHost authority

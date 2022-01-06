@@ -1,6 +1,7 @@
 module Homepage.Server.Err404 where
 
 import Homepage.Application.Configured
+import Homepage.BaseUrl
 import Homepage.Configuration
 import Homepage.Contact
 import Homepage.Server.Html.Depth
@@ -8,7 +9,6 @@ import Homepage.Server.Html.Document
 
 import Control.Monad.Error.Class
 import Data.ByteString.Builder
-import Data.Text as T
 import Servant
 import Network.HTTP.Types.Status
 import Network.Wai
@@ -34,7 +34,7 @@ servantError404 = do
     , errBody = renderHtml $ html404 baseUrl contactInformation
     }
 
-html404 :: T.Text -> ContactInformation -> Html
+html404 :: BaseUrl -> ContactInformation -> Html
 html404 baseUrl contactInformation =
   document baseUrl contactInformation Nothing Nothing $ do
     h1 "404"
