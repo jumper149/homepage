@@ -25,9 +25,9 @@ handler :: (MonadConfigured m, MonadLogger m)
         => ServerT API m
 handler = do
   baseUrl <- configBaseUrl <$> configuration
+  contactInformation <- configContactInformation <$> configuration
   blogs <- configBlogEntries <$> configuration
   blogPreviewMaxLength <- configBlogPreviewMaxLength <$> configuration
-  contactInformation <- configContactInformation <$> configuration
   $logInfo "Serve main page."
   pure $ document baseUrl contactInformation (Just 0) (Just TabHome) $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
