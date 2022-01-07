@@ -6,7 +6,8 @@ import qualified Deriving.Aeson as A
 import GHC.Generics
 
 data ContactInformation = ContactInformation
-    { contactEmailAddress :: Maybe T.Text
+    { contactHomepageLabel :: Maybe T.Text
+    , contactEmailAddress :: Maybe T.Text
     , contactMatrix :: Maybe T.Text
     , contactLiberaChat :: Maybe T.Text
     , contactGithubUsername :: Maybe T.Text

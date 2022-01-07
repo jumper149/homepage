@@ -11,7 +11,8 @@
   , "path": []
   }
 , "contact-information":
-  { "email-address": "contact@felixspringer.xyz"
+  { "homepage-label": "felixspringer.xyz"
+  , "email-address": "contact@felixspringer.xyz"
   , "matrix": "@jumper149:matrix.org"
   , "libera-chat": "jumper149"
   , "github-username": "jumper149"
