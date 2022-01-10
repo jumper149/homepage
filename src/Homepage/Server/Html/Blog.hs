@@ -1,7 +1,7 @@
 module Homepage.Server.Html.Blog where
 
-import Homepage.BaseUrl
-import Homepage.Blog
+import Homepage.Configuration.BaseUrl
+import Homepage.Configuration.Blog
 import Homepage.Server.Html.Depth
 
 import Data.List

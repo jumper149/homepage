@@ -1,6 +1,6 @@
 module Homepage.Server.Html.Depth where
 
-import Homepage.BaseUrl
+import Homepage.Configuration.BaseUrl
 
 import Numeric.Natural
 import Text.Blaze.Html5

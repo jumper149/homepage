@@ -1,7 +1,7 @@
 module Homepage.Server.Html.Document where
 
-import Homepage.BaseUrl
-import Homepage.Contact
+import Homepage.Configuration.BaseUrl
+import Homepage.Configuration.Contact
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Header
 import Homepage.Server.Tab

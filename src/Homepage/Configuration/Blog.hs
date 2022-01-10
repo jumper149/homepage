@@ -1,4 +1,4 @@
-module Homepage.Blog where
+module Homepage.Configuration.Blog where
 
 import qualified Data.Aeson as A
 import qualified Data.List as L

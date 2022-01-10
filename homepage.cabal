@@ -11,12 +11,12 @@ library
     , Homepage.Application.Configurable
     , Homepage.Application.Configured
     , Homepage.Application.Logging
-    , Homepage.BaseUrl
-    , Homepage.Blog
     , Homepage.Configuration
     , Homepage.Configuration.Acquisition
-    , Homepage.Contact
-    , Homepage.Files
+    , Homepage.Configuration.BaseUrl
+    , Homepage.Configuration.Blog
+    , Homepage.Configuration.Contact
+    , Homepage.Configuration.Files
     , Homepage.Server
     , Homepage.Server.Html.Blog
     , Homepage.Server.Html.Depth

@@ -3,9 +3,9 @@
 module Homepage.Server.Route.Home where
 
 import Homepage.Application.Configured
-import Homepage.Blog
 import Homepage.Configuration
-import Homepage.Contact
+import Homepage.Configuration.Blog
+import Homepage.Configuration.Contact
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document

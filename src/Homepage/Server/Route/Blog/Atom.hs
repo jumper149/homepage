@@ -4,9 +4,9 @@ module Homepage.Server.Route.Blog.Atom where
 
 import Homepage.Application.Blog
 import Homepage.Application.Configured
-import Homepage.BaseUrl
-import Homepage.Blog
 import Homepage.Configuration
+import Homepage.Configuration.BaseUrl
+import Homepage.Configuration.Blog
 
 import Control.Monad.Error.Class
 import Control.Monad.Logger

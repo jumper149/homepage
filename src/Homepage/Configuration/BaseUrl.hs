@@ -1,4 +1,4 @@
-module Homepage.BaseUrl where
+module Homepage.Configuration.BaseUrl where
 
 import qualified Data.Aeson as A
 import qualified Data.Text as T

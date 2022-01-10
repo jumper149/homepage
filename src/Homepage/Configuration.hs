@@ -1,9 +1,9 @@
 module Homepage.Configuration where
 
-import Homepage.BaseUrl
-import Homepage.Blog
-import Homepage.Contact
-import Homepage.Files
+import Homepage.Configuration.BaseUrl
+import Homepage.Configuration.Blog
+import Homepage.Configuration.Contact
+import Homepage.Configuration.Files
 
 import qualified Data.Aeson as A
 import qualified Data.Text as T

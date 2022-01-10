@@ -1,7 +1,7 @@
 module Homepage.Server.Html.Files where
 
-import Homepage.BaseUrl
-import Homepage.Files
+import Homepage.Configuration.BaseUrl
+import Homepage.Configuration.Files
 import Homepage.Server.Html.Depth
 
 import Data.Foldable

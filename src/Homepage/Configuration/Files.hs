@@ -1,4 +1,4 @@
-module Homepage.Files where
+module Homepage.Configuration.Files where
 
 import qualified Data.Aeson as A
 import qualified Data.Map as M

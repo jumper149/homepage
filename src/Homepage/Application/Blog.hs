@@ -3,8 +3,8 @@
 module Homepage.Application.Blog where
 
 import Homepage.Application.Configured
-import Homepage.Blog
 import Homepage.Configuration
+import Homepage.Configuration.Blog
 
 import Control.Monad.Trans
 import Control.Monad.Trans.Control

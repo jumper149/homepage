@@ -4,8 +4,8 @@ module Homepage.Server.Route.Blog where
 
 import Homepage.Application.Blog
 import Homepage.Application.Configured
-import Homepage.Blog
 import Homepage.Configuration
+import Homepage.Configuration.Blog
 import Homepage.Server.Err404
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth

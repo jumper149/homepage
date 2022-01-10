@@ -1,4 +1,4 @@
-module Homepage.Contact where
+module Homepage.Configuration.Contact where
 
 import qualified Data.Aeson as A
 import qualified Data.Text as T
