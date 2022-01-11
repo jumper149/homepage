@@ -6,7 +6,8 @@ import qualified Deriving.Aeson as A
 import GHC.Generics
 
 data ContactInformation = ContactInformation
-    { contactHomepageLabel :: Maybe T.Text
+    { contactHeaderIcons :: HeaderIcons
+    , contactHomepageLabel :: Maybe T.Text
     , contactEmailAddress :: Maybe T.Text
     , contactMatrix :: Maybe T.Text
     , contactLiberaChat :: Maybe T.Text
@@ -18,3 +19,12 @@ data ContactInformation = ContactInformation
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving (A.FromJSON, A.ToJSON) via
     A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "contact", A.CamelToKebab], A.RejectUnknownFields] ContactInformation
+
+data HeaderIcons = HeaderIcons
+    { headerIconFeed :: Bool
+    , headerIconGithub :: Bool
+    , headerIconGitlab :: Bool
+    }
+  deriving stock (Eq, Generic, Ord, Read, Show)
+  deriving (A.FromJSON, A.ToJSON) via
+    A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "headerIcon", A.CamelToKebab], A.RejectUnknownFields] HeaderIcons

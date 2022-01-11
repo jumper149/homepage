@@ -5,6 +5,7 @@ import Homepage.Configuration.Contact
 import Homepage.Server.Tab
 import Homepage.Server.Html.Depth
 
+import Control.Monad
 import Data.Foldable
 import Numeric.Natural
 import Text.Blaze.Html5
@@ -39,22 +40,25 @@ headerTabs :: BaseUrl
            -> Maybe Natural -- ^ depth
            -> Maybe Tab
            -> Html
-headerTabs baseUrl ContactInformation { contactHomepageLabel, contactGithubUsername, contactGitlabUsername } depth activeTab =
+headerTabs baseUrl ContactInformation { contactHeaderIcons, contactHomepageLabel, contactGithubUsername, contactGitlabUsername } depth activeTab =
   header $ H.div ! class_ "bar" $ do
     headerTabsHelper baseUrl depth activeTab
     H.span $ do
-      a ! hrefWithDepth baseUrl depth "blog/atom.xml" ! class_ "icon" $
-        img ! src (withDepth baseUrl depth "icons/feed.png") ! A.title "Feed" ! class_ "icon"
-      case contactGithubUsername of
-        Nothing -> mempty
-        Just githubUsername ->
-          a ! href ("https://github.com/" <> textValue githubUsername) ! class_ "icon" $
-            img ! src (withDepth baseUrl depth "icons/GitHub.png") ! A.title "GitHub" ! class_ "icon"
-      case contactGitlabUsername of
-        Nothing -> mempty
-        Just gitlabUsername ->
-          a ! href ("https://gitlab.com/" <> textValue gitlabUsername) ! class_ "icon" $
-            img ! src (withDepth baseUrl depth "icons/GitLab.png") ! A.title "GitLab" ! class_ "icon"
+      when (headerIconFeed contactHeaderIcons) $
+        a ! hrefWithDepth baseUrl depth "blog/atom.xml" ! class_ "icon" $
+          img ! src (withDepth baseUrl depth "icons/feed.png") ! A.title "Feed" ! class_ "icon"
+      when (headerIconGithub contactHeaderIcons) $
+        case contactGithubUsername of
+          Nothing -> mempty
+          Just githubUsername ->
+            a ! href ("https://github.com/" <> textValue githubUsername) ! class_ "icon" $
+              img ! src (withDepth baseUrl depth "icons/GitHub.png") ! A.title "GitHub" ! class_ "icon"
+      when (headerIconGitlab contactHeaderIcons) $
+        case contactGitlabUsername of
+          Nothing -> mempty
+          Just gitlabUsername ->
+            a ! href ("https://gitlab.com/" <> textValue gitlabUsername) ! class_ "icon" $
+              img ! src (withDepth baseUrl depth "icons/GitLab.png") ! A.title "GitLab" ! class_ "icon"
       let maybeHomepageLabel = case contactHomepageLabel of
                                  Nothing -> baseUrlAuthorityHost <$> baseUrlAuthority baseUrl
                                  Just _ -> contactHomepageLabel
