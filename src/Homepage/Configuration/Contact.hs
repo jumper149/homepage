@@ -11,6 +11,7 @@ data ContactInformation = ContactInformation
     , contactMatrix :: Maybe T.Text
     , contactLiberaChat :: Maybe T.Text
     , contactGithubUsername :: Maybe T.Text
+    , contactGitlabUsername :: Maybe T.Text
     , contactHackageUsername :: Maybe T.Text
     , contactAurUsername :: Maybe T.Text
     }

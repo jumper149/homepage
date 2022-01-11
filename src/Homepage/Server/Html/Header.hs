@@ -39,7 +39,7 @@ headerTabs :: BaseUrl
            -> Maybe Natural -- ^ depth
            -> Maybe Tab
            -> Html
-headerTabs baseUrl ContactInformation { contactHomepageLabel, contactGithubUsername } depth activeTab =
+headerTabs baseUrl ContactInformation { contactHomepageLabel, contactGithubUsername, contactGitlabUsername } depth activeTab =
   header $ H.div ! class_ "bar" $ do
     headerTabsHelper baseUrl depth activeTab
     H.span $ do
@@ -50,6 +50,11 @@ headerTabs baseUrl ContactInformation { contactHomepageLabel, contactGithubUsern
         Just githubUsername ->
           a ! href ("https://github.com/" <> textValue githubUsername) ! class_ "icon" $
             img ! src (withDepth baseUrl depth "icons/GitHub.png") ! A.title "GitHub" ! class_ "icon"
+      case contactGitlabUsername of
+        Nothing -> mempty
+        Just gitlabUsername ->
+          a ! href ("https://gitlab.com/" <> textValue gitlabUsername) ! class_ "icon" $
+            img ! src (withDepth baseUrl depth "icons/GitLab.png") ! A.title "GitLab" ! class_ "icon"
       let maybeHomepageLabel = case contactHomepageLabel of
                                  Nothing -> baseUrlAuthorityHost <$> baseUrlAuthority baseUrl
                                  Just _ -> contactHomepageLabel

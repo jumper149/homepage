@@ -75,6 +75,7 @@ contactHtml ContactInformation
   , contactMatrix
   , contactLiberaChat
   , contactGithubUsername
+  , contactGitlabUsername
   , contactHackageUsername
   , contactAurUsername
   } = ul $ toMarkup $ li <$> catMaybes
@@ -82,6 +83,7 @@ contactHtml ContactInformation
     , markupMatrix <$> contactMatrix
     , markupLiberaChat <$> contactLiberaChat
     , markupGitHub <$> contactGithubUsername
+    , markupGitLab <$> contactGitlabUsername
     , markupHackage <$> contactHackageUsername
     , markupAUR <$> contactAurUsername
     ]
@@ -94,6 +96,9 @@ contactHtml ContactInformation
       markupGitHub githubUsername = toMarkup $ do
         a ! href ("https://github.com/" <> textValue githubUsername) $ "GitHub"
         ": " <> toMarkup githubUsername
+      markupGitLab gitlabUsername = toMarkup $ do
+        a ! href ("https://gitlab.com/" <> textValue gitlabUsername) $ "GitLab"
+        ": " <> toMarkup gitlabUsername
       markupHackage hackageUsername = do
         a ! href ("https://hackage.haskell.org/user/" <> textValue hackageUsername) $ "Hackage"
         ": " <> toMarkup hackageUsername
