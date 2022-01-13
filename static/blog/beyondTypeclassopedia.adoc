@@ -1,0 +1,134 @@
+== beyond Typeclassopedia
+
+There are quite a few type classes, that are completely fine the way they are defined in the https://hackage.haskell.org/package/base[base] library.
+These are mostly part of the famous https://wiki.haskell.org/Typeclassopedia[Typeclassopedia].
+
+* `Semigroup` and `Monoid`
+* `Functor`, `Applicative` and `Monad`
+* `Foldable` and `Traversable`
+
+=== Typeclassopedia
+
+The https://wiki.haskell.org/Typeclassopedia[Typeclassopedia] also explains `Pointed` and `Comonad`.
+
+`Pointed` is a superclass of `Applicative` with just `pure`.
+I am not against this separation, but can't think of an example of `Pointed`, that isn't also `Applicative`.
+
+TODO: `MonadFix`
+
+CAUTION: I am only covering the "`left`" side of the https://wiki.haskell.org/Typeclassopedia[Typeclassopedia].
+The `Category` and `Arrow` type classes are not discussed here.
+I am also ignoring `Comonad` for now.
+
+To conclude the https://wiki.haskell.org/Typeclassopedia[Typeclassopedia], let's look at `Alternative`.
+
+==== `Alternative`
+
+NOTE: `MonadPlus m` is equivalent to `(Alternative m, Monad m)`.
+It's an unnecessary alias, but it doesn't do any harm.
+
+`Alternative` can actually be expressed with the other already introduced type classes.
+
+CAUTION: The `QuantifiedConstraints` language extension is required.
+
+[source,haskell]
+----
+class (Applicative f, forall x. Monoid (f x)) => Alternative f where
+
+  empty :: f a
+  empty = mempty
+
+  (<|>) :: f a -> f a -> f a
+  (<|>) = (<>)
+----
+
+NOTE: The `Applicative f` superclass is not necessary at all, but otherwise it would be an alias for `forall x. Monoid (f x)`.
+
+The only problem is, that https://hackage.haskell.org/package/base[base] introduces some `Monoid` instances, that don't work with this definition.
+`Maybe` for example uses a superclass constraint.
+
+[source,haskell]
+----
+class Semigroup a => Monoid (Maybe a) where
+  -- ...
+----
+
+The proposed `Alternative` doesn't work, because `forall a. Semigroup a` (from `Maybe`) is a stronger constraint than `forall x.` (from `Alternative`).
+
+[TIP]
+====
+The solution would be to use compatible instances.
+The currently used instances can still be made available with ``newtype``s.
+
+The `newtype` `Alt` already exists for the other direction `Alternative f => Monoid (f x)`.
+====
+
+The current situation isn't bad though, considering that ``newtype``s are annoying to use.
+Maybe https://www.idris-lang.org/[idris] made the right choice with named implementations (multiple named instances in Haskell terms).
+
+Another interesting change would be the separation of `(<|>)` and `empty`, similar to the separation of `Semigroup` and `Monoid` (or `Pointed` and `Applicative`).
+
+[TIP]
+====
+The structure of `Applicative` and `Alternative` is similar to a semiring.
+[cols="1,1,1,1"]
+|===
+| `Applicative` / `Alternative` | natural numbers | boolean algebra | algebra of types
+
+| `empty`
+| 0
+| _false_
+| `Void`
+
+| `pure _`
+| 1
+| _true_
+| `()`
+
+| `<\|>`
+| +
+| _or_
+| `Either`
+
+| `<*>`
+| ×
+| _and_
+| `(,)`
+|===
+====
+
+The https://wiki.haskell.org/Typeclassopedia[Typeclassopedia] is actually quite old by now and there are more additions in https://hackage.haskell.org/package/base[base].
+
+=== `base` library
+
+Let's start with `MonadFail`.
+This type class was a stupid idea to allow pattern matching in __do-__notation.
+Whenever writing actual code you should use a __case-__block.
+Patterns that _always_ match are fine, but other patterns should just give a warning like "`patterns are non-exhaustive`".
+
+`Bifunctor`, `Bifoldable` and `Bitraversable` are nice to have.
+Generalizations for `Trifunctor`, `Quadrofunctor`, etc. are missing though.
+I'm not sure how those type classes would be implemented without boilerplate.
+
+`MonadIO` is a type class for all monads, that use `IO` as the base monad.
+This is a useful type class, but it can be completely replaced with `MonadBase` from https://hackage.haskell.org/package/transformers-base[transformers-base].
+Additionaly `MonadBaseControl` from https://hackage.haskell.org/package/monad-control[monad-control] could be added to https://hackage.haskell.org/package/base[base].
+
+NOTE: I am in favor of completely removing `MonadIO`, which some people might find a bit harsh.
+
+`MonadTrans` from https://hackage.haskell.org/package/transformers[transformers] and `MonadTransControl` from https://hackage.haskell.org/package/monad-control[monad-control] also fit into the same category, but for monad transformers.
+
+https://hackage.haskell.org/package/base[Base] introduces `Contravariant` functors, which can be derived from https://wiki.haskell.org/Typeclassopedia[Typeclassopedia]s `Comonad`.
+Analogously to `Applicative` and `Alternative`, the https://hackage.haskell.org/package/contravariant[contravariant] library defines `Divisible` und `Decidable`.
+These two type class can be quite useful, but I haven't explored in this direction any further.
+
+NOTE: This didn't cover _all_ type classes from https://hackage.haskell.org/package/base[base], but only the ones similar to the https://wiki.haskell.org/Typeclassopedia[Typeclassopedia].
+
+=== Takeaways
+
+* Classes like `Monoid` will often have multiple lawful instances, but Haskell requires us to use a `newtype` for each implementation.
+Instances should be chosen wisely.
+* `Alternative` and `Applicative` can be thought of as monoids.
+* `MonadFail` is a _fail_.
+* `MonadBase` makes `MonadIO` unnecessary.
+* `MonadBaseControl` and `MonadTransControl` would be a nice addition to https://hackage.haskell.org/package/base[base], including `MonadTrans` and `MonadBase`.
