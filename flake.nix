@@ -109,13 +109,31 @@
         name = "static"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/static;
         buildPhase = ''
+          echo "Build 'favicon.png'."
           convert favicon.xpm favicon.png
           rm favicon.xpm
+
+          echo "Add link 'favicon.ico'."
           ln -s favicon.png favicon.ico
 
-          convert icons/feed.png -resize 128x128 icons/feed.png
-          convert icons/GitHub.png -resize 128x128 icons/GitHub.png
-          convert icons/GitLab.png -resize 128x128 icons/GitLab.png
+          resizeIcon() {
+            ICON_NAME="$1"
+            if [ -f "$ICON_NAME" ]
+            then
+              echo "Icon exists: '$ICON_NAME'"
+
+              echo "Resize icon: '$ICON_NAME'."
+              convert "$ICON_NAME" -resize 128x128 "$ICON_NAME"
+            else
+              echo "Icon doesn't exist: '$ICON_NAME'"
+              exit 2
+            fi
+          }
+
+          for icon in ./icons/*
+          do
+            resizeIcon "$icon"
+          done
         '';
         installPhase = ''
           mkdir -p $out
