@@ -115,6 +115,7 @@
 
           convert icons/feed.png -resize 128x128 icons/feed.png
           convert icons/GitHub.png -resize 128x128 icons/GitHub.png
+          convert icons/GitLab.png -resize 128x128 icons/GitLab.png
         '';
         installPhase = ''
           mkdir -p $out
