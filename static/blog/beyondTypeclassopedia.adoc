@@ -7,14 +7,19 @@ These are mostly part of the famous https://wiki.haskell.org/Typeclassopedia[Typ
 * `Functor`, `Applicative` and `Monad`
 * `Foldable` and `Traversable`
 
+This article is mainly an overview and doesn't try to explain each type class.
+I also want to point out some opinionated critique.
+
 === Typeclassopedia
 
-The https://wiki.haskell.org/Typeclassopedia[Typeclassopedia] also explains `Pointed` and `Comonad`.
+The https://wiki.haskell.org/Typeclassopedia[Typeclassopedia] explains a few more type classes.
 
 `Pointed` is a superclass of `Applicative` with just `pure`.
 I am not against this separation, but can't think of an example of `Pointed`, that isn't also `Applicative`.
 
-TODO: `MonadFix`
+`MonadFix` is not as well known as some other type classes, but is actually quite useful.
+The `RecursiveDo` extension adds some syntactic sugar to ``MonadFix``es.
+This allows recursive bindings in __do-__notation.
 
 CAUTION: I am only covering the "`left`" side of the https://wiki.haskell.org/Typeclassopedia[Typeclassopedia].
 The `Category` and `Arrow` type classes are not discussed here.
@@ -22,7 +27,7 @@ I am also ignoring `Comonad` for now.
 
 To conclude the https://wiki.haskell.org/Typeclassopedia[Typeclassopedia], let's look at `Alternative`.
 
-==== `Alternative`
+==== `Alternative` is a monoid
 
 NOTE: `MonadPlus m` is equivalent to `(Alternative m, Monad m)`.
 It's an unnecessary alias, but it doesn't do any harm.
@@ -54,6 +59,8 @@ class Semigroup a => Monoid (Maybe a) where
 ----
 
 The proposed `Alternative` doesn't work, because `forall a. Semigroup a` (from `Maybe`) is a stronger constraint than `forall x.` (from `Alternative`).
+I am not quite sure, whether this change can actually break ``Alternative``s laws.
+The `Maybe` example will be caught by the compiler at least.
 
 [TIP]
 ====
@@ -80,7 +87,7 @@ The structure of `Applicative` and `Alternative` is similar to a semiring.
 | _false_
 | `Void`
 
-| `pure _`
+| `pure ()`
 | 1
 | _true_
 | `()`
@@ -118,9 +125,9 @@ NOTE: I am in favor of completely removing `MonadIO`, which some people might fi
 
 `MonadTrans` from https://hackage.haskell.org/package/transformers[transformers] and `MonadTransControl` from https://hackage.haskell.org/package/monad-control[monad-control] also fit into the same category, but for monad transformers.
 
-https://hackage.haskell.org/package/base[Base] introduces `Contravariant` functors, which can be derived from https://wiki.haskell.org/Typeclassopedia[Typeclassopedia]s `Comonad`.
-Analogously to `Applicative` and `Alternative`, the https://hackage.haskell.org/package/contravariant[contravariant] library defines `Divisible` und `Decidable`.
-These two type class can be quite useful, but I haven't explored in this direction any further.
+https://hackage.haskell.org/package/base[Base] introduces `Contravariant` functors.
+Analogously to `Applicative` and `Alternative`, the https://hackage.haskell.org/package/contravariant[contravariant] library defines `Divisible` and `Decidable`.
+These two type class can be quite useful, but I haven't explored this direction any further.
 
 NOTE: This didn't cover _all_ type classes from https://hackage.haskell.org/package/base[base], but only the ones similar to the https://wiki.haskell.org/Typeclassopedia[Typeclassopedia].
 
@@ -132,3 +139,4 @@ Instances should be chosen wisely.
 * `MonadFail` is a _fail_.
 * `MonadBase` makes `MonadIO` unnecessary.
 * `MonadBaseControl` and `MonadTransControl` would be a nice addition to https://hackage.haskell.org/package/base[base], including `MonadTrans` and `MonadBase`.
+* Other type classes like `Num`, `IsString`, `IsList` or other stock classes deserve their own discussion.
