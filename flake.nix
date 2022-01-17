@@ -14,7 +14,7 @@
 
     defaultPackage.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
-      writeScript "homepage-full" ''
+      writeScriptBin "homepage-full" ''
         HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.packages.x86_64-linux.homepage}/bin/homepage
       '';
 
