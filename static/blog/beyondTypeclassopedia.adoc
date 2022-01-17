@@ -1,3 +1,4 @@
+:revdate: 2022-01-17
 = beyond Typeclassopedia
 
 There are quite a few type classes, that are completely fine the way they are defined in the https://hackage.haskell.org/package/base[base] library.

@@ -48,6 +48,7 @@
             "--safe-mode server"
             "--attribute source-highlighter=rouge"
             "--attribute email=${config.contact-information.email-address}"
+            "--attribute revnumber=$(echo "$out" | sed 's|^/nix/store/||g' | sed 's|-blog$||g')"
           )
           ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
 

@@ -10,15 +10,11 @@ header:
   border-width: $footer-border-width
   recto:
     left:
-      content: '{author}'
-    center:
       content: '{homepage}'
     right:
-      content: '{revdate}'
+      content: '{revdate}-{revnumber}'
   verso:
     left:
-      content: $header-recto-right-content
-    center:
-      content: $header-recto-center-content
-    right:
       content: $header-recto-left-content
+    right:
+      content: $header-recto-right-content
