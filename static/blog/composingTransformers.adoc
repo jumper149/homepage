@@ -1,4 +1,4 @@
-== composing Transformers
+= composing Transformers
 
 There exists a certain kind of monad transformers.
 I`'m talking about all transformers that have lawful instances of `MonadTransControl` from the https://hackage.haskell.org/package/monad-control[monad-control] library.
@@ -19,7 +19,7 @@ instance MonadTransControl ReaderT where
   restoreT = ReaderT . const
 ----
 
-=== Why is `ReaderT` of interest?
+== Why is `ReaderT` of interest?
 `ReaderT` in conjunction with an ``IO``-based Monad `m` can be used to build stateful applications, when using something like https://hackage.haskell.org/package/stm[stm]'s ``TVar``s.
 `ReaderT` is special compared to other transformers, because it doesn`'t carry any monadic state `StT (ReaderT r) = a`, which is an associated type of the `MonadTransControl` class.
 This is also the reason, why it has an instance of `MonadUnliftIO`.
@@ -43,7 +43,7 @@ I did exactly this in a library called https://hackage.haskell.org/package/wai-c
 type ApplicationT m = Request -> (Response -> m ResponseReceived) -> m ResponseReceived
 ----
 
-=== Building an application
+== Building an application
 Now let`'s build an application using a `Configuration`, the ability to do logging and a database connection.
 
 NOTE: You should be able to cover most of the required language extensions with `GHC2021`.
@@ -102,7 +102,7 @@ instance (MonadIO m) => MonadDatabase (DatabaseT m) where
 
 '''
 
-==== Naive `AppT` implementation
+=== Naive `AppT` implementation
 To hide away implementation details, it might be of interest to wrap your environment with a newtype `AppT`.
 We will also add `MonadTrans` and `MonadTransControl` instances, that have to be defined manually, but can help when implementing other instances like `MonadIO` or https://hackage.haskell.org/package/mtl[mtl] type classes.
 
@@ -136,7 +136,7 @@ If you look closely, you might say that this is not all of the initialization.
 We still need to read the `Configuration` and connecting to the database was left to `runDatabaseT`.
 If you have a complicated environment you might be interested in the next approach, which addresses this non-trivial part of initialization.
 
-==== Improving initialization
+=== Improving initialization
 We can use our transformer stack to guide the initialization.
 The inner transformers should be initialized before the outer ones.
 In our example that would mean:
@@ -169,7 +169,7 @@ This is already looking pretty good, but we can do even better.
 
 Let me show you, where this can be improved.
 
-===== ``AppT```'s instances
+==== ``AppT```'s instances
 To use the environment you will have to provide a few instances.
 
 [source,haskell]
@@ -189,7 +189,7 @@ This is quite annoying.
 If you add another transformer to the stack, you will have to manually add the ``lift``ing to each method.
 Only instances of the outer most transformer can be used for deriving (`DatabaseT` in this case).
 
-===== Using methods during initialization
+==== Using methods during initialization
 We were able to use `logInfoN` during the initialization.
 Unfortunately we still have to remember to `lift` the method call, unless each transformer in our stack provides a `MonadLogger` instance.
 
@@ -198,7 +198,7 @@ For a more complicated setup it might become hard to track all the ``lift``s and
 It would be nice to also have a `MonadLogger m` constraint on `runDatabaseT`.
 So we basically want to be able to use the full power of each transformer, right after we set it up.
 
-=== Actually composing transformers
+== Actually composing transformers
 Until now, we have applied transformers on monads to generate a new monad from an existing one.
 We can also compose two transformers and generate a new transformer with `ComposeT`.
 
@@ -241,7 +241,7 @@ The same overlapping style, using ``MonadTrans``/``MonadTransControl`` should be
 
 This recursive instance lookup will be useful to us, because now we don`'t have to keep track of `lift`/`liftWith` throughout our transformer stack anymore.
 
-==== Deriving to the rescue
+=== Deriving to the rescue
 We did all of this with the premise, that deriving would improve.
 After we have set up our `ComposeT`, we can derive everything we want for `AppT`.
 And now we can easily add another layer to our transformer stack without changing any of the other instances.
@@ -265,7 +265,7 @@ newtype AppT m a = AppT { unAppT :: (DatabaseT |. ReaderT Configuration |. Loggi
 
 We need `IdentityT` at the end of our transformer stack, so that our "`non-default`" instance of `LoggingT` is inferred.
 
-==== Initializing in style
+=== Initializing in style
 Now we can finally use any class, as soon as we want.
 Let`'s reimplement our initialization.
 
@@ -298,7 +298,7 @@ runApplication app = do
 
 We finally arrived at a solution, that allows us to easily compose each step of initialization and also comfortably derives our instances for us.
 
-=== References
+== References
 I personally use this kind of transformer stack for my https://github.com/jumper149/homepage[homepage].
 
 Since `ComposeT` has quite a few canonical instances, it would be sensible to add `ComposeT` to the transformers library.

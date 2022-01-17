@@ -1,10 +1,11 @@
-## a Small Showcase of blucontrol
+= a Small Showcase of blucontrol
+
 [NOTE]
 ====
 This article is written for blucontrol https://hackage.haskell.org/package/blucontrol-0.7.0.0[v0.7.0.0].
 ====
 
-### A customizable blue light filter
+== A customizable blue light filter
 The main structure of blucontrol is the split into 3 individual environments.
 These environments `m` are implemented using type classes with `Monad m` constraints.
 
@@ -51,7 +52,7 @@ main = void $ blucontrol configControl
                    ]
 ----
 
-### So what is actually going on here?
+== So what is actually going on here?
 All the user has to do is set the 3 environments and the rest will be handled by the type class instances.
 The constrained type signature of the `blucontrol` function will make sure that everyone works in conjunction with one another.
 
@@ -60,7 +61,7 @@ Some of them take arguments and `def` can be used as a default most of the time.
 
 If you are looking for alternatives you should look through the type class instances https://hackage.haskell.org/package/blucontrol-0.7.0.0/docs/Blucontrol-Monad-PrepareValue.html#t:MonadPrepareValue[here] for example.
 
-### Conclusion
+== Conclusion
 In general you should look through the documentation of the https://hackage.haskell.org/package/blucontrol-0.7.0.0/docs/Blucontrol.html[Blucontrol] module.
 
 To get started I recommend sticking to the example configuration for the `runControl` and `runApplyValue` fields.

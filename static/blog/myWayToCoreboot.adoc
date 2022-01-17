@@ -1,4 +1,5 @@
-## my Way to Coreboot
+= my Way to Coreboot
+
 In the last few months I have made my experiences with https://coreboot.org[coreboot] and was thinking it might need some more recognition!
 
 The first time I heard about it was from https://lukesmith.xyz[Luke Smith] and I was pretty much hooked on the idea of running your own BIOS on your machine.

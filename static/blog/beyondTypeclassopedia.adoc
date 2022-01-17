@@ -1,4 +1,4 @@
-== beyond Typeclassopedia
+= beyond Typeclassopedia
 
 There are quite a few type classes, that are completely fine the way they are defined in the https://hackage.haskell.org/package/base[base] library.
 These are mostly part of the famous https://wiki.haskell.org/Typeclassopedia[Typeclassopedia].
@@ -10,7 +10,7 @@ These are mostly part of the famous https://wiki.haskell.org/Typeclassopedia[Typ
 This article is mainly an overview and doesn't try to explain each type class.
 I also want to point out some opinionated critique.
 
-=== Typeclassopedia
+== Typeclassopedia
 
 The https://wiki.haskell.org/Typeclassopedia[Typeclassopedia] explains a few more type classes.
 
@@ -27,7 +27,7 @@ I am also ignoring `Comonad` for now.
 
 To conclude the https://wiki.haskell.org/Typeclassopedia[Typeclassopedia], let's look at `Alternative`.
 
-==== `Alternative` is a monoid
+=== `Alternative` is a monoid
 
 NOTE: `MonadPlus m` is equivalent to `(Alternative m, Monad m)`.
 It's an unnecessary alias, but it doesn't do any harm.
@@ -106,7 +106,7 @@ The structure of `Applicative` and `Alternative` is similar to a semiring.
 
 The https://wiki.haskell.org/Typeclassopedia[Typeclassopedia] is actually quite old by now and there are more additions in https://hackage.haskell.org/package/base[base].
 
-=== `base` library
+== `base` library
 
 Let's start with `MonadFail`.
 This type class was a stupid idea to allow pattern matching in __do-__notation.
@@ -131,7 +131,7 @@ These two type class can be quite useful, but I haven't explored this direction 
 
 NOTE: This didn't cover _all_ type classes from https://hackage.haskell.org/package/base[base], but only the ones similar to the https://wiki.haskell.org/Typeclassopedia[Typeclassopedia].
 
-=== Takeaways
+== Takeaways
 
 * Classes like `Monoid` will often have multiple lawful instances, but Haskell requires us to use a `newtype` for each implementation.
 Instances should be chosen wisely.
