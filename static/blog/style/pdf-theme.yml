@@ -1,6 +1,20 @@
 extends: default
 footer:
   font-style: italic
+  recto:
+    left:
+      content: ''
+    center:
+      content: ''
+    right:
+      content: '{page-number}'
+  verso:
+    left:
+      content: $footer-recto-left-content
+    center:
+      content: $footer-recto-center-content
+    right:
+      content: $footer-recto-right-content
 header:
   height: $footer-height
   line-height: $footer-line-height
@@ -11,10 +25,14 @@ header:
   recto:
     left:
       content: '{homepage}'
+    center:
+      content: ''
     right:
       content: '{revdate}-{revnumber}'
   verso:
     left:
       content: $header-recto-left-content
+    center:
+      content: $header-recto-center-content
     right:
       content: $header-recto-right-content
