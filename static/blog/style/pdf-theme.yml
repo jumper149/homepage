@@ -1,0 +1,24 @@
+extends: default
+footer:
+  font-style: italic
+header:
+  height: $footer-height
+  line-height: $footer-line-height
+  padding: $footer-padding
+  font-style: $footer-font-style
+  border-color: $footer-border-color
+  border-width: $footer-border-width
+  recto:
+    left:
+      content: '{author}'
+    center:
+      content: '{homepage}'
+    right:
+      content: '{revdate}'
+  verso:
+    left:
+      content: $header-recto-right-content
+    center:
+      content: $header-recto-center-content
+    right:
+      content: $header-recto-left-content

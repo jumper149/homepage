@@ -42,7 +42,13 @@
         buildPhase = ''
           mkdir -p static
 
-          ASCIIDOCTOR_FLAGS="--doctype article --safe-mode server --attribute nofooter --attribute source-highlighter=rouge"
+          ASCIIDOCTOR_FLAG_LIST=(
+            "--doctype article"
+            "--safe-mode server"
+            "--attribute source-highlighter=rouge"
+            "--attribute email=contact@felixspringer.xyz"
+          )
+          ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
 
           compileArticle() {
             ARTICLE_NAME="$1"
@@ -52,11 +58,18 @@
               echo "Article exists: '$ARTICLE_NAME'"
 
               echo "HTML: '$ARTICLE_NAME'"
-              asciidoctor "$ARTICLE_NAME.adoc" --backend html5 $ASCIIDOCTOR_FLAGS --out-file "static/$ARTICLE_NAME.html"
+              asciidoctor "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
+                --attribute author="Felix Springer" \
+                --attribute homepage="https://felixspringer.xyz[felixspringer.xyz]" \
+                --backend html5 \
+                --attribute nofooter
               sed -i 's/^<head>$/<head>\n<base target="_parent">/' "static/$ARTICLE_NAME.html"
 
               echo "PDF: '$ARTICLE_NAME'"
-              asciidoctor-pdf "$ARTICLE_NAME.adoc" $ASCIIDOCTOR_FLAGS --out-file "static/$ARTICLE_NAME.pdf"
+              asciidoctor-pdf "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
+                --attribute author="Felix Springer" \
+                --attribute homepage="https://felixspringer.xyz[felixspringer.xyz]" \
+                --attribute pdf-theme="style/pdf-theme.yml"
 
               if [ -d "$ARTICLE_NAME" ]
               then
