@@ -35,10 +35,11 @@
 
     packages.x86_64-linux.blog =
       with import nixpkgs { system = "x86_64-linux"; };
-      let blogIds = builtins.attrNames (builtins.fromJSON (builtins.readFile ./homepage.json)).blog-entries;
+      let config = builtins.fromJSON (builtins.readFile ./homepage.json);
       in stdenv.mkDerivation {
         name = "blog"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/blog;
+        # TODO: Configure `author` and `homepage`.
         buildPhase = ''
           mkdir -p static
 
@@ -46,7 +47,7 @@
             "--doctype article"
             "--safe-mode server"
             "--attribute source-highlighter=rouge"
-            "--attribute email=contact@felixspringer.xyz"
+            "--attribute email=${config.contact-information.email-address}"
           )
           ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
 
@@ -84,7 +85,7 @@
             fi
           }
 
-          for blogId in ${lib.strings.escapeShellArgs blogIds}
+          for blogId in ${lib.strings.escapeShellArgs (builtins.attrNames config.blog-entries)}
           do
             compileArticle "$blogId"
           done
