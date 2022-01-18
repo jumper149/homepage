@@ -39,9 +39,10 @@ overviewHandler :: (MonadConfigured m, MonadLogger m)
 overviewHandler = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
+  revision <- configRevision <$> configuration
   fileEntries <- configFileEntries <$> configuration
   $logInfo "Serve files overview."
-  pure $ document baseUrl contactInformation (Just 0) (Just TabFiles) $ do
+  pure $ document baseUrl contactInformation revision (Just 0) (Just TabFiles) $ do
     h2 "my Files"
     fileList baseUrl (Just 0) fileEntries
 

@@ -26,10 +26,11 @@ handler :: (MonadConfigured m, MonadLogger m)
 handler = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
+  revision <- configRevision <$> configuration
   blogs <- configBlogEntries <$> configuration
   blogPreviewMaxLength <- configBlogPreviewMaxLength <$> configuration
   $logInfo "Serve main page."
-  pure $ document baseUrl contactInformation (Just 0) (Just TabHome) $ do
+  pure $ document baseUrl contactInformation revision (Just 0) (Just TabHome) $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
     h1 "Felix Springer"
     h2 "Welcome"

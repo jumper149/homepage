@@ -6,6 +6,7 @@ import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Header
 import Homepage.Server.Tab
 
+import qualified Data.Text as T
 import Numeric.Natural
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
@@ -13,11 +14,12 @@ import qualified Text.Blaze.Html5 as H
 
 document :: BaseUrl
          -> ContactInformation
+         -> Maybe T.Text -- ^ revision
          -> Maybe Natural -- ^ depth
          -> Maybe Tab -- ^ current tab
          -> Html -- ^ body
          -> Html
-document baseUrl contactInformation depth activeTab x =
+document baseUrl contactInformation maybeRev depth activeTab x =
   docTypeHtml ! lang "en" $ do
       H.head $ do
           meta ! charset "UTF-8"
@@ -32,6 +34,14 @@ document baseUrl contactInformation depth activeTab x =
       body $ do
         headerTabs baseUrl contactInformation depth activeTab
         x
+        case maybeRev of
+          Nothing -> mempty
+          Just rev ->
+            H.div ! class_ "footer" $ do
+              let withHref = case contactSourceUrl contactInformation of
+                               Nothing -> Prelude.id
+                               Just url -> (! href (textValue url))
+              withHref a $ toMarkup rev
   where
     titleName = maybe "Homepage" (tabPageName . describeTab) activeTab
     maybeDescription = textValue <$> (tabMetaDescription . describeTab =<< activeTab)

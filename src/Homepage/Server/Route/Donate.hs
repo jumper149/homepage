@@ -38,8 +38,9 @@ donateHandler :: (MonadConfigured m, MonadLogger m)
 donateHandler = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
+  revision <- configRevision <$> configuration
   $logInfo "Serve donation page."
-  pure $ document baseUrl contactInformation (Just 0) Nothing $ do
+  pure $ document baseUrl contactInformation revision (Just 0) Nothing $ do
     h2 "Donate to me"
     h3 "Reasons to donate"
     ul $ do
@@ -82,8 +83,9 @@ thankYouHandler :: (MonadConfigured m, MonadLogger m)
 thankYouHandler = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
+  revision <- configRevision <$> configuration
   $logInfo "Serve thankful donation page."
-  pure $ document baseUrl contactInformation (Just 1) Nothing $ do
+  pure $ document baseUrl contactInformation revision (Just 1) Nothing $ do
     h2 "Thank you"
     p "I just want to let you know, that you are an awesome human being and I am very grateful for your support!"
     p ":)"

@@ -1,4 +1,5 @@
-{ "directory-blog": "./static/blog"
+{ "revision": null
+, "directory-blog": "./static/blog"
 , "directory-files": "./static/files"
 , "directory-static": "./static/static"
 , "port": 8008
@@ -16,6 +17,7 @@
     , "github": true
     , "gitlab": false
     }
+  , "source-url": "https://github.com/jumper149/homepage"
   , "homepage-label": "felixspringer.xyz"
   , "email-address": "contact@felixspringer.xyz"
   , "matrix": "@jumper149:matrix.org"

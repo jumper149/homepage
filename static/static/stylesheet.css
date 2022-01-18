@@ -172,3 +172,25 @@ figure {
 .bar span a.icon:hover img.icon {
     filter:  grayscale(25%) opacity(75%);
 }
+
+.footer {
+    height:           20px;
+    padding-top:      10px;
+    padding-bottom:   10px;
+    border-top-style: solid;
+    border-top-color: var(--color7);
+    text-align:       center;
+}
+
+.footer:hover {
+    border-top-color: var(--color2);
+}
+
+.footer a {
+    text-align: center;
+    color:      var(--color7);
+}
+
+.footer a:hover {
+    color: var(--color2);
+}

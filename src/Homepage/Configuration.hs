@@ -12,7 +12,8 @@ import Data.Word
 import GHC.Generics
 
 data Configuration = Configuration
-    { configDirectoryBlog :: FilePath
+    { configRevision :: Maybe T.Text
+    , configDirectoryBlog :: FilePath
     , configDirectoryFiles :: FilePath
     , configDirectoryStatic :: FilePath
     , configPort :: Word16
