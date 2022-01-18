@@ -179,7 +179,7 @@ figure {
     padding-bottom:   10px;
     border-top-style: solid;
     border-top-color: var(--color7);
-    text-align:       center;
+    text-align:       right;
 }
 
 .footer:hover {
@@ -187,8 +187,8 @@ figure {
 }
 
 .footer a {
-    text-align: center;
-    color:      var(--color7);
+    margin-right: 12px;
+    color:        var(--color7);
 }
 
 .footer a:hover {
