@@ -49,7 +49,7 @@
             "--safe-mode server"
             "--attribute source-highlighter=rouge"
             "--attribute email=${config.contact-information.email-address}"
-            ${if self ? rev then "\"--attribute revnumber=" + self.rev + "\"" else ""}
+            "--attribute revnumber="${if self ? rev then self.rev else "unknown-revision"}""
           )
           ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
 
