@@ -125,9 +125,22 @@
         name = "static"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/static;
         buildPhase = ''
-          echo "Build 'favicon.png'."
-          convert favicon.xpm favicon.png
+          FAVICON_RESOLUTIONS=(
+            "32x32"
+            "192x192"
+            "512x512"
+          )
+          for resolution in ''${FAVICON_RESOLUTIONS[*]}
+          do
+            echo "Build 'favicon-''${resolution}.png'."
+            convert favicon.xpm -scale "''${resolution}" "favicon-''${resolution}.png"
+          done
+
+          echo "Remove 'favicon.xpm'"
           rm favicon.xpm
+
+          echo "Add link 'favicon.png'."
+          ln -s favicon-32x32.png favicon.png
 
           echo "Add link 'favicon.ico'."
           ln -s favicon.png favicon.ico

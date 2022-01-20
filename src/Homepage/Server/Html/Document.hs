@@ -30,7 +30,10 @@ document baseUrl contactInformation maybeRev depth activeTab x =
             _ -> pure ()
           meta ! name "viewport" ! content "width=500"
           H.title $ "Felix Springer's " <> toMarkup titleName
-          link ! rel "icon" ! hrefWithDepth baseUrl depth "favicon.png"
+          link ! rel "icon" ! type_ "image/png" ! sizes "32x32" ! hrefWithDepth baseUrl depth "favicon.png"
+          link ! rel "icon" ! type_ "image/png" ! sizes "192x192" ! hrefWithDepth baseUrl depth "favicon-192x192.png"
+          link ! rel "icon" ! type_ "image/png" ! sizes "512x512" ! hrefWithDepth baseUrl depth "favicon-512x512.png"
+          link ! rel "apple-touch-icon" ! type_ "image/png" ! sizes "512x512" ! hrefWithDepth baseUrl depth "favicon-512x512.png"
           link ! rel "stylesheet" ! type_ "text/css" ! hrefWithDepth baseUrl depth "stylesheet.css"
       body $ do
         headerTabs baseUrl contactInformation depth activeTab
