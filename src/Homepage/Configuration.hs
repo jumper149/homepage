@@ -7,8 +7,8 @@ import Homepage.Configuration.Files
 
 import qualified Data.Aeson as A
 import qualified Data.Text as T
-import qualified Deriving.Aeson as A
 import Data.Word
+import qualified Deriving.Aeson as A
 import GHC.Generics
 
 data Configuration = Configuration

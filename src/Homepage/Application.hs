@@ -44,7 +44,6 @@ runApplication app = do
   (preConfig, preConfigLog) <- runWriterLoggingT acquirePreConfig
 
   let
-
     runConfigurableT' :: ConfigurableT n a -> n a
     runConfigurableT' tma = runConfigurableT tma preConfig
 
