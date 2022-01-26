@@ -26,7 +26,7 @@ newtype (|.)
   (t2 :: (Type -> Type) -> Type -> Type)
   (m :: Type -> Type)
   (a :: Type)
-    = ComposeT' { unComposeT' :: ComposeT t1 t2 m a }
+    = ComposeT' { deComposeT' :: ComposeT t1 t2 m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadError e, MonadReader r, MonadState s, MonadWriter w)
 
@@ -117,6 +117,6 @@ deriving via LoggingT' (t2 (m :: * -> *))
 (|.) :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
      -> (forall a. t2 m a -> m (StT t2 a))
      -> (forall a. (t1 |. t2) m a -> m (StT t2 (StT t1 a)))
-(|.) runT1 runT2 = runComposeT runT1 runT2 . unComposeT'
+(|.) runT1 runT2 = runComposeT runT1 runT2 . deComposeT'
 
 infixr 1 |.
