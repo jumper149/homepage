@@ -8,17 +8,13 @@ import Homepage.Application.Configured
 import Homepage.Application.Logging
 
 import Control.Monad.Base
-import Control.Monad.Error.Class
 import Control.Monad.IO.Class
 import Control.Monad.Logger
 import Control.Monad.Logger.OrphanInstances ()
-import Control.Monad.Reader.Class
-import Control.Monad.State.Class
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Elevator
-import Control.Monad.Writer.Class
 import Data.Kind
 
 newtype (|.)
@@ -28,7 +24,6 @@ newtype (|.)
   (a :: Type)
     = ComposeT' { deComposeT' :: ComposeT t1 t2 m a }
   deriving newtype (Applicative, Functor, Monad)
-  deriving newtype (MonadError e, MonadReader r, MonadState s, MonadWriter w)
 
 deriving newtype
   instance

@@ -11,7 +11,6 @@ import Homepage.Configuration
 import Homepage.Configuration.Acquisition
 
 import Control.Monad.Base
-import Control.Monad.Catch
 import Control.Monad.Catch.OrphanInstances ()
 import Control.Monad.Except
 import Control.Monad.Identity
@@ -30,7 +29,6 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: ApplicationStack m a
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
-  deriving (MonadThrow, MonadCatch) via (Elevator ApplicationStack m)
 
 deriving via Elevator ApplicationStack m
   instance
