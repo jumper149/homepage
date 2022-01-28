@@ -3,7 +3,6 @@
 module Homepage.Application where
 
 import Homepage.Application.Blog
-import Homepage.Application.Compose
 import Homepage.Application.Configurable
 import Homepage.Application.Configured
 import Homepage.Application.Logging
@@ -15,10 +14,21 @@ import Control.Monad.Catch.OrphanInstances ()
 import Control.Monad.Except
 import Control.Monad.Identity
 import Control.Monad.Logger
+import Control.Monad.Logger.OrphanInstances ()
+import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Elevator
 import Data.Foldable
 import qualified Servant
+
+type (|.) = ComposeT
+
+(|.) :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
+     -> (forall a. t2 m a -> m (StT t2 a))
+     -> (forall a. (t1 |. t2) m a -> m (StT t2 (StT t1 a)))
+(|.) = runComposeT
+
+infixr 1 |.
 
 type ApplicationStack = BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT
 

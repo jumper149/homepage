@@ -7,7 +7,6 @@ library
     , Homepage
     , Homepage.Application
     , Homepage.Application.Blog
-    , Homepage.Application.Compose
     , Homepage.Application.Configurable
     , Homepage.Application.Configured
     , Homepage.Application.Logging
@@ -35,8 +34,6 @@ library
   other-modules:
     , Control.Monad.Catch.OrphanInstances
     , Control.Monad.Logger.OrphanInstances
-    , Control.Monad.Trans.Compose
-    , Control.Monad.Trans.Elevator
     , Text.Blaze.Html5.Extra
   build-depends:
     , aeson
@@ -47,6 +44,7 @@ library
     , containers
     , exceptions
     , deriving-aeson
+    , deriving-trans
     , feed
     , http-media
     , http-types
