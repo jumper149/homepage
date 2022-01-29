@@ -21,9 +21,18 @@
 
     defaultPackage.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
-      writeScriptBin "homepage-full" ''
-        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.packages.x86_64-linux.homepage}/bin/homepage
+      let config = writeText "homepage.json" (builtins.toJSON self.defaultConfig.x86_64-linux);
+      in writeScriptBin "homepage-full" ''
+        HOMEPAGE_CONFIG_FILE="${config}" ${self.packages.x86_64-linux.homepage}/bin/homepage
       '';
+
+    defaultConfig.x86_64-linux =
+      builtins.fromJSON (builtins.readFile ./homepage.json) // {
+        revision = if self ? rev then self.rev else null;
+        directory-blog = "${self.packages.x86_64-linux.blog}";
+        directory-files = "${self.packages.x86_64-linux.files}";
+        directory-static = "${self.packages.x86_64-linux.static}";
+      };
 
     packages.x86_64-linux.homepage =
       with import nixpkgs { system = "x86_64-linux"; };
@@ -33,17 +42,6 @@
           deriving-trans = deriving-trans.defaultPackage.x86_64-linux;
         };
       in (haskellPackages.extend overlay).callCabal2nix "homepage" src {};
-
-    packages.x86_64-linux.config =
-      with import nixpkgs { system = "x86_64-linux"; };
-      let
-        config = builtins.fromJSON (builtins.readFile ./homepage.json) // {
-          revision = if self ? rev then self.rev else null;
-          directory-blog = "${self.packages.x86_64-linux.blog}";
-          directory-files = "${self.packages.x86_64-linux.files}";
-          directory-static = "${self.packages.x86_64-linux.static}";
-        };
-      in writeText "homepage.json" (builtins.toJSON config);
 
     packages.x86_64-linux.blog =
       with import nixpkgs { system = "x86_64-linux"; };
@@ -210,7 +208,7 @@
     nixosModule = { config, lib, ... }:
       let
         cfg = config.services.homepage;
-        homepageConfig = builtins.fromJSON (builtins.readFile self.packages.x86_64-linux.config) // {
+        homepageConfig = self.defaultConfig.x86_64-linux // {
           port = cfg.port;
           base-url = cfg.baseUrl;
         } // cfg.extraConfig;
@@ -286,9 +284,6 @@
             };
             restartTriggers = [
               config.environment.etc."homepage.json".source
-            ];
-            path = [
-              self.packages.x86_64-linux.config # Included, because it is otherwise not seen as "buildInputs" to this service.
             ];
             serviceConfig = {
               DynamicUser = true;
