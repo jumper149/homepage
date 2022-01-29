@@ -51,15 +51,21 @@ runApplication :: (MonadIO m, MonadBaseControl IO m)
 runApplication app = do
   (preConfig, preConfigLog) <- runWriterLoggingT acquirePreConfig
 
-  let
-    runConfigurableT' :: ConfigurableT n a -> n a
-    runConfigurableT' tma = runConfigurableT tma preConfig
+  runBlogT |.
+    runConfiguredT' |.
+      runLoggingT'' preConfigLog |.
+        runConfigurableT' preConfig |.
+          runIdentityT $ unApplicationT app
 
-    runLoggingT'' :: (MonadBaseControl IO n, MonadConfigurable n, MonadIO n) => LoggingT' n a -> n a
-    runLoggingT'' tma = do
+  where
+    runConfigurableT' :: PreConfiguration -> ConfigurableT n a -> n a
+    runConfigurableT' preConfig tma = runConfigurableT tma preConfig
+
+    runLoggingT'' :: (MonadBaseControl IO n, MonadConfigurable n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
+    runLoggingT'' preLog tma = do
       maybeLogFile <- preConfigLogFile <$> preConfiguration
       runLoggingT' maybeLogFile $ do
-        traverse_ logLine preConfigLog
+        traverse_ logLine preLog
         tma
 
     runConfiguredT' :: (MonadConfigurable n, MonadIO n, MonadLogger n) => ConfiguredT n a -> n a
@@ -68,5 +74,3 @@ runApplication app = do
       case maybeConfig of
         Nothing -> error "No configuration."
         Just config -> runConfiguredT tma config
-
-  runBlogT |. runConfiguredT' |. runLoggingT'' |. runConfigurableT' |. runIdentityT $ unApplicationT app
