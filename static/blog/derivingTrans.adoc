@@ -1,0 +1,204 @@
+:revdate: 2022-01-29
+:toc:
+= Showcase: https://hackage.haskell.org/package/deriving-trans[`deriving-trans`]
+
+When creating monad transformer stacks, you usually have to implement some instances manually.
+Here is a way how this can mostly be avoided.
+After writing several blog articles on the topic I finally decided to create a https://hackage.haskell.org/package/deriving-trans[library on Hackage].
+
+// TODO: remove?
+The library consists of two concepts.
+
+* `Elevator`
+* `ComposeT`
+
+== `Elevator`
+`Elevator` is a newtype wrapper for monad transformers.
+It can take three arguments.
+
+1. monad transformer `t :: (Type -> Type) -> Type -> Type`
+2. monad `m :: Type -> Type`
+3. value `a :: Type`
+
+[source,haskell]
+----
+newtype Elevator t m a = Ascend { descend :: t m a }
+  deriving newtype (Functor, Applicative, Monad)
+  deriving newtype (MonadTrans, MonadTransControl)
+----
+
+We can use it to derive instances for monad transformers.
+
+[NOTE]
+====
+https://hackage.haskell.org/package/mtl[mtl] adds an instance of each type class to each transformer.
+With _n_ type classes and _n_ transformers this results in __n^2^__ instances.
+
+This is particularly annoying when you add your own transformers and type classes.
+====
+
+Let's use https://hackage.haskell.org/package/mtl[mtl]'s `Reader` as an example.
+
+[discrete]
+==== Type class example "```MonadReader```"
+
+You are probably familiar with the `MonadReader` class.
+
+[source,haskell]
+----
+class Monad m => MonadReader r m | m -> r where
+  ask :: m r
+  local :: (r -> r) -> m a -> m a
+----
+
+Any transformer, that implements `MonadTransControl` from https://hackage.haskell.org/package/monad-control[monad-control] can be stacked on top of a `Reader` and the `MonadReader` instance can be passed through.
+We can observe exactly this with the `Elevator` instance below.
+
+// TODO: Fix line length
+.`MonadReader` instance for `Elevator`
+[source,haskell]
+----
+instance (Monad (t m), MonadTransControl t, MonadReader r m) => MonadReader r (Elevator t m) where
+  ask = lift ask
+  local f tma = (restoreT . pure =<<) $ liftWith $ \ runT ->
+    local f $ runT tma
+----
+
+[discrete]
+==== Monad transformer example "```ReaderT```"
+
+`ReaderT` is the canonical transformer, that implements a `MonadReader` instance.
+
+[source,haskell]
+----
+newtype ReaderT r m a = ReaderT { runReaderT :: r -> m a }
+  -- manually implemented (Functor, Applicative, Monad)
+----
+
+Here we don't have to do anything special aside from implenting the regular `MonadReader` instance.
+
+[source,haskell]
+----
+instance (Monad m) => MonadReader r (ReaderT r m) where
+  ask = ReaderT return
+  local f m = ReaderT $ runReaderT m . f
+----
+
+=== Usage
+
+Now we can use `Elevator` to access a specific `MonadReader` instance in a transformer stack.
+
+[source,haskell]
+----
+newtype CustomT m a = CustomT { unCustomT :: ReaderT Bool (ReaderT Char m) a }
+  deriving newtype (Functor, Applicative, Monad)
+  deriving (MonadReader Char) via Elevator (ReaderT Bool) (ReaderT Char m) a
+----
+
+Usually we would have to define this `MonadReader Char` instance manually, but now we can use _DerivingVia_ to generate it for us.
+
+== `ComposeT`
+
+`ComposeT` is also a newtype wrapper, but it can take two monad transformers as arguments.
+This allows us to actually compose two transformers (`t1` and `t2`) into a new transformer (`ComposeT t1 t2`).
+
+1. outer monad transformer `t1 :: (Type -> Type) -> Type -> Type`
+2. inner monad transformer `t2 :: (Type -> Type) -> Type -> Type`
+3. monad `m :: Type -> Type`
+4. value `a :: Type`
+
+[source,haskell]
+----
+newtype ComposeT t1 t2 m a = ComposeT { deComposeT :: t1 (t2 m) a }
+  deriving newtype (Applicative, Functor, Monad)
+  -- manually implemented (MonadTrans, MonadTransControl)
+----
+
+We can use it to derive instances for monad transformer stacks.
+For each type class we will need one recursive instance, that can be implemented with `Elevator`.
+Each transformer, that is supposed to provide an instance for a transformer stack, will require an additional instance.
+
+We are sticking to our `Reader` example.
+
+TIP: The recursive instance can always be derived using `Elevator`.
+
+.recursive `MonadReader` instance for `ComposeT`
+[source,haskell]
+----
+deriving via Elevator t1 (t2 (m :: * -> *))
+  instance {-# OVERLAPPABLE #-}
+    ( Monad (t1 (t2 m))
+    , MonadTransControl t1
+    , MonadReader r (t2 m)
+    ) => MonadReader r (ComposeT t1 t2 m)
+----
+
+WARNING: The recursive instance is using the `OVERLAPPABLE` pragma, because whenever a `ReaderT` is encountered in a transformer stack, we want to use the following instance.
+
+Additionaly we need the base case for our recursion, which is `ReaderT` in this case.
+
+.``ReaderT``'s `MonadReader` instance for `ComposeT`
+[source,haskell]
+----
+deriving via ReaderT r (t2 (m :: * -> *))
+  instance (Monad (t2 m)) => MonadReader r ((ComposeT (ReaderT r) t2) m)
+----
+
+=== Usage
+
+Monad transformer stacks can be useful if you want to combine multiple transformers.
+The instances I just introduced will look very similar for any type class and transformer.
+
+Now let's get to a use case.
+
+[source,haskell]
+----
+type (|.) = ComposeT -- a handy infix operator
+type StackT = StateT Int |. CustomT |. ReaderT Char |. IdentityT
+newtype FinalT = FinalT { unFinalT :: StackT m a }
+  deriving newtype (Functor, Applicative, Monad)
+  deriving newtype (MonadTrans, MonadTransControl)
+  deriving newtype (MonadBase, MonadBaseControl)
+  deriving newtype (MonadReader Char)
+  deriving newtype (MonadCustom)
+  deriving newtype (MonadState Int)
+  deriving (MonadError e) via Elevator StackT m
+----
+
+CAUTION: We add `IdentityT` at the end, because the "`base-case-instances`" only cover `t1` (``ComposeT``'s first argument).
+
+Now we are able to derive a whole lot of instances.
+
+[NOTE]
+====
+One big advantage of this method is, that when you change the transformer stack, the instances will still keep working.
+Especially manually using `lift`/`liftWith` is cumbersome and even error prone.
+====
+
+We also need a runner for `FinalT`.
+We can now implement this incrementally, which is very clean and might be a good way to refactor your huge initialization function, that lived in `IO` until now.
+
+[source,haskell]
+----
+runFinalT :: MonadBaseControl IO m => FinalT m a -> FinalT m (StT FinalT a)
+runFinalT final = do
+  let (|.) = runComposeT -- another nice infix operator using `infixr 1` -- TODO
+
+  runStateTFinal |. runCustomT |. runReaderTFinal |. runIdentityT $
+    unFinalT final
+
+  where
+    runReaderTFinal :: MonadBase IO m => ReaderT n b -> n b
+    runReaderTFinal = do
+      content <- readFile "config.json"
+      case content of
+        [] -> error "empty file"
+        char : _ -> runReaderT tma char
+
+    runStateTFinal :: MonadReader Char m => StateT Int n b -> n (b, Int)
+    runStateTFinal tma = do
+      number <- fromEnum <$> ask
+      runStateT tma number
+----
+
+Now every transformer can be seen as an initialization step.
