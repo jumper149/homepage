@@ -1,4 +1,4 @@
-:revdate: 2022-01-29
+:revdate: 2022-01-31
 = Showcase: https://hackage.haskell.org/package/deriving-trans[`deriving-trans`]
 
 When creating monad transformer stacks, you usually have to implement some instances manually.
@@ -35,6 +35,8 @@ With _n_ type classes and _n_ transformers this results in __n^2^__ instances.
 
 This is particularly annoying when you add your own transformers and type classes.
 ====
+
+=== Example
 
 Let's use https://hackage.haskell.org/package/mtl[mtl]'s `Reader` as an example.
 
@@ -117,6 +119,8 @@ We can use it to derive instances for monad transformer stacks.
 For each type class we will need one recursive instance, that can be implemented with `Elevator`.
 Each transformer, that is supposed to provide an instance for a transformer stack, will require an additional instance.
 
+=== Example
+
 We are sticking to our `Reader` example.
 
 TIP: The recursive instance can always be derived using `Elevator`.
@@ -152,7 +156,7 @@ Now let's get to a use case.
 
 [NOTE]
 ====
-We will be using an infix type operator.
+We will be using a handy infix type operator.
 
 [source,haskell]
 ----
@@ -223,3 +227,17 @@ We are using another infix operator here, that allows us to combine transformer 
 infixr 1 |.
 ----
 ====
+
+== Summary
+
+1. Use `Elevator` to access instances, that are shadowed by transformers stacked on top.
+2. Use `ComposeT` to implement large monad transformer stacks.
+
+[discrete]
+==== There are some caveats
+
+* You will need quite a few language extensions __(and I'm too lazy to look them all up)__.
+* Be careful with `MonadTransControl`, when implementing `Elevator` instances.
+* _DerivingVia_ sometimes needs a little help with kind inference.
+* Watch out for mistakes with overlapping instances.
+* Append `IdentityT` to your `ComposeT` transformer stack, to keep all instances.
