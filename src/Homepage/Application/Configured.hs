@@ -17,7 +17,7 @@ instance ( Monad (t m)
          , MonadTrans t
          , MonadConfigured m
          ) => MonadConfigured (Elevator t m) where
-  configuration = Ascend $ lift configuration
+  configuration = lift configuration
 
 deriving via Elevator t1 (t2 (m :: * -> *))
   instance {-# OVERLAPPABLE #-}

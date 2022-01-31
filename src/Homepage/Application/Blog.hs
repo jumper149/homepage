@@ -22,8 +22,8 @@ instance ( Monad (t m)
          , MonadTrans t
          , MonadBlog m
          ) => MonadBlog (Elevator t m) where
-  blogEntries = Ascend $ lift blogEntries
-  readBlogEntryHtml = Ascend . lift . readBlogEntryHtml
+  blogEntries = lift blogEntries
+  readBlogEntryHtml = lift . readBlogEntryHtml
 
 deriving via Elevator t1 (t2 (m :: * -> *))
   instance {-# OVERLAPPABLE #-}

@@ -8,7 +8,7 @@ import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Elevator
 
 instance (Monad (t m), MonadTrans t, MonadLogger m) => MonadLogger (Elevator t m) where
-  monadLoggerLog loc logSource logLevel = Ascend . lift . monadLoggerLog loc logSource logLevel
+  monadLoggerLog loc logSource logLevel = lift . monadLoggerLog loc logSource logLevel
 
 deriving via Elevator t1 (t2 (m :: * -> *))
   instance {-# OVERLAPPABLE #-}
