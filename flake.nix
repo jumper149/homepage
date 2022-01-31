@@ -12,7 +12,7 @@
       type = "github";
       owner = "jumper149";
       repo = "deriving-trans";
-      ref = "master";
+      ref = "v0.2.2.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
