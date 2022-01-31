@@ -3,7 +3,7 @@
 module Homepage.Server where
 
 import Homepage.Application
-import Homepage.Application.Configured
+import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Server.Route
 

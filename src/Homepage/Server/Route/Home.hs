@@ -2,7 +2,7 @@
 
 module Homepage.Server.Route.Home where
 
-import Homepage.Application.Configured
+import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Configuration.Blog
 import Homepage.Configuration.Contact

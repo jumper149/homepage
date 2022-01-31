@@ -2,7 +2,7 @@
 
 module Homepage.Server.Route.Files where
 
-import Homepage.Application.Configured
+import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Server.Tab
 import Homepage.Server.Html.Document

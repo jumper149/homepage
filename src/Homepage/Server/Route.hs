@@ -1,7 +1,7 @@
 module Homepage.Server.Route where
 
-import           Homepage.Application.Blog
-import           Homepage.Application.Configured
+import           Homepage.Application.Blog.Class
+import           Homepage.Application.Configured.Class
 import qualified Homepage.Server.Route.Blog
 import qualified Homepage.Server.Route.Donate
 import qualified Homepage.Server.Route.Files

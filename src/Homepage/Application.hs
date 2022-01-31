@@ -3,8 +3,11 @@
 module Homepage.Application where
 
 import Homepage.Application.Blog
+import Homepage.Application.Blog.Class
 import Homepage.Application.Configurable
+import Homepage.Application.Configurable.Class
 import Homepage.Application.Configured
+import Homepage.Application.Configured.Class
 import Homepage.Application.Logging
 import Homepage.Configuration
 import Homepage.Configuration.Acquisition

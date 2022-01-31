@@ -2,8 +2,8 @@
 
 module Homepage.Server.Route.Blog.Atom where
 
-import Homepage.Application.Blog
-import Homepage.Application.Configured
+import Homepage.Application.Blog.Class
+import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Blog

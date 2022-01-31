@@ -2,7 +2,7 @@
 
 module Homepage.Server.Route.Static where
 
-import Homepage.Application.Configured
+import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Server.Err404
 

@@ -1,6 +1,6 @@
 module Homepage.Server.Err404 where
 
-import Homepage.Application.Configured
+import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Contact

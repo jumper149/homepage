@@ -7,8 +7,11 @@ library
     , Homepage
     , Homepage.Application
     , Homepage.Application.Blog
+    , Homepage.Application.Blog.Class
     , Homepage.Application.Configurable
+    , Homepage.Application.Configurable.Class
     , Homepage.Application.Configured
+    , Homepage.Application.Configured.Class
     , Homepage.Application.Logging
     , Homepage.Configuration
     , Homepage.Configuration.Acquisition
