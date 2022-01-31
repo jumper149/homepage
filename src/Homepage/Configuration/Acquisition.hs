@@ -8,7 +8,7 @@ import Control.Monad.Logger
 import Control.Monad.IO.Class
 import qualified Data.Aeson as A
 import qualified Data.Text as T
-import System.Environment
+import System.Posix.Env
 import System.Posix.Files
 
 configFileEnvironmentVariable :: String
@@ -22,7 +22,7 @@ acquirePreConfig :: (MonadIO m, MonadLogger m)
 acquirePreConfig = do
 
   $logInfo $ "Looking up environment variable: " <> T.pack (show configFileEnvironmentVariable)
-  maybeConfigFilePath <- liftIO $ lookupEnv configFileEnvironmentVariable
+  maybeConfigFilePath <- liftIO $ getEnv configFileEnvironmentVariable
   preConfigConfigFile <- case maybeConfigFilePath of
     Nothing -> do
       let configFileDefault = "./homepage.json"
@@ -33,7 +33,7 @@ acquirePreConfig = do
       pure fp
 
   $logInfo $ "Looking up environment variable: " <> T.pack (show logFileEnvironmentVariable)
-  preConfigLogFile <- liftIO $ lookupEnv logFileEnvironmentVariable
+  preConfigLogFile <- liftIO $ getEnv logFileEnvironmentVariable
   case preConfigLogFile of
     Nothing -> $logInfo "Using no log file."
     Just fp -> $logInfo $ "Using log file: " <> T.pack (show fp)
