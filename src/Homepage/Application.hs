@@ -13,7 +13,6 @@ import Homepage.Configuration
 import Homepage.Configuration.Acquisition
 
 import Control.Monad.Base
-import Control.Monad.Catch.OrphanInstances ()
 import Control.Monad.Except
 import Control.Monad.Identity
 import Control.Monad.Logger

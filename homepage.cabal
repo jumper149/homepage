@@ -35,7 +35,6 @@ library
     , Homepage.Server.Route.Static
     , Homepage.Server.Tab
   other-modules:
-    , Control.Monad.Catch.OrphanInstances
     , Control.Monad.Logger.OrphanInstances
     , Text.Blaze.Html5.Extra
   build-depends:
@@ -45,7 +44,6 @@ library
     , blaze-markup
     , bytestring
     , containers
-    , exceptions
     , deriving-aeson
     , deriving-trans
     , feed
