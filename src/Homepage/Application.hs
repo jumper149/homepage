@@ -30,9 +30,9 @@ type (|.) = ComposeT
 
 infixr 1 |.
 
-type ApplicationStack = BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT
+type StackT = BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT
 
-newtype ApplicationT m a = ApplicationT { unApplicationT :: ApplicationStack m a }
+newtype ApplicationT m a = ApplicationT { unApplicationT :: StackT m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadTrans, MonadTransControl)
@@ -40,7 +40,7 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: ApplicationStack m a
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
 
-deriving via Elevator ApplicationStack m
+deriving via Elevator ApplicationT m
   instance
     ( MonadError Servant.ServerError m
     ) => MonadError Servant.ServerError (ApplicationT m)
