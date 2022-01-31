@@ -1,5 +1,4 @@
 :revdate: 2022-01-29
-:toc:
 = Showcase: https://hackage.haskell.org/package/deriving-trans[`deriving-trans`]
 
 When creating monad transformer stacks, you usually have to implement some instances manually.
@@ -151,14 +150,23 @@ The instances I just introduced will look very similar for any type class and tr
 
 Now let's get to a use case.
 
+[NOTE]
+====
+We will be using an infix type operator.
+
 [source,haskell]
 ----
-type (|.) = ComposeT -- a handy infix operator
+type (|.) = ComposeT
+----
+====
+
+[source,haskell]
+----
 type StackT = StateT Int |. CustomT |. ReaderT Char |. IdentityT
 newtype FinalT = FinalT { unFinalT :: StackT m a }
   deriving newtype (Functor, Applicative, Monad)
   deriving newtype (MonadTrans, MonadTransControl)
-  deriving newtype (MonadBase, MonadBaseControl)
+  deriving newtype (MonadBase b, MonadBaseControl b)
   deriving newtype (MonadReader Char)
   deriving newtype (MonadCustom)
   deriving newtype (MonadState Int)
@@ -175,30 +183,43 @@ One big advantage of this method is, that when you change the transformer stack,
 Especially manually using `lift`/`liftWith` is cumbersome and even error prone.
 ====
 
-We also need a runner for `FinalT`.
+We also need a runner function for `FinalT`.
 We can now implement this incrementally, which is very clean and might be a good way to refactor your huge initialization function, that lived in `IO` until now.
 
 [source,haskell]
 ----
-runFinalT :: MonadBaseControl IO m => FinalT m a -> FinalT m (StT FinalT a)
-runFinalT final = do
-  let (|.) = runComposeT -- another nice infix operator using `infixr 1` -- TODO
-
-  runStateTFinal |. runCustomT |. runReaderTFinal |. runIdentityT $
-    unFinalT final
-
+runFinalT :: MonadBaseControl IO m => FinalT m a -> m (StT FinalT a)
+runFinalT final =
+  runStateTFinal |.
+    runCustomT |.
+      runReaderTFinal |.
+        runIdentityT $ unFinalT final
   where
-    runReaderTFinal :: MonadBase IO m => ReaderT n b -> n b
-    runReaderTFinal = do
-      content <- readFile "config.json"
+    runReaderTFinal :: MonadBase IO n => ReaderT Char n b -> n b
+    runReaderTFinal tma = do
+      content <- liftBase $ readFile "config.json"
       case content of
         [] -> error "empty file"
         char : _ -> runReaderT tma char
 
-    runStateTFinal :: MonadReader Char m => StateT Int n b -> n (b, Int)
+    runStateTFinal :: MonadReader Char n => StateT Int n b -> n (b, Int)
     runStateTFinal tma = do
       number <- fromEnum <$> ask
       runStateT tma number
 ----
 
-Now every transformer can be seen as an initialization step.
+Now every transformer represents an initialization step.
+
+[NOTE]
+====
+We are using another infix operator here, that allows us to combine transformer runners.
+
+[source,haskell]
+----
+(|.) :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
+     -> (forall a. t2 m a -> m (StT t2 a))
+     -> (forall a. (t1 |. t2) m a -> m (StT t2 (StT t1 a)))
+(|.) = runComposeT
+infixr 1 |.
+----
+====
