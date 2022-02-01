@@ -136,15 +136,15 @@ deriving via Elevator t1 (t2 (m :: * -> *))
     ) => MonadReader r (ComposeT t1 t2 m)
 ----
 
-WARNING: The recursive instance is using the `OVERLAPPABLE` pragma, because whenever a `ReaderT` is encountered in a transformer stack, we want to use the following instance.
-
 Additionaly we need the base case for our recursion, which is `ReaderT` in this case.
+
+WARNING: The recursive instance is using the `OVERLAPPABLE` pragma, because whenever a `ReaderT` is encountered in a transformer stack, we want to use the following instance.
 
 .``ReaderT``'s `MonadReader` instance for `ComposeT`
 [source,haskell]
 ----
 deriving via ReaderT r (t2 (m :: * -> *))
-  instance (Monad (t2 m)) => MonadReader r ((ComposeT (ReaderT r) t2) m)
+  instance Monad (t2 m) => MonadReader r (ComposeT (ReaderT r) t2 m)
 ----
 
 === Usage
@@ -177,14 +177,14 @@ newtype FinalT = FinalT { unFinalT :: StackT m a }
   deriving (MonadError e) via Elevator StackT m
 ----
 
-CAUTION: We add `IdentityT` at the end, because the "`base-case-instances`" only cover `t1` (``ComposeT``'s first argument).
+CAUTION: We add `IdentityT` at the end, because the "`base-case`" instances only cover `t1` (``ComposeT``'s first argument).
 
 Now we are able to derive a whole lot of instances.
 
 [NOTE]
 ====
 One big advantage of this method is, that when you change the transformer stack, the instances will still keep working.
-Especially manually using `lift`/`liftWith` is cumbersome and even error prone.
+Especially manually using `lift`/`liftWith` would be cumbersome and even error prone.
 ====
 
 We also need a runner function for `FinalT`.
@@ -241,3 +241,6 @@ infixr 1 |.
 * _DerivingVia_ sometimes needs a little help with kind inference.
 * Watch out for mistakes with overlapping instances.
 * Append `IdentityT` to your `ComposeT` transformer stack, to keep all instances.
+
+I am using this library myself for https://github.com/jumper149/homepage/blob/a612bdca6ac8dfa0fb9ce103707b0921dfd8f90a/src/Homepage/Application.hs[my homepage].
+If you notice any problem, I will be happy to hear from you!
