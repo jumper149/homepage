@@ -26,10 +26,7 @@ instance (MonadConfigured m, MonadIO m) => MonadBlog (BlogT m) where
     BlogT $ lift $ liftIO $ T.readFile file
 
 deriving via BlogT (t2 (m :: * -> *))
-  instance
-    ( MonadConfigured (t2 m)
-    , MonadIO (t2 m)
-    ) => MonadBlog (ComposeT BlogT t2 m)
+  instance (MonadConfigured (t2 m), MonadIO (t2 m)) => MonadBlog (ComposeT BlogT t2 m)
 
 runBlogT :: BlogT m a
          -> m a

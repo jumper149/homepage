@@ -18,9 +18,7 @@ instance Monad m => MonadConfigured (ConfiguredT m) where
   configuration = ConfiguredT ask
 
 deriving via ConfiguredT (t2 (m :: * -> *))
-  instance
-    ( Monad (t2 m)
-    ) => MonadConfigured (ComposeT ConfiguredT t2 m)
+  instance Monad (t2 m) => MonadConfigured (ComposeT ConfiguredT t2 m)
 
 runConfiguredT :: ConfiguredT m a -> Configuration -> m a
 runConfiguredT = runReaderT . unConfiguredT

@@ -20,9 +20,7 @@ instance MonadIO m => MonadLogger (LoggingT' m) where
       toLogStr $ B.pack (show time) <> " | " <> fromLogStr (toLogStr logStr)
 
 deriving via LoggingT' (t2 (m :: * -> *))
-  instance
-    ( MonadIO (t2 m)
-    ) => MonadLogger (ComposeT LoggingT' t2 m)
+  instance MonadIO (t2 m) => MonadLogger (ComposeT LoggingT' t2 m)
 
 runLoggingT' :: (MonadIO m, MonadBaseControl IO m)
              => Maybe FilePath

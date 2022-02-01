@@ -18,6 +18,4 @@ deriving via Elevator t1 (t2 (m :: * -> *))
     ) => MonadLogger (ComposeT t1 t2 m)
 
 deriving via LoggingT (t2 (m :: * -> *))
-  instance
-    ( MonadIO (t2 m)
-    ) => MonadLogger (ComposeT LoggingT t2 m)
+  instance MonadIO (t2 m) => MonadLogger (ComposeT LoggingT t2 m)

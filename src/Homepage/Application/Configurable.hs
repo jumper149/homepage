@@ -18,9 +18,7 @@ instance Monad m => MonadConfigurable (ConfigurableT m) where
   preConfiguration = ConfigurableT ask
 
 deriving via ConfigurableT (t2 (m :: * -> *))
-  instance
-    ( Monad (t2 m)
-    ) => MonadConfigurable (ComposeT ConfigurableT t2 m)
+  instance Monad (t2 m) => MonadConfigurable (ComposeT ConfigurableT t2 m)
 
 runConfigurableT :: ConfigurableT m a -> PreConfiguration -> m a
 runConfigurableT = runReaderT . unConfigurableT
