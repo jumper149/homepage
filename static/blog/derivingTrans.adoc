@@ -59,10 +59,11 @@ We can observe exactly this with the `Elevator` instance below.
 .`MonadReader` instance for `Elevator`
 [source,haskell]
 ----
-instance (Monad (t m), MonadTransControl t, MonadReader r m) => MonadReader r (Elevator t m) where
-  ask = lift ask
-  local f tma = (restoreT . pure =<<) $ liftWith $ \ runT ->
-    local f $ runT tma
+instance (Monad (t m), MonadTransControl t, MonadReader r m) =>
+  MonadReader r (Elevator t m) where
+    ask = lift ask
+    local f tma = (restoreT . pure =<<) $ liftWith $ \ runT ->
+      local f $ runT tma
 ----
 
 [discrete]
