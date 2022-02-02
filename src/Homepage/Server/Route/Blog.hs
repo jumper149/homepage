@@ -36,7 +36,7 @@ data Routes route = Routes
                 :> Atom.API
     , routeArticle :: route
                    :- Capture "article" BlogId
-                   :> Get '[HTML] Html
+                   :> UVerb 'GET '[HTML] '[WithStatus 200 Html, WithStatus 404 Html]
     , routeOverview :: route
                     :- Get '[HTML] Html
     }
@@ -67,21 +67,21 @@ overviewHandler = do
       "."
     blogList baseUrl (Just 0) blogs
 
-articleHandler :: (MonadConfigured m, MonadError ServerError m, MonadLogger m)
+articleHandler :: (MonadConfigured m, MonadLogger m)
                => BlogId
-               -> m Html
+               -> m (Union '[WithStatus 200 Html, WithStatus 404 Html])
 articleHandler blogId = do
   blogs <- configBlogEntries <$> configuration
   case lookupBlog blogId blogs of
     Nothing -> do
         $logWarn $ "Failed to serve blog article: " <> T.pack (show blogId)
-        servantError404
+        respond . WithStatus @404 =<< html404
     Just blog -> do
         baseUrl <- configBaseUrl <$> configuration
         contactInformation <- configContactInformation <$> configuration
         revision <- configRevision <$> configuration
         $logInfo $ "Serve blog article: " <> T.pack (show blogId)
-        pure $ document baseUrl contactInformation revision (Just 1) (Just TabBlog) $ do
+        respond . WithStatus @200 $ document baseUrl contactInformation revision (Just 1) (Just TabBlog) $ do
           h2 $ text $ blogTitle blog
           p $ do
             "View blog entry: "
