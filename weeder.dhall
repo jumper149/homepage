@@ -1,5 +1,5 @@
 { roots =
-    [ "^Main.main$"
+    [ "^Homepage.main$"
     ]
 , type-class-roots = True
 }

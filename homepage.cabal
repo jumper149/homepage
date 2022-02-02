@@ -94,6 +94,8 @@ library
   ghc-options:
     -Wall
     -Wredundant-constraints
+    -fwrite-ide-info
+      -- ^ Generate data for 'weeder'.
 
 executable homepage
   main-is: Main.hs
