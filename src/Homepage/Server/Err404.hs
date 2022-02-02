@@ -5,7 +5,6 @@ import Homepage.Configuration
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 
-import Control.Monad.Error.Class
 import Data.ByteString.Builder
 import Servant
 import Network.HTTP.Types.Status
@@ -20,15 +19,6 @@ application404 = do
   pure $ \ _ rsp -> rsp $
     responseBuilder status404 [ (,) "Content-Type" "text/html" ] $
       lazyByteString $ renderHtml html404'
-
-servantError404 :: (MonadConfigured m, MonadError ServerError m)
-                => m a
-servantError404 = do
-  html404' <- html404
-  throwError err404
-    { errHeaders = [ (,) "Content-Type" "text/html" ]
-    , errBody = renderHtml html404'
-    }
 
 html404 :: MonadConfigured m
         => m Html
