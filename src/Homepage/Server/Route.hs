@@ -8,7 +8,6 @@ import qualified Homepage.Server.Route.Files
 import qualified Homepage.Server.Route.Home
 import qualified Homepage.Server.Route.Static
 
-import Control.Monad.Error.Class
 import Control.Monad.Logger
 import GHC.Generics
 import Servant
@@ -24,7 +23,7 @@ data Routes route = Routes
     }
   deriving stock (Generic)
 
-routes :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+routes :: (MonadBlog m, MonadConfigured m, MonadLogger m)
        => Routes (AsServerT m)
 routes = Routes
     { routeHome = Homepage.Server.Route.Home.handler

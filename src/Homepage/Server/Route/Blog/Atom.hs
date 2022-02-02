@@ -8,7 +8,6 @@ import Homepage.Configuration
 import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Blog
 
-import Control.Monad.Error.Class
 import Control.Monad.Logger
 import Data.List
 import Data.Ord
@@ -24,7 +23,7 @@ import qualified Text.Feed.Types as Feed
 import qualified Text.Feed.Export as Feed
 import Servant
 
-type API = Get '[Atom] AtomFeed
+type API = UVerb 'GET '[Atom] '[WithStatus 200 AtomFeed, WithStatus 500 NoContent]
 
 data Atom
 
@@ -37,7 +36,7 @@ newtype AtomFeed = AtomFeed { unAtomFeed :: LT.Text }
 instance MimeRender Atom AtomFeed where
   mimeRender _ (AtomFeed text) = LT.encodeUtf8 text
 
-handler :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+handler :: (MonadBlog m, MonadConfigured m, MonadLogger m)
         => ServerT API m
 handler = do
   blogs <- configBlogEntries <$> configuration
@@ -48,11 +47,11 @@ handler = do
   feed <- Feed.AtomFeed <$> atomFeed entries
   case Feed.textFeed feed of
     Nothing -> do
-      $logError "Failed to serve Atom feed."
-      throwError err500 { errBody = "Failed to serialize feed." }
+      $logError "Failed to serialize Atom feed."
+      respond $ WithStatus @500 NoContent
     Just text -> do
       $logInfo "Serve Atom feed."
-      pure $ AtomFeed text
+      respond . WithStatus @200 $ AtomFeed text
 
 atomFeed :: MonadConfigured m
          => [Atom.Entry]

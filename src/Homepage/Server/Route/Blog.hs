@@ -13,7 +13,6 @@ import Homepage.Server.Html.Document
 import qualified Homepage.Server.Route.Blog.Atom as Atom
 import Homepage.Server.Tab
 
-import Control.Monad.Error.Class
 import Control.Monad.Logger
 import qualified Data.Text as T
 import Servant hiding (serveDirectoryWith)
@@ -42,7 +41,7 @@ data Routes route = Routes
     }
   deriving Generic
 
-routes :: (MonadBlog m, MonadConfigured m, MonadError ServerError m, MonadLogger m)
+routes :: (MonadBlog m, MonadConfigured m, MonadLogger m)
        => Routes (AsServerT m)
 routes = Routes
     { routeRaw = rawHandler
