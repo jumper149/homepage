@@ -168,7 +168,7 @@ type (|.) = ComposeT
 [source,haskell]
 ----
 type StackT = StateT Int |. CustomT |. ReaderT Char |. IdentityT
-newtype FinalT = FinalT { unFinalT :: StackT m a }
+newtype FinalT m a = FinalT { unFinalT :: StackT m a }
   deriving newtype (Functor, Applicative, Monad)
   deriving newtype (MonadTrans, MonadTransControl)
   deriving newtype (MonadBase b, MonadBaseControl b)
