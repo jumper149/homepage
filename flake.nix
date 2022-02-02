@@ -26,6 +26,10 @@
         HOMEPAGE_CONFIG_FILE="${config}" ${self.packages.x86_64-linux.homepage}/bin/homepage
       '';
 
+    defaultConfigFile.x86_64-linux =
+      with import nixpkgs { system = "x86_64-linux"; };
+      writeText "homepage.json" (builtins.toJSON self.defaultConfig.x86_64-linux);
+
     defaultConfig.x86_64-linux =
       builtins.fromJSON (builtins.readFile ./homepage.json) // {
         revision = if self ? rev then self.rev else null;

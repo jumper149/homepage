@@ -70,7 +70,7 @@ Install with a NixOS system flake and enable the service.
 nix develop
 
 # Generate static files and configuration.
-nix build .#config
+nix build .#defaultConfigFile.x86_64-linux
 
 # Run to debug.
 HOMEPAGE_CONFIG_FILE=result cabal run homepage
