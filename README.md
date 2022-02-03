@@ -1,6 +1,6 @@
 # homepage
 
-Felix Springer's Homepage.
+Felix Springer's Homepage hosted on [felixspringer.xyz](https://felixspringer.xyz/homepage/).
 
 ## Install
 
