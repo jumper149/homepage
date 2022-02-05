@@ -61,6 +61,7 @@
             "--doctype article"
             "--safe-mode server"
             "--attribute source-highlighter=rouge"
+            "--attribute prewrap!"
             "--attribute email=${config.contact-information.email-address}"
             "--attribute revnumber="${if self ? rev then self.rev else "unknown-revision"}""
           )
