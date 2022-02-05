@@ -1,4 +1,4 @@
-:revdate: 2022-01-17
+:revdate: 2022-02-05
 = composing Transformers
 
 There exists a certain kind of monad transformers.
@@ -84,7 +84,7 @@ Some implementation details are left to your imagination.
 
 [source,haskell]
 ----
-newtype DatabaseT m a = DatabaseT { runDatabaseT :: ReaderT (TVar DatabaseConnection) m a
+newtype DatabaseT m a = DatabaseT { runDatabaseT :: ReaderT (TVar DatabaseConnection) m a }
   deriving (Functor, Applicative, Monad)
 
 -- and additional instances ...
