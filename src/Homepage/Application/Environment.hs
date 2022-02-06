@@ -10,13 +10,14 @@ import Control.Applicative
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Identity
 import Control.Monad.Trans.Reader
 import Data.Kind
 import Data.Proxy
 
 newtype EnvironmentT m a = EnvironmentT { unEnvironmentT :: ReaderT Environment m a }
   deriving newtype (Applicative, Functor, Monad)
-  deriving newtype (MonadTrans, MonadTransControl)
+  deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
 instance Monad m => MonadEnvironment (EnvironmentT m) where
   environmentVariable :: forall name val (envVar :: EnvVarKind name val).

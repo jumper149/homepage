@@ -14,6 +14,7 @@ import Control.Monad.Logger.CallStack
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Control.Identity
 import Control.Monad.Trans.Identity
 import Data.Foldable
 import Data.Kind
@@ -23,7 +24,7 @@ import Data.Text.IO qualified as T
 
 newtype BlogT m a = BlogT { unBlogT :: IdentityT m a }
   deriving newtype (Applicative, Functor, Monad)
-  deriving newtype (MonadTrans, MonadTransControl)
+  deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
 instance (MonadBaseControl IO m, MonadConfigured m, MonadLogger m) => MonadBlog (BlogT m) where
   blogEntries = lift $ configBlogEntries <$> configuration

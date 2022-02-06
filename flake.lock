@@ -1,5 +1,26 @@
 {
   "nodes": {
+    "deriving-trans": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1644181546,
+        "narHash": "sha256-a7ggw9prhcu2bryMtVdQA7f+0l5wzGygcRPIaP+Z2NI=",
+        "owner": "jumper149",
+        "repo": "deriving-trans",
+        "rev": "8e033038d2d30a6fa3ccb296ff2034bab6381ee6",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jumper149",
+        "ref": "monad-control-identity",
+        "repo": "deriving-trans",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1648730673,

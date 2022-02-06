@@ -5,8 +5,12 @@ module Control.Monad.Logger.OrphanInstances () where
 import Control.Monad.Logger
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
+import Control.Monad.Trans.Control.Identity
 import Control.Monad.Trans.Elevator
 import Data.Kind
+
+instance MonadTransControlIdentity LoggingT where
+  liftWithIdentity = defaultLiftWithIdentity
 
 instance (Monad (t m), MonadTrans t, MonadLogger m) => MonadLogger (Elevator t m) where
   monadLoggerLog loc logSource logLevel = lift . monadLoggerLog loc logSource logLevel

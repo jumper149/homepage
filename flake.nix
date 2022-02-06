@@ -8,6 +8,13 @@
       repo = "nixpkgs";
       ref = "master";
     };
+    deriving-trans = {
+      type = "github";
+      owner = "jumper149";
+      repo = "deriving-trans";
+      ref = "monad-control-identity";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = { self, nixpkgs }: {

@@ -52,6 +52,7 @@ library
     , http-media
     , http-types
     , monad-control
+    , monad-control-identity
     , monad-logger
     , mtl
     , servant

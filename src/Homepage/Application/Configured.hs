@@ -11,12 +11,13 @@ import Control.Monad.Logger
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Control.Identity
 import Control.Monad.Trans.Reader
 import Data.Kind
 
 newtype ConfiguredT m a = ConfiguredT { unConfiguredT :: ReaderT Configuration m a }
   deriving newtype (Applicative, Functor, Monad)
-  deriving newtype (MonadTrans, MonadTransControl)
+  deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
 instance Monad m => MonadConfigured (ConfiguredT m) where
   configuration = ConfiguredT ask

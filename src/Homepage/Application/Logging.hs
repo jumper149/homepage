@@ -6,16 +6,18 @@ module Homepage.Application.Logging where
 import Homepage.Application.Environment.Class
 
 import Control.Monad.Logger
+import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
+import Control.Monad.Trans.Control.Identity
 import Data.ByteString.Char8 qualified as B
 import Data.Kind
 import Data.Time qualified as T
 
 newtype LoggingT' m a = LoggingT' { unLoggingT' :: LoggingT m a }
   deriving newtype (Applicative, Functor, Monad)
-  deriving newtype (MonadTrans, MonadTransControl)
+  deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
 instance MonadIO m => MonadLogger (LoggingT' m) where
   monadLoggerLog loc logSource logLevel logStr = do
