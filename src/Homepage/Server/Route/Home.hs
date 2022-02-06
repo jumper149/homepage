@@ -32,7 +32,7 @@ handler = do
   $logInfo "Serve main page."
   pure $ document baseUrl contactInformation revision (Just 0) (Just TabHome) $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
-    h1 "Felix Springer"
+    h1 $ toMarkup $ contactName contactInformation
     h2 "Welcome"
     p $ do
         "I am living in Germany and working as a Software Engineer at "

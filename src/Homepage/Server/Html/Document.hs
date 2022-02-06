@@ -24,12 +24,12 @@ document baseUrl contactInformation maybeRev depth activeTab x =
   docTypeHtml ! lang "en" $ do
       H.head $ do
           meta ! charset "UTF-8"
-          meta ! name "author" ! content "Felix Springer"
+          meta ! name "author" ! content (textValue $ contactName contactInformation)
           case maybeDescription of
             Just description -> meta ! name "description" ! content description
             _ -> pure ()
           meta ! name "viewport" ! content "width=500"
-          H.title $ "Felix Springer's " <> toMarkup titleName
+          H.title $ toMarkup (contactName contactInformation) <> "'s " <> toMarkup titleName
           link ! rel "icon" ! type_ "image/png" ! sizes "32x32" ! hrefWithDepth baseUrl depth "favicon.png"
           link ! rel "icon" ! type_ "image/png" ! sizes "192x192" ! hrefWithDepth baseUrl depth "favicon-192x192.png"
           link ! rel "icon" ! type_ "image/png" ! sizes "512x512" ! hrefWithDepth baseUrl depth "favicon-512x512.png"

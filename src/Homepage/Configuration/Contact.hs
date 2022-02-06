@@ -7,6 +7,7 @@ import GHC.Generics
 
 data ContactInformation = ContactInformation
     { contactHeaderIcons :: HeaderIcons
+    , contactName :: T.Text
     , contactSourceUrl :: Maybe T.Text
     , contactHomepageLabel :: Maybe T.Text
     , contactEmailAddress :: Maybe T.Text

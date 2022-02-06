@@ -59,7 +59,7 @@ atomFeed :: MonadConfigured m
          -> m Atom.Feed
 atomFeed entries = do
   baseUrl <- configBaseUrl <$> configuration
-  personName <- configAtomPersonName <$> configuration
+  personName <- contactName . configContactInformation <$> configuration
   person <- atomPerson
   pure Atom.Feed
     { Atom.feedId = displayBaseUrl baseUrl <> "blog/atom.xml"
@@ -73,7 +73,7 @@ atomFeed entries = do
     , Atom.feedGenerator = Just Atom.Generator
         { Atom.genURI = Just "https://github.com/jumper149/homepage"
         , Atom.genVersion = Nothing
-        , Atom.genText = "Felix Springer's Homepage"
+        , Atom.genText = personName <> "'s Homepage"
         }
     , Atom.feedIcon = Just $ displayBaseUrl baseUrl <> "favicon.png"
     , Atom.feedLinks =
@@ -149,7 +149,7 @@ atomPerson :: MonadConfigured m
            => m Atom.Person
 atomPerson = do
   baseUrl <- configBaseUrl <$> configuration
-  personName <- configAtomPersonName <$> configuration
+  personName <- contactName . configContactInformation <$> configuration
   maybePersonEmail <- contactEmailAddress . configContactInformation <$> configuration
   pure Atom.Person
     { Atom.personName = personName

@@ -76,7 +76,7 @@
 
               echo "HTML: '$ARTICLE_NAME'"
               asciidoctor "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
-                --attribute author="Felix Springer" \
+                --attribute author="${config.contact-information.name}" \
                 --attribute homepage="https://felixspringer.xyz[felixspringer.xyz]" \
                 --backend html5 \
                 --attribute nofooter
@@ -84,7 +84,7 @@
 
               echo "PDF: '$ARTICLE_NAME'"
               asciidoctor-pdf "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
-                --attribute author="Felix Springer" \
+                --attribute author="${config.contact-information.name}" \
                 --attribute homepage="https://felixspringer.xyz[felixspringer.xyz]" \
                 --attribute pdf-theme="style/pdf-theme.yml"
 
