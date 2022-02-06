@@ -40,16 +40,12 @@ type StackT = IdentityT
 
 newtype ApplicationT m a = ApplicationT { unApplicationT :: StackT m a }
   deriving newtype (Applicative, Functor, Monad)
-  deriving newtype (MonadBase b, MonadBaseControl b)
+  deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
 
 deriving newtype instance (MonadBaseControl IO m, MonadIO m) => MonadBlog (ApplicationT m)
-
-deriving newtype instance
-  ( MonadBaseControlIdentity b m
-  ) => MonadBaseControlIdentity b (ApplicationT m)
 
 deriving via Elevator ApplicationT m
   instance MonadError Servant.ServerError m => MonadError Servant.ServerError (ApplicationT m)
