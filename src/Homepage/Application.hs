@@ -12,6 +12,7 @@ import Homepage.Application.Logging
 import Homepage.Configuration
 import Homepage.Configuration.Acquisition
 
+import Control.Exception
 import Control.Monad.Base
 import Control.Monad.Except
 import Control.Monad.Identity
@@ -47,13 +48,13 @@ deriving via Elevator ApplicationT m
     ( MonadError Servant.ServerError m
     ) => MonadError Servant.ServerError (ApplicationT m)
 
-runApplication :: (MonadIO m, MonadBaseControl IO m)
+runApplication :: (MonadError IOException m, MonadIO m, MonadBaseControl IO m)
                => ApplicationT m a
                -> m a
 runApplication app = do
   (preConfig, preConfigLog) <- runWriterLoggingT acquirePreConfig
 
-  runBlogT |.
+  runCheckedBlogT |.
     runConfiguredT' |.
       runLoggingT'' preConfigLog |.
         runConfigurableT' preConfig |.
