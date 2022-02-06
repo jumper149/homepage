@@ -7,6 +7,7 @@ import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Blog
+import Homepage.Configuration.Contact
 
 import Control.Monad.Logger
 import Data.List
@@ -149,7 +150,7 @@ atomPerson :: MonadConfigured m
 atomPerson = do
   baseUrl <- configBaseUrl <$> configuration
   personName <- configAtomPersonName <$> configuration
-  maybePersonEmail <- configAtomPersonEmail <$> configuration
+  maybePersonEmail <- contactEmailAddress . configContactInformation <$> configuration
   pure Atom.Person
     { Atom.personName = personName
     , Atom.personURI = Just $ displayBaseUrl baseUrl

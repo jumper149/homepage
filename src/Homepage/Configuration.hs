@@ -22,7 +22,6 @@ data Configuration = Configuration
     , configBlogEntries :: BlogEntries
     , configBlogPreviewMaxLength :: Maybe Word
     , configAtomPersonName :: T.Text
-    , configAtomPersonEmail :: Maybe T.Text
     , configAtomMaxLength :: Maybe Word
     , configFileEntries :: FileEntries
     }

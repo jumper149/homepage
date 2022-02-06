@@ -59,7 +59,6 @@
   }
 , "blog-preview-max-length": 5
 , "atom-person-name": "Felix Springer"
-, "atom-person-email": "contact@felixspringer.xyz"
 , "atom-max-length": null
 , "file-entries":
   [ { "identifier": "Felix_Springer-cv"
