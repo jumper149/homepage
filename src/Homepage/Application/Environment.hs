@@ -10,7 +10,7 @@ import Control.Applicative
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
-import Control.Monad.Trans.Identity
+import Control.Monad.Trans.Control.Identity
 import Control.Monad.Trans.Reader
 import Data.Kind
 import Data.Proxy

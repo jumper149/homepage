@@ -15,9 +15,16 @@
       ref = "monad-control-identity";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    monad-control-identity = {
+      type = "github";
+      owner = "jumper149";
+      repo = "monad-control-identity";
+      ref = "master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs }: {
+  outputs = { self, nixpkgs, deriving-trans, monad-control-identity }: {
 
     defaultPackage.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
@@ -40,8 +47,13 @@
 
     packages.x86_64-linux.homepage =
       with import nixpkgs { system = "x86_64-linux"; };
-      let src = nix-gitignore.gitignoreSource [] ./.;
-      in haskellPackages.callCabal2nix "homepage" src {};
+      let
+        src = nix-gitignore.gitignoreSource [] ./.;
+        overlay = self: super: {
+          monad-control-identity = self.callCabal2nix "monad-control-identity" monad-control-identity.outPath {};
+          deriving-trans = self.callCabal2nix "deriving-trans" deriving-trans.outPath {};
+        };
+      in (haskellPackages.extend overlay).callCabal2nix "homepage" src {};
 
     packages.x86_64-linux.blog =
       with import nixpkgs { system = "x86_64-linux"; };

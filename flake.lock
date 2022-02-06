@@ -21,6 +21,27 @@
         "type": "github"
       }
     },
+    "monad-control-identity": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1644187539,
+        "narHash": "sha256-vnjDF+dN0AztrTV61b4FW3P46V6214zScYsnygQnfCk=",
+        "owner": "jumper149",
+        "repo": "monad-control-identity",
+        "rev": "8322ed4a1135ee8242a6b8a1d0e618b781de1eb3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jumper149",
+        "ref": "master",
+        "repo": "monad-control-identity",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1648730673,
@@ -39,6 +60,8 @@
     },
     "root": {
       "inputs": {
+        "deriving-trans": "deriving-trans",
+        "monad-control-identity": "monad-control-identity",
         "nixpkgs": "nixpkgs"
       }
     }
