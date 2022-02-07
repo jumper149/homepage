@@ -12,7 +12,6 @@ import Homepage.Application.Logging
 import Homepage.Configuration
 import Homepage.Configuration.Acquisition
 
-import Control.Exception
 import Control.Monad.Base
 import Control.Monad.Except
 import Control.Monad.Identity
@@ -41,14 +40,15 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: StackT m a }
   deriving newtype (MonadTrans, MonadTransControl)
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
-  deriving newtype (MonadBlog)
+
+deriving newtype instance (MonadBaseControl IO m, MonadIO m) => MonadBlog (ApplicationT m)
 
 deriving via Elevator ApplicationT m
   instance
     ( MonadError Servant.ServerError m
     ) => MonadError Servant.ServerError (ApplicationT m)
 
-runApplication :: (MonadError IOException m, MonadIO m, MonadBaseControl IO m)
+runApplication :: (MonadIO m, MonadBaseControl IO m)
                => ApplicationT m a
                -> m a
 runApplication app = do
