@@ -43,7 +43,7 @@
       let
         src = nix-gitignore.gitignoreSource [] ./.;
         overlay = self: super: {
-          deriving-trans = deriving-trans.defaultPackage.x86_64-linux;
+          deriving-trans = self.callCabal2nix "deriving-trans" deriving-trans.outPath {};
         };
       in (haskellPackages.extend overlay).callCabal2nix "homepage" src {};
 
