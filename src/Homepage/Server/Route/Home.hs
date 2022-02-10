@@ -12,6 +12,8 @@ import Homepage.Server.Html.Document
 import Homepage.Server.Tab
 
 import Control.Monad.Logger
+import Data.Foldable
+import Data.List
 import Data.Maybe
 import Servant
 import Servant.HTML.Blaze
@@ -42,11 +44,12 @@ handler = do
         "I recently completed my Bachelor's degree in Physics with a minor in Computer Science, which I studied for at "
         a ! href "https://www.uni-hannover.de/en/" $ "Leibniz Universität Hannover"
         "."
-    p $ do
-      "In my free time I like messing around with Linux and programming.\n\
-      \I am spending most of my time with functional languages like Haskell.\n\
-      \If I want to take a break from the computer I enjoy playing guitar or badminton.\n\
-      \I also love green tea."
+    p $ fold $ intersperse " "
+      [ "In my free time I like messing around with Linux and programming."
+      , "I am spending most of my time with functional languages like Haskell."
+      , "If I want to take a break from the computer I enjoy playing guitar or badminton."
+      , "I also love green tea."
+      ]
     h2 "recent Blog"
     p $ do
       "You can stay up to date by subscribing to this "
