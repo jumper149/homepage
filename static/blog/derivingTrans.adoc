@@ -1,4 +1,4 @@
-:revdate: 2022-02-02
+:revdate: 2022-02-13
 = Showcase: https://hackage.haskell.org/package/deriving-trans[`deriving-trans`]
 
 When creating monad transformer stacks, you usually have to implement some instances manually.
@@ -77,7 +77,7 @@ newtype ReaderT r m a = ReaderT { runReaderT :: r -> m a }
   -- manually implemented (Functor, Applicative, Monad)
 ----
 
-Here we don't have to do anything special aside from implenting the regular `MonadReader` instance.
+Here we don't have to do anything special aside from implementing the regular `MonadReader` instance.
 
 [source,haskell]
 ----
