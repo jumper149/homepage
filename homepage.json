@@ -57,6 +57,10 @@
     { "timestamp": "2022-02-02"
     , "title": "Showcase: deriving-trans"
     }
+  , "jsonFormatting":
+    { "timestamp": "2022-02-13"
+    , "title": "JSON Formatting"
+    }
   }
 , "blog-preview-max-length": 5
 , "atom-max-length": null
