@@ -1,0 +1,69 @@
+:revdate: 2022-02-13
+= JSON Formatting
+
+https://www.json.org/json-en.html["`JavaScript Object Notation`"] is widely used.
+It is used as a data interchange standard and is also human-readable.
+One thing I dislike about it, is the way it's usually formatted.
+
+== `jq`
+
+`jq` is the most popular tool to format and query JSON.
+
+When formatting, it puts commas at the end of a line.
+Brackets (`[`,`]`) and curly braces (`{`,`}`) are on their own lines (line 1) or together with a field key (line 4).
+
+.`jq` formatting
+[source,json,linenums]
+----
+{
+  "credits": {
+    "director": "Steven Spielberg",
+    "starring": [
+      "Sam Neill",
+      "Laura Dern",
+      "Jeff Goldblum"
+    ]
+  },
+  "released": 1993,
+  "title": "Jurassic Park"
+}
+----
+
+== my Preference
+
+I personally prefer the formatting to be similar to Haskell lists.
+The opening bracket (`[`) / curly brace (`{`) is on the same line as the first element of the starting object / array.
+Leading Commas are indented the same as the opening bracket / curly brace.
+
+.my preferred formatting
+[source,json,linenums]
+----
+{ "credits":
+  { "director": "Steven Spielberg"
+  , "starring":
+    [ "Sam Neill"
+    , "Laura Dern"
+    , "Jeff Goldblum"
+    ]
+  }
+, "released": 1993
+, "title": "Jurassic Park"
+}
+----
+
+[discrete]
+==== Why do I like this better?
+
+* The structural components (object, array) can always be recognized on the left, while the content (string, number, boolean) is always on the right.
+* Single line JSON values are on the same line as their key.
+* Multi line JSON values are on their own lines.
+Compare line 4-8 by `jq` and line 4-7 by me.
+* Line based ``diff``s are slightly more efficient.
+* There are shorter and fewer lines overall.
+* Trailing commas are easily forgotten.
+
+=== Last note
+
+I can totally understand, if you call this article nit-picking.
+It's definitely more important to agree on one kind of formatting, than to use the optimal kind of formatting.
+It's just a minor thing that has bugged me before.
