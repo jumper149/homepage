@@ -94,6 +94,7 @@ library
   ghc-options:
     -Wall
     -Wredundant-constraints
+    -Wunused-packages
     -fwrite-ide-info
       -- ^ Generate data for 'weeder'.
 
