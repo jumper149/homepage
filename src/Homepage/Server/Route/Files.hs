@@ -25,7 +25,7 @@ data Routes route = Routes
     , routeFiles :: route
                  :- RawM.RawM
     }
-  deriving Generic
+  deriving stock Generic
 
 routes :: (MonadConfigured m, MonadLogger m)
        => Routes (AsServerT m)

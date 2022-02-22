@@ -32,7 +32,7 @@ instance Accept Atom where
   contentType _ = "application" Media.// "atom+xml"
 
 newtype AtomFeed = AtomFeed { unAtomFeed :: LT.Text }
-  deriving (Eq, Generic, Ord, Read, Show)
+  deriving stock (Eq, Generic, Ord, Read, Show)
 
 instance MimeRender Atom AtomFeed where
   mimeRender _ (AtomFeed text) = LT.encodeUtf8 text

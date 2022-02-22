@@ -24,7 +24,7 @@ data Routes route = Routes
                     :- "thankYou"
                     :> Get '[HTML] Html
     }
-  deriving Generic
+  deriving stock Generic
 
 routes :: (MonadConfigured m, MonadLogger m)
        => Routes (AsServerT m)

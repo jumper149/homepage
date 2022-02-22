@@ -92,11 +92,20 @@ library
     TypeFamilies
     TypeOperators
   ghc-options:
-    -Wall
-    -Wredundant-constraints
-    -Wunused-packages
     -fwrite-ide-info
       -- ^ Generate data for 'weeder'.
+    -Wall
+    -Widentities
+      -- ^ Prevent redundant conversions, such as `fromIntegral :: Int -> Int`.
+    -Wincomplete-record-updates
+      -- ^ Forbid using partial accessor functions.
+    -Wincomplete-uni-patterns
+      -- ^ Prevent non-exhaustive pattern matching in lambda functions and other places.
+    -Wmissing-deriving-strategies
+    -Wpartial-fields
+      -- ^ Forbid defining partial accessor functions in data declarations.
+    -Wredundant-constraints
+    -Wunused-packages
 
 executable homepage
   main-is: Main.hs

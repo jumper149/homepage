@@ -39,7 +39,7 @@ data Routes route = Routes
     , routeOverview :: route
                     :- Get '[HTML] Html
     }
-  deriving Generic
+  deriving stock Generic
 
 routes :: (MonadBlog m, MonadConfigured m, MonadLogger m)
        => Routes (AsServerT m)
