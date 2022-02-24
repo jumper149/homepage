@@ -21,7 +21,7 @@ data Routes route = Routes
     , routeFiles :: route :- "files" :> ToServantApi Homepage.Server.Route.Files.Routes
     , routeStatic :: route :- Homepage.Server.Route.Static.API
     }
-  deriving stock (Generic)
+  deriving stock Generic
 
 routes :: (MonadBlog m, MonadConfigured m, MonadLogger m)
        => Routes (AsServerT m)
