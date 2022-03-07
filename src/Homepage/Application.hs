@@ -55,24 +55,24 @@ runApplication app = do
   (preConfig, preConfigLog) <- runWriterLoggingT acquirePreConfig
 
   runCheckedBlogT |.
-    runConfiguredT' |.
-      runLoggingT'' preConfigLog |.
-        runConfigurableT' preConfig |.
+    runAppConfiguredT |.
+      runAppLoggingT' preConfigLog |.
+        runAppConfigurableT preConfig |.
           runIdentityT $ unApplicationT app
 
   where
-    runConfigurableT' :: PreConfiguration -> ConfigurableT n a -> n a
-    runConfigurableT' preConfig tma = runConfigurableT tma preConfig
+    runAppConfigurableT :: PreConfiguration -> ConfigurableT n a -> n a
+    runAppConfigurableT preConfig tma = runConfigurableT tma preConfig
 
-    runLoggingT'' :: (MonadBaseControl IO n, MonadConfigurable n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
-    runLoggingT'' preLog tma = do
+    runAppLoggingT' :: (MonadBaseControl IO n, MonadConfigurable n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
+    runAppLoggingT' preLog tma = do
       maybeLogFile <- preConfigLogFile <$> preConfiguration
       runLoggingT' maybeLogFile $ do
         traverse_ logLine preLog
         tma
 
-    runConfiguredT' :: (MonadConfigurable n, MonadIO n, MonadLogger n) => ConfiguredT n a -> n a
-    runConfiguredT' tma = do
+    runAppConfiguredT :: (MonadConfigurable n, MonadIO n, MonadLogger n) => ConfiguredT n a -> n a
+    runAppConfiguredT tma = do
       maybeConfig <- acquireConfig =<< preConfiguration
       case maybeConfig of
         Nothing -> error "No configuration."
