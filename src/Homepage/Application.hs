@@ -11,6 +11,7 @@ import Homepage.Application.Environment.Class
 import Homepage.Application.Logging
 import Homepage.Configuration.Acquisition
 import Homepage.Environment
+import Homepage.Environment.Acquisition
 
 import Control.Monad.Base
 import Control.Monad.Except

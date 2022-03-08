@@ -20,6 +20,7 @@ library
     , Homepage.Configuration.Contact
     , Homepage.Configuration.Files
     , Homepage.Environment
+    , Homepage.Environment.Acquisition
     , Homepage.Server
     , Homepage.Server.Err404
     , Homepage.Server.Html.Blog
