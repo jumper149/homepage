@@ -27,9 +27,3 @@ data Configuration = Configuration
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving (A.FromJSON, A.ToJSON) via
     A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "config", A.CamelToKebab], A.RejectUnknownFields] Configuration
-
-data PreConfiguration = PreConfiguration
-    { preConfigConfigFile :: FilePath
-    , preConfigLogFile :: Maybe FilePath
-    }
-  deriving stock (Eq, Generic, Ord, Read, Show)

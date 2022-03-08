@@ -8,10 +8,10 @@ library
     , Homepage.Application
     , Homepage.Application.Blog
     , Homepage.Application.Blog.Class
-    , Homepage.Application.Configurable
-    , Homepage.Application.Configurable.Class
     , Homepage.Application.Configured
     , Homepage.Application.Configured.Class
+    , Homepage.Application.Environment
+    , Homepage.Application.Environment.Class
     , Homepage.Application.Logging
     , Homepage.Configuration
     , Homepage.Configuration.Acquisition
@@ -19,6 +19,7 @@ library
     , Homepage.Configuration.Blog
     , Homepage.Configuration.Contact
     , Homepage.Configuration.Files
+    , Homepage.Environment
     , Homepage.Server
     , Homepage.Server.Err404
     , Homepage.Server.Html.Blog

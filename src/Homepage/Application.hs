@@ -4,13 +4,13 @@ module Homepage.Application where
 
 import Homepage.Application.Blog
 import Homepage.Application.Blog.Class
-import Homepage.Application.Configurable
-import Homepage.Application.Configurable.Class
 import Homepage.Application.Configured
 import Homepage.Application.Configured.Class
+import Homepage.Application.Environment
+import Homepage.Application.Environment.Class
 import Homepage.Application.Logging
-import Homepage.Configuration
 import Homepage.Configuration.Acquisition
+import Homepage.Environment
 
 import Control.Monad.Base
 import Control.Monad.Except
@@ -32,7 +32,7 @@ type (|.) = ComposeT
 
 infixr 1 |.
 
-type StackT = BlogT |. ConfiguredT |. LoggingT' |. ConfigurableT |. IdentityT
+type StackT = BlogT |. ConfiguredT |. LoggingT' |. EnvironmentT |. IdentityT
 
 newtype ApplicationT m a = ApplicationT { unApplicationT :: StackT m a }
   deriving newtype (Applicative, Functor, Monad)
@@ -52,28 +52,28 @@ runApplication :: (MonadIO m, MonadBaseControl IO m)
                => ApplicationT m a
                -> m a
 runApplication app = do
-  (preConfig, preConfigLog) <- runWriterLoggingT acquirePreConfig
+  (env, envLog) <- runWriterLoggingT acquireEnvironment
 
   runCheckedBlogT |.
     runAppConfiguredT |.
-      runAppLoggingT' preConfigLog |.
-        runAppConfigurableT preConfig |.
+      runAppLoggingT' envLog |.
+        runAppEnvironmentT env |.
           runIdentityT $ unApplicationT app
 
   where
-    runAppConfigurableT :: PreConfiguration -> ConfigurableT n a -> n a
-    runAppConfigurableT preConfig tma = runConfigurableT tma preConfig
+    runAppEnvironmentT :: Environment -> EnvironmentT n a -> n a
+    runAppEnvironmentT env tma = runEnvironmentT tma env
 
-    runAppLoggingT' :: (MonadBaseControl IO n, MonadConfigurable n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
-    runAppLoggingT' preLog tma = do
-      maybeLogFile <- preConfigLogFile <$> preConfiguration
+    runAppLoggingT' :: (MonadBaseControl IO n, MonadEnvironment n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
+    runAppLoggingT' envLog tma = do
+      maybeLogFile <- envVarLogFile <$> environment
       runLoggingT' maybeLogFile $ do
-        traverse_ logLine preLog
+        traverse_ logLine envLog
         tma
 
-    runAppConfiguredT :: (MonadConfigurable n, MonadIO n, MonadLogger n) => ConfiguredT n a -> n a
+    runAppConfiguredT :: (MonadEnvironment n, MonadIO n, MonadLogger n) => ConfiguredT n a -> n a
     runAppConfiguredT tma = do
-      maybeConfig <- acquireConfig =<< preConfiguration
+      maybeConfig <- acquireConfig =<< environment
       case maybeConfig of
         Nothing -> error "No configuration."
         Just config -> runConfiguredT tma config
