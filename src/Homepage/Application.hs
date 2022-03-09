@@ -66,7 +66,8 @@ runApplication app = do
     runAppLoggingT' :: (MonadBaseControl IO n, MonadEnvironment n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
     runAppLoggingT' envLog tma = do
       maybeLogFile <- environmentVariable $ EnvVar @"LOG_FILE"
-      runLoggingT' maybeLogFile $ do
+      logLevel <- environmentVariable $ EnvVar @"LOG_LEVEL"
+      runLoggingT' maybeLogFile logLevel $ do
         traverse_ logLine envLog
         tma
 

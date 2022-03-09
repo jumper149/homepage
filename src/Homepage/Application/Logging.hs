@@ -24,10 +24,13 @@ deriving via LoggingT' (t2 (m :: * -> *))
 
 runLoggingT' :: (MonadIO m, MonadBaseControl IO m)
              => Maybe FilePath
+             -> LogLevel
              -> LoggingT' m a
              -> m a
-runLoggingT' Nothing = runStdoutLoggingT . unLoggingT'
-runLoggingT' (Just filePath) = runFileLoggingT filePath . unLoggingT'
+runLoggingT' maybeFilePath configuredLogLevel = run . withFilter . unLoggingT'
+  where
+    run = maybe runStdoutLoggingT runFileLoggingT maybeFilePath
+    withFilter = filterLogger $ \ _src lvl -> lvl >= configuredLogLevel
 
 logLine :: MonadLogger m
         => LogLine
