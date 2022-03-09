@@ -5,6 +5,7 @@ module Homepage.Environment.Acquisition where
 
 import Homepage.Environment
 
+import Control.Applicative (Const (..))
 import Control.Monad.Logger
 import Control.Monad.IO.Class
 import Data.Proxy
@@ -30,24 +31,24 @@ acquireEnvironment = do
 lookupEnvironmentVariable :: (EnvironmentVariable envVar, MonadLogger m, Show (EnvironmentVariableContent envVar))
                           => Proxy envVar
                           -> [(String,String)]
-                          -> m (EnvironmentVariableContent envVar)
+                          -> m (Const (EnvironmentVariableContent envVar) envVar)
 lookupEnvironmentVariable proxy env = do
   $logInfo $ "Inspecting environment variable: " <> T.pack (show envVarName)
   case lookup envVarName env of
     Nothing -> do
       $logInfo $ "Environment variable '" <> T.pack (show envVarName) <> "' is not set."
       $logInfo $ "Using default value for environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show envVarDefault)
-      pure envVarDefault
+      pure $ Const envVarDefault
     Just str -> do
       $logInfo $ "Parsing environment variable: " <> T.pack (show envVarName)
       case parseEnvironmentVariable proxy str of
         Nothing -> do
           $logError $ "Failed to parse environment variable: " <> T.pack (show envVarName)
           $logWarn $ "Fall back to default value for environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show envVarDefault)
-          pure envVarDefault
+          pure $ Const envVarDefault
         Just val -> do
           $logInfo $ "Parsed environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show val)
-          pure val
+          pure $ Const val
   where
     envVarName = "HOMEPAGE_" <> symbolVal proxy
     envVarDefault = defaultEnvironmentVariable proxy

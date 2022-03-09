@@ -5,6 +5,7 @@ module Homepage.Configuration.Acquisition where
 import Homepage.Configuration
 import Homepage.Environment
 
+import Control.Applicative (Const (..))
 import Control.Monad.Logger
 import Control.Monad.IO.Class
 import qualified Data.Aeson as A
@@ -16,11 +17,11 @@ acquireConfig :: (MonadIO m, MonadLogger m)
               -> m (Maybe Configuration)
 acquireConfig Environment { envVarConfigFile }= do
   $logInfo "Checking configuration file."
-  exists <- liftIO $ fileExist envVarConfigFile
+  exists <- liftIO $ fileExist $ getConst envVarConfigFile
   if exists
      then do
        $logInfo "Reading configuration file."
-       eitherContent <- liftIO $ A.eitherDecodeFileStrict envVarConfigFile
+       eitherContent <- liftIO $ A.eitherDecodeFileStrict $ getConst envVarConfigFile
        case eitherContent of
          Left err -> do
            $logError $ "Failed to read/parse configuration file: " <> T.pack (show err)

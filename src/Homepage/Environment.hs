@@ -1,15 +1,16 @@
 module Homepage.Environment where
 
 import Control.Monad.Logger
+import Control.Applicative (Const)
 import Data.Proxy
 import GHC.Generics
 import GHC.TypeLits
 import Text.Read
 
 data Environment = Environment
-    { envVarConfigFile :: FilePath
-    , envVarLogFile :: Maybe FilePath
-    , envVarLogLevel :: LogLevel
+    { envVarConfigFile :: Const FilePath "CONFIG_FILE"
+    , envVarLogFile :: Const (Maybe FilePath) "LOG_FILE"
+    , envVarLogLevel :: Const LogLevel "LOG_LEVEL"
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
 
@@ -17,7 +18,7 @@ class KnownSymbol envVar => EnvironmentVariable (envVar :: Symbol) where
   type EnvironmentVariableContent envVar
   parseEnvironmentVariable :: Proxy envVar -> String -> Maybe (EnvironmentVariableContent envVar)
   defaultEnvironmentVariable :: Proxy envVar -> EnvironmentVariableContent envVar
-  askEnvironmentVariable :: Proxy envVar -> Environment -> EnvironmentVariableContent envVar
+  askEnvironmentVariable :: Proxy envVar -> Environment -> Const (EnvironmentVariableContent envVar) envVar
 
 instance EnvironmentVariable "CONFIG_FILE" where
   type EnvironmentVariableContent "CONFIG_FILE" = FilePath

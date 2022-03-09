@@ -13,6 +13,7 @@ import Homepage.Configuration.Acquisition
 import Homepage.Environment
 import Homepage.Environment.Acquisition
 
+import Control.Applicative (Const (..))
 import Control.Monad.Base
 import Control.Monad.Except
 import Control.Monad.Identity
@@ -65,7 +66,7 @@ runApplication app = do
 
     runAppLoggingT' :: (MonadBaseControl IO n, MonadEnvironment n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
     runAppLoggingT' envLog tma = do
-      maybeLogFile <- envVarLogFile <$> environment
+      maybeLogFile <- getConst . envVarLogFile <$> environment
       runLoggingT' maybeLogFile $ do
         traverse_ logLine envLog
         tma
