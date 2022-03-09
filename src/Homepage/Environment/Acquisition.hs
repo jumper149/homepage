@@ -21,6 +21,7 @@ acquireEnvironment = do
 
   envVarConfigFile <- lookupEnvironmentVariable @"CONFIG_FILE" Proxy env
   envVarLogFile <- lookupEnvironmentVariable @"LOG_FILE" Proxy env
+  envVarLogLevel <- lookupEnvironmentVariable @"LOG_LEVEL" Proxy env
 
   let environment = Environment {..}
   $logInfo $ "Looked up all environment variables and accumulated them: " <> T.pack (show environment)

@@ -1,12 +1,15 @@
 module Homepage.Environment where
 
+import Control.Monad.Logger
 import Data.Proxy
 import GHC.Generics
 import GHC.TypeLits
+import Text.Read
 
 data Environment = Environment
     { envVarConfigFile :: FilePath
     , envVarLogFile :: Maybe FilePath
+    , envVarLogLevel :: LogLevel
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
 
@@ -27,3 +30,9 @@ instance EnvironmentVariable "LOG_FILE" where
   parseEnvironmentVariable _ = Just . Just
   defaultEnvironmentVariable _ = Nothing
   askEnvironmentVariable _ = envVarLogFile
+
+instance EnvironmentVariable "LOG_LEVEL" where
+  type EnvironmentVariableContent "LOG_LEVEL" = LogLevel
+  parseEnvironmentVariable _ = readMaybe
+  defaultEnvironmentVariable _ = LevelInfo
+  askEnvironmentVariable _ = envVarLogLevel
