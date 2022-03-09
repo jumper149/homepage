@@ -13,7 +13,6 @@ import Homepage.Configuration.Acquisition
 import Homepage.Environment
 import Homepage.Environment.Acquisition
 
-import Control.Applicative (Const (..))
 import Control.Monad.Base
 import Control.Monad.Except
 import Control.Monad.Identity
@@ -23,6 +22,7 @@ import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Elevator
 import Data.Foldable
+import Data.Proxy
 import qualified Servant
 
 type (|.) = ComposeT
@@ -66,14 +66,14 @@ runApplication app = do
 
     runAppLoggingT' :: (MonadBaseControl IO n, MonadEnvironment n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
     runAppLoggingT' envLog tma = do
-      maybeLogFile <- getConst . envVarLogFile <$> environment
+      maybeLogFile <- environmentVariable @_ @"LOG_FILE" Proxy
       runLoggingT' maybeLogFile $ do
         traverse_ logLine envLog
         tma
 
     runAppConfiguredT :: (MonadEnvironment n, MonadIO n, MonadLogger n) => ConfiguredT n a -> n a
     runAppConfiguredT tma = do
-      maybeConfig <- acquireConfig =<< environment
+      maybeConfig <- acquireConfig
       case maybeConfig of
         Nothing -> error "No configuration."
         Just config -> runConfiguredT tma config

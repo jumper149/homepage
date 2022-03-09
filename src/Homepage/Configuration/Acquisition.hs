@@ -2,26 +2,26 @@
 
 module Homepage.Configuration.Acquisition where
 
+import Homepage.Application.Environment.Class
 import Homepage.Configuration
-import Homepage.Environment
 
-import Control.Applicative (Const (..))
 import Control.Monad.Logger
 import Control.Monad.IO.Class
 import qualified Data.Aeson as A
+import Data.Proxy
 import qualified Data.Text as T
 import System.Posix.Files
 
-acquireConfig :: (MonadIO m, MonadLogger m)
-              => Environment
-              -> m (Maybe Configuration)
-acquireConfig Environment { envVarConfigFile }= do
+acquireConfig :: (MonadIO m, MonadEnvironment m, MonadLogger m)
+              => m (Maybe Configuration)
+acquireConfig = do
   $logInfo "Checking configuration file."
-  exists <- liftIO $ fileExist $ getConst envVarConfigFile
+  configFile <- environmentVariable @_ @"CONFIG_FILE" Proxy
+  exists <- liftIO $ fileExist configFile
   if exists
      then do
        $logInfo "Reading configuration file."
-       eitherContent <- liftIO $ A.eitherDecodeFileStrict $ getConst envVarConfigFile
+       eitherContent <- liftIO $ A.eitherDecodeFileStrict configFile
        case eitherContent of
          Left err -> do
            $logError $ "Failed to read/parse configuration file: " <> T.pack (show err)

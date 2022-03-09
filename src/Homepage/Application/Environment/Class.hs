@@ -5,15 +5,16 @@ import Homepage.Environment
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Elevator
+import Data.Proxy
 
 class Monad m => MonadEnvironment m where
-  environment :: m Environment
+  environmentVariable :: EnvironmentVariable envVar => Proxy envVar -> m (EnvironmentVariableContent envVar)
 
 instance ( Monad (t m)
          , MonadTrans t
          , MonadEnvironment m
          ) => MonadEnvironment (Elevator t m) where
-  environment = lift environment
+  environmentVariable = lift . environmentVariable
 
 deriving via Elevator t1 (t2 (m :: * -> *))
   instance {-# OVERLAPPABLE #-}
