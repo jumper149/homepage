@@ -22,7 +22,6 @@ import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Elevator
 import Data.Foldable
-import Data.Proxy
 import qualified Servant
 
 type (|.) = ComposeT
@@ -66,7 +65,7 @@ runApplication app = do
 
     runAppLoggingT' :: (MonadBaseControl IO n, MonadEnvironment n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
     runAppLoggingT' envLog tma = do
-      maybeLogFile <- environmentVariable @_ @"LOG_FILE" Proxy
+      maybeLogFile <- environmentVariable $ EnvVar @"LOG_FILE"
       runLoggingT' maybeLogFile $ do
         traverse_ logLine envLog
         tma

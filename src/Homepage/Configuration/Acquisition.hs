@@ -8,7 +8,6 @@ import Homepage.Configuration
 import Control.Monad.Logger
 import Control.Monad.IO.Class
 import qualified Data.Aeson as A
-import Data.Proxy
 import qualified Data.Text as T
 import System.Posix.Files
 
@@ -16,7 +15,7 @@ acquireConfig :: (MonadIO m, MonadEnvironment m, MonadLogger m)
               => m (Maybe Configuration)
 acquireConfig = do
   $logInfo "Checking configuration file."
-  configFile <- environmentVariable @_ @"CONFIG_FILE" Proxy
+  configFile <- environmentVariable $ EnvVar @"CONFIG_FILE"
   exists <- liftIO $ fileExist configFile
   if exists
      then do

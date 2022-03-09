@@ -5,10 +5,10 @@ import Homepage.Environment
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Elevator
-import Data.Proxy
+import GHC.TypeLits
 
 class Monad m => MonadEnvironment m where
-  environmentVariable :: EnvironmentVariable envVar => Proxy envVar -> m (EnvironmentVariableContent envVar)
+  environmentVariable :: EnvironmentVariable envVar => EnvVar envVar -> m (EnvironmentVariableContent envVar)
 
 instance ( Monad (t m)
          , MonadTrans t
@@ -22,3 +22,5 @@ deriving via Elevator t1 (t2 (m :: * -> *))
     , MonadTrans t1
     , MonadEnvironment (t2 m)
     ) => MonadEnvironment (ComposeT t1 t2 m)
+
+data EnvVar (name :: Symbol) = EnvVar
