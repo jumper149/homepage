@@ -17,12 +17,14 @@ acquireEnvironment :: (MonadIO m, MonadLogger m)
 acquireEnvironment = do
   $logInfo "Looking up environment variables."
   env <- liftIO getEnvironment
-  $logInfo $ "Looked up environment variables: " <> T.pack (show env)
+  $logDebug $ "Looked up environment variables: " <> T.pack (show env)
 
   envVarConfigFile <- lookupEnvironmentVariable @"CONFIG_FILE" Proxy env
   envVarLogFile <- lookupEnvironmentVariable @"LOG_FILE" Proxy env
 
-  pure Environment {..}
+  let environment = Environment {..}
+  $logInfo $ "Looked up all environment variables and accumulated them: " <> T.pack (show environment)
+  pure environment
 
 lookupEnvironmentVariable :: (EnvironmentVariable envVar, MonadLogger m, Show (EnvironmentVariableContent envVar))
                           => Proxy envVar
