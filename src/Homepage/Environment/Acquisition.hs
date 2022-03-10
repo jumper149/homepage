@@ -25,7 +25,7 @@ acquireEnvironment = do
   envVarLogLevel <- lookupEnvironmentVariable @"HOMEPAGE_LOG_LEVEL" Proxy env
 
   let environment = Environment {..}
-  $logInfo $ "Looked up all environment variables and accumulated them: " <> T.pack (show environment)
+  $logInfo $ "Processed environment variables and accumulated them: " <> T.pack (show environment)
   pure environment
 
 lookupEnvironmentVariable :: (EnvironmentVariable envVar, MonadLogger m, Show (EnvironmentVariableContent envVar))
