@@ -8,9 +8,9 @@ import GHC.TypeLits
 import Text.Read
 
 data Environment = Environment
-    { envVarConfigFile :: Const FilePath "CONFIG_FILE"
-    , envVarLogFile :: Const (Maybe FilePath) "LOG_FILE"
-    , envVarLogLevel :: Const LogLevel "LOG_LEVEL"
+    { envVarConfigFile :: Const FilePath "HOMEPAGE_CONFIG_FILE"
+    , envVarLogFile :: Const (Maybe FilePath) "HOMEPAGE_LOG_FILE"
+    , envVarLogLevel :: Const LogLevel "HOMEPAGE_LOG_LEVEL"
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
 
@@ -20,20 +20,20 @@ class KnownSymbol envVar => EnvironmentVariable (envVar :: Symbol) where
   defaultEnvironmentVariable :: Proxy envVar -> EnvironmentVariableContent envVar
   askEnvironmentVariable :: Proxy envVar -> Environment -> Const (EnvironmentVariableContent envVar) envVar
 
-instance EnvironmentVariable "CONFIG_FILE" where
-  type EnvironmentVariableContent "CONFIG_FILE" = FilePath
+instance EnvironmentVariable "HOMEPAGE_CONFIG_FILE" where
+  type EnvironmentVariableContent "HOMEPAGE_CONFIG_FILE" = FilePath
   parseEnvironmentVariable _ = Just
   defaultEnvironmentVariable _ = "./homepage.json"
   askEnvironmentVariable _ = envVarConfigFile
 
-instance EnvironmentVariable "LOG_FILE" where
-  type EnvironmentVariableContent "LOG_FILE" = Maybe FilePath
+instance EnvironmentVariable "HOMEPAGE_LOG_FILE" where
+  type EnvironmentVariableContent "HOMEPAGE_LOG_FILE" = Maybe FilePath
   parseEnvironmentVariable _ = Just . Just
   defaultEnvironmentVariable _ = Nothing
   askEnvironmentVariable _ = envVarLogFile
 
-instance EnvironmentVariable "LOG_LEVEL" where
-  type EnvironmentVariableContent "LOG_LEVEL" = LogLevel
+instance EnvironmentVariable "HOMEPAGE_LOG_LEVEL" where
+  type EnvironmentVariableContent "HOMEPAGE_LOG_LEVEL" = LogLevel
   parseEnvironmentVariable _ = readMaybe
   defaultEnvironmentVariable _ = LevelInfo
   askEnvironmentVariable _ = envVarLogLevel

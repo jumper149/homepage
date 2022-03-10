@@ -20,9 +20,9 @@ acquireEnvironment = do
   env <- liftIO getEnvironment
   $logDebug $ "Looked up environment variables: " <> T.pack (show env)
 
-  envVarConfigFile <- lookupEnvironmentVariable @"CONFIG_FILE" Proxy env
-  envVarLogFile <- lookupEnvironmentVariable @"LOG_FILE" Proxy env
-  envVarLogLevel <- lookupEnvironmentVariable @"LOG_LEVEL" Proxy env
+  envVarConfigFile <- lookupEnvironmentVariable @"HOMEPAGE_CONFIG_FILE" Proxy env
+  envVarLogFile <- lookupEnvironmentVariable @"HOMEPAGE_LOG_FILE" Proxy env
+  envVarLogLevel <- lookupEnvironmentVariable @"HOMEPAGE_LOG_LEVEL" Proxy env
 
   let environment = Environment {..}
   $logInfo $ "Looked up all environment variables and accumulated them: " <> T.pack (show environment)
@@ -50,5 +50,5 @@ lookupEnvironmentVariable proxy env = do
           $logInfo $ "Parsed environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show val)
           pure $ Const val
   where
-    envVarName = "HOMEPAGE_" <> symbolVal proxy
+    envVarName = symbolVal proxy
     envVarDefault = defaultEnvironmentVariable proxy

@@ -15,7 +15,7 @@ acquireConfig :: (MonadIO m, MonadEnvironment m, MonadLogger m)
               => m (Maybe Configuration)
 acquireConfig = do
   $logInfo "Checking configuration file."
-  configFile <- environmentVariable $ EnvVar @"CONFIG_FILE"
+  configFile <- environmentVariable $ EnvVar @"HOMEPAGE_CONFIG_FILE"
   exists <- liftIO $ fileExist configFile
   if exists
      then do
