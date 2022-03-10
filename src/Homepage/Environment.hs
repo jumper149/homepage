@@ -35,5 +35,5 @@ instance EnvironmentVariable "HOMEPAGE_LOG_FILE" where
 instance EnvironmentVariable "HOMEPAGE_LOG_LEVEL" where
   type EnvironmentVariableContent "HOMEPAGE_LOG_LEVEL" = LogLevel
   parseEnvironmentVariable _ = readMaybe
-  defaultEnvironmentVariable _ = LevelInfo
+  defaultEnvironmentVariable _ = LevelDebug
   askEnvironmentVariable _ = envVarLogLevel

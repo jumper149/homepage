@@ -275,6 +275,7 @@
             environment = {
               HOMEPAGE_CONFIG_FILE = "/etc/homepage.json";
               HOMEPAGE_LOG_FILE = "/var/log/homepage/access.log";
+              HOMEPAGE_LOG_LEVEL = "LevelInfo";
             };
             restartTriggers = [
               config.environment.etc."homepage.json".source
