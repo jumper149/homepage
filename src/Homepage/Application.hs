@@ -8,7 +8,6 @@ import Homepage.Application.Configured
 import Homepage.Application.Configured.Class
 import Homepage.Application.Environment
 import Homepage.Application.Environment.Acquisition
-import Homepage.Application.Environment.Class
 import Homepage.Application.Logging
 
 import Control.Monad.Base
@@ -53,15 +52,6 @@ runApplication app = do
 
   runCheckedBlogT |.
     runAppConfiguredT |.
-      runAppLoggingT' envLog |.
+      runAppLoggingT' . (traverse_ logLine envLog >>) |.
         runEnvironmentT env |.
           runIdentityT $ unApplicationT app
-
-  where
-    runAppLoggingT' :: (MonadBaseControl IO n, MonadEnvironment n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
-    runAppLoggingT' envLog tma = do
-      maybeLogFile <- environmentVariable $ EnvVar @"HOMEPAGE_LOG_FILE"
-      logLevel <- environmentVariable $ EnvVar @"HOMEPAGE_LOG_LEVEL"
-      runLoggingT' maybeLogFile logLevel $ do
-        traverse_ logLine envLog
-        tma

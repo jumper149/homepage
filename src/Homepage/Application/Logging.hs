@@ -2,6 +2,8 @@
 
 module Homepage.Application.Logging where
 
+import Homepage.Application.Environment.Class
+
 import Control.Monad.Logger
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
@@ -31,6 +33,12 @@ runLoggingT' maybeFilePath configuredLogLevel = run . withFilter . unLoggingT'
   where
     run = maybe runStdoutLoggingT runFileLoggingT maybeFilePath
     withFilter = filterLogger $ \ _src lvl -> lvl >= configuredLogLevel
+
+runAppLoggingT' :: (MonadBaseControl IO m, MonadEnvironment m, MonadIO m) => LoggingT' m a -> m a
+runAppLoggingT' tma = do
+  maybeLogFile <- environmentVariable $ EnvVar @"HOMEPAGE_LOG_FILE"
+  logLevel <- environmentVariable $ EnvVar @"HOMEPAGE_LOG_LEVEL"
+  runLoggingT' maybeLogFile logLevel tma
 
 logLine :: MonadLogger m
         => LogLine
