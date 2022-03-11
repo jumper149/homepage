@@ -21,17 +21,16 @@ import Control.Monad.Trans.Elevator
 import Data.Foldable
 import qualified Servant
 
-type (|.) = ComposeT
-infixr 1 |.
+type (.|) t2 t1 = ComposeT t1 t2
 
 (.|) :: (forall a. t2 m a -> m (StT t2 a))
      -> (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
-     -> (forall a. (t1 |. t2) m a -> m (StT t2 (StT t1 a)))
+     -> (forall a. (t2 .| t1) m a -> m (StT t2 (StT t1 a)))
 (.|) runT2 runT1 = runComposeT runT1 runT2
+
 infixl 1 .|
 
-
-type StackT = BlogT |. ConfiguredT |. LoggingT' |. EnvironmentT |. IdentityT
+type StackT = IdentityT .| EnvironmentT .| LoggingT' .| ConfiguredT .| BlogT
 
 newtype ApplicationT m a = ApplicationT { unApplicationT :: StackT m a }
   deriving newtype (Applicative, Functor, Monad)
