@@ -4,4 +4,4 @@ import Homepage.Application
 import Homepage.Server
 
 main :: IO ()
-main = runApplication server
+main = runApplicationT server
