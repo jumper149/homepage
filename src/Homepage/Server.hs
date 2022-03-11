@@ -8,6 +8,7 @@ import Homepage.Configuration
 import Homepage.Server.Route
 
 import Control.Monad
+import Control.Monad.IO.Class
 import Control.Monad.Logger
 import Control.Monad.Trans.Control
 import qualified Data.Text as T
@@ -15,14 +16,14 @@ import Network.Wai.Handler.Warp
 import Servant.Server.Generic
 import System.Posix.Signals
 
-server :: ApplicationT IO ()
+server :: (MonadIO m, MonadBaseControl IO m) => ApplicationT m ()
 server = do
   $logInfo "Configure warp."
   withPort <- setPort . fromEnum . configPort <$> configuration
-  withShutdownHandler <- liftBaseWith $ \ runInBase ->
+  withShutdownHandler <- liftWith $ \ runT ->
     pure $ setInstallShutdownHandler $ \ closeSocket -> do
       let catchOnceShutdown sig = CatchOnce $ do
-            void $ runInBase $ do
+            void $ runT $ do
               $logInfo $ "Received signal '" <> T.pack (show sig) <> "'."
               $logWarn "Shutdown."
             closeSocket
@@ -34,4 +35,4 @@ server = do
 
   $logInfo "Start server."
   liftWith $ \ runT ->
-    runSettings settings $ genericServeT runT routes
+    liftIO $ runSettings settings $ genericServeT runT routes
