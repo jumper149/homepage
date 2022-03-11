@@ -50,7 +50,7 @@ deriving newtype instance (MonadBaseControl IO m, MonadIO m) => MonadBlog (Appli
 deriving via Elevator ApplicationT m
   instance MonadError Servant.ServerError m => MonadError Servant.ServerError (ApplicationT m)
 
-runApplicationT :: (MonadIO m, MonadBaseControl IO m)
+runApplicationT :: (MonadIO m, MonadBaseControlIdentity IO m)
                 => ApplicationT m a
                 -> m a
 runApplicationT app = do
