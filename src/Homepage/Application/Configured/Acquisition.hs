@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 
-module Homepage.Configuration.Acquisition where
+module Homepage.Application.Configured.Acquisition where
 
 import Homepage.Application.Environment.Class
 import Homepage.Configuration

@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module Homepage.Environment.Acquisition where
+module Homepage.Application.Environment.Acquisition where
 
 import Homepage.Environment
 

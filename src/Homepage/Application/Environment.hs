@@ -25,5 +25,5 @@ instance Monad m => MonadEnvironment (EnvironmentT m) where
 deriving via EnvironmentT (t2 (m :: * -> *))
   instance Monad (t2 m) => MonadEnvironment (ComposeT EnvironmentT t2 m)
 
-runEnvironmentT :: EnvironmentT m a -> Environment -> m a
-runEnvironmentT = runReaderT . unEnvironmentT
+runEnvironmentT :: Environment -> EnvironmentT m a -> m a
+runEnvironmentT env tma = runReaderT (unEnvironmentT tma) env

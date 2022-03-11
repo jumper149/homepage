@@ -7,11 +7,9 @@ import Homepage.Application.Blog.Class
 import Homepage.Application.Configured
 import Homepage.Application.Configured.Class
 import Homepage.Application.Environment
+import Homepage.Application.Environment.Acquisition
 import Homepage.Application.Environment.Class
 import Homepage.Application.Logging
-import Homepage.Configuration.Acquisition
-import Homepage.Environment
-import Homepage.Environment.Acquisition
 
 import Control.Monad.Base
 import Control.Monad.Except
@@ -56,13 +54,10 @@ runApplication app = do
   runCheckedBlogT |.
     runAppConfiguredT |.
       runAppLoggingT' envLog |.
-        runAppEnvironmentT env |.
+        runEnvironmentT env |.
           runIdentityT $ unApplicationT app
 
   where
-    runAppEnvironmentT :: Environment -> EnvironmentT n a -> n a
-    runAppEnvironmentT env tma = runEnvironmentT tma env
-
     runAppLoggingT' :: (MonadBaseControl IO n, MonadEnvironment n, MonadIO n) => [LogLine] -> LoggingT' n a -> n a
     runAppLoggingT' envLog tma = do
       maybeLogFile <- environmentVariable $ EnvVar @"HOMEPAGE_LOG_FILE"
@@ -70,10 +65,3 @@ runApplication app = do
       runLoggingT' maybeLogFile logLevel $ do
         traverse_ logLine envLog
         tma
-
-    runAppConfiguredT :: (MonadEnvironment n, MonadIO n, MonadLogger n) => ConfiguredT n a -> n a
-    runAppConfiguredT tma = do
-      maybeConfig <- acquireConfig
-      case maybeConfig of
-        Nothing -> error "No configuration."
-        Just config -> runConfiguredT tma config

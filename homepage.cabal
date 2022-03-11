@@ -9,18 +9,18 @@ library
     , Homepage.Application.Blog
     , Homepage.Application.Blog.Class
     , Homepage.Application.Configured
+    , Homepage.Application.Configured.Acquisition
     , Homepage.Application.Configured.Class
     , Homepage.Application.Environment
+    , Homepage.Application.Environment.Acquisition
     , Homepage.Application.Environment.Class
     , Homepage.Application.Logging
     , Homepage.Configuration
-    , Homepage.Configuration.Acquisition
     , Homepage.Configuration.BaseUrl
     , Homepage.Configuration.Blog
     , Homepage.Configuration.Contact
     , Homepage.Configuration.Files
     , Homepage.Environment
-    , Homepage.Environment.Acquisition
     , Homepage.Server
     , Homepage.Server.Err404
     , Homepage.Server.Html.Blog

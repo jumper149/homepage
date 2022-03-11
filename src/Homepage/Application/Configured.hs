@@ -2,9 +2,12 @@
 
 module Homepage.Application.Configured where
 
+import Homepage.Application.Configured.Acquisition
 import Homepage.Application.Configured.Class
+import Homepage.Application.Environment.Class
 import Homepage.Configuration
 
+import Control.Monad.Logger
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
@@ -22,3 +25,12 @@ deriving via ConfiguredT (t2 (m :: * -> *))
 
 runConfiguredT :: ConfiguredT m a -> Configuration -> m a
 runConfiguredT = runReaderT . unConfiguredT
+
+runAppConfiguredT :: (MonadEnvironment m, MonadIO m, MonadLogger m)
+                  => ConfiguredT m a
+                  -> m a
+runAppConfiguredT tma = do
+  maybeConfig <- acquireConfig
+  case maybeConfig of
+    Nothing -> error "No configuration."
+    Just config -> runConfiguredT tma config
