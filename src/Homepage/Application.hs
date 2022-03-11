@@ -22,13 +22,14 @@ import Data.Foldable
 import qualified Servant
 
 type (|.) = ComposeT
-
-(|.) :: (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
-     -> (forall a. t2 m a -> m (StT t2 a))
-     -> (forall a. (t1 |. t2) m a -> m (StT t2 (StT t1 a)))
-(|.) = runComposeT
-
 infixr 1 |.
+
+(.|) :: (forall a. t2 m a -> m (StT t2 a))
+     -> (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
+     -> (forall a. (t1 |. t2) m a -> m (StT t2 (StT t1 a)))
+(.|) runT2 runT1 = runComposeT runT1 runT2
+infixl 1 .|
+
 
 type StackT = BlogT |. ConfiguredT |. LoggingT' |. EnvironmentT |. IdentityT
 
@@ -50,8 +51,9 @@ runApplication :: (MonadIO m, MonadBaseControl IO m)
 runApplication app = do
   (env, envLog) <- runWriterLoggingT acquireEnvironment
 
-  runCheckedBlogT |.
-    runAppConfiguredT |.
-      runAppLoggingT' . (traverse_ logLine envLog >>) |.
-        runEnvironmentT env |.
-          runIdentityT $ unApplicationT app
+  runIdentityT .|
+    runEnvironmentT env .|
+      runAppLoggingT' . (traverse_ logLine envLog >>) .|
+        runAppConfiguredT .|
+          runCheckedBlogT $
+            unApplicationT app
