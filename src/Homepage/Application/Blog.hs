@@ -41,10 +41,10 @@ runBlogT :: BlogT m a
          -> m a
 runBlogT = runIdentityT . unBlogT
 
-runCheckedBlogT :: (MonadBaseControl IO m, MonadConfigured m, MonadLogger m)
-                => BlogT m a
-                -> m a
-runCheckedBlogT tma = runBlogT $ do
+runAppBlogT :: (MonadBaseControl IO m, MonadConfigured m, MonadLogger m)
+            => BlogT m a
+            -> m a
+runAppBlogT tma = runBlogT $ do
   entries <- M.toList . unBlogEntries <$> blogEntries
   let checkBlogEntry blogId blogEntry = do
         lift $ $logInfo $ "Check blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."

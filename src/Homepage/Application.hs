@@ -55,5 +55,5 @@ runApplication app = do
     runEnvironmentT env .|
       runAppLoggingT' . (traverse_ logLine envLog >>) .|
         runAppConfiguredT .|
-          runCheckedBlogT $
+          runAppBlogT $
             unApplicationT app
