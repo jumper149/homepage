@@ -10,6 +10,7 @@ data ContactInformation = ContactInformation
     , contactName :: T.Text
     , contactSourceUrl :: Maybe T.Text
     , contactHomepageLabel :: Maybe T.Text
+    , contactDonateInformation :: Maybe DonateInformation
     , contactEmailAddress :: Maybe T.Text
     , contactMatrix :: Maybe T.Text
     , contactLiberaChat :: Maybe T.Text
@@ -30,3 +31,10 @@ data HeaderIcons = HeaderIcons
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving (A.FromJSON, A.ToJSON) via
     A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "headerIcon", A.CamelToKebab], A.RejectUnknownFields] HeaderIcons
+
+data DonateInformation = DonateInformation
+    { donatePaypalUrl :: T.Text
+    }
+  deriving stock (Eq, Generic, Ord, Read, Show)
+  deriving (A.FromJSON, A.ToJSON) via
+    A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "donate", A.CamelToKebab], A.RejectUnknownFields] DonateInformation

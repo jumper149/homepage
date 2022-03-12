@@ -4,6 +4,7 @@ module Homepage.Server.Route.Donate where
 
 import Homepage.Application.Configured.Class
 import Homepage.Configuration
+import Homepage.Configuration.Contact
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 
@@ -39,6 +40,7 @@ donateHandler = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
   revision <- configRevision <$> configuration
+  let maybeDonateInformation = contactDonateInformation contactInformation
   $logInfo "Serve donation page."
   pure $ document baseUrl contactInformation revision (Just 0) Nothing $ do
     h2 "Donate to me"
@@ -65,18 +67,23 @@ donateHandler = do
          i "PP"
     hr
     br
-    -- TODO: This URL includes redirection after donation and should be configured instead of hardcoded.
-    let paypalUrl = "https://www.paypal.com/donate?hosted_button_id=3LZQ9DCDDFFWU"
-    H.div ! HA.style "text-align: center;" $
-      b $ do
-        a ! href paypalUrl $ "Donate"
-        " via PayPal."
-    br
-    H.div ! HA.style "text-align: center;" $
-      a ! href paypalUrl $
-        img ! alt "QR-Code to donate via PayPal"
-            ! src (withDepth baseUrl (Just 0) "donatePayPalQR.png")
-            ! HA.style "width: 128px; height: 128px;"
+    case maybeDonateInformation of
+      Nothing -> p $ do
+        "Actually there is no way to "
+        i "donate"
+        " to me at the moment."
+      Just donateInformation -> do
+        let paypalUrl = donatePaypalUrl donateInformation
+        H.div ! HA.style "text-align: center;" $
+          b $ do
+            a ! href (textValue paypalUrl) $ "Donate"
+            " via PayPal."
+        br
+        H.div ! HA.style "text-align: center;" $
+          a ! href (textValue paypalUrl) $
+            img ! alt "QR-Code to donate via PayPal"
+                ! src (withDepth baseUrl (Just 0) "donatePayPalQR.png")
+                ! HA.style "width: 128px; height: 128px;"
 
 thankYouHandler :: (MonadConfigured m, MonadLogger m)
                 => m Html
