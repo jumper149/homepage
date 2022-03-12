@@ -16,7 +16,7 @@ import Network.Wai.Handler.Warp
 import Servant.Server.Generic
 import System.Posix.Signals
 
-server :: (MonadIO m, MonadBaseControl IO m) => ApplicationT m ()
+server :: MonadIO m => ApplicationT m ()
 server = do
   $logInfo "Configure warp."
   withPort <- setPort . fromEnum . configPort <$> configuration
