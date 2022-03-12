@@ -80,6 +80,7 @@ donateHandler = do
             " via PayPal."
         br
         H.div ! HA.style "text-align: center;" $
+          -- TODO: Configure QR-Code.
           a ! href (textValue paypalUrl) $
             img ! alt "QR-Code to donate via PayPal"
                 ! src (withDepth baseUrl (Just 0) "donatePayPalQR.png")
