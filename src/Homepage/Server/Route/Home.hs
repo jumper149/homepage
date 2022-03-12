@@ -37,13 +37,13 @@ handler = do
     h1 $ toMarkup $ contactName contactInformation
     h2 "Welcome"
     p $ do
-        "I am living in Germany and working as a Software Engineer at "
-        a ! href "https://www.possehl-analytics.com/" $ "Possehl Analytics"
-        " in Augsburg."
+      "I am living in Germany and working as a Software Engineer at "
+      a ! href "https://www.possehl-analytics.com/" $ "Possehl Analytics"
+      " in Augsburg."
     p $ do
-        "I recently completed my Bachelor's degree in Physics with a minor in Computer Science, which I studied for at "
-        a ! href "https://www.uni-hannover.de/en/" $ "Leibniz Universität Hannover"
-        "."
+      "I recently completed my Bachelor's degree in Physics with a minor in Computer Science, which I studied for at "
+      a ! href "https://www.uni-hannover.de/en/" $ "Leibniz Universität Hannover"
+      "."
     p $ fold $ intersperse " "
       [ "In my free time I like messing around with Linux and programming."
       , "I am spending most of my time with functional languages like Haskell."
@@ -62,16 +62,16 @@ handler = do
       "."
     h2 "shared Files"
     p $ do
-        "You can download some of my shared files "
-        a ! hrefWithDepth baseUrl (Just 0) "files" $ "here"
-        "."
+      "You can download some of my shared files "
+      a ! hrefWithDepth baseUrl (Just 0) "files" $ "here"
+      "."
     h2 "Contact"
     contactHtml contactInformation
     h2 "Donate"
     p $ do
-        "If you want to support me, you can donate to me "
-        a ! hrefWithDepth baseUrl (Just 0) "donate" $ "here"
-        "."
+      "If you want to support me, you can donate to me "
+      a ! hrefWithDepth baseUrl (Just 0) "donate" $ "here"
+      "."
 
 contactHtml :: ContactInformation -> Html
 contactHtml ContactInformation
