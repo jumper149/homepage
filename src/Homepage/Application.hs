@@ -49,8 +49,8 @@ deriving via Elevator ApplicationT m
   instance MonadError Servant.ServerError m => MonadError Servant.ServerError (ApplicationT m)
 
 runApplicationT :: (MonadIO m, MonadBaseControl IO m)
-               => ApplicationT m a
-               -> m a
+                => ApplicationT m a
+                -> m a
 runApplicationT app = do
   (env, envLog) <- runWriterLoggingT acquireEnvironment
 
