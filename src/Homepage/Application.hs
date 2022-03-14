@@ -30,7 +30,11 @@ type (.|) t2 t1 = ComposeT t1 t2
 
 infixl 1 .|
 
-type StackT = IdentityT .| EnvironmentT .| LoggingT' .| ConfiguredT .| BlogT
+type StackT = IdentityT
+           .| EnvironmentT
+           .| LoggingT'
+           .| ConfiguredT
+           .| BlogT
 
 newtype ApplicationT m a = ApplicationT { unApplicationT :: StackT m a }
   deriving newtype (Applicative, Functor, Monad)
@@ -50,9 +54,10 @@ runApplicationT :: (MonadIO m, MonadBaseControl IO m)
 runApplicationT app = do
   (env, envLog) <- runWriterLoggingT acquireEnvironment
 
-  runIdentityT .|
-    runEnvironmentT env .|
-      runAppLoggingT' . (traverse_ logLine envLog >>) .|
-        runAppConfiguredT .|
-          runAppBlogT $
-            unApplicationT app
+  let runStackT = runIdentityT
+               .| runEnvironmentT env
+               .| runAppLoggingT' . (traverse_ logLine envLog >>)
+               .| runAppConfiguredT
+               .| runAppBlogT
+
+  runStackT $ unApplicationT app
