@@ -5,6 +5,7 @@ import Homepage.Configuration.Blog
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Elevator
+import Data.Kind
 import qualified Data.Text as T
 
 class Monad m => MonadBlog m where
@@ -18,7 +19,7 @@ instance ( Monad (t m)
   blogEntries = lift blogEntries
   readBlogEntryHtml = lift . readBlogEntryHtml
 
-deriving via Elevator t1 (t2 (m :: * -> *))
+deriving via Elevator t1 (t2 (m :: Type -> Type))
   instance {-# OVERLAPPABLE #-}
     ( Monad (t1 (t2 m))
     , MonadTrans t1

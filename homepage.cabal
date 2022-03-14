@@ -97,18 +97,16 @@ library
     -fwrite-ide-info
       -- ^ Generate data for 'weeder'.
     -O2
-    -Wall
-    -Widentities
-      -- ^ Prevent redundant conversions, such as `fromIntegral :: Int -> Int`.
-    -Wincomplete-record-updates
-      -- ^ Forbid using partial accessor functions.
-    -Wincomplete-uni-patterns
-      -- ^ Prevent non-exhaustive pattern matching in lambda functions and other places.
-    -Wmissing-deriving-strategies
-    -Wpartial-fields
-      -- ^ Forbid defining partial accessor functions in data declarations.
-    -Wredundant-constraints
-    -Wunused-packages
+    -Weverything
+    -Wno-all-missed-specialisations
+    -Wno-compat-unqualified-imports
+    -Wno-implicit-prelude
+    -Wno-missing-export-lists
+    -Wno-missing-import-lists
+    -Wno-missing-local-signatures
+    -Wno-missing-safe-haskell-mode
+    -Wno-prepositive-qualified-module
+    -Wno-unsafe
 
 executable homepage
   main-is: Main.hs

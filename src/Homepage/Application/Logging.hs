@@ -9,6 +9,7 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import qualified Data.ByteString.Char8 as B
+import Data.Kind
 import qualified Data.Time as T
 
 newtype LoggingT' m a = LoggingT' { unLoggingT' :: LoggingT m a }
@@ -21,7 +22,7 @@ instance MonadIO m => MonadLogger (LoggingT' m) where
     LoggingT' $ monadLoggerLog loc logSource logLevel $
       toLogStr $ B.pack (show time) <> " | " <> fromLogStr (toLogStr logStr)
 
-deriving via LoggingT' (t2 (m :: * -> *))
+deriving via LoggingT' (t2 (m :: Type -> Type))
   instance MonadIO (t2 m) => MonadLogger (ComposeT LoggingT' t2 m)
 
 runLoggingT' :: (MonadIO m, MonadBaseControl IO m)

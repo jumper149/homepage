@@ -12,6 +12,7 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Reader
+import Data.Kind
 
 newtype ConfiguredT m a = ConfiguredT { unConfiguredT :: ReaderT Configuration m a }
   deriving newtype (Applicative, Functor, Monad)
@@ -20,7 +21,7 @@ newtype ConfiguredT m a = ConfiguredT { unConfiguredT :: ReaderT Configuration m
 instance Monad m => MonadConfigured (ConfiguredT m) where
   configuration = ConfiguredT ask
 
-deriving via ConfiguredT (t2 (m :: * -> *))
+deriving via ConfiguredT (t2 (m :: Type -> Type))
   instance Monad (t2 m) => MonadConfigured (ComposeT ConfiguredT t2 m)
 
 runConfiguredT :: ConfiguredT m a -> Configuration -> m a

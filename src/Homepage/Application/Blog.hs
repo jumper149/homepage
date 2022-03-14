@@ -16,6 +16,7 @@ import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Identity
 import Data.Foldable
+import Data.Kind
 import qualified Data.Map as M
 import qualified Data.Text as T
 import qualified Data.Text.IO as T
@@ -34,7 +35,7 @@ instance (MonadBaseControl IO m, MonadConfigured m, MonadLogger m) => MonadBlog 
         $logWarn $ "Failed to read HTML blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
         pure (undefined :: T.Text)
 
-deriving via BlogT (t2 (m :: * -> *))
+deriving via BlogT (t2 (m :: Type -> Type))
   instance (MonadBaseControl IO (t2 m), MonadConfigured (t2 m), MonadLogger (t2 m)) => MonadBlog (ComposeT BlogT t2 m)
 
 runBlogT :: BlogT m a

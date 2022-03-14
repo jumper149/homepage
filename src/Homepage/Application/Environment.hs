@@ -10,6 +10,7 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Reader
+import Data.Kind
 import Data.Proxy
 
 newtype EnvironmentT m a = EnvironmentT { unEnvironmentT :: ReaderT Environment m a }
@@ -22,7 +23,7 @@ instance Monad m => MonadEnvironment (EnvironmentT m) where
       proxy :: EnvVar n -> Proxy n
       proxy _ = Proxy
 
-deriving via EnvironmentT (t2 (m :: * -> *))
+deriving via EnvironmentT (t2 (m :: Type -> Type))
   instance Monad (t2 m) => MonadEnvironment (ComposeT EnvironmentT t2 m)
 
 runEnvironmentT :: Environment -> EnvironmentT m a -> m a
