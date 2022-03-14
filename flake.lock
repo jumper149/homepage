@@ -7,11 +7,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1644181546,
-        "narHash": "sha256-a7ggw9prhcu2bryMtVdQA7f+0l5wzGygcRPIaP+Z2NI=",
+        "lastModified": 1648726935,
+        "narHash": "sha256-CSszUGkvii8wAl9s4Piv++h2OM4luI1WDblnXazBNI8=",
         "owner": "jumper149",
         "repo": "deriving-trans",
-        "rev": "8e033038d2d30a6fa3ccb296ff2034bab6381ee6",
+        "rev": "0cdc2a7462ff5f020c4df2e94127c95f898bfd92",
         "type": "github"
       },
       "original": {
@@ -28,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1644187539,
-        "narHash": "sha256-vnjDF+dN0AztrTV61b4FW3P46V6214zScYsnygQnfCk=",
+        "lastModified": 1648726590,
+        "narHash": "sha256-cIguYE9k0VtMGoNS1SqlO9bZ2sWoApAXqESgwC//T68=",
         "owner": "jumper149",
         "repo": "monad-control-identity",
-        "rev": "8322ed4a1135ee8242a6b8a1d0e618b781de1eb3",
+        "rev": "1c3f0b38efa24697f3eb6d9978fdada7572076b4",
         "type": "github"
       },
       "original": {
