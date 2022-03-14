@@ -96,6 +96,7 @@ library
   ghc-options:
     -fwrite-ide-info
       -- ^ Generate data for 'weeder'.
+    -O2
     -Wall
     -Widentities
       -- ^ Prevent redundant conversions, such as `fromIntegral :: Int -> Int`.
@@ -115,3 +116,5 @@ executable homepage
     , base
     , homepage
   default-language: Haskell2010
+  ghc-options:
+    -threaded
