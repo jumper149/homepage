@@ -25,10 +25,10 @@ import Servant qualified
 
 type (.|) t2 t1 = ComposeT t1 t2
 
-(.|) :: (forall a. t2 m a -> m (StT t2 a))
-     -> (forall a. t1 (t2 m) a -> t2 m (StT t1 a))
-     -> (forall a. (t2 .| t1) m a -> m (StT t2 (StT t1 a)))
-(.|) runT2 runT1 = runComposeT runT1 runT2
+(.|) :: (t2 m a -> m a)
+     -> (t1 (t2 m) a -> t2 m a)
+     -> ((t2 .| t1) m a -> m a)
+(.|) = flip runComposeT'
 
 infixl 1 .|
 
