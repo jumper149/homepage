@@ -1,6 +1,3 @@
-module Main where
+module Main ( main ) where
 
-import qualified Homepage
-
-main :: IO ()
-main = Homepage.main
+import Homepage

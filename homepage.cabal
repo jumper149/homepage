@@ -149,8 +149,9 @@ library
 executable homepage
   main-is: Main.hs
   build-depends:
-    , base
     , homepage
   default-language: Haskell2010
+  default-extensions:
+    NoImplicitPrelude
   ghc-options:
     -threaded
