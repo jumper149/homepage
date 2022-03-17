@@ -13,7 +13,7 @@ import Control.Monad.Logger
 import Servant
 import Servant.API.Generic
 import Servant.HTML.Blaze
-import qualified Servant.RawM.Server as RawM
+import Servant.RawM.Server qualified as RawM
 import Servant.Server.Generic
 import Text.Blaze.Html5
 import WaiAppStatic.Storage.Filesystem

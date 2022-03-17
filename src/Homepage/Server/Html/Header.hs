@@ -10,8 +10,8 @@ import Data.Foldable
 import Numeric.Natural
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as A
+import Text.Blaze.Html5 qualified as H
+import Text.Blaze.Html5.Attributes qualified as A
 
 headerTab :: BaseUrl
           -> Maybe Natural -- ^ depth

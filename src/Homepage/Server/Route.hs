@@ -1,12 +1,12 @@
 module Homepage.Server.Route where
 
-import           Homepage.Application.Blog.Class
-import           Homepage.Application.Configured.Class
-import qualified Homepage.Server.Route.Blog
-import qualified Homepage.Server.Route.Donate
-import qualified Homepage.Server.Route.Files
-import qualified Homepage.Server.Route.Home
-import qualified Homepage.Server.Route.Static
+import Homepage.Application.Blog.Class
+import Homepage.Application.Configured.Class
+import Homepage.Server.Route.Blog qualified
+import Homepage.Server.Route.Donate qualified
+import Homepage.Server.Route.Files qualified
+import Homepage.Server.Route.Home qualified
+import Homepage.Server.Route.Static qualified
 
 import Control.Monad.Logger
 import GHC.Generics

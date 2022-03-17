@@ -12,16 +12,16 @@ import Homepage.Configuration.Contact
 import Control.Monad.Logger
 import Data.List
 import Data.Ord
-import qualified Data.Map as M
-import qualified Data.Text as T
-import qualified Data.Text.Lazy as LT
-import qualified Data.Text.Lazy.Encoding as LT
-import qualified Data.Time as T
+import Data.Map qualified as M
+import Data.Text qualified as T
+import Data.Text.Lazy qualified as LT
+import Data.Text.Lazy.Encoding qualified as LT
+import Data.Time qualified as T
 import GHC.Generics
-import qualified Network.HTTP.Media as Media
-import qualified Text.Atom.Feed as Atom
-import qualified Text.Feed.Types as Feed
-import qualified Text.Feed.Export as Feed
+import Network.HTTP.Media qualified as Media
+import Text.Atom.Feed qualified as Atom
+import Text.Feed.Types qualified as Feed
+import Text.Feed.Export qualified as Feed
 import Servant
 
 type API = UVerb 'GET '[Atom] '[WithStatus 200 AtomFeed, WithStatus 500 NoContent]

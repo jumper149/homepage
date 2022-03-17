@@ -1,8 +1,8 @@
 module Homepage.Configuration.Contact where
 
-import qualified Data.Aeson as A
-import qualified Data.Text as T
-import qualified Deriving.Aeson as A
+import Data.Aeson qualified as A
+import Data.Text qualified as T
+import Deriving.Aeson qualified as A
 import GHC.Generics
 
 data ContactInformation = ContactInformation

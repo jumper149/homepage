@@ -1,10 +1,10 @@
 module Homepage.Configuration.Files where
 
-import qualified Data.Aeson as A
-import qualified Data.Map as M
-import qualified Data.Set as S
-import qualified Data.Text as T
-import qualified Deriving.Aeson as A
+import Data.Aeson qualified as A
+import Data.Map qualified as M
+import Data.Set qualified as S
+import Data.Text qualified as T
+import Deriving.Aeson qualified as A
 import Data.Time.Calendar
 import GHC.Generics
 

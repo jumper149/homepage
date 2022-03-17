@@ -103,6 +103,7 @@ library
     HexFloatLiterals
     ImplicitPrelude
       -- ^ implied by Haskell2010
+    ImportQualifiedPost
     InstanceSigs
     KindSignatures
     LambdaCase
@@ -143,7 +144,6 @@ library
     -Wno-missing-import-lists
     -Wno-missing-local-signatures
     -Wno-missing-safe-haskell-mode
-    -Wno-prepositive-qualified-module
     -Wno-unsafe
 
 executable homepage

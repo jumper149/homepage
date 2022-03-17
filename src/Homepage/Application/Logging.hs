@@ -8,9 +8,9 @@ import Control.Monad.Logger
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
-import qualified Data.ByteString.Char8 as B
+import Data.ByteString.Char8 qualified as B
 import Data.Kind
-import qualified Data.Time as T
+import Data.Time qualified as T
 
 newtype LoggingT' m a = LoggingT' { unLoggingT' :: LoggingT m a }
   deriving newtype (Applicative, Functor, Monad)

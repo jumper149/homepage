@@ -6,11 +6,11 @@ import Homepage.Server.Html.Depth
 
 import Data.Foldable
 import Data.List
-import qualified Data.Map as M
+import Data.Map qualified as M
 import Data.Maybe
 import Data.Ord
-import qualified Data.Set as S
-import qualified Data.Text as T
+import Data.Set qualified as S
+import Data.Text qualified as T
 import Data.Time.Calendar
 import Numeric.Natural
 import Text.Blaze.Html5

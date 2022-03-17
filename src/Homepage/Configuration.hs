@@ -5,10 +5,10 @@ import Homepage.Configuration.Blog
 import Homepage.Configuration.Contact
 import Homepage.Configuration.Files
 
-import qualified Data.Aeson as A
-import qualified Data.Text as T
+import Data.Aeson qualified as A
+import Data.Text qualified as T
 import Data.Word
-import qualified Deriving.Aeson as A
+import Deriving.Aeson qualified as A
 import GHC.Generics
 
 data Configuration = Configuration

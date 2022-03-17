@@ -19,7 +19,7 @@ import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Elevator
 import Data.Foldable
-import qualified Servant
+import Servant qualified
 
 type (.|) t2 t1 = ComposeT t1 t2
 

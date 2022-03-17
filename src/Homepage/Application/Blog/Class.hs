@@ -6,7 +6,7 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Elevator
 import Data.Kind
-import qualified Data.Text as T
+import Data.Text qualified as T
 
 class Monad m => MonadBlog m where
   blogEntries :: m BlogEntries

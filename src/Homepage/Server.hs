@@ -11,7 +11,7 @@ import Control.Monad
 import Control.Monad.IO.Class
 import Control.Monad.Logger
 import Control.Monad.Trans.Control
-import qualified Data.Text as T
+import Data.Text qualified as T
 import Network.Wai.Handler.Warp
 import Servant.Server.Generic
 import System.Posix.Signals

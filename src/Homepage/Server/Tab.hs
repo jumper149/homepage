@@ -1,6 +1,6 @@
 module Homepage.Server.Tab where
 
-import qualified Data.Text as T
+import Data.Text qualified as T
 import GHC.Generics
 
 data Tab =

@@ -18,9 +18,9 @@ import Control.Monad.Trans.Control
 import Control.Monad.Trans.Identity
 import Data.Foldable
 import Data.Kind
-import qualified Data.Map as M
-import qualified Data.Text as T
-import qualified Data.Text.IO as T
+import Data.Map qualified as M
+import Data.Text qualified as T
+import Data.Text.IO qualified as T
 
 newtype BlogT m a = BlogT { unBlogT :: IdentityT m a }
   deriving newtype (Applicative, Functor, Monad)

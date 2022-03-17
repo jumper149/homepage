@@ -7,11 +7,11 @@ import Homepage.Server.Html.Header
 import Homepage.Server.Tab
 
 import Data.Maybe
-import qualified Data.Text as T
+import Data.Text qualified as T
 import Numeric.Natural
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
-import qualified Text.Blaze.Html5 as H
+import Text.Blaze.Html5 qualified as H
 
 document :: BaseUrl
          -> ContactInformation

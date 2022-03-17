@@ -15,8 +15,8 @@ import Servant.HTML.Blaze
 import Servant.Server.Generic
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
-import qualified Text.Blaze.Html5 as H
-import qualified Text.Blaze.Html5.Attributes as HA
+import Text.Blaze.Html5 qualified as H
+import Text.Blaze.Html5.Attributes qualified as HA
 
 data Routes route = Routes
     { routeDonate :: route

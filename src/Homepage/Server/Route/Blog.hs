@@ -10,19 +10,19 @@ import Homepage.Server.Err404
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
-import qualified Homepage.Server.Route.Blog.Atom as Atom
+import Homepage.Server.Route.Blog.Atom qualified as Atom
 import Homepage.Server.Tab
 
 import Control.Monad.Logger
-import qualified Data.Text as T
+import Data.Text qualified as T
 import Servant hiding (serveDirectoryWith)
 import Servant.API.Generic
 import Servant.HTML.Blaze
-import qualified Servant.RawM.Server as RawM
+import Servant.RawM.Server qualified as RawM
 import Servant.Server.Generic
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Extra
-import qualified Text.Blaze.Html5.Attributes as H
+import Text.Blaze.Html5.Attributes qualified as H
 import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 

@@ -7,8 +7,8 @@ import Homepage.Configuration
 
 import Control.Monad.Logger
 import Control.Monad.IO.Class
-import qualified Data.Aeson as A
-import qualified Data.Text as T
+import Data.Aeson qualified as A
+import Data.Text qualified as T
 import System.Posix.Files
 
 acquireConfig :: (MonadIO m, MonadEnvironment m, MonadLogger m)

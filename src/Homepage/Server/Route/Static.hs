@@ -8,7 +8,7 @@ import Homepage.Server.Err404
 
 import Control.Monad.Logger
 import Servant
-import qualified Servant.RawM.Server as RawM
+import Servant.RawM.Server qualified as RawM
 import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 

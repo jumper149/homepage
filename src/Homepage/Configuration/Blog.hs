@@ -1,14 +1,14 @@
 module Homepage.Configuration.Blog where
 
-import qualified Data.Aeson as A
-import qualified Data.List as L
-import qualified Data.Map as M
+import Data.Aeson qualified as A
+import Data.List qualified as L
+import Data.Map qualified as M
 import Data.Ord
-import qualified Data.Text as T
-import qualified Deriving.Aeson as A
+import Data.Text qualified as T
+import Deriving.Aeson qualified as A
 import Data.Time.Calendar
 import GHC.Generics
-import qualified Servant as S
+import Servant qualified as S
 
 newtype BlogId = BlogId { unBlogId :: T.Text }
   deriving stock (Eq, Generic, Ord, Read, Show)

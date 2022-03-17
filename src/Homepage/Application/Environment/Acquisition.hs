@@ -9,9 +9,9 @@ import Control.Applicative
 import Control.Monad.Logger
 import Control.Monad.IO.Class
 import Data.Proxy
-import qualified Data.Text as T
+import Data.Text qualified as T
 import GHC.TypeLits
-import qualified System.Posix.Env as System
+import System.Posix.Env qualified as System
 
 acquireEnvironment :: (MonadIO m, MonadLogger m)
                    => m Environment
