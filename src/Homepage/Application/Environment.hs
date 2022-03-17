@@ -1,3 +1,4 @@
+{-# LANGUAGE PolyKinds #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Homepage.Application.Environment where
@@ -5,7 +6,7 @@ module Homepage.Application.Environment where
 import Homepage.Application.Environment.Class
 import Homepage.Environment
 
-import Control.Applicative (Const (..))
+import Control.Applicative
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
@@ -13,15 +14,19 @@ import Control.Monad.Trans.Reader
 import Data.Kind
 import Data.Proxy
 
+newtype Environment = MkEnvironment { getEnvironment :: forall name val. EnvVarKind name val -> Const val name }
+
 newtype EnvironmentT m a = EnvironmentT { unEnvironmentT :: ReaderT Environment m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl)
 
 instance Monad m => MonadEnvironment (EnvironmentT m) where
-  environmentVariable named = getConst . askEnvironmentVariable (proxy named) <$> EnvironmentT ask
+  environmentVariable named = lookupEnvVar (proxy named) <$> EnvironmentT ask
     where
-      proxy :: EnvVar n -> Proxy n
+      proxy :: EnvVar name -> Proxy name
       proxy _ = Proxy
+      lookupEnvVar :: KnownEnvVar name val envVar => Proxy name -> Environment -> val
+      lookupEnvVar p env = getConst $ getEnvironment env $ caseEnvVar p
 
 deriving via EnvironmentT (t2 (m :: Type -> Type))
   instance Monad (t2 m) => MonadEnvironment (ComposeT EnvironmentT t2 m)

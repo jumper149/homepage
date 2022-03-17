@@ -1,39 +1,35 @@
+{-# LANGUAGE GADTs #-}
+{-# LANGUAGE PolyKinds #-}
+
 module Homepage.Environment where
 
 import Control.Monad.Logger
-import Control.Applicative (Const)
+import Data.Kind
 import Data.Proxy
-import GHC.Generics
 import GHC.TypeLits
 import Text.Read
 
-data Environment = Environment
-    { envVarConfigFile :: Const FilePath "HOMEPAGE_CONFIG_FILE"
-    , envVarLogFile :: Const (Maybe FilePath) "HOMEPAGE_LOG_FILE"
-    , envVarLogLevel :: Const LogLevel "HOMEPAGE_LOG_LEVEL"
-    }
-  deriving stock (Eq, Generic, Ord, Read, Show)
+data EnvVarKind :: Symbol -> Type -> Type where
+  EnvVarConfigFile :: EnvVarKind "HOMEPAGE_CONFIG_FILE" FilePath
+  EnvVarLogFile :: EnvVarKind "HOMEPAGE_LOG_FILE" (Maybe FilePath)
+  EnvVarLogLevel :: EnvVarKind "HOMEPAGE_LOG_LEVEL" LogLevel
 
-class KnownSymbol envVar => EnvironmentVariable (envVar :: Symbol) where
-  type EnvironmentVariableContent envVar
-  parseEnvironmentVariable :: Proxy envVar -> String -> Maybe (EnvironmentVariableContent envVar)
-  defaultEnvironmentVariable :: Proxy envVar -> EnvironmentVariableContent envVar
-  askEnvironmentVariable :: Proxy envVar -> Environment -> Const (EnvironmentVariableContent envVar) envVar
+instance KnownEnvVar "HOMEPAGE_CONFIG_FILE" FilePath 'EnvVarConfigFile where
+  parseEnvVar _ = Just
+  defaultEnvVar _ = "./homepage.json"
+  caseEnvVar _ = EnvVarConfigFile
 
-instance EnvironmentVariable "HOMEPAGE_CONFIG_FILE" where
-  type EnvironmentVariableContent "HOMEPAGE_CONFIG_FILE" = FilePath
-  parseEnvironmentVariable _ = Just
-  defaultEnvironmentVariable _ = "./homepage.json"
-  askEnvironmentVariable _ = envVarConfigFile
+instance KnownEnvVar "HOMEPAGE_LOG_FILE" (Maybe FilePath) 'EnvVarLogFile where
+  parseEnvVar _ = Just . Just
+  defaultEnvVar _ = Nothing
+  caseEnvVar _ = EnvVarLogFile
 
-instance EnvironmentVariable "HOMEPAGE_LOG_FILE" where
-  type EnvironmentVariableContent "HOMEPAGE_LOG_FILE" = Maybe FilePath
-  parseEnvironmentVariable _ = Just . Just
-  defaultEnvironmentVariable _ = Nothing
-  askEnvironmentVariable _ = envVarLogFile
+instance KnownEnvVar "HOMEPAGE_LOG_LEVEL" LogLevel 'EnvVarLogLevel where
+  parseEnvVar _ = readMaybe
+  defaultEnvVar _ = LevelDebug
+  caseEnvVar _ = EnvVarLogLevel
 
-instance EnvironmentVariable "HOMEPAGE_LOG_LEVEL" where
-  type EnvironmentVariableContent "HOMEPAGE_LOG_LEVEL" = LogLevel
-  parseEnvironmentVariable _ = readMaybe
-  defaultEnvironmentVariable _ = LevelDebug
-  askEnvironmentVariable _ = envVarLogLevel
+class KnownSymbol name => KnownEnvVar (name :: Symbol) (val :: Type) (envVar :: EnvVarKind name val) | name -> envVar, envVar -> name, envVar -> val where
+  parseEnvVar :: Proxy name -> String -> Maybe val
+  defaultEnvVar :: Proxy name -> val
+  caseEnvVar :: Proxy name -> EnvVarKind name val

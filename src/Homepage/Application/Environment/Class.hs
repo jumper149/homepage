@@ -1,3 +1,5 @@
+{-# LANGUAGE PolyKinds #-}
+
 module Homepage.Application.Environment.Class where
 
 import Homepage.Environment
@@ -9,7 +11,7 @@ import Data.Kind
 import GHC.TypeLits
 
 class Monad m => MonadEnvironment m where
-  environmentVariable :: EnvironmentVariable envVar => EnvVar envVar -> m (EnvironmentVariableContent envVar)
+  environmentVariable :: KnownEnvVar name val envVar => EnvVar name -> m val
 
 instance ( Monad (t m)
          , MonadTrans t
