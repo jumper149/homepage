@@ -1,4 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE TemplateHaskell #-}
 
 module Homepage.Application.Environment.Acquisition where

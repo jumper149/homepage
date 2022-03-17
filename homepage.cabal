@@ -84,6 +84,7 @@ library
     FlexibleInstances
     FunctionalDependencies
     GeneralizedNewtypeDeriving
+    LambdaCase
     MultiParamTypeClasses
     NamedFieldPuns
     OverloadedStrings
