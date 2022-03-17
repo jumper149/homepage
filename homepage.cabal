@@ -70,26 +70,42 @@ library
   default-language: Haskell2010
   default-extensions:
     BangPatterns
+    BinaryLiterals
+    ConstrainedClassMethods
     ConstraintKinds
     DataKinds
     DeriveAnyClass
+    DeriveDataTypeable
     DeriveFoldable
     DeriveFunctor
     DeriveGeneric
+    DeriveLift
     DeriveTraversable
     DerivingStrategies
     DerivingVia
+    EmptyCase
+    EmptyDataDecls
     EmptyDataDeriving
     FlexibleContexts
     FlexibleInstances
     FunctionalDependencies
+    GADTSyntax
     GeneralizedNewtypeDeriving
+    HexFloatLiterals
+    ImplicitPrelude
+    InstanceSigs
+    KindSignatures
     LambdaCase
     MultiParamTypeClasses
     NamedFieldPuns
+    NumericUnderscores
     OverloadedStrings
     RankNTypes
+    ScopedTypeVariables
     StandaloneDeriving
+    StandaloneKindSignatures
+    StarIsType
+    TupleSections
     TypeApplications
     TypeFamilies
     TypeOperators
