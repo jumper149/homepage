@@ -33,7 +33,8 @@ data HeaderIcons = HeaderIcons
     A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "headerIcon", A.CamelToKebab], A.RejectUnknownFields] HeaderIcons
 
 data DonateInformation = DonateInformation
-    { donatePaypalUrl :: T.Text
+    { donatePaypalUrl :: Maybe T.Text
+    , donateXmrAddress :: Maybe T.Text
     }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving (A.FromJSON, A.ToJSON) via

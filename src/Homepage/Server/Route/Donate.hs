@@ -65,26 +65,38 @@ donateHandler = do
        li $ do
          "You have big "
          i "PP"
-    hr
-    br
     case maybeDonateInformation of
       Nothing -> p $ do
         "Actually there is no way to "
         i "donate"
         " to me at the moment."
       Just donateInformation -> do
-        let paypalUrl = donatePaypalUrl donateInformation
-        H.div ! HA.style "text-align: center;" $
-          b $ do
-            a ! href (textValue paypalUrl) $ "Donate"
-            " via PayPal."
+        case donatePaypalUrl donateInformation of
+          Nothing -> mempty
+          Just paypalUrl -> do
+            hr
+            br
+            H.div ! HA.style "text-align: center;" $
+              b $ do
+                a ! href (textValue paypalUrl) $ "Donate"
+                " via PayPal."
+            br
+            H.div ! HA.style "text-align: center;" $
+              -- TODO: Configure QR-Code.
+              a ! href (textValue paypalUrl) $
+                img ! alt "QR-Code to donate via PayPal"
+                    ! src (withDepth baseUrl (Just 0) "donatePayPalQR.png")
+                    ! HA.style "width: 128px; height: 128px;"
+        case donateXmrAddress donateInformation of
+          Nothing -> mempty
+          Just xmrAddress -> do
+            hr
+            br
+            H.div ! HA.style "text-align: center;" $
+              b $ do
+                "Donate via XMR: "
+                toMarkup xmrAddress
         br
-        H.div ! HA.style "text-align: center;" $
-          -- TODO: Configure QR-Code.
-          a ! href (textValue paypalUrl) $
-            img ! alt "QR-Code to donate via PayPal"
-                ! src (withDepth baseUrl (Just 0) "donatePayPalQR.png")
-                ! HA.style "width: 128px; height: 128px;"
 
 thankYouHandler :: (MonadConfigured m, MonadLogger m)
                 => m Html
