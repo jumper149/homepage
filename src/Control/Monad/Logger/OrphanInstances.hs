@@ -18,5 +18,5 @@ deriving via Elevator t1 (t2 (m :: Type -> Type))
     , MonadLogger (t2 m)
     ) => MonadLogger (ComposeT t1 t2 m)
 
-deriving via LoggingT (t2 (m :: Type -> Type))
+deriving via LoggingT ((t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type))
   instance MonadIO (t2 m) => MonadLogger (ComposeT LoggingT t2 m)

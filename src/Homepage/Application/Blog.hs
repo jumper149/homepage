@@ -36,7 +36,7 @@ instance (MonadBaseControl IO m, MonadConfigured m, MonadLogger m) => MonadBlog 
         $logWarn $ "Failed to read HTML for blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
         pure (undefined :: T.Text)
 
-deriving via BlogT (t2 (m :: Type -> Type))
+deriving via BlogT ((t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type))
   instance (MonadBaseControl IO (t2 m), MonadConfigured (t2 m), MonadLogger (t2 m)) => MonadBlog (ComposeT BlogT t2 m)
 
 runBlogT :: BlogT m a

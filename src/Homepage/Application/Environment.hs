@@ -28,7 +28,7 @@ instance Monad m => MonadEnvironment (EnvironmentT m) where
       lookupEnvVar :: KnownEnvVar name val envVar => Proxy name -> Environment -> val
       lookupEnvVar p env = getConst $ getEnvironment env $ caseEnvVar p
 
-deriving via EnvironmentT (t2 (m :: Type -> Type))
+deriving via EnvironmentT ((t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type))
   instance Monad (t2 m) => MonadEnvironment (ComposeT EnvironmentT t2 m)
 
 runEnvironmentT :: Environment -> EnvironmentT m a -> m a

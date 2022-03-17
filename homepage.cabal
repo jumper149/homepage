@@ -115,6 +115,7 @@ library
     -- PatternGuards
       -- ^ implied by Haskell2010
     NoPatternGuards
+    PolyKinds
     RankNTypes
     RelaxedPolyRec
       -- ^ implied by Haskell2010
