@@ -75,8 +75,8 @@ library
     ConstraintKinds
     CUSKs
       -- ^ implied by Haskell2010
-    DatatypeContexts
-      -- ^ implied by Haskell2010
+    -- DatatypeContexts
+      -- ^ implied by Haskell2010, deprecated
     DataKinds
     DeriveAnyClass
     DeriveDataTypeable
