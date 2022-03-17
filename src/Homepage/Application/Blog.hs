@@ -1,4 +1,5 @@
-{-# LANGUAGE TemplateHaskell, UndecidableInstances #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE UndecidableInstances #-}
 
 module Homepage.Application.Blog where
 
