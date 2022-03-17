@@ -73,6 +73,10 @@ library
     BinaryLiterals
     ConstrainedClassMethods
     ConstraintKinds
+    CUSKs
+      -- ^ implied by Haskell2010
+    DatatypeContexts
+      -- ^ implied by Haskell2010
     DataKinds
     DeriveAnyClass
     DeriveDataTypeable
@@ -83,28 +87,45 @@ library
     DeriveTraversable
     DerivingStrategies
     DerivingVia
+    DoAndIfThenElse
+      -- ^ implied by Haskell2010
     EmptyCase
     EmptyDataDecls
+      -- ^ implied by Haskell2010
     EmptyDataDeriving
     FlexibleContexts
     FlexibleInstances
+    ForeignFunctionInterface
+      -- ^ implied by Haskell2010
     FunctionalDependencies
     GADTSyntax
     GeneralizedNewtypeDeriving
     HexFloatLiterals
     ImplicitPrelude
+      -- ^ implied by Haskell2010
     InstanceSigs
     KindSignatures
     LambdaCase
+    MonomorphismRestriction
+      -- ^ implied by Haskell2010
     MultiParamTypeClasses
     NamedFieldPuns
     NumericUnderscores
     OverloadedStrings
+    -- PatternGuards
+      -- ^ implied by Haskell2010
+    NoPatternGuards
     RankNTypes
+    RelaxedPolyRec
+      -- ^ implied by Haskell2010
     ScopedTypeVariables
     StandaloneDeriving
     StandaloneKindSignatures
-    StarIsType
+    -- StarIsType
+      -- ^ implied by Haskell2010
+    NoStarIsType
+    TraditionalRecordSyntax
+      -- ^ implied by Haskell2010
     TupleSections
     TypeApplications
     TypeFamilies
