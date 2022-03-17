@@ -1,3 +1,3 @@
 module Main ( main ) where
 
-import Homepage
+import Homepage ( main )
