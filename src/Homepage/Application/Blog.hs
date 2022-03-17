@@ -26,13 +26,13 @@ newtype BlogT m a = BlogT { unBlogT :: IdentityT m a }
   deriving newtype (MonadTrans, MonadTransControl)
 
 instance (MonadBaseControl IO m, MonadConfigured m, MonadLogger m) => MonadBlog (BlogT m) where
-  blogEntries = BlogT $ lift $ configBlogEntries <$> configuration
+  blogEntries = lift $ configBlogEntries <$> configuration
   readBlogEntryHtml blogId = do
-    dir <- BlogT $ lift $ configDirectoryBlog <$> configuration
+    dir <- lift $ configDirectoryBlog <$> configuration
     let file = dir <> "/" <> T.unpack (unBlogId blogId) <> ".html"
-    BlogT $ lift $ (restoreM =<<) $ liftBaseWith $ \ runInBase ->
+    lift $ (restoreM =<<) $ liftBaseWith $ \ runInBase ->
       catchError (runInBase $ liftBase $ T.readFile file) $ \ err -> runInBase $ do
-        $logWarn $ "Failed to read HTML blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
+        $logWarn $ "Failed to read HTML for blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
         pure (undefined :: T.Text)
 
 deriving via BlogT (t2 (m :: Type -> Type))
