@@ -30,7 +30,7 @@ acquireEnvironment = do
         EnvVarLogLevel -> logLevel
   pure environment
 
-lookupEnvironmentVariable :: (KnownEnvVar name val envVar, MonadLogger m, Show val)
+lookupEnvironmentVariable :: forall name val (envVar :: EnvVarKind name val) m. (KnownEnvVar envVar, MonadLogger m, Show val)
                           => [(String,String)]
                           -> Proxy name
                           -> m (Const val name)

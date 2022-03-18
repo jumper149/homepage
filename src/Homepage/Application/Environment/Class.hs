@@ -11,7 +11,7 @@ import Data.Kind
 import GHC.TypeLits
 
 class Monad m => MonadEnvironment m where
-  environmentVariable :: KnownEnvVar name val envVar => EnvVar name -> m val
+  environmentVariable :: forall name val (envVar :: EnvVarKind name val). KnownEnvVar envVar => EnvVar name -> m val
 
 instance ( Monad (t m)
          , MonadTrans t
