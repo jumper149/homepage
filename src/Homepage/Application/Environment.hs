@@ -14,7 +14,7 @@ import Control.Monad.Trans.Reader
 import Data.Kind
 import Data.Proxy
 
-newtype Environment = MkEnvironment { getEnvironment :: forall name val. EnvVarKind name val -> Const val name }
+newtype Environment = MkEnvironment { getEnvironment :: forall name value. EnvVarKind name value -> Const value name }
 
 newtype EnvironmentT m a = EnvironmentT { unEnvironmentT :: ReaderT Environment m a }
   deriving newtype (Applicative, Functor, Monad)
@@ -25,7 +25,7 @@ instance Monad m => MonadEnvironment (EnvironmentT m) where
     where
       proxy :: EnvVar name -> Proxy name
       proxy _ = Proxy
-      lookupEnvVar :: forall name val (envVar :: EnvVarKind name val). KnownEnvVar envVar => Proxy name -> Environment -> val
+      lookupEnvVar :: forall name value (envVar :: EnvVarKind name value). KnownEnvVar envVar => Proxy name -> Environment -> value
       lookupEnvVar p env = getConst $ getEnvironment env $ caseEnvVar p
 
 deriving via EnvironmentT ((t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type))

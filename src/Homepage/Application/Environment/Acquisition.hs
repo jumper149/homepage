@@ -34,9 +34,9 @@ acquireEnvironment = do
           EnvVarLogLevel -> logLevel
     pure environment
 
-lookupEnvironmentVariable :: forall name val (envVar :: EnvVarKind name val) m. (KnownEnvVar envVar, MonadLogger m, Show val)
+lookupEnvironmentVariable :: forall name value (envVar :: EnvVarKind name value) m. (KnownEnvVar envVar, MonadLogger m, Show value)
                           => Proxy name
-                          -> Elevator (ReaderT [(String,String)]) m (Const val name)
+                          -> Elevator (ReaderT [(String,String)]) m (Const value name)
 lookupEnvironmentVariable proxy = do
   $logInfo $ "Inspecting environment variable: " <> T.pack (show envVarName)
   env <- Ascend ask

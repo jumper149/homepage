@@ -29,7 +29,7 @@ instance KnownEnvVar 'EnvVarLogLevel where
   defaultEnvVar _ = LevelDebug
   caseEnvVar _ = EnvVarLogLevel
 
-class KnownSymbol name => KnownEnvVar (envVar :: EnvVarKind name val) | name -> envVar, envVar -> name, envVar -> val where
-  parseEnvVar :: Proxy name -> String -> Maybe val
-  defaultEnvVar :: Proxy name -> val
-  caseEnvVar :: Proxy name -> EnvVarKind name val
+class KnownSymbol name => KnownEnvVar (envVar :: EnvVarKind name value) | name -> envVar, envVar -> name, envVar -> value where
+  parseEnvVar :: Proxy name -> String -> Maybe value
+  defaultEnvVar :: Proxy name -> value
+  caseEnvVar :: Proxy name -> EnvVarKind name value
