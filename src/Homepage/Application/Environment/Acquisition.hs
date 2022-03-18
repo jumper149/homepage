@@ -7,7 +7,10 @@ import Homepage.Application.Environment
 
 import Control.Applicative
 import Control.Monad.Logger
+import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.IO.Class
+import Control.Monad.Trans.Elevator
+import Control.Monad.Trans.Reader
 import Data.Proxy
 import Data.Text qualified as T
 import GHC.TypeLits
@@ -20,22 +23,23 @@ acquireEnvironment = do
   env <- liftIO System.getEnvironment
   $logDebug $ "Looked up environment variables: " <> T.pack (show env)
 
-  configFile <- lookupEnvironmentVariable env $ Proxy @"HOMEPAGE_CONFIG_FILE"
-  logFile <- lookupEnvironmentVariable env $ Proxy @"HOMEPAGE_LOG_FILE"
-  logLevel <- lookupEnvironmentVariable env $ Proxy @"HOMEPAGE_LOG_LEVEL"
+  flip runReaderT env . descend $ do
+    configFile <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_CONFIG_FILE"
+    logFile <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_LOG_FILE"
+    logLevel <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_LOG_LEVEL"
 
-  let environment = MkEnvironment $ \case
-        EnvVarConfigFile -> configFile
-        EnvVarLogFile -> logFile
-        EnvVarLogLevel -> logLevel
-  pure environment
+    let environment = MkEnvironment $ \case
+          EnvVarConfigFile -> configFile
+          EnvVarLogFile -> logFile
+          EnvVarLogLevel -> logLevel
+    pure environment
 
 lookupEnvironmentVariable :: forall name val (envVar :: EnvVarKind name val) m. (KnownEnvVar envVar, MonadLogger m, Show val)
-                          => [(String,String)]
-                          -> Proxy name
-                          -> m (Const val name)
-lookupEnvironmentVariable env proxy = do
+                          => Proxy name
+                          -> Elevator (ReaderT [(String,String)]) m (Const val name)
+lookupEnvironmentVariable proxy = do
   $logInfo $ "Inspecting environment variable: " <> T.pack (show envVarName)
+  env <- Ascend ask
   case lookup envVarName env of
     Nothing -> do
       $logInfo $ "Environment variable '" <> T.pack (show envVarName) <> "' is not set."
