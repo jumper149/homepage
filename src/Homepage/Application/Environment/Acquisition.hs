@@ -10,7 +10,8 @@ import Control.Monad.Logger
 import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.IO.Class
 import Control.Monad.Trans.Elevator
-import Control.Monad.Trans.Reader
+import Control.Monad.Trans.State
+import Data.List
 import Data.Proxy
 import Data.Text qualified as T
 import GHC.TypeLits
@@ -23,7 +24,7 @@ acquireEnvironment = do
   env <- liftIO System.getEnvironment
   $logDebug $ "Looked up environment variables: " <> T.pack (show env)
 
-  flip runReaderT env . descend $ do
+  (environment, consumedEnv) <- flip runStateT env . descend $ do
     configFile <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_CONFIG_FILE"
     logFile <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_LOG_FILE"
     logLevel <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_LOG_LEVEL"
@@ -34,12 +35,15 @@ acquireEnvironment = do
           EnvVarLogLevel -> logLevel
     pure environment
 
+  checkConsumedEnvironment consumedEnv
+  pure environment
+
 lookupEnvironmentVariable :: forall name value (envVar :: EnvVarKind name value) m. (KnownEnvVar envVar, MonadLogger m, Show value)
                           => Proxy name
-                          -> Elevator (ReaderT [(String,String)]) m (Const value name)
+                          -> Elevator (StateT [(String,String)]) m (Const value name)
 lookupEnvironmentVariable proxy = do
   $logInfo $ "Inspecting environment variable: " <> T.pack (show envVarName)
-  env <- Ascend ask
+  env <- Ascend get
   case lookup envVarName env of
     Nothing -> do
       $logInfo $ "Environment variable '" <> T.pack (show envVarName) <> "' is not set."
@@ -47,6 +51,7 @@ lookupEnvironmentVariable proxy = do
       pure $ Const envVarDefault
     Just str -> do
       $logInfo $ "Spotted environment variable: " <> T.pack (show envVarName)
+      Ascend $ modify $ deleteBy (\ x y -> fst x == fst y) (envVarName, undefined)
       $logDebug $ "Parsing environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show str)
       case parseEnvVar proxy str of
         Nothing -> do
@@ -59,3 +64,15 @@ lookupEnvironmentVariable proxy = do
   where
     envVarName = symbolVal proxy
     envVarDefault = defaultEnvVar proxy
+
+checkConsumedEnvironment :: MonadLogger m
+                         => [(String,String)]
+                         -> m ()
+checkConsumedEnvironment env = do
+  $logDebug $ "Check consumed environment for left-over environment variables: " <> T.pack (show env)
+  case filter isSuspicious env of
+    [] -> $logInfo "Consumed environment doesn't contain any anomalies."
+    anomalies -> $logWarn $ "Consumed environment contains anomalies: " <> T.pack (show anomalies)
+  where
+    isSuspicious :: (String,String) -> Bool
+    isSuspicious (identifier, _value) = "HOMEPAGE" `isPrefixOf` identifier
