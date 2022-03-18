@@ -24,7 +24,7 @@ acquireEnvironment = do
   env <- liftIO System.getEnvironment
   $logDebug $ "Looked up environment variables: " <> T.pack (show env)
 
-  (environment, consumedEnv) <- flip runStateT env . descend $ do
+  (environment, unconsumedEnv) <- flip runStateT env . descend $ do
     configFile <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_CONFIG_FILE"
     logFile <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_LOG_FILE"
     logLevel <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_LOG_LEVEL"
@@ -35,7 +35,7 @@ acquireEnvironment = do
           EnvVarLogLevel -> logLevel
     pure environment
 
-  checkConsumedEnvironment consumedEnv
+  checkConsumedEnvironment unconsumedEnv
   pure environment
 
 lookupEnvironmentVariable :: forall name value (envVar :: EnvVarKind name value) m. (KnownEnvVar envVar, MonadLogger m, Show value)
@@ -69,10 +69,10 @@ checkConsumedEnvironment :: MonadLogger m
                          => [(String,String)]
                          -> m ()
 checkConsumedEnvironment env = do
-  $logDebug $ "Check consumed environment for left-over environment variables: " <> T.pack (show env)
+  $logDebug $ "Check unconsumed environment for left-over environment variables: " <> T.pack (show env)
   case filter isSuspicious env of
-    [] -> $logInfo "Consumed environment doesn't contain any anomalies."
-    anomalies -> $logWarn $ "Consumed environment contains anomalies: " <> T.pack (show anomalies)
+    [] -> $logInfo "Unconsumed environment doesn't contain any anomalies."
+    anomalies -> $logWarn $ "Unconsumed environment contains anomalies: " <> T.pack (show anomalies)
   where
     isSuspicious :: (String,String) -> Bool
     isSuspicious (identifier, _value) = "HOMEPAGE" `isPrefixOf` identifier
