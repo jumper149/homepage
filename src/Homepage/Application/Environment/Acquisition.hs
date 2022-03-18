@@ -46,7 +46,8 @@ lookupEnvironmentVariable proxy = do
       $logInfo $ "Using default value for environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show envVarDefault)
       pure $ Const envVarDefault
     Just str -> do
-      $logInfo $ "Parsing environment variable: " <> T.pack (show envVarName)
+      $logInfo $ "Spotted environment variable: " <> T.pack (show envVarName)
+      $logDebug $ "Parsing environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show str)
       case parseEnvVar proxy str of
         Nothing -> do
           $logError $ "Failed to parse environment variable: " <> T.pack (show envVarName)
