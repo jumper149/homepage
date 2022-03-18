@@ -94,18 +94,18 @@ contactHtml ContactInformation
     where
       markupEmailAddress emailAddress = do
         a ! href ("mailto:" <> textValue emailAddress) $ "E-Mail"
-        ": " <> toMarkup emailAddress
-      markupMatrix matrix = toMarkup $ "Matrix: " <> matrix
-      markupLiberaChat liberaChat = "IRC (Libera Chat): " <> toMarkup liberaChat
-      markupGitHub githubUsername = toMarkup $ do
+        ": " <> text emailAddress
+      markupMatrix matrix = "Matrix: " <> text matrix
+      markupLiberaChat liberaChat = "IRC (Libera Chat): " <> text liberaChat
+      markupGitHub githubUsername = do
         a ! href ("https://github.com/" <> textValue githubUsername) $ "GitHub"
-        ": " <> toMarkup githubUsername
-      markupGitLab gitlabUsername = toMarkup $ do
+        ": " <> text githubUsername
+      markupGitLab gitlabUsername = do
         a ! href ("https://gitlab.com/" <> textValue gitlabUsername) $ "GitLab"
-        ": " <> toMarkup gitlabUsername
+        ": " <> text gitlabUsername
       markupHackage hackageUsername = do
         a ! href ("https://hackage.haskell.org/user/" <> textValue hackageUsername) $ "Hackage"
-        ": " <> toMarkup hackageUsername
+        ": " <> text hackageUsername
       markupAUR aurUsername = do
         a ! href ("https://aur.archlinux.org/packages/?K=" <> textValue aurUsername <> "&SeB=m") $ "AUR"
-        ": " <> toMarkup aurUsername
+        ": " <> text aurUsername

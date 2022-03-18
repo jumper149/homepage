@@ -142,7 +142,6 @@ library
     -Wno-implicit-prelude
     -Wno-missing-export-lists
     -Wno-missing-import-lists
-    -Wno-missing-local-signatures
     -Wno-missing-safe-haskell-mode
     -Wno-unsafe
 

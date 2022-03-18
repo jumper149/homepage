@@ -43,13 +43,15 @@ runBlogT :: BlogT m a
          -> m a
 runBlogT = runIdentityT . unBlogT
 
-runAppBlogT :: (MonadBaseControl IO m, MonadConfigured m, MonadLogger m)
+runAppBlogT :: forall m a. (MonadBaseControl IO m, MonadConfigured m, MonadLogger m)
             => BlogT m a
             -> m a
 runAppBlogT tma = runBlogT $ do
   entries <- M.toList . unBlogEntries <$> blogEntries
-  let checkBlogEntry blogId blogEntry = do
-        lift $ $logInfo $ "Check blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
-        void $ readBlogEntryHtml blogId
   traverse_ (uncurry checkBlogEntry) entries
   tma
+  where
+    checkBlogEntry :: BlogId -> BlogEntry -> BlogT m ()
+    checkBlogEntry blogId blogEntry = do
+      lift $ $logInfo $ "Check blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
+      void $ readBlogEntryHtml blogId
