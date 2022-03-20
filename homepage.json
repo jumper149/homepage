@@ -19,11 +19,11 @@
     }
   , "name": "Felix Springer"
   , "source-url": "https://github.com/jumper149/homepage"
+  , "homepage-label": "felixspringer.xyz"
   , "donate-information":
     { "paypal-url": "https://www.paypal.com/donate?hosted_button_id=3LZQ9DCDDFFWU"
     , "xmr-address": null
     }
-  , "homepage-label": "felixspringer.xyz"
   , "email-address": "contact@felixspringer.xyz"
   , "matrix": "@jumper149:matrix.org"
   , "libera-chat": "jumper149"
