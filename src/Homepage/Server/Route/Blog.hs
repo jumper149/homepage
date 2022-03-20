@@ -22,7 +22,7 @@ import Servant.RawM.Server qualified as RawM
 import Servant.Server.Generic
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Extra
-import Text.Blaze.Html5.Attributes qualified as H
+import Text.Blaze.Html5.Attributes qualified as HA
 import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 
@@ -88,16 +88,16 @@ articleHandler blogId = do
             " | "
             a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> unBlogId blogId <> ".pdf") $ "PDF"
           hr
-          script ! H.type_ "text/javascript" $
+          script ! HA.type_ "text/javascript" $
             "function resizeIframe(iframe) {\
             \  iframe.height = `${iframe.contentWindow.document.body.scrollHeight + 30}` + \"px\";\
             \}"
-          iframe ! H.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> unBlogId blogId <> ".html")
-                 ! H.name "blog article (HTML)"
-                 ! H.width "100%"
-                 ! H.onload "resizeIframe(this)"
-                 ! H.target "_parent"
-                 ! H.style "border: none;"
+          iframe ! HA.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> unBlogId blogId <> ".html")
+                 ! HA.name "blog article (HTML)"
+                 ! HA.width "100%"
+                 ! HA.onload "resizeIframe(this)"
+                 ! HA.target "_parent"
+                 ! HA.style "border: none;"
                  $ mempty
 
 rawHandler :: (MonadConfigured m, MonadLogger m)

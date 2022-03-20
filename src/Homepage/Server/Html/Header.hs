@@ -9,9 +9,8 @@ import Control.Monad
 import Data.Foldable
 import Numeric.Natural
 import Text.Blaze.Html5
-import Text.Blaze.Html5.Attributes
 import Text.Blaze.Html5 qualified as H
-import Text.Blaze.Html5.Attributes qualified as A
+import Text.Blaze.Html5.Attributes as HA
 
 headerTab :: BaseUrl
           -> Maybe Natural -- ^ depth
@@ -46,19 +45,19 @@ headerTabs baseUrl ContactInformation { contactHeaderIcons, contactHomepageLabel
     H.span $ do
       when (headerIconFeed contactHeaderIcons) $
         a ! hrefWithDepth baseUrl depth "blog/atom.xml" ! class_ "icon" $
-          img ! src (withDepth baseUrl depth "icons/feed.png") ! A.title "Feed" ! class_ "icon"
+          img ! src (withDepth baseUrl depth "icons/feed.png") ! HA.title "Feed" ! class_ "icon"
       when (headerIconGithub contactHeaderIcons) $
         case contactGithubUsername of
           Nothing -> mempty
           Just githubUsername ->
             a ! href ("https://github.com/" <> textValue githubUsername) ! class_ "icon" $
-              img ! src (withDepth baseUrl depth "icons/GitHub.png") ! A.title "GitHub" ! class_ "icon"
+              img ! src (withDepth baseUrl depth "icons/GitHub.png") ! HA.title "GitHub" ! class_ "icon"
       when (headerIconGitlab contactHeaderIcons) $
         case contactGitlabUsername of
           Nothing -> mempty
           Just gitlabUsername ->
             a ! href ("https://gitlab.com/" <> textValue gitlabUsername) ! class_ "icon" $
-              img ! src (withDepth baseUrl depth "icons/GitLab.png") ! A.title "GitLab" ! class_ "icon"
+              img ! src (withDepth baseUrl depth "icons/GitLab.png") ! HA.title "GitLab" ! class_ "icon"
       let maybeHomepageLabel = case contactHomepageLabel of
                                  Nothing -> baseUrlAuthorityHost <$> baseUrlAuthority baseUrl
                                  Just _ -> contactHomepageLabel
