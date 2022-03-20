@@ -89,7 +89,7 @@ atomFeed entries = do
             }
         , Atom.Link
             { Atom.linkHref = displayBaseUrl baseUrl <> "blog"
-            , Atom.linkRel = Nothing
+            , Atom.linkRel = Just $ Left "alternate"
             , Atom.linkType = Just "text/html"
             , Atom.linkHrefLang = Nothing
             , Atom.linkTitle = Nothing -- TODO
@@ -126,8 +126,8 @@ atomEntry blogId BlogEntry { blogTitle , blogTimestamp } = do
     , Atom.entryLinks =
         [ Atom.Link
             { Atom.linkHref = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId
-            , Atom.linkRel = Nothing
-            , Atom.linkType = Nothing -- TODO
+            , Atom.linkRel = Just $ Left "alternate"
+            , Atom.linkType = Just "text/html"
             , Atom.linkHrefLang = Nothing
             , Atom.linkTitle = Nothing -- TODO
             , Atom.linkLength = Nothing
