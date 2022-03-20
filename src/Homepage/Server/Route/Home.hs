@@ -35,7 +35,9 @@ handler = do
   pure $ document baseUrl contactInformation revision (Just 0) (Just TabHome) $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
     h1 $ toMarkup $ contactName contactInformation
+
     h2 "Welcome"
+    -- TODO: Configure author specific information.
     p $ do
       "I am living in Germany and working as a Software Engineer at "
       a ! href "https://www.possehl-analytics.com/" $ "Possehl Analytics"
@@ -50,6 +52,7 @@ handler = do
       , "If I want to take a break from the computer I enjoy playing guitar or badminton."
       , "I also love green tea."
       ]
+
     h2 "recent Blog"
     p $ do
       "You can stay up to date by subscribing to this "
@@ -60,13 +63,16 @@ handler = do
       "The full list of blog articles can be accessed "
       a ! hrefWithDepth baseUrl (Just 0) "blog" $ "here"
       "."
+
     h2 "shared Files"
     p $ do
       "You can download some of my shared files "
       a ! hrefWithDepth baseUrl (Just 0) "files" $ "here"
       "."
+
     h2 "Contact"
     contactHtml contactInformation
+
     h2 "Donate"
     p $ do
       "If you want to support me, you can donate to me "
