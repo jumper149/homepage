@@ -80,7 +80,7 @@ atomFeed entries = do
         [ Atom.Link
             { Atom.linkHref = displayBaseUrl baseUrl <> "blog/atom.xml"
             , Atom.linkRel = Just $ Left "self"
-            , Atom.linkType = Nothing -- TODO
+            , Atom.linkType = Just "application/atom+xml"
             , Atom.linkHrefLang = Nothing
             , Atom.linkTitle = Nothing -- TODO
             , Atom.linkLength = Nothing
@@ -90,7 +90,7 @@ atomFeed entries = do
         , Atom.Link
             { Atom.linkHref = displayBaseUrl baseUrl <> "blog"
             , Atom.linkRel = Nothing
-            , Atom.linkType = Nothing -- TODO
+            , Atom.linkType = Just "text/html"
             , Atom.linkHrefLang = Nothing
             , Atom.linkTitle = Nothing -- TODO
             , Atom.linkLength = Nothing
