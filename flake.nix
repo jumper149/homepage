@@ -202,10 +202,7 @@
     nixosModule = { config, lib, ... }:
       let
         cfg = config.services.homepage;
-        homepageConfig = self.defaultConfig.x86_64-linux // {
-          port = cfg.port;
-          base-url = cfg.baseUrl;
-        } // cfg.extraConfig;
+        homepageConfig = lib.recursiveUpdate self.defaultConfig.x86_64-linux cfg.config;
       in {
         options = {
           services.homepage = {
@@ -216,50 +213,12 @@
                 Felix Springer's Homepage.
               '';
             };
-            port = lib.mkOption {
-              default = 8008;
-              type = with lib.types; ints.between 0 65535;
-              description = ''
-                Port to listen on.
-              '';
-            };
-            baseUrl = {
-              scheme = lib.mkOption {
-                default = "http";
-                type = with lib.types; str;
-                description = ''
-                  Base URL scheme.
-                '';
-              };
-              authority = {
-                host = lib.mkOption {
-                  default = "localhost";
-                  type = with lib.types; str;
-                  description = ''
-                    Base URL host.
-                  '';
-                };
-                port = lib.mkOption {
-                  default = cfg.port;
-                  type = with lib.types; nullOr (ints.between 0 65535);
-                  description = ''
-                    Base URL port.
-                  '';
-                };
-              };
-              path = lib.mkOption {
-                default = [];
-                type = with lib.types; listOf str;
-                description = ''
-                  Base URL path.
-                '';
-              };
-            };
-            extraConfig = lib.mkOption {
+            config = lib.mkOption {
               default = { };
               type = with lib.types; attrsOf anything;
               description = ''
                 Configuration, that will be merged with default options and serialized to JSON.
+                `lib.recursiveUpdate` is used to merge these changes.
               '';
             };
           };

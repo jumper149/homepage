@@ -35,14 +35,16 @@ Install with a NixOS system flake and enable the service.
           ];
           services.homepage = {
             enable = true;
-            port = 8008;
-            baseUrl = {
-              scheme = "https";
-              authority = {
-                host = "example.com";
-                port = null;
+            config = {
+              port = 8008;
+              base-url = {
+                scheme = "https";
+                authority = {
+                  host = "example.com";
+                  port = null;
+                };
+                path = [];
               };
-              path = [];
             };
           };
           services.nginx = {
@@ -51,7 +53,7 @@ Install with a NixOS system flake and enable the service.
               onlySSL = true;
               enableACME = true;
               locations."/" = {
-                proxyPass = "http://127.0.0.1:${toString config.services.homepage.port}/";
+                proxyPass = "http://127.0.0.1:${toString config.services.homepage.config.port}/";
               };
             };
           };
