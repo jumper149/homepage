@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Homepage.Server.Route.Donate where
 
 import Homepage.Application.Configured.Class
@@ -9,7 +7,7 @@ import Homepage.Configuration.Contact
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Data.List
 import Data.Maybe
 import Servant
@@ -42,7 +40,7 @@ donateHandler = do
   contactInformation <- configContactInformation <$> configuration
   revision <- configRevision <$> configuration
   let maybeDonateInformation = contactDonateInformation contactInformation
-  $logInfo "Serve donation page."
+  logInfo "Serve donation page."
   pure $ document baseUrl contactInformation revision (Just 0) Nothing $ do
     h2 "Donate to me"
     case maybeDonateInformation of
@@ -88,7 +86,7 @@ thankYouHandler = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
   revision <- configRevision <$> configuration
-  $logInfo "Serve thankful donation page."
+  logInfo "Serve thankful donation page."
   pure $ document baseUrl contactInformation revision (Just 1) Nothing $ do
     h2 "Thank you"
     p "I just want to let you know, that you are an awesome human being and I am very grateful for your support!"

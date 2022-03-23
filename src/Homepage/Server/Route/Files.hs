@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Homepage.Server.Route.Files where
 
 import Homepage.Application.Configured.Class
@@ -9,7 +7,7 @@ import Homepage.Server.Html.Document
 import Homepage.Server.Html.Files
 import Homepage.Server.Err404
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Servant
 import Servant.API.Generic
 import Servant.HTML.Blaze
@@ -41,7 +39,7 @@ overviewHandler = do
   contactInformation <- configContactInformation <$> configuration
   revision <- configRevision <$> configuration
   fileEntries <- configFileEntries <$> configuration
-  $logInfo "Serve files overview."
+  logInfo "Serve files overview."
   pure $ document baseUrl contactInformation revision (Just 0) (Just TabFiles) $ do
     h2 "my Files"
     fileList baseUrl (Just 0) fileEntries
@@ -51,5 +49,5 @@ filesHandler :: (MonadConfigured m, MonadLogger m)
 filesHandler = do
   directory <- configDirectoryFiles <$> configuration
   fallbackApplication <- application404
-  $logInfo "Serve file download."
+  logInfo "Serve file download."
   RawM.serveDirectoryWith (defaultFileServerSettings directory) { ss404Handler = Just fallbackApplication }

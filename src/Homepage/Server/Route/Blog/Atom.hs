@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Homepage.Server.Route.Blog.Atom where
 
 import Homepage.Application.Blog.Class
@@ -9,7 +7,7 @@ import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Blog
 import Homepage.Configuration.Contact
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Data.List
 import Data.Ord
 import Data.Map qualified as M
@@ -48,10 +46,10 @@ handler = do
   feed <- Feed.AtomFeed <$> atomFeed entries
   case Feed.textFeed feed of
     Nothing -> do
-      $logError "Failed to serialize Atom feed."
+      logError "Failed to serialize Atom feed."
       respond $ WithStatus @500 NoContent
     Just text -> do
-      $logInfo "Serve Atom feed."
+      logInfo "Serve Atom feed."
       respond . WithStatus @200 $ AtomFeed text
 
 atomFeed :: MonadConfigured m
@@ -113,7 +111,7 @@ atomEntry :: (MonadBlog m, MonadConfigured m, MonadLogger m)
 atomEntry blogId BlogEntry { blogTitle , blogTimestamp } = do
   baseUrl <- configBaseUrl <$> configuration
   person <- atomPerson
-  $logInfo $ "Read blog article from file: " <> T.pack (show blogId)
+  logInfo $ "Read blog article from file: " <> T.pack (show blogId)
   content <- readBlogEntryHtml blogId
   pure Atom.Entry
     { Atom.entryId = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId

@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Homepage.Server.Route.Blog where
 
 import Homepage.Application.Blog.Class
@@ -13,7 +11,7 @@ import Homepage.Server.Html.Document
 import Homepage.Server.Route.Blog.Atom qualified as Atom
 import Homepage.Server.Tab
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Data.Text qualified as T
 import Servant hiding (serveDirectoryWith)
 import Servant.API.Generic
@@ -57,7 +55,7 @@ overviewHandler = do
   contactInformation <- configContactInformation <$> configuration
   revision <- configRevision <$> configuration
   blogs <- configBlogEntries <$> configuration
-  $logInfo "Serve blog overview."
+  logInfo "Serve blog overview."
   pure $ document baseUrl contactInformation revision (Just 0) (Just TabBlog) $ do
     h2 "my Blog"
     p $ do
@@ -73,13 +71,13 @@ articleHandler blogId = do
   blogs <- configBlogEntries <$> configuration
   case lookupBlog blogId blogs of
     Nothing -> do
-        $logWarn $ "Failed to serve blog article: " <> T.pack (show blogId)
+        logWarn $ "Failed to serve blog article: " <> T.pack (show blogId)
         respond . WithStatus @404 =<< html404
     Just blog -> do
         baseUrl <- configBaseUrl <$> configuration
         contactInformation <- configContactInformation <$> configuration
         revision <- configRevision <$> configuration
-        $logInfo $ "Serve blog article: " <> T.pack (show blogId)
+        logInfo $ "Serve blog article: " <> T.pack (show blogId)
         respond . WithStatus @200 $ document baseUrl contactInformation revision (Just 1) (Just TabBlog) $ do
           h2 $ text $ blogTitle blog
           p $ do
@@ -105,5 +103,5 @@ rawHandler :: (MonadConfigured m, MonadLogger m)
 rawHandler = do
   directory <- configDirectoryBlog <$> configuration
   fallbackApplication <- application404
-  $logInfo "Serve blog download."
+  logInfo "Serve blog download."
   RawM.serveDirectoryWith (defaultFileServerSettings directory) { ss404Handler = Just fallbackApplication }

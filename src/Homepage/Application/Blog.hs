@@ -1,4 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Homepage.Application.Blog where
@@ -11,7 +10,7 @@ import Homepage.Configuration.Blog
 import Control.Monad
 import Control.Monad.Base
 import Control.Monad.Error.Class
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
@@ -33,7 +32,7 @@ instance (MonadBaseControl IO m, MonadConfigured m, MonadLogger m) => MonadBlog 
     let file = dir <> "/" <> T.unpack (unBlogId blogId) <> ".html"
     lift $ (restoreM =<<) $ liftBaseWith $ \ runInBase ->
       catchError (runInBase $ liftBase $ T.readFile file) $ \ err -> runInBase $ do
-        $logWarn $ "Failed to read HTML for blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
+        logWarn $ "Failed to read HTML for blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
         pure (undefined :: T.Text)
 
 deriving via BlogT ((t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type))
@@ -53,5 +52,5 @@ runAppBlogT tma = runBlogT $ do
   where
     checkBlogEntry :: BlogId -> BlogEntry -> BlogT m ()
     checkBlogEntry blogId blogEntry = do
-      lift $ $logInfo $ "Check blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
+      lift $ logInfo $ "Check blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
       void $ readBlogEntryHtml blogId

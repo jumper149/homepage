@@ -1,5 +1,3 @@
-{-# LANGUAGE TemplateHaskell #-}
-
 module Homepage.Server.Route.Home where
 
 import Homepage.Application.Configured.Class
@@ -11,7 +9,7 @@ import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import Homepage.Server.Tab
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Data.Foldable
 import Data.List
 import Data.Maybe
@@ -31,7 +29,7 @@ handler = do
   revision <- configRevision <$> configuration
   blogs <- configBlogEntries <$> configuration
   blogPreviewMaxLength <- configBlogPreviewMaxLength <$> configuration
-  $logInfo "Serve main page."
+  logInfo "Serve main page."
   pure $ document baseUrl contactInformation revision (Just 0) (Just TabHome) $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt "Portrait of Felix Springer"
     h1 $ toMarkup $ contactName contactInformation
