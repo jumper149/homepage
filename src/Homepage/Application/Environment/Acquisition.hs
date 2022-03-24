@@ -1,3 +1,5 @@
+{-# LANGUAGE GADTs #-}
+
 module Homepage.Application.Environment.Acquisition where
 
 import Homepage.Environment

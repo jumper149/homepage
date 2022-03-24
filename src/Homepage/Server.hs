@@ -22,7 +22,7 @@ server = do
     pure $ setInstallShutdownHandler $ \ closeSocket -> do
       let catchOnceShutdown sig = CatchOnce $ do
             void $ runT $ do
-              logInfo $ "Received signal '" <> T.pack (show sig) <> "'."
+              logInfo $ "Received signal '" <> T.pack (show @Signal sig) <> "'."
               logWarn "Shutdown."
             closeSocket
       let installShutdownHandler sig = void $ installHandler sig (catchOnceShutdown sig) Nothing

@@ -27,7 +27,7 @@ fileList baseUrl depth files = do
     topLevelEntries = fromMaybe mempty $ M.lookup Nothing entryGroups
     otherEntries = M.mapKeys fromJust . M.delete Nothing $ entryGroups
     markupSection (sectionName, entrySet) = do
-      h2 $ toMarkup $ "my " <> sectionName
+      h2 $ text $ "my " <> sectionName
       markupEntries entrySet
     markupEntries entrySet = ul $ toMarkup $ fileToMarkup <$> sortOn (Down . fileTimestamp) (S.toList entrySet)
     fileToMarkup file@FileEntry { fileName, fileTimestamp } =

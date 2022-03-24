@@ -181,7 +181,6 @@ library
       -- ^ implied by GHC2021
     TypeApplications
       -- ^ implied by GHC2021
-    TypeFamilies
     TypeOperators
       -- ^ implied by GHC2021
     TypeSynonymInstances
