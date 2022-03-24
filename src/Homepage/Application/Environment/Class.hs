@@ -1,5 +1,3 @@
-{-# LANGUAGE PolyKinds #-}
-
 module Homepage.Application.Environment.Class where
 
 import Homepage.Environment

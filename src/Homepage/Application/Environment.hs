@@ -1,4 +1,3 @@
-{-# LANGUAGE PolyKinds #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Homepage.Application.Environment where
