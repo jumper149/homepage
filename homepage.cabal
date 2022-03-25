@@ -112,6 +112,8 @@ library
       -- ^ implied by GHC2021
     ExplicitForAll
       -- ^ implied by GHC2021
+    ExplicitNamespaces
+      -- ^ implied by GHC2021
     -- FieldSelectors
       -- ^ implied by GHC2021
       -- ^ TODO: unreleased
@@ -139,6 +141,8 @@ library
     KindSignatures
       -- ^ implied by GHC2021
     LambdaCase
+    -- LexicalNegation
+      -- TODO: unreleased
     MonomorphismRestriction
       -- ^ implied by Haskell2010
       -- ^ implied by GHC2021
@@ -148,6 +152,7 @@ library
       -- ^ implied by GHC2021
     NamedWildCards
       -- ^ implied by GHC2021
+    NumDecimals
     NumericUnderscores
       -- ^ implied by GHC2021
     OverloadedStrings
