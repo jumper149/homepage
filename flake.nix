@@ -178,6 +178,42 @@
         ];
       };
 
+    checks.x86_64-linux.hlint =
+      with import nixpkgs { system = "x86_64-linux"; };
+      stdenv.mkDerivation {
+        name = "hlint"; # TODO: Necessary to avoid segmentation fault.
+        src = ./.;
+        buildPhase = ''
+          hlint ./src
+        '';
+        installPhase = ''
+          mkdir $out
+        '';
+        buildInputs = [
+        ];
+        nativeBuildInputs = [
+          haskellPackages.hlint
+        ];
+      };
+
+    checks.x86_64-linux.hie-yaml =
+      with import nixpkgs { system = "x86_64-linux"; };
+      stdenv.mkDerivation {
+        name = "hie-yaml"; # TODO: Necessary to avoid segmentation fault.
+        src = ./.;
+        buildPhase = ''
+          diff --report-identical-files ./hie.yaml <(gen-hie)
+        '';
+        installPhase = ''
+          mkdir $out
+        '';
+        buildInputs = [
+        ];
+        nativeBuildInputs = [
+          haskellPackages.implicit-hie
+        ];
+      };
+
     devShell.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
       haskellPackages.shellFor {

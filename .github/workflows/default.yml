@@ -11,16 +11,14 @@ jobs:
     - name: "Set up nix"
       uses: cachix/install-nix-action@v15
     - name: "Build"
-      run: nix build
-    - name: "Check"
-      run: nix flake check
-  generate_hie-yaml:
-    name: "Generate hie.yaml"
+      run: nix build --print-build-logs
+  check:
+    name: "Check Flake"
     runs-on: ubuntu-latest
     steps:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v2.4.0
     - name: "Set up nix"
       uses: cachix/install-nix-action@v15
-    - name: "Generate hie.yaml"
-      run: nix develop --command bash -c "diff --report-identical-files hie.yaml <(gen-hie)"
+    - name: "Check"
+      run: nix flake check --keep-going --print-build-logs
