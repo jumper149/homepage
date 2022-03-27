@@ -13,8 +13,6 @@ import Control.Monad.Trans.Reader
 import Data.Kind
 import Data.Proxy
 
-newtype Environment = MkEnvironment { getEnvironment :: forall name value. EnvVarKind name value -> Const value name }
-
 newtype EnvironmentT m a = EnvironmentT { unEnvironmentT :: ReaderT Environment m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl)

@@ -3,7 +3,6 @@
 module Homepage.Application.Environment.Acquisition where
 
 import Homepage.Environment
-import Homepage.Application.Environment
 
 import Control.Applicative
 import Control.Monad.Logger.CallStack

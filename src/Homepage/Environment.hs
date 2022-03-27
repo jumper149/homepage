@@ -2,6 +2,7 @@
 
 module Homepage.Environment where
 
+import Control.Applicative
 import Control.Monad.Logger
 import Data.Kind
 import Data.Proxy
@@ -32,3 +33,5 @@ class KnownSymbol name => KnownEnvVar (envVar :: EnvVarKind name value) | name -
   parseEnvVar :: Proxy name -> String -> Maybe value
   defaultEnvVar :: Proxy name -> value
   caseEnvVar :: Proxy name -> EnvVarKind name value
+
+newtype Environment = MkEnvironment { getEnvironment :: forall name value. EnvVarKind name value -> Const value name }
