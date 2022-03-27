@@ -29,6 +29,10 @@ instance KnownEnvVar 'EnvVarLogLevel where
   defaultEnvVar _ = LevelDebug
   caseEnvVar _ = EnvVarLogLevel
 
+deriving stock instance Eq (EnvVarKind name value)
+deriving stock instance Ord (EnvVarKind name value)
+deriving stock instance Show (EnvVarKind name value)
+
 class KnownSymbol name => KnownEnvVar (envVar :: EnvVarKind name value) | name -> envVar, envVar -> name, envVar -> value where
   parseEnvVar :: Proxy name -> String -> Maybe value
   defaultEnvVar :: Proxy name -> value
