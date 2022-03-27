@@ -37,7 +37,8 @@ acquireEnvironment = do
   checkConsumedEnvironment unconsumedEnv
   pure environment
 
-lookupEnvironmentVariable :: forall name value (envVar :: EnvVarKind name value) m. (KnownEnvVar envVar, MonadLogger m, Show value)
+lookupEnvironmentVariable :: forall name value (envVar :: EnvVarKind name value) m.
+                             (KnownEnvVar envVar, MonadLogger m, Show value)
                           => Proxy name
                           -> Elevator (StateT [(String,String)]) m (Const value name)
 lookupEnvironmentVariable proxy = do

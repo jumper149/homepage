@@ -18,7 +18,10 @@ newtype EnvironmentT m a = EnvironmentT { unEnvironmentT :: ReaderT Environment 
   deriving newtype (MonadTrans, MonadTransControl)
 
 instance Monad m => MonadEnvironment (EnvironmentT m) where
-  environmentVariable :: forall name val (envVar :: EnvVarKind name val). KnownEnvVar envVar => EnvVar name -> EnvironmentT m val
+  environmentVariable :: forall name val (envVar :: EnvVarKind name val).
+                         KnownEnvVar envVar
+                      => EnvVar name
+                      -> EnvironmentT m val
   environmentVariable _ = do
     accessEnvVar <- getEnvironment <$> EnvironmentT ask
     pure $ getConst $ accessEnvVar $ caseEnvVar $ Proxy @name
