@@ -113,7 +113,6 @@ library
     ExplicitForAll
       -- ^ implied by GHC2021
     ExplicitNamespaces
-      -- ^ implied by GHC2021
     -- FieldSelectors
       -- ^ implied by GHC2021
       -- ^ TODO: unreleased
