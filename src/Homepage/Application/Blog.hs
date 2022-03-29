@@ -52,5 +52,5 @@ runAppBlogT tma = runBlogT $ do
   where
     checkBlogEntry :: BlogId -> BlogEntry -> BlogT m ()
     checkBlogEntry blogId blogEntry = do
-      lift $ logInfo $ "Check blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
+      lift $ logInfo $ "Checking blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
       void $ readBlogEntryHtml blogId

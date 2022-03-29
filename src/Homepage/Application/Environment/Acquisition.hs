@@ -56,7 +56,7 @@ lookupEnvironmentVariable proxy = do
       case parseEnvVar proxy str of
         Nothing -> do
           logError $ "Failed to parse environment variable: " <> T.pack (show envVarName)
-          logWarn $ "Fall back to default value for environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show envVarDefault)
+          logWarn $ "Falling back to default value for environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show envVarDefault)
           pure $ Const envVarDefault
         Just val -> do
           logInfo $ "Parsed environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show val)
