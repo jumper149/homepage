@@ -14,7 +14,7 @@ import Homepage.Application.Logging
 import Control.Monad.Base
 import Control.Monad.Except
 import Control.Monad.Identity
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
@@ -53,11 +53,13 @@ runApplicationT :: (MonadIO m, MonadBaseControl IO m)
                 => ApplicationT m a
                 -> m a
 runApplicationT app = do
-  (env, envLog) <- runWriterLoggingT acquireEnvironment
+  (env, preLog) <- runWriterLoggingT $ do
+    logInfo "Startup."
+    acquireEnvironment
 
   let runStackT = runIdentityT
                .| runEnvironmentT env
-               .| runAppLoggingT' . (traverse_ logLine envLog >>)
+               .| runAppLoggingT' . (traverse_ logLine preLog >>)
                .| runAppConfiguredT
                .| runAppBlogT
 
