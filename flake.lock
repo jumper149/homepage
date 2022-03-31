@@ -28,11 +28,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1648726590,
-        "narHash": "sha256-cIguYE9k0VtMGoNS1SqlO9bZ2sWoApAXqESgwC//T68=",
+        "lastModified": 1648760612,
+        "narHash": "sha256-+wIUuWvbq+od+/+L/iJDt/XBtVANEimLA/SyYZkqf6A=",
         "owner": "jumper149",
         "repo": "monad-control-identity",
-        "rev": "1c3f0b38efa24697f3eb6d9978fdada7572076b4",
+        "rev": "a94d2765936642012bb327917668ebf3547ff5ad",
         "type": "github"
       },
       "original": {
