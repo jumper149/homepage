@@ -8,7 +8,7 @@ import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 
 import Control.Monad.Logger.CallStack
-import Data.List
+import Data.List (intersperse)
 import Data.Maybe
 import Servant
 import Servant.API.Generic

@@ -195,7 +195,6 @@ library
     -O2
     -Weverything
     -Wno-all-missed-specialisations
-    -Wno-compat-unqualified-imports
     -Wno-implicit-prelude
     -Wno-missing-export-lists
     -Wno-missing-import-lists

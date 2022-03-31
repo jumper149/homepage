@@ -10,7 +10,7 @@ import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.IO.Class
 import Control.Monad.Trans.Elevator
 import Control.Monad.Trans.State
-import Data.List
+import Data.List (deleteBy, isPrefixOf)
 import Data.Proxy
 import Data.Text qualified as T
 import GHC.TypeLits

@@ -4,7 +4,7 @@ import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Blog
 import Homepage.Server.Html.Depth
 
-import Data.List
+import Data.List (sortOn)
 import Data.Map qualified as M
 import Data.Ord
 import Data.Text qualified as T

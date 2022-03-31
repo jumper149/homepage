@@ -8,7 +8,7 @@ import Homepage.Configuration.Blog
 import Homepage.Configuration.Contact
 
 import Control.Monad.Logger.CallStack
-import Data.List
+import Data.List (sortOn)
 import Data.Ord
 import Data.Map qualified as M
 import Data.Text qualified as T

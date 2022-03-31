@@ -5,7 +5,7 @@ import Homepage.Configuration.Files
 import Homepage.Server.Html.Depth
 
 import Data.Foldable
-import Data.List
+import Data.List (intersperse, sortOn)
 import Data.Map qualified as M
 import Data.Maybe
 import Data.Ord

@@ -11,7 +11,7 @@ import Homepage.Server.Tab
 
 import Control.Monad.Logger.CallStack
 import Data.Foldable
-import Data.List
+import Data.List (intersperse)
 import Data.Maybe
 import Servant
 import Servant.HTML.Blaze
