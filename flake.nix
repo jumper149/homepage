@@ -14,6 +14,7 @@
       repo = "deriving-trans";
       ref = "monad-control-identity";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.monad-control-identity.follows = "monad-control-identity";
     };
     monad-control-identity = {
       type = "github";
