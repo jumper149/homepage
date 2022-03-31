@@ -140,8 +140,7 @@ library
     KindSignatures
       -- ^ implied by GHC2021
     LambdaCase
-    -- LexicalNegation
-      -- TODO: unreleased
+    LexicalNegation
     MonomorphismRestriction
       -- ^ implied by Haskell2010
       -- ^ implied by GHC2021
