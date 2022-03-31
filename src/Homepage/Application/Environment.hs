@@ -1,3 +1,4 @@
+{-# LANGUAGE MonoLocalBinds #-}
 {-# LANGUAGE UndecidableInstances #-}
 
 module Homepage.Application.Environment where
@@ -23,7 +24,8 @@ instance Monad m => MonadEnvironment (EnvironmentT m) where
                       => EnvVar name
                       -> EnvironmentT m val
   environmentVariable _ = do
-    accessEnvVar <- getEnvironment <$> EnvironmentT ask
+    environment <- EnvironmentT ask
+    let accessEnvVar = getEnvironment environment
     pure $ getConst $ accessEnvVar $ caseEnvVar $ Proxy @name
 
 deriving via EnvironmentT ((t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type))
