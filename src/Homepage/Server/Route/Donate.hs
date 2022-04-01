@@ -8,7 +8,7 @@ import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 
 import Control.Monad.Logger.CallStack
-import Data.List (intersperse)
+import Data.List qualified as L
 import Data.Maybe
 import Servant
 import Servant.API.Generic
@@ -57,7 +57,7 @@ donateHtml :: BaseUrl -> DonateInformation -> Html
 donateHtml baseUrl DonateInformation
   { donatePaypalUrl
   , donateXmrAddress
-  } = toMarkup $ intersperse (hr >> br) $ catMaybes
+  } = toMarkup $ L.intersperse (hr >> br) $ catMaybes
     [ markupPaypalUrl <$> donatePaypalUrl
     , markupXmrAddress <$> donateXmrAddress
     ]

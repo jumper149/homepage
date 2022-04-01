@@ -4,7 +4,7 @@ import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Blog
 import Homepage.Server.Html.Depth
 
-import Data.List (sortOn)
+import Data.List qualified as L
 import Data.Map qualified as M
 import Data.Ord
 import Data.Text qualified as T
@@ -17,7 +17,7 @@ blogList :: BaseUrl
          -> BlogEntries
          -> Html
 blogList baseUrl depth blogs = ul $
-  toMarkup $ entryToMarkup <$> sortOn (Down . blogTimestamp . snd) (M.toList (unBlogEntries blogs))
+  toMarkup $ entryToMarkup <$> L.sortOn (Down . blogTimestamp . snd) (M.toList (unBlogEntries blogs))
   where
     entryToMarkup (blogId, BlogEntry { blogTitle, blogTimestamp }) =
       li $ do

@@ -10,7 +10,7 @@ import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.IO.Class
 import Control.Monad.Trans.Elevator
 import Control.Monad.Trans.State
-import Data.List (deleteBy, isPrefixOf)
+import Data.List qualified as L
 import Data.Proxy
 import Data.Text qualified as T
 import GHC.TypeLits
@@ -51,7 +51,7 @@ lookupEnvironmentVariable proxy = do
       pure $ Const envVarDefault
     Just str -> do
       logInfo $ "Spotted environment variable: " <> T.pack (show envVarName)
-      Ascend $ modify $ deleteBy (\ x y -> fst x == fst y) (envVarName, undefined)
+      Ascend $ modify $ L.deleteBy (\ x y -> fst x == fst y) (envVarName, undefined)
       logDebug $ "Parsing environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show str)
       case parseEnvVar proxy str of
         Nothing -> do
@@ -75,4 +75,4 @@ checkConsumedEnvironment env = do
     anomalies -> logWarn $ "Unconsumed environment contains anomalies: " <> T.pack (show anomalies)
   where
     isSuspicious :: (String,String) -> Bool
-    isSuspicious (identifier, _value) = "HOMEPAGE" `isPrefixOf` identifier
+    isSuspicious (identifier, _value) = "HOMEPAGE" `L.isPrefixOf` identifier

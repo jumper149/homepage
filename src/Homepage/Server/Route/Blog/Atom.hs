@@ -8,7 +8,7 @@ import Homepage.Configuration.Blog
 import Homepage.Configuration.Contact
 
 import Control.Monad.Logger.CallStack
-import Data.List (sortOn)
+import Data.List qualified as L
 import Data.Ord
 import Data.Map qualified as M
 import Data.Text qualified as T
@@ -41,7 +41,7 @@ handler = do
   blogs <- configBlogEntries <$> configuration
   atomMaxLength <- configAtomMaxLength <$> configuration
   let recentBlogs = recentBlogEntries atomMaxLength blogs
-  let entryList = sortOn (Down . blogTimestamp . snd) $ M.toList (unBlogEntries recentBlogs)
+  let entryList = L.sortOn (Down . blogTimestamp . snd) $ M.toList (unBlogEntries recentBlogs)
   entries <- traverse (uncurry atomEntry) entryList
   feed <- Feed.AtomFeed <$> atomFeed entries
   case Feed.textFeed feed of

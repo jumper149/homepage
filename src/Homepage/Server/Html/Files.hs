@@ -5,7 +5,7 @@ import Homepage.Configuration.Files
 import Homepage.Server.Html.Depth
 
 import Data.Foldable
-import Data.List (intersperse, sortOn)
+import Data.List qualified as L
 import Data.Map qualified as M
 import Data.Maybe
 import Data.Ord
@@ -29,7 +29,7 @@ fileList baseUrl depth files = do
     markupSection (sectionName, entrySet) = do
       h2 $ text $ "my " <> sectionName
       markupEntries entrySet
-    markupEntries entrySet = ul $ toMarkup $ fileToMarkup <$> sortOn (Down . fileTimestamp) (S.toList entrySet)
+    markupEntries entrySet = ul $ toMarkup $ fileToMarkup <$> L.sortOn (Down . fileTimestamp) (S.toList entrySet)
     fileToMarkup file@FileEntry { fileName, fileTimestamp } =
       li $ do
         toMarkup $ T.pack (showGregorian fileTimestamp)
@@ -44,7 +44,7 @@ fileFormatList :: BaseUrl
                -> Html
 fileFormatList baseUrl depth FileEntry { fileIdentifier, fileFormats } = do
   "[ "
-  toMarkup $ intersperse " | " $ fileFormat <$> fileFormats
+  toMarkup $ L.intersperse " | " $ fileFormat <$> fileFormats
   " ]"
   where
     fileFormat FileFormat { fileFormatName, fileFormatExtension } =
