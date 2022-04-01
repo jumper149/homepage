@@ -20,7 +20,7 @@ instance ( Monad (t m)
          ) => MonadEnvironment (Elevator t m) where
   environmentVariable = lift . environmentVariable
 
-deriving via Elevator t1 (t2 (m :: Type -> Type))
+deriving via Elevator t1 ((t2 :: (Type -> Type) -> Type -> Type) m)
   instance {-# OVERLAPPABLE #-}
     ( Monad (t1 (t2 m))
     , MonadTrans t1

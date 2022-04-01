@@ -19,7 +19,7 @@ instance ( Monad (t m)
   blogEntries = lift blogEntries
   readBlogEntryHtml = lift . readBlogEntryHtml
 
-deriving via Elevator t1 (t2 (m :: Type -> Type))
+deriving via Elevator t1 ((t2 :: (Type -> Type) -> Type -> Type) m)
   instance {-# OVERLAPPABLE #-}
     ( Monad (t1 (t2 m))
     , MonadTrans t1

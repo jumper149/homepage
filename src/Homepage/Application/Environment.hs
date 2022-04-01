@@ -28,7 +28,7 @@ instance Monad m => MonadEnvironment (EnvironmentT m) where
     let accessEnvVar = getEnvironment environment
     pure $ getConst $ accessEnvVar $ caseEnvVar $ Proxy @name
 
-deriving via EnvironmentT ((t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type))
+deriving via EnvironmentT ((t2 :: (Type -> Type) -> Type -> Type) m)
   instance Monad (t2 m) => MonadEnvironment (ComposeT EnvironmentT t2 m)
 
 runEnvironmentT :: Environment -> EnvironmentT m a -> m a

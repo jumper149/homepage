@@ -23,7 +23,7 @@ instance MonadIO m => MonadLogger (LoggingT' m) where
     LoggingT' $ monadLoggerLog loc logSource logLevel $
       toLogStr $ B.pack (show time) <> " | " <> fromLogStr (toLogStr logStr)
 
-deriving via LoggingT' ((t2 :: (Type -> Type) -> Type -> Type) (m :: Type -> Type))
+deriving via LoggingT' ((t2 :: (Type -> Type) -> Type -> Type) m)
   instance MonadIO (t2 m) => MonadLogger (ComposeT LoggingT' t2 m)
 
 runLoggingT' :: (MonadIO m, MonadBaseControl IO m)
