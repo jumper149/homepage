@@ -8,6 +8,13 @@
       repo = "nixpkgs";
       ref = "master";
     };
+    monad-control-identity = {
+      type = "github";
+      owner = "jumper149";
+      repo = "monad-control-identity";
+      ref = "master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     deriving-trans = {
       type = "github";
       owner = "jumper149";
@@ -16,16 +23,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.monad-control-identity.follows = "monad-control-identity";
     };
-    monad-control-identity = {
-      type = "github";
-      owner = "jumper149";
-      repo = "monad-control-identity";
-      ref = "master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, deriving-trans, monad-control-identity }: {
+  outputs = { self, nixpkgs, monad-control-identity, deriving-trans }: {
 
     defaultPackage.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; };
