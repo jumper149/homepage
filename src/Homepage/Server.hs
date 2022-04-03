@@ -6,8 +6,8 @@ import Homepage.Configuration
 import Homepage.Server.Route
 
 import Control.Monad
-import Control.Monad.Logger.CallStack
 import Control.Monad.Base
+import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Control.Identity
 import Data.Text qualified as T
 import Network.Wai.Handler.Warp
