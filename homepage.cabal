@@ -204,6 +204,7 @@ library
   if flag(cabal2nix)
     ghc-options:
       -O2
+      -Werror
   else
     ghc-options:
       -fwrite-ide-info
