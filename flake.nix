@@ -54,7 +54,7 @@
           monad-control-identity = self.callCabal2nix "monad-control-identity" monad-control-identity.outPath {};
           deriving-trans = self.callCabal2nix "deriving-trans" deriving-trans.outPath {};
         };
-      in (haskellPackages.extend overlay).callCabal2nix "homepage" src {};
+      in (haskellPackages.extend overlay).callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
 
     packages.x86_64-linux.blog =
       with import nixpkgs { system = "x86_64-linux"; };

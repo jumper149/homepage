@@ -2,6 +2,9 @@ cabal-version: 3.0
 name: homepage
 version: 0
 
+flag cabal2nix
+  default: False
+
 library
   exposed-modules:
     , Homepage
@@ -191,9 +194,6 @@ library
     TypeSynonymInstances
       -- ^ implied by GHC2021
   ghc-options:
-    -fwrite-ide-info
-      -- ^ Generate data for 'weeder'.
-    -O2
     -Weverything
     -Wno-all-missed-specialisations
     -Wno-implicit-prelude
@@ -201,6 +201,13 @@ library
     -Wno-missing-import-lists
     -Wno-missing-safe-haskell-mode
     -Wno-unsafe
+  if flag(cabal2nix)
+    ghc-options:
+      -O2
+  else
+    ghc-options:
+      -fwrite-ide-info
+        -- ^ Generate data for 'weeder'.
 
 executable homepage
   main-is: Main.hs
