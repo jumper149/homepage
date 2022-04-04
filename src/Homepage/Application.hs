@@ -34,7 +34,7 @@ infixl 1 .|
 
 type StackT = IdentityT
            .| EnvironmentT
-           .| LoggingT'
+           .| TimedLoggingT
            .| ConfiguredT
            .| BlogT
 
@@ -60,7 +60,7 @@ runApplicationT app = do
 
   let runStackT = runIdentityT
                .| runEnvironmentT env
-               .| runAppLoggingT' . (traverse_ logLine preLog >>)
+               .| runAppTimedLoggingT . (traverse_ logLine preLog >>)
                .| runAppConfiguredT
                .| runAppBlogT
 

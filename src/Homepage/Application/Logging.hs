@@ -15,34 +15,34 @@ import Data.ByteString.Char8 qualified as B
 import Data.Kind
 import Data.Time qualified as T
 
-newtype LoggingT' m a = LoggingT' { unLoggingT' :: LoggingT m a }
+newtype TimedLoggingT m a = TimedLoggingT { unTimedLoggingT :: LoggingT m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
-instance MonadIO m => MonadLogger (LoggingT' m) where
+instance MonadIO m => MonadLogger (TimedLoggingT m) where
   monadLoggerLog loc logSource logLevel logStr = do
     time <- lift $ liftIO T.getCurrentTime
-    LoggingT' $ monadLoggerLog loc logSource logLevel $
+    TimedLoggingT $ monadLoggerLog loc logSource logLevel $
       toLogStr $ B.pack (show time) <> " | " <> fromLogStr (toLogStr logStr)
 
-deriving via LoggingT' ((t2 :: (Type -> Type) -> Type -> Type) m)
-  instance MonadIO (t2 m) => MonadLogger (ComposeT LoggingT' t2 m)
+deriving via TimedLoggingT ((t2 :: (Type -> Type) -> Type -> Type) m)
+  instance MonadIO (t2 m) => MonadLogger (ComposeT TimedLoggingT t2 m)
 
-runLoggingT' :: (MonadIO m, MonadBaseControl IO m)
-             => Maybe FilePath
-             -> LogLevel
-             -> LoggingT' m a
-             -> m a
-runLoggingT' maybeFilePath configuredLogLevel = run . withFilter . unLoggingT'
+runTimedLoggingT :: (MonadIO m, MonadBaseControl IO m)
+                 => Maybe FilePath
+                 -> LogLevel
+                 -> TimedLoggingT m a
+                 -> m a
+runTimedLoggingT maybeFilePath configuredLogLevel = run . withFilter . unTimedLoggingT
   where
     run = maybe runStdoutLoggingT runFileLoggingT maybeFilePath
     withFilter = filterLogger $ \ _src lvl -> lvl >= configuredLogLevel
 
-runAppLoggingT' :: (MonadBaseControl IO m, MonadEnvironment m, MonadIO m) => LoggingT' m a -> m a
-runAppLoggingT' tma = do
+runAppTimedLoggingT :: (MonadBaseControl IO m, MonadEnvironment m, MonadIO m) => TimedLoggingT m a -> m a
+runAppTimedLoggingT tma = do
   maybeLogFile <- environmentVariable $ EnvVar @"HOMEPAGE_LOG_FILE"
   logLevel <- environmentVariable $ EnvVar @"HOMEPAGE_LOG_LEVEL"
-  runLoggingT' maybeLogFile logLevel tma
+  runTimedLoggingT maybeLogFile logLevel tma
 
 logLine :: MonadLogger m
         => LogLine
