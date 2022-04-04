@@ -21,7 +21,7 @@ server = do
   withShutdownHandler <- liftBaseWithIdentity $ \ runInIO ->
     pure $ setInstallShutdownHandler $ \ closeSocket -> do
       let catchOnceShutdown sig = CatchOnce $ do
-            void $ runInIO $ do
+            runInIO $ do
               logInfo $ "Received signal '" <> T.pack (show @Signal sig) <> "'."
               logWarn "Shutdown."
             closeSocket
