@@ -67,6 +67,9 @@ Install with a NixOS system flake and enable the service.
 
 ## Development
 
+Enter a development shell.
+Development tools are configured in `flake.nix`.
+
 ```
 # Set up development environment with nix flakes.
 nix develop
@@ -76,4 +79,29 @@ nix build .#defaultConfigFile.x86_64-linux
 
 # Run to debug.
 HOMEPAGE_CONFIG_FILE=result cabal run homepage
+```
+
+### Linting
+
+Linting is configured in `flake.nix`.
+
+```
+# Test and lint.
+nix flake check
+```
+
+### `weeder`
+
+Running `weeder` should be a part of linting, but requires manual execution at the moment.
+
+```
+# Enter development shell.
+nix develop
+
+# Prepare additional information for weeder.
+cabal clean
+cabal build all
+
+# Run weeder.
+weeder
 ```
