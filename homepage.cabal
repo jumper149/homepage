@@ -207,6 +207,7 @@ library
       -Werror
   else
     ghc-options:
+      -fdefer-typed-holes
       -fwrite-ide-info
         -- ^ Generate data for 'weeder'.
 
