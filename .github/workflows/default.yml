@@ -33,3 +33,16 @@ jobs:
       uses: cachix/install-nix-action@v15
     - name: "Check"
       run: nix flake check --keep-going --print-build-logs
+  # TODO: Run weeder using `nix flake check` instead.
+  weeder:
+    name: "Detect dead code"
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Set up GitHub Actions"
+      uses: actions/checkout@v2.4.0
+    - name: "Set up nix"
+      uses: cachix/install-nix-action@v15
+    - name: "Prepare weeder"
+      run: nix develop --command cabal build all
+    - name: "Run weeder"
+      run: nix develop --command weeder
