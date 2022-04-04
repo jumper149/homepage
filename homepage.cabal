@@ -78,8 +78,9 @@ library
       -- ^ implied by GHC2021
     ConstraintKinds
       -- ^ implied by GHC2021
-    CUSKs
+    -- CUSKs
       -- ^ implied by Haskell2010
+      -- TODO: deprecated
     -- DatatypeContexts
       -- ^ implied by Haskell2010
       -- ^ TODO: deprecated
