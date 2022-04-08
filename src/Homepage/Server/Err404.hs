@@ -5,20 +5,21 @@ import Homepage.Configuration
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 
+import Control.Monad.Logger.CallStack
 import Data.ByteString.Builder
-import Servant
 import Network.HTTP.Types.Status
 import Network.Wai
+import Network.Wai.Trans
 import Text.Blaze.Html.Renderer.Utf8
 import Text.Blaze.Html5 as H
 
-application404 :: MonadConfigured m
-               => m Application
-application404 = do
+application404 :: (MonadConfigured m, MonadLogger m)
+               => ApplicationT m
+application404 _req rsp = do
   html404' <- html404
-  pure $ \ _ rsp -> rsp $
-    responseBuilder status404 [ (,) "Content-Type" "text/html" ] $
-      lazyByteString $ renderHtml html404'
+  logWarn "Serve generic 404 page."
+  rsp $ responseBuilder status404 [ (,) "Content-Type" "text/html" ] $
+    lazyByteString $ renderHtml html404'
 
 html404 :: MonadConfigured m
         => m Html

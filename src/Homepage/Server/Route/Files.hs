@@ -8,6 +8,8 @@ import Homepage.Server.Html.Files
 import Homepage.Server.Err404
 
 import Control.Monad.Logger.CallStack
+import Control.Monad.Trans.Control.Identity
+import Network.Wai.Trans
 import Servant
 import Servant.API.Generic
 import Servant.HTML.Blaze
@@ -25,7 +27,7 @@ data Routes route = Routes
     }
   deriving stock Generic
 
-routes :: (MonadConfigured m, MonadLogger m)
+routes :: (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m)
        => Routes (AsServerT m)
 routes = Routes
     { routeOverview = overviewHandler
@@ -44,10 +46,10 @@ overviewHandler = do
     h2 "my Files"
     fileList baseUrl (Just 0) fileEntries
 
-filesHandler :: (MonadConfigured m, MonadLogger m)
+filesHandler :: (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m)
              => ServerT RawM.RawM m
 filesHandler = do
   directory <- configDirectoryFiles <$> configuration
-  fallbackApplication <- application404
+  fallbackApplication <- runApplicationT application404
   logInfo "Serve file download."
   RawM.serveDirectoryWith (defaultFileServerSettings directory) { ss404Handler = Just fallbackApplication }

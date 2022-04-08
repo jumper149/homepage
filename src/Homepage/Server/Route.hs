@@ -9,6 +9,7 @@ import Homepage.Server.Route.Home qualified
 import Homepage.Server.Route.Static qualified
 
 import Control.Monad.Logger
+import Control.Monad.Trans.Control.Identity
 import GHC.Generics
 import Servant
 import Servant.API.Generic
@@ -23,7 +24,7 @@ data Routes route = Routes
     }
   deriving stock Generic
 
-routes :: (MonadBlog m, MonadConfigured m, MonadLogger m)
+routes :: (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadLogger m)
        => Routes (AsServerT m)
 routes = Routes
     { routeHome = Homepage.Server.Route.Home.handler

@@ -12,7 +12,9 @@ import Homepage.Server.Route.Blog.Atom qualified as Atom
 import Homepage.Server.Tab
 
 import Control.Monad.Logger.CallStack
+import Control.Monad.Trans.Control.Identity
 import Data.Text qualified as T
+import Network.Wai.Trans
 import Servant hiding (serveDirectoryWith)
 import Servant.API.Generic
 import Servant.HTML.Blaze
@@ -39,7 +41,7 @@ data Routes route = Routes
     }
   deriving stock Generic
 
-routes :: (MonadBlog m, MonadConfigured m, MonadLogger m)
+routes :: (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadLogger m)
        => Routes (AsServerT m)
 routes = Routes
     { routeRaw = rawHandler
@@ -98,10 +100,10 @@ articleHandler blogId = do
                  ! HA.style "border: none;"
                  $ mempty
 
-rawHandler :: (MonadConfigured m, MonadLogger m)
+rawHandler :: (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m)
            => ServerT RawM.RawM m
 rawHandler = do
   directory <- configDirectoryBlog <$> configuration
-  fallbackApplication <- application404
+  fallbackApplication <- runApplicationT application404
   logInfo "Serve blog download."
   RawM.serveDirectoryWith (defaultFileServerSettings directory) { ss404Handler = Just fallbackApplication }
