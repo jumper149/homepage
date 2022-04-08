@@ -22,9 +22,6 @@ newtype Hash = MkHash { getHash :: Word }
 requestHash :: Request -> Hash
 requestHash = MkHash . fromIntegral . hash . show
 
-showHash :: Hash -> String
-showHash = show . getHash
-
 newtype RequestHashT m a = RequestHashT { unRequestHashT :: ReaderT Hash m a }
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
