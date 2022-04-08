@@ -3,15 +3,19 @@ module Homepage.Server where
 import Homepage.Application.Blog.Class
 import Homepage.Application.Configured.Class
 import Homepage.Configuration
+import Homepage.Handler
+import Homepage.Handler.RequestHash
 import Homepage.Server.Route
 
 import Control.Monad
 import Control.Monad.Base
 import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Control.Identity
+import Data.Proxy
 import Data.Text qualified as T
 import Network.Wai.Handler.Warp
 import Network.Wai.Trans
+import Servant.Server
 import Servant.Server.Generic
 import System.Posix.Signals
 
@@ -37,9 +41,13 @@ server = do
 
   logInfo "Start server."
   liftBaseWithIdentity $ \ runInIO ->
-    runSettings settings $ addMiddleware $ genericServeT (liftBase . runInIO) routes
+    runSettings settings $ addMiddleware $
+      serveWithContextT (Proxy @WrappedAPI) EmptyContext (liftBase . runInIO) $
+        wrapApi $ genericServerT routes
 
 middleware :: MonadLogger m => MiddlewareT m
 middleware application req resp = do
-  logDebug $ "Received HTTP request: " <> T.pack (show req)
+  let reqHash = T.pack $ showHash $ requestHash req
+  logInfo $ "Received HTTP request: " <> reqHash
+  logDebug $ "Full HTTP request '" <> reqHash <> "': " <> T.pack (show req)
   application req resp

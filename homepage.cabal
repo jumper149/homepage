@@ -24,6 +24,8 @@ library
     , Homepage.Configuration.Contact
     , Homepage.Configuration.Files
     , Homepage.Environment
+    , Homepage.Handler
+    , Homepage.Handler.RequestHash
     , Homepage.Server
     , Homepage.Server.Err404
     , Homepage.Server.Html.Blog
@@ -52,6 +54,7 @@ library
     , deriving-aeson
     , deriving-trans
     , feed
+    , hashable
     , http-media
     , http-types
     , monad-control
