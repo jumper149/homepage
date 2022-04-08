@@ -14,6 +14,8 @@ data EnvVarKind :: Symbol -> Type -> Type where
   EnvVarLogFile :: EnvVarKind "HOMEPAGE_LOG_FILE" (Maybe FilePath)
   EnvVarLogLevel :: EnvVarKind "HOMEPAGE_LOG_LEVEL" LogLevel
 
+deriving stock instance Show (EnvVarKind name value)
+
 instance KnownEnvVar 'EnvVarConfigFile where
   parseEnvVar _ = Just
   defaultEnvVar _ = "./homepage.json"
@@ -28,10 +30,6 @@ instance KnownEnvVar 'EnvVarLogLevel where
   parseEnvVar _ = readMaybe
   defaultEnvVar _ = LevelDebug
   caseEnvVar _ = EnvVarLogLevel
-
-deriving stock instance Eq (EnvVarKind name value)
-deriving stock instance Ord (EnvVarKind name value)
-deriving stock instance Show (EnvVarKind name value)
 
 class KnownSymbol name => KnownEnvVar (envVar :: EnvVarKind name value)
     | name -> envVar , envVar -> name , envVar -> value where
