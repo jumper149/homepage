@@ -10,7 +10,7 @@ import Homepage.Server.Route
 
 import Control.Monad.Base
 import Control.Monad.Error.Class
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Compose
@@ -45,8 +45,10 @@ newtype HandlerT m a = HandlerT { unHandlerT :: StackT m a }
   deriving newtype MonadBlog
   deriving newtype (MonadError e)
 
-runHandlerT :: Hash -> HandlerT m a -> m a
-runHandlerT randomHash = (runIdentityT . descend .| runRequestHashT randomHash) . unHandlerT
+runHandlerT :: MonadLogger m => Hash -> HandlerT m a -> m a
+runHandlerT randomHash handler = runIdentityT . descend
+                              .| runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)
+                               $ unHandlerT handler
 
-wrapApi :: ServerT API (HandlerT m) -> ServerT WrappedAPI m
+wrapApi :: MonadLogger m => ServerT API (HandlerT m) -> ServerT WrappedAPI m
 wrapApi server randomHash = hoistServer (Proxy @API) (runHandlerT randomHash) server

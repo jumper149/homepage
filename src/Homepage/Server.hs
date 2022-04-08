@@ -4,7 +4,6 @@ import Homepage.Application.Blog.Class
 import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Handler
-import Homepage.Handler.RequestHash
 import Homepage.Server.Route
 
 import Control.Monad
@@ -47,7 +46,5 @@ server = do
 
 middleware :: MonadLogger m => MiddlewareT m
 middleware application req resp = do
-  let reqHash = T.pack $ showHash $ requestHash req
-  logInfo $ "Received HTTP request: " <> reqHash
-  logDebug $ "Full HTTP request '" <> reqHash <> "': " <> T.pack (show req)
+  logDebug $ "Received HTTP request: " <> T.pack (show req)
   application req resp
