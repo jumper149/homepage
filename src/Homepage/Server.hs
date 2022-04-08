@@ -11,6 +11,7 @@ import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Control.Identity
 import Data.Text qualified as T
 import Network.Wai.Handler.Warp
+import Network.Wai.Trans
 import Servant.Server.Generic
 import System.Posix.Signals
 
@@ -31,6 +32,14 @@ server = do
       installShutdownHandler sigTERM
   let settings = withShutdownHandler $ withPort defaultSettings
 
+  logInfo "Configure middleware."
+  addMiddleware <- runMiddlewareT middleware
+
   logInfo "Start server."
   liftBaseWithIdentity $ \ runInIO ->
-    runSettings settings $ genericServeT (liftBase . runInIO) routes
+    runSettings settings $ addMiddleware $ genericServeT (liftBase . runInIO) routes
+
+middleware :: MonadLogger m => MiddlewareT m
+middleware application req resp = do
+  logDebug $ "Received HTTP request: " <> T.pack (show req)
+  application req resp
