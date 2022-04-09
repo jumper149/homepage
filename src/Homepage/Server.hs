@@ -42,7 +42,7 @@ server = do
   liftBaseWithIdentity $ \ runInIO ->
     runSettings settings $ addMiddleware $
       serveWithContextT (Proxy @WrappedAPI) EmptyContext (liftBase . runInIO) $
-        wrapApi $ genericServerT routes
+        hoistServerRunHandlerT $ genericServerT routes
 
 middleware :: MonadLogger m => MiddlewareT m
 middleware application req resp = do

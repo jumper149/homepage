@@ -25,6 +25,9 @@ import Servant.API.Generic
 type API = ToServantApi Routes
 type WrappedAPI = RequestHash :> API
 
+hoistServerRunHandlerT :: MonadLogger m => ServerT API (HandlerT m) -> ServerT WrappedAPI m
+hoistServerRunHandlerT server randomHash = hoistServer (Proxy @API) (runHandlerT randomHash) server
+
 type StackT = Elevator IdentityT
            .| RequestHashT
 
@@ -41,6 +44,3 @@ runHandlerT :: MonadLogger m => Hash -> HandlerT m a -> m a
 runHandlerT randomHash handler = runIdentityT . descend
                               .| runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)
                                $ unHandlerT handler
-
-wrapApi :: MonadLogger m => ServerT API (HandlerT m) -> ServerT WrappedAPI m
-wrapApi server randomHash = hoistServer (Proxy @API) (runHandlerT randomHash) server
