@@ -43,6 +43,7 @@ library
     , Homepage.Server.Tab
   other-modules:
     , Control.Monad.Logger.OrphanInstances
+    , Control.Monad.Trans.Compose.Infix
     , Text.Blaze.Html5.Extra
   build-depends:
     , aeson
