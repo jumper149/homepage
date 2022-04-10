@@ -1,4 +1,4 @@
-:revdate: 2022-04-09
+:revdate: 2022-04-10
 = Environment Variables
 
 The way, that programs usually interact with __environment variables__, can be expressed beautifully in __Haskell__.
@@ -7,7 +7,7 @@ For me __dependent types__ are the most natural way to semantically reason about
 Unfortunately dependently typed languages are not really production-ready yet.
 __Haskell__ and __GHC__ often come close enough.
 
-The https://github.com/jumper149/homepage[source code] for my homepage has become a playground for exploring new ideas in Haskell.
+The https://github.com/jumper149/homepage[source code] of my homepage has become a playground for exploring new ideas in Haskell.
 And that's also where this idea originated from.
 
 == Example use case
@@ -95,8 +95,8 @@ With this setup we can access the final value through a function, which we initi
 
 [source,haskell]
 ----
-getEnvironment :: IO ((x :: EnvVarKind) -> EnvVarType x)
-getEnvironment = undefined -- TODO: Left out for brevity.
+acquireEnvironment :: IO ((x :: EnvVarKind) -> EnvVarType x)
+acquireEnvironment = undefined -- TODO: Left out for brevity.
 ----
 
 The actual implementation is left out here, but the idea is as follows.
@@ -164,20 +164,21 @@ Finally the function we use to access an environment variable stays pretty much 
 
 [source,haskell]
 ----
-getEnvironment :: IO (forall name value. EnvVarKind name value -> value)
-getEnvironment = undefined -- TODO: Left out for brevity.
+acquireEnvironment :: IO (forall name value. EnvVarKind name value -> value)
+acquireEnvironment = undefined -- TODO: Left out for brevity.
 ----
 
 [TIP]
 ====
 It's tempting to use __TypeFamilies__ instead of __FunctionalDependencies__ and remove the type parameters from `EnvVarKind`.
-Unfortunately this makes it impossible to implement the accessor function in `getEnvironment`.
+Unfortunately this makes it impossible to implement the accessor function in `acquireEnvironment`.
 ====
 
 To easily use this accessor function an mtl-style class can make sense.
 Here is an example of the https://github.com/jumper149/homepage/blob/a3479dd1e25d6ffe25a6f29d3d7888faed5bea2d/src/Homepage/Application/Logging.hs#L43[usage] of such a https://github.com/jumper149/homepage/blob/a3479dd1e25d6ffe25a6f29d3d7888faed5bea2d/src/Homepage/Application/Environment/Class.hs#L11[class].
 
 The Haskell snippets from this article are used https://github.com/jumper149/homepage/blob/a3479dd1e25d6ffe25a6f29d3d7888faed5bea2d/src/Homepage/Environment.hs[here].
+`acquireEnvironment` is actually implemented https://github.com/jumper149/homepage/blob/a3479dd1e25d6ffe25a6f29d3d7888faed5bea2d/src/Homepage/Application/Environment/Acquisition.hs#L19[here].
 
 [appendix]
 [#nameToEnvVar]
@@ -189,8 +190,10 @@ Together with `envVar -> name` it enforces that names and environment variables 
 
 Wihout the `name -> envVar` dependency there could be two references to the same environment variable.
 
-In our fictional dependently typed language we would have to use a proof to ensure this property.
+In our fictional dependently typed language we would have to use a proof to ensure this property actually holds.
+We want `EnvVarName` to be injective.
 
+.Proving uniqueness of names in a dependently typed language.
 [source,haskell]
 ----
 ResolveEnvVarName :: String -> Maybe EnvVarKind
@@ -200,9 +203,11 @@ ResolveEnvVarName = \case
   "LOG_LEVEL" -> Just EnvVarLogLevel
   _ -> Nothing
 
-proofName : {x :: EnvVarKind} -> Just x = ResolveEnvVarName (EnvVarName x)
-proofName = case x of
+proofUniqueName : {x :: EnvVarKind} -> Just x = ResolveEnvVarName (EnvVarName x)
+proofUniqueName = case x of
   EnvVarConfigFile -> Refl
   EnvVarLogFile -> Refl
   EnvVarLogLevel -> Refl
 ----
+
+On a side-note, I checked the dependently typed approach with Idris2, but didn't want to introduce any syntax aside from Haskell.
