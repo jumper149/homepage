@@ -1,0 +1,208 @@
+:revdate: 2022-04-09
+= Environment Variables
+
+The way, that programs usually interact with __environment variables__, can be expressed beautifully in __Haskell__.
+
+For me __dependent types__ are the most natural way to semantically reason about programs.
+Unfortunately dependently typed languages are not really production-ready yet.
+__Haskell__ and __GHC__ often come close enough.
+
+The https://github.com/jumper149/homepage[source code] for my homepage has become a playground for exploring new ideas in Haskell.
+And that's also where this idea originated from.
+
+== Example use case
+
+Usually programs interact with a fixed set of environment variables.
+In this depiction environment variables have a __name__, a __content type__ and a __default value__.
+
+.An example of environment variables used by an HTTP server.
+`HOMEPAGE_CONFIG_FILE`::
+A file path, where the configuration is read from.
+Defaults to `"./homepage.json"`.
+
+`HOMEPAGE_LOG_FILE`::
+A file path, where the log is appended.
+When unset the log is piped to __StdOut__.
+
+`HOMEPAGE_LOG_LEVEL`::
+The minimum log level.
+Messages with an even lower log level will be discarded.
+Defaults to `"LevelDebug"`.
+
+Furthermore we will need a parser for each environment variable.
+
+== Dependently typed approach
+
+In a fictional dependently typed language we can just use a simple data type and functions.
+
+We use the sum-type `EnvVarKind` to identify each environment variable.
+
+.A data type representing an environment variable.
+[source,haskell]
+----
+data EnvVarKind = EnvVarConfigFile
+                | EnvVarLogFile
+                | EnvVarLogLevel
+----
+
+Now we can pattern-match on any `EnvVarKind`.
+The exhaustiveness-checker of our fictional language would warn us about missing cases.
+
+.The name of an environment variable is a simple function.
+[source,haskell]
+----
+EnvVarName :: EnvVarKind -> String
+EnvVarName = \case
+  EnvVarConfigFile -> "HOMEPAGE_CONFIG_FILE"
+  EnvVarLogFile -> "HOMEPAGE_LOG_FILE"
+  EnvVarLogLevel -> "HOMEPAGE_LOG_LEVEL"
+----
+
+.The type of an environment variable is already a bit special.
+[source,haskell]
+----
+EnvVarType :: EnvVarKind -> Type
+EnvVarType = \case
+  EnvVarConfigFile -> FilePath
+  EnvVarLogFile -> Maybe FilePath
+  EnvVarLogLevel -> LogLevel
+----
+
+The function `EnvVarType` returns a value of type `Type`.
+We can now use this in `defaultEnvVar` and `parseEnvVar`.
+
+.The default value of an environment variable is a dependently typed function.
+[source,haskell]
+----
+defaultEnvVar :: (x :: EnvVarKind) -> EnvVarType x
+defaultEnvVar = \case
+  EnvVarConfigFile -> "./homepage.json"
+  EnvVarLogFile -> Nothing
+  EnvVarLogLevel -> LevelDebug
+----
+
+.The parser of an environment variable is also a dependently typed function.
+[source,haskell]
+----
+parseEnvVar :: (x :: EnvVarKind) -> String -> Maybe (EnvVarType x)
+parseEnvVar = \case
+  EnvVarConfigFile -> parseFilePath
+  EnvVarLogFile -> fmap Just . parseFilePath
+  EnvVarLogLevel -> readMaybe
+----
+
+With this setup we can access the final value through a function, which we initialize during startup of our application.
+
+[source,haskell]
+----
+getEnvironment :: IO ((x :: EnvVarKind) -> EnvVarType x)
+getEnvironment = undefined -- TODO: Left out for brevity.
+----
+
+The actual implementation is left out here, but the idea is as follows.
+
+For each environment variable, lookup the `EnvVarName`.
+When there is a match, parse the content using `parseEnvVar`.
+When parsing fails or when there is no match use `defaultEnvVar`.
+Add a case for each environment variable in the resulting function and return the value.
+The exhaustiveness-checker will come in handy again.
+
+== Haskell approach
+
+Unfortunately in Haskell we don't have dependent types.
+We can still get very close with todays language extensions (mainly __GADTs__ and __FunctionalDependencies__).
+
+.`KnownEnvVar` uses functional dependencies and sets the same laws as the previous section.
+[source,haskell]
+----
+class KnownSymbol name => KnownEnvVar (envVar :: EnvVarKind name value)
+    | name -> envVar, envVar -> name, envVar -> value where
+  parseEnvVar :: Proxy name -> String -> Maybe value
+  defaultEnvVar :: Proxy name -> value
+  caseEnvVar :: Proxy name -> EnvVarKind name value
+----
+
+In Haskell we can't use simple functions like `EnvVarName` and `EnvVarType`.
+Instead we use functional dependencies `envVar -> name` and `envVar -> value`.
+
+NOTE: Additionaly we use `name -> envVar` to ensure, that we have exactly one `envVar` for each `name`. There are more details in the <<nameToEnvVar>>.
+
+`name` and `value` are now required as type parameters to `EnvVarKind` to bring them into scope for the methods.
+Aside from the additional type level information, `EnvVarKind` has exactly the same constructors as before.
+
+.`EnvVarKind` is now a GADT.
+[source,haskell]
+----
+data EnvVarKind :: Symbol -> Type -> Type where
+  EnvVarConfigFile :: EnvVarKind "HOMEPAGE_CONFIG_FILE" FilePath
+  EnvVarLogFile :: EnvVarKind "HOMEPAGE_LOG_FILE" (Maybe FilePath)
+  EnvVarLogLevel :: EnvVarKind "HOMEPAGE_LOG_LEVEL" LogLevel
+----
+
+The information, that we previously encoded with simple functions, now becomes available on type-level through instances of `KnownEnvVar`.
+
+.Instances for `KnownEnvVar` are required for each constructor of `EnvVarKind`.
+[source,haskell]
+----
+instance KnownEnvVar 'EnvVarConfigFile where
+  parseEnvVar _ = parseFilePath
+  defaultEnvVar _ = "./homepage.json"
+  caseEnvVar _ = EnvVarConfigFile
+
+instance KnownEnvVar 'EnvVarLogFile where
+  parseEnvVar _ = fmap Just . parseFilePath
+  defaultEnvVar _ = Nothing
+  caseEnvVar _ = EnvVarLogFile
+
+instance KnownEnvVar 'EnvVarLogLevel where
+  parseEnvVar _ = readMaybe
+  defaultEnvVar _ = LevelDebug
+  caseEnvVar _ = EnvVarLogLevel
+----
+
+Finally the function we use to access an environment variable stays pretty much the same.
+
+[source,haskell]
+----
+getEnvironment :: IO (forall name value. EnvVarKind name value -> value)
+getEnvironment = undefined -- TODO: Left out for brevity.
+----
+
+[TIP]
+====
+It's tempting to use __TypeFamilies__ instead of __FunctionalDependencies__ and remove the type parameters from `EnvVarKind`.
+Unfortunately this makes it impossible to implement the accessor function in `getEnvironment`.
+====
+
+To easily use this accessor function an mtl-style class can make sense.
+Here is an example of the https://github.com/jumper149/homepage/blob/a3479dd1e25d6ffe25a6f29d3d7888faed5bea2d/src/Homepage/Application/Logging.hs#L43[usage] of such a https://github.com/jumper149/homepage/blob/a3479dd1e25d6ffe25a6f29d3d7888faed5bea2d/src/Homepage/Application/Environment/Class.hs#L11[class].
+
+The Haskell snippets from this article are used https://github.com/jumper149/homepage/blob/a3479dd1e25d6ffe25a6f29d3d7888faed5bea2d/src/Homepage/Environment.hs[here].
+
+[appendix]
+[#nameToEnvVar]
+[reftext="Appendix"]
+== Uniqueness of names
+
+The functional dependency `name -> envVar`, that we can use in Haskell, is very powerful and would require a bit more effort with dependent types.
+Together with `envVar -> name` it enforces that names and environment variables are in a one-to-one relationship.
+
+Wihout the `name -> envVar` dependency there could be two references to the same environment variable.
+
+In our fictional dependently typed language we would have to use a proof to ensure this property.
+
+[source,haskell]
+----
+ResolveEnvVarName :: String -> Maybe EnvVarKind
+ResolveEnvVarName = \case
+  "CONFIG_FILE" -> Just EnvVarConfigFile
+  "LOG_FILE" -> Just EnvVarLogFile
+  "LOG_LEVEL" -> Just EnvVarLogLevel
+  _ -> Nothing
+
+proofName : {x :: EnvVarKind} -> Just x = ResolveEnvVarName (EnvVarName x)
+proofName = case x of
+  EnvVarConfigFile -> Refl
+  EnvVarLogFile -> Refl
+  EnvVarLogLevel -> Refl
+----
