@@ -65,6 +65,10 @@
     { "timestamp": "2022-02-13"
     , "title": "JSON Formatting"
     }
+  , "anInterfaceForAccessingEnvironmentVariables":
+    { "timestamp": "2022-04-11"
+    , "title": "an Interface for accessing Environment Variables"
+    }
   }
 , "blog-preview-max-length": 5
 , "atom-max-length": null
