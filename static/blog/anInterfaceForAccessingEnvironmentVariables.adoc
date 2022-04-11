@@ -188,7 +188,7 @@ The Haskell snippets from this article are used https://github.com/jumper149/hom
 The functional dependency `name -> envVar`, that we can use in Haskell, is very powerful and would require a bit more effort with dependent types.
 Together with `envVar -> name` it enforces that names and environment variables are in a one-to-one relationship.
 
-Wihout the `name -> envVar` dependency there could be two references to the same environment variable name.
+Without the `name -> envVar` dependency there could be two references to the same environment variable name.
 
 In a dependently typed language we would have to use a proof to ensure this property actually holds.
 We want `EnvVarName` to be injective.
