@@ -2,8 +2,8 @@ module Homepage.Configuration.BaseUrl where
 
 import Data.Aeson qualified as A
 import Data.Text qualified as T
-import Deriving.Aeson qualified as A
 import Data.Word
+import Deriving.Aeson qualified as A
 import GHC.Generics
 
 displayBaseUrl :: BaseUrl -> T.Text

@@ -4,8 +4,8 @@ import Data.Aeson qualified as A
 import Data.Map qualified as M
 import Data.Set qualified as S
 import Data.Text qualified as T
-import Deriving.Aeson qualified as A
 import Data.Time.Calendar
+import Deriving.Aeson qualified as A
 import GHC.Generics
 
 data FileFormat = FileFormat

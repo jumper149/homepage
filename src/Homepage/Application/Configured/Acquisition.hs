@@ -3,8 +3,8 @@ module Homepage.Application.Configured.Acquisition where
 import Homepage.Application.Environment.Class
 import Homepage.Configuration
 
-import Control.Monad.Logger.CallStack
 import Control.Monad.IO.Class
+import Control.Monad.Logger.CallStack
 import Data.Aeson qualified as A
 import Data.Text qualified as T
 import System.Posix.Files

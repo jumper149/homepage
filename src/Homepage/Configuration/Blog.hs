@@ -5,8 +5,8 @@ import Data.List qualified as L
 import Data.Map qualified as M
 import Data.Ord
 import Data.Text qualified as T
-import Deriving.Aeson qualified as A
 import Data.Time.Calendar
+import Deriving.Aeson qualified as A
 import GHC.Generics
 import Servant qualified as S
 

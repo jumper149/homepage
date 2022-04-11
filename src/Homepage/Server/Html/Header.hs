@@ -2,8 +2,8 @@ module Homepage.Server.Html.Header where
 
 import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Contact
-import Homepage.Server.Tab
 import Homepage.Server.Html.Depth
+import Homepage.Server.Tab
 
 import Control.Monad
 import Data.Foldable

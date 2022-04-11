@@ -2,10 +2,10 @@ module Homepage.Server.Route.Files where
 
 import Homepage.Application.Configured.Class
 import Homepage.Configuration
-import Homepage.Server.Tab
+import Homepage.Server.Err404
 import Homepage.Server.Html.Document
 import Homepage.Server.Html.Files
-import Homepage.Server.Err404
+import Homepage.Server.Tab
 
 import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Control.Identity

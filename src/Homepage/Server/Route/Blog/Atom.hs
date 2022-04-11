@@ -9,18 +9,18 @@ import Homepage.Configuration.Contact
 
 import Control.Monad.Logger.CallStack
 import Data.List qualified as L
-import Data.Ord
 import Data.Map qualified as M
+import Data.Ord
 import Data.Text qualified as T
 import Data.Text.Lazy qualified as LT
 import Data.Text.Lazy.Encoding qualified as LT
 import Data.Time qualified as T
 import GHC.Generics
 import Network.HTTP.Media qualified as Media
-import Text.Atom.Feed qualified as Atom
-import Text.Feed.Types qualified as Feed
-import Text.Feed.Export qualified as Feed
 import Servant
+import Text.Atom.Feed qualified as Atom
+import Text.Feed.Export qualified as Feed
+import Text.Feed.Types qualified as Feed
 
 type API = UVerb 'GET '[Atom] '[WithStatus 200 AtomFeed, WithStatus 500 NoContent]
 

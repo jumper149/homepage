@@ -16,8 +16,8 @@ import Data.Maybe
 import Servant
 import Servant.HTML.Blaze
 import Text.Blaze.Html5
-import Text.Blaze.Html5.Extra
 import Text.Blaze.Html5.Attributes
+import Text.Blaze.Html5.Extra
 
 type API = Get '[HTML] Html
 
