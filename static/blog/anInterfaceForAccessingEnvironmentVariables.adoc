@@ -1,5 +1,5 @@
 :revdate: 2022-04-11
-= Environment Variables
+= an Interface for accessing Environment Variables
 
 The way, that programs usually interact with __environment variables__, can be expressed beautifully in __Haskell__.
 
