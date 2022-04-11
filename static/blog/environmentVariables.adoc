@@ -1,4 +1,4 @@
-:revdate: 2022-04-10
+:revdate: 2022-04-11
 = Environment Variables
 
 The way, that programs usually interact with __environment variables__, can be expressed beautifully in __Haskell__.
@@ -33,7 +33,7 @@ Furthermore we will need a parser for each environment variable.
 
 == Dependently typed approach
 
-In a fictional dependently typed language we can just use a simple data type and functions.
+In a dependently typed language, like Idris, we can just use a simple data type and functions.
 
 We use the sum-type `EnvVarKind` to identify each environment variable.
 
@@ -46,26 +46,26 @@ data EnvVarKind = EnvVarConfigFile
 ----
 
 Now we can pattern-match on any `EnvVarKind`.
-The exhaustiveness-checker of our fictional language would warn us about missing cases.
+The exhaustiveness-checker of Idris would warn us about missing cases.
 
 .The name of an environment variable is a simple function.
 [source,haskell]
 ----
-EnvVarName :: EnvVarKind -> String
+EnvVarName : EnvVarKind -> String
 EnvVarName = \case
-  EnvVarConfigFile -> "HOMEPAGE_CONFIG_FILE"
-  EnvVarLogFile -> "HOMEPAGE_LOG_FILE"
-  EnvVarLogLevel -> "HOMEPAGE_LOG_LEVEL"
+  EnvVarConfigFile => "HOMEPAGE_CONFIG_FILE"
+  EnvVarLogFile => "HOMEPAGE_LOG_FILE"
+  EnvVarLogLevel => "HOMEPAGE_LOG_LEVEL"
 ----
 
 .The type of an environment variable is already a bit special.
 [source,haskell]
 ----
-EnvVarType :: EnvVarKind -> Type
+EnvVarType : EnvVarKind -> Type
 EnvVarType = \case
-  EnvVarConfigFile -> FilePath
-  EnvVarLogFile -> Maybe FilePath
-  EnvVarLogLevel -> LogLevel
+  EnvVarConfigFile => FilePath
+  EnvVarLogFile => Maybe FilePath
+  EnvVarLogLevel => LogLevel
 ----
 
 The function `EnvVarType` returns a value of type `Type`.
@@ -74,32 +74,32 @@ We can now use this in `defaultEnvVar` and `parseEnvVar`.
 .The default value of an environment variable is a dependently typed function.
 [source,haskell]
 ----
-defaultEnvVar :: (x :: EnvVarKind) -> EnvVarType x
+defaultEnvVar : (x : EnvVarKind) -> EnvVarType x
 defaultEnvVar = \case
-  EnvVarConfigFile -> "./homepage.json"
-  EnvVarLogFile -> Nothing
-  EnvVarLogLevel -> LevelDebug
+  EnvVarConfigFile => "./homepage.json"
+  EnvVarLogFile => Nothing
+  EnvVarLogLevel => LevelDebug
 ----
 
 .The parser of an environment variable is also a dependently typed function.
 [source,haskell]
 ----
-parseEnvVar :: (x :: EnvVarKind) -> String -> Maybe (EnvVarType x)
+parseEnvVar : (x : EnvVarKind) -> String -> Maybe (EnvVarType x)
 parseEnvVar = \case
-  EnvVarConfigFile -> parseFilePath
-  EnvVarLogFile -> fmap Just . parseFilePath
-  EnvVarLogLevel -> readMaybe
+  EnvVarConfigFile => parseFilePath
+  EnvVarLogFile => fmap Just . parseFilePath
+  EnvVarLogLevel => readMaybe
 ----
 
 With this setup we can access the final value through a function, which we initialize during startup of our application.
 
 [source,haskell]
 ----
-acquireEnvironment :: IO ((x :: EnvVarKind) -> EnvVarType x)
+acquireEnvironment : IO ((x : EnvVarKind) -> EnvVarType x)
 acquireEnvironment = undefined -- TODO: Left out for brevity.
 ----
 
-The actual implementation is left out here, but the idea is as follows.
+The actual implementation is left out here, but the idea goes as follows.
 
 For each environment variable, lookup the `EnvVarName`.
 When there is a match, parse the content using `parseEnvVar`.
@@ -110,7 +110,7 @@ The exhaustiveness-checker will come in handy again.
 == Haskell approach
 
 Unfortunately in Haskell we don't have dependent types.
-We can still get very close with todays language extensions (mainly __GADTs__ and __FunctionalDependencies__).
+We can still get very close with todays language extensions (mainly __DataKinds__, __GADTs__ and __FunctionalDependencies__).
 
 .`KnownEnvVar` uses functional dependencies and sets the same laws as the previous section.
 [source,haskell]
@@ -188,26 +188,24 @@ The Haskell snippets from this article are used https://github.com/jumper149/hom
 The functional dependency `name -> envVar`, that we can use in Haskell, is very powerful and would require a bit more effort with dependent types.
 Together with `envVar -> name` it enforces that names and environment variables are in a one-to-one relationship.
 
-Wihout the `name -> envVar` dependency there could be two references to the same environment variable.
+Wihout the `name -> envVar` dependency there could be two references to the same environment variable name.
 
-In our fictional dependently typed language we would have to use a proof to ensure this property actually holds.
+In a dependently typed language we would have to use a proof to ensure this property actually holds.
 We want `EnvVarName` to be injective.
 
-.Proving uniqueness of names in a dependently typed language.
+.Proving uniqueness of names in Idris.
 [source,haskell]
 ----
-ResolveEnvVarName :: String -> Maybe EnvVarKind
+ResolveEnvVarName : String -> Maybe EnvVarKind
 ResolveEnvVarName = \case
-  "CONFIG_FILE" -> Just EnvVarConfigFile
-  "LOG_FILE" -> Just EnvVarLogFile
-  "LOG_LEVEL" -> Just EnvVarLogLevel
+  "CONFIG_FILE" => Just EnvVarConfigFile
+  "LOG_FILE" => Just EnvVarLogFile
+  "LOG_LEVEL" => Just EnvVarLogLevel
   _ -> Nothing
 
-proofUniqueName : {x :: EnvVarKind} -> Just x = ResolveEnvVarName (EnvVarName x)
+proofUniqueName : {x : EnvVarKind} -> Just x = ResolveEnvVarName (EnvVarName x)
 proofUniqueName = case x of
-  EnvVarConfigFile -> Refl
-  EnvVarLogFile -> Refl
-  EnvVarLogLevel -> Refl
+  EnvVarConfigFile => Refl
+  EnvVarLogFile => Refl
+  EnvVarLogLevel => Refl
 ----
-
-On a side-note, I checked the dependently typed approach with Idris2, but didn't want to introduce any syntax aside from Haskell.
