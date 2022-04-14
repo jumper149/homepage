@@ -6,7 +6,7 @@
       type = "github";
       owner = "NixOS";
       repo = "nixpkgs";
-      ref = "master";
+      ref = "nixpkgs-unstable";
     };
     monad-control-identity = {
       type = "github";
