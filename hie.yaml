@@ -1,6 +1,6 @@
 cradle:
   cabal:
-    - path: "src"
+    - path: "source"
       component: "lib:homepage"
 
     - path: "./Main.hs"

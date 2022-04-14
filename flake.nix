@@ -204,7 +204,7 @@
         name = "hlint"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
         buildPhase = ''
-          hlint ./src
+          hlint ./source
         '';
         installPhase = ''
           mkdir $out
