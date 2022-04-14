@@ -19,8 +19,7 @@ blogList ::
   BlogEntries ->
   Html
 blogList baseUrl depth blogs =
-  ul $
-    toMarkup $ entryToMarkup <$> L.sortOn (Down . blogTimestamp . snd) (M.toList (unBlogEntries blogs))
+  ul . toMarkup $ entryToMarkup <$> L.sortOn (Down . blogTimestamp . snd) (M.toList (unBlogEntries blogs))
  where
   entryToMarkup (blogId, BlogEntry {blogTitle, blogTimestamp}) =
     li $ do

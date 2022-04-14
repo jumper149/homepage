@@ -34,15 +34,16 @@ type StackT =
 
 newtype HandlerT m a = HandlerT {unHandlerT :: StackT m a}
   deriving newtype (Applicative, Functor, Monad)
-  deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
+  deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
   deriving newtype (MonadError e)
 
 runHandlerT :: MonadLogger m => Hash -> HandlerT m a -> m a
-runHandlerT randomHash handler =
-  runIdentityT . descend
-    .| runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)
-    $ unHandlerT handler
+runHandlerT randomHash = runStackT . unHandlerT
+ where
+  runStackT =
+    runIdentityT . descend
+      .| runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)

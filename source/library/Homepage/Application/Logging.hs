@@ -22,9 +22,8 @@ newtype TimedLoggingT m a = TimedLoggingT {unTimedLoggingT :: LoggingT m a}
 instance MonadIO m => MonadLogger (TimedLoggingT m) where
   monadLoggerLog loc logSource logLevel logStr = do
     time <- lift $ liftIO T.getCurrentTime
-    TimedLoggingT $
-      monadLoggerLog loc logSource logLevel $
-        toLogStr $ B.pack (show time) <> " | " <> fromLogStr (toLogStr logStr)
+    TimedLoggingT . monadLoggerLog loc logSource logLevel . toLogStr $
+      B.pack (show time) <> " | " <> fromLogStr (toLogStr logStr)
 
 deriving via
   TimedLoggingT ((t2 :: (Type -> Type) -> Type -> Type) m)

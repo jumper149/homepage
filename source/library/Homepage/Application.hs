@@ -33,8 +33,8 @@ type StackT =
 
 newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT m a}
   deriving newtype (Applicative, Functor, Monad)
-  deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
+  deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
 

@@ -20,12 +20,8 @@ import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 
 data Routes route = Routes
-  { routeOverview ::
-      route
-        :- Get '[HTML] Html
-  , routeFiles ::
-      route
-        :- RawM.RawM
+  { routeOverview :: route :- Get '[HTML] Html
+  , routeFiles :: route :- RawM.RawM
   }
   deriving stock (Generic)
 
@@ -47,10 +43,9 @@ overviewHandler = do
   revision <- configRevision <$> configuration
   fileEntries <- configFileEntries <$> configuration
   logInfo "Serve files overview."
-  pure $
-    document baseUrl contactInformation revision (Just 0) (Just TabFiles) $ do
-      h2 "my Files"
-      fileList baseUrl (Just 0) fileEntries
+  pure . document baseUrl contactInformation revision (Just 0) (Just TabFiles) $ do
+    h2 "my Files"
+    fileList baseUrl (Just 0) fileEntries
 
 filesHandler ::
   (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m) =>

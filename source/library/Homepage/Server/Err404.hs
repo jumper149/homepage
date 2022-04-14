@@ -19,9 +19,8 @@ application404 ::
 application404 _req rsp = do
   html404' <- html404
   logWarn "Serve generic 404 page."
-  rsp $
-    responseBuilder status404 [(,) "Content-Type" "text/html"] $
-      lazyByteString $ renderHtml html404'
+  rsp . responseBuilder status404 [(,) "Content-Type" "text/html"] $
+    lazyByteString $ renderHtml html404'
 
 html404 ::
   MonadConfigured m =>
@@ -30,8 +29,7 @@ html404 = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
   revision <- configRevision <$> configuration
-  pure $
-    document baseUrl contactInformation revision Nothing Nothing $ do
-      h1 "404"
-      h2 "You got lost?"
-      p $ "My homepage is " <> (a ! hrefWithDepth baseUrl Nothing "" $ "here") <> "."
+  pure . document baseUrl contactInformation revision Nothing Nothing $ do
+    h1 "404"
+    h2 "You got lost?"
+    p $ "My homepage is " <> (a ! hrefWithDepth baseUrl Nothing "" $ "here") <> "."

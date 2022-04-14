@@ -27,21 +27,13 @@ import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 
 data Routes route = Routes
-  { routeRaw ::
-      route
-        :- "raw"
-        :> RawM.RawM
-  , routeFeed ::
-      route
-        :- "atom.xml"
-        :> Atom.API
+  { routeRaw :: route :- "raw" :> RawM.RawM
+  , routeFeed :: route :- "atom.xml" :> Atom.API
   , routeArticle ::
       route
         :- Capture "article" BlogId
         :> UVerb 'GET '[HTML] '[WithStatus 200 Html, WithStatus 404 Html]
-  , routeOverview ::
-      route
-        :- Get '[HTML] Html
+  , routeOverview :: route :- Get '[HTML] Html
   }
   deriving stock (Generic)
 
@@ -65,14 +57,13 @@ overviewHandler = do
   revision <- configRevision <$> configuration
   blogs <- configBlogEntries <$> configuration
   logInfo "Serve blog overview."
-  pure $
-    document baseUrl contactInformation revision (Just 0) (Just TabBlog) $ do
-      h2 "my Blog"
-      p $ do
-        "My blog is available as an "
-        a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ s "RSS" <> "/Atom Feed"
-        "."
-      blogList baseUrl (Just 0) blogs
+  pure . document baseUrl contactInformation revision (Just 0) (Just TabBlog) $ do
+    h2 "my Blog"
+    p $ do
+      "My blog is available as an "
+      a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ s "RSS" <> "/Atom Feed"
+      "."
+    blogList baseUrl (Just 0) blogs
 
 articleHandler ::
   (MonadConfigured m, MonadLogger m) =>
@@ -102,7 +93,8 @@ articleHandler blogId = do
             "function resizeIframe(iframe) {\
             \  iframe.height = `${iframe.contentWindow.document.body.scrollHeight + 30}` + \"px\";\
             \}"
-          iframe ! HA.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> unBlogId blogId <> ".html")
+          iframe
+            ! HA.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> unBlogId blogId <> ".html")
             ! HA.name "blog article (HTML)"
             ! HA.width "100%"
             ! HA.onload "resizeIframe(this)"

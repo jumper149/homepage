@@ -31,12 +31,11 @@ instance (MonadBaseControl IO m, MonadConfigured m, MonadLogger m) => MonadBlog 
   readBlogEntryHtml blogId = do
     dir <- lift $ configDirectoryBlog <$> configuration
     let file = dir <> "/" <> T.unpack (unBlogId blogId) <> ".html"
-    lift $
-      (restoreM =<<) $
-        liftBaseWith $ \runInBase ->
-          catchError (runInBase $ liftBase $ T.readFile file) $ \err -> runInBase $ do
-            logWarn $ "Failed to read HTML for blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
-            pure (undefined :: T.Text)
+    lift . (restoreM =<<) $
+      liftBaseWith $ \runInBase ->
+        catchError (runInBase $ liftBase $ T.readFile file) $ \err -> runInBase $ do
+          logWarn $ "Failed to read HTML for blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
+          pure (undefined :: T.Text)
 
 deriving via
   BlogT ((t2 :: (Type -> Type) -> Type -> Type) m)
