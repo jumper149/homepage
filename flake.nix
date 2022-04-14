@@ -27,7 +27,7 @@
 
   outputs = { self, nixpkgs, monad-control-identity, deriving-trans }: {
 
-    defaultPackage.x86_64-linux =
+    packages.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; };
       let config = writeText "homepage.json" (builtins.toJSON self.defaultConfig.x86_64-linux);
       in writeScriptBin "homepage-full" ''
