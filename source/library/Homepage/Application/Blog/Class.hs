@@ -12,16 +12,22 @@ class Monad m => MonadBlog m where
   blogEntries :: m BlogEntries
   readBlogEntryHtml :: BlogId -> m T.Text
 
-instance ( Monad (t m)
-         , MonadTrans t
-         , MonadBlog m
-         ) => MonadBlog (Elevator t m) where
+instance
+  ( Monad (t m)
+  , MonadTrans t
+  , MonadBlog m
+  ) =>
+  MonadBlog (Elevator t m)
+  where
   blogEntries = lift blogEntries
   readBlogEntryHtml = lift . readBlogEntryHtml
 
-deriving via Elevator t1 ((t2 :: (Type -> Type) -> Type -> Type) m)
-  instance {-# OVERLAPPABLE #-}
+deriving via
+  Elevator t1 ((t2 :: (Type -> Type) -> Type -> Type) m)
+  instance
+  {-# OVERLAPPABLE #-}
     ( Monad (t1 (t2 m))
     , MonadTrans t1
     , MonadBlog (t2 m)
-    ) => MonadBlog (ComposeT t1 t2 m)
+    ) =>
+    MonadBlog (ComposeT t1 t2 m)

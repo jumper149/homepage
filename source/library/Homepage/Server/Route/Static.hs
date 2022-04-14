@@ -14,10 +14,11 @@ import WaiAppStatic.Types
 
 type API = RawM.RawM
 
-handler :: (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m)
-        => ServerT API m
+handler ::
+  (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m) =>
+  ServerT API m
 handler = do
   path <- configDirectoryStatic <$> configuration
   fallbackApplication <- runApplicationT application404
   logInfo "Serve static file download."
-  RawM.serveDirectoryWith (defaultFileServerSettings path) { ss404Handler = Just fallbackApplication }
+  RawM.serveDirectoryWith (defaultFileServerSettings path) {ss404Handler = Just fallbackApplication}

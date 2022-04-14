@@ -31,10 +31,15 @@ instance KnownEnvVar 'EnvVarLogLevel where
   defaultEnvVar _ = LevelDebug
   caseEnvVar _ = EnvVarLogLevel
 
-class KnownSymbol name => KnownEnvVar (envVar :: EnvVarKind name value)
-    | name -> envVar, envVar -> name, envVar -> value where
+class
+  KnownSymbol name =>
+  KnownEnvVar (envVar :: EnvVarKind name value)
+    | name -> envVar
+    , envVar -> name
+    , envVar -> value
+  where
   parseEnvVar :: Proxy name -> String -> Maybe value
   defaultEnvVar :: Proxy name -> value
   caseEnvVar :: Proxy name -> EnvVarKind name value
 
-newtype Environment = MkEnvironment { getEnvironment :: forall name value. EnvVarKind name value -> Const value name }
+newtype Environment = MkEnvironment {getEnvironment :: forall name value. EnvVarKind name value -> Const value name}

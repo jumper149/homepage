@@ -24,13 +24,14 @@ import Control.Monad.Trans.Elevator
 import Data.Foldable
 import Servant qualified
 
-type StackT = IdentityT
-           .| EnvironmentT
-           .| TimedLoggingT
-           .| ConfiguredT
-           .| BlogT
+type StackT =
+  IdentityT
+    .| EnvironmentT
+    .| TimedLoggingT
+    .| ConfiguredT
+    .| BlogT
 
-newtype ApplicationT m a = ApplicationT { unApplicationT :: StackT m a }
+newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
@@ -39,21 +40,25 @@ newtype ApplicationT m a = ApplicationT { unApplicationT :: StackT m a }
 
 deriving newtype instance (MonadBaseControl IO m, MonadIO m) => MonadBlog (ApplicationT m)
 
-deriving via Elevator ApplicationT m
-  instance MonadError Servant.ServerError m => MonadError Servant.ServerError (ApplicationT m)
+deriving via
+  Elevator ApplicationT m
+  instance
+    MonadError Servant.ServerError m => MonadError Servant.ServerError (ApplicationT m)
 
-runApplicationT :: (MonadIO m, MonadBaseControlIdentity IO m)
-                => ApplicationT m a
-                -> m a
+runApplicationT ::
+  (MonadIO m, MonadBaseControlIdentity IO m) =>
+  ApplicationT m a ->
+  m a
 runApplicationT app = do
   (env, preLog) <- runWriterLoggingT $ do
     logInfo "Startup."
     acquireEnvironment
 
-  let runStackT = runIdentityT
-               .| runEnvironmentT env
-               .| runAppTimedLoggingT . (traverse_ logLine preLog >>)
-               .| runAppConfiguredT
-               .| runAppBlogT
+  let runStackT =
+        runIdentityT
+          .| runEnvironmentT env
+          .| runAppTimedLoggingT . (traverse_ logLine preLog >>)
+          .| runAppConfiguredT
+          .| runAppBlogT
 
   runStackT $ unApplicationT app

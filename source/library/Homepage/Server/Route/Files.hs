@@ -20,36 +20,43 @@ import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 
 data Routes route = Routes
-    { routeOverview :: route
-                    :- Get '[HTML] Html
-    , routeFiles :: route
-                 :- RawM.RawM
-    }
-  deriving stock Generic
+  { routeOverview ::
+      route
+        :- Get '[HTML] Html
+  , routeFiles ::
+      route
+        :- RawM.RawM
+  }
+  deriving stock (Generic)
 
-routes :: (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m)
-       => Routes (AsServerT m)
-routes = Routes
+routes ::
+  (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m) =>
+  Routes (AsServerT m)
+routes =
+  Routes
     { routeOverview = overviewHandler
     , routeFiles = filesHandler
     }
 
-overviewHandler :: (MonadConfigured m, MonadLogger m)
-                => m Html
+overviewHandler ::
+  (MonadConfigured m, MonadLogger m) =>
+  m Html
 overviewHandler = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
   revision <- configRevision <$> configuration
   fileEntries <- configFileEntries <$> configuration
   logInfo "Serve files overview."
-  pure $ document baseUrl contactInformation revision (Just 0) (Just TabFiles) $ do
-    h2 "my Files"
-    fileList baseUrl (Just 0) fileEntries
+  pure $
+    document baseUrl contactInformation revision (Just 0) (Just TabFiles) $ do
+      h2 "my Files"
+      fileList baseUrl (Just 0) fileEntries
 
-filesHandler :: (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m)
-             => ServerT RawM.RawM m
+filesHandler ::
+  (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m) =>
+  ServerT RawM.RawM m
 filesHandler = do
   directory <- configDirectoryFiles <$> configuration
   fallbackApplication <- runApplicationT application404
   logInfo "Serve file download."
-  RawM.serveDirectoryWith (defaultFileServerSettings directory) { ss404Handler = Just fallbackApplication }
+  RawM.serveDirectoryWith (defaultFileServerSettings directory) {ss404Handler = Just fallbackApplication}

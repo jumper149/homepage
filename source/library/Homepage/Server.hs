@@ -22,27 +22,29 @@ server :: (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadL
 server = do
   logInfo "Configure warp."
   withPort <- setPort . fromEnum . configPort <$> configuration
-  withShutdownHandler <- liftBaseWithIdentity $ \ runInIO ->
-    pure $ setInstallShutdownHandler $ \ closeSocket -> do
-      let catchOnceShutdown sig = CatchOnce $ do
-            runInIO $ do
-              logInfo $ "Received signal '" <> T.pack (show @Signal sig) <> "'."
-              logWarn "Shutdown."
-            closeSocket
-      let installShutdownHandler sig = void $ installHandler sig (catchOnceShutdown sig) Nothing
-      installShutdownHandler sigHUP
-      installShutdownHandler sigINT
-      installShutdownHandler sigTERM
+  withShutdownHandler <- liftBaseWithIdentity $ \runInIO ->
+    pure $
+      setInstallShutdownHandler $ \closeSocket -> do
+        let catchOnceShutdown sig = CatchOnce $ do
+              runInIO $ do
+                logInfo $ "Received signal '" <> T.pack (show @Signal sig) <> "'."
+                logWarn "Shutdown."
+              closeSocket
+        let installShutdownHandler sig = void $ installHandler sig (catchOnceShutdown sig) Nothing
+        installShutdownHandler sigHUP
+        installShutdownHandler sigINT
+        installShutdownHandler sigTERM
   let settings = withShutdownHandler $ withPort defaultSettings
 
   logInfo "Configure middleware."
   addMiddleware <- runMiddlewareT middleware
 
   logInfo "Start server."
-  liftBaseWithIdentity $ \ runInIO ->
-    runSettings settings $ addMiddleware $
-      serveWithContextT (Proxy @WrappedAPI) EmptyContext (liftBase . runInIO) $
-        hoistServerRunHandlerT $ genericServerT routes
+  liftBaseWithIdentity $ \runInIO ->
+    runSettings settings $
+      addMiddleware $
+        serveWithContextT (Proxy @WrappedAPI) EmptyContext (liftBase . runInIO) $
+          hoistServerRunHandlerT $ genericServerT routes
 
 middleware :: MonadLogger m => MiddlewareT m
 middleware application req resp = do

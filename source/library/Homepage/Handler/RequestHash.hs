@@ -17,12 +17,12 @@ import Network.Wai
 import Servant
 import Servant.Server.Internal.Delayed
 
-newtype Hash = MkHash { getHash :: Word }
+newtype Hash = MkHash {getHash :: Word}
 
 requestHash :: Request -> Hash
 requestHash = MkHash . fromIntegral . hash . show
 
-newtype RequestHashT m a = RequestHashT { unRequestHashT :: ReaderT Hash m a }
+newtype RequestHashT m a = RequestHashT {unRequestHashT :: ReaderT Hash m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
@@ -30,11 +30,14 @@ instance MonadLogger m => MonadLogger (RequestHashT m) where
   monadLoggerLog loc logSource logLevel logStr = do
     reqHash <- RequestHashT ask
     let reqInfo = "@[" <> show (getHash reqHash) <> "]"
-    lift $ monadLoggerLog loc logSource logLevel $
-      toLogStr $ fromLogStr (toLogStr logStr) <> " " <> B.pack reqInfo
+    lift $
+      monadLoggerLog loc logSource logLevel $
+        toLogStr $ fromLogStr (toLogStr logStr) <> " " <> B.pack reqInfo
 
-deriving via RequestHashT ((t2 :: (Type -> Type) -> Type -> Type) m)
-  instance MonadLogger (t2 m) => MonadLogger (ComposeT RequestHashT t2 m)
+deriving via
+  RequestHashT ((t2 :: (Type -> Type) -> Type -> Type) m)
+  instance
+    MonadLogger (t2 m) => MonadLogger (ComposeT RequestHashT t2 m)
 
 runRequestHashT :: Hash -> RequestHashT m a -> m a
 runRequestHashT reqHash = flip runReaderT reqHash . unRequestHashT
