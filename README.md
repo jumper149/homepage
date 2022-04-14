@@ -81,6 +81,15 @@ nix build .#config
 HOMEPAGE_CONFIG_FILE=result cabal run homepage
 ```
 
+### Formatting
+
+Use `fourmolu` to format Haskell.
+
+```
+# Format Haskell.
+fourmolu --cabal-default-extensions --mode inplace $(find source -name '*.hs')
+```
+
 ### Linting
 
 Linting is configured in `flake.nix`.
