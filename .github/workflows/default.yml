@@ -9,7 +9,7 @@ jobs:
       matrix:
         output:
           [ packages.x86_64-linux.default
-          , defaultConfigFile.x86_64-linux
+          , packages.x86_64-linux.config
           , devShells.x86_64-linux.default
           , packages.x86_64-linux.blog
           , packages.x86_64-linux.files

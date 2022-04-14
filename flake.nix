@@ -29,16 +29,16 @@
 
     packages.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; };
-      let config = writeText "homepage.json" (builtins.toJSON self.defaultConfig.x86_64-linux);
+      let config = writeText "homepage.json" (builtins.toJSON self.config);
       in writeScriptBin "homepage-full" ''
         HOMEPAGE_CONFIG_FILE="${config}" ${self.packages.x86_64-linux.homepage}/bin/homepage
       '';
 
-    defaultConfigFile.x86_64-linux =
+    packages.x86_64-linux.config =
       with import nixpkgs { system = "x86_64-linux"; };
-      writeText "homepage.json" (builtins.toJSON self.defaultConfig.x86_64-linux);
+      writeText "homepage.json" (builtins.toJSON self.config);
 
-    defaultConfig.x86_64-linux =
+    config =
       builtins.fromJSON (builtins.readFile ./homepage.json) // {
         revision = if self ? rev then self.rev else null;
         directory-blog = "${self.packages.x86_64-linux.blog}";
@@ -258,7 +258,7 @@
     nixosModule = { config, lib, ... }:
       let
         cfg = config.services.homepage;
-        homepageConfig = lib.recursiveUpdate self.defaultConfig.x86_64-linux cfg.config;
+        homepageConfig = lib.recursiveUpdate self.config cfg.config;
       in {
         options = {
           services.homepage = {

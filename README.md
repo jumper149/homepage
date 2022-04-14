@@ -75,7 +75,7 @@ Development tools are configured in `flake.nix`.
 nix develop
 
 # Generate static files and configuration.
-nix build .#defaultConfigFile.x86_64-linux
+nix build .#config
 
 # Run to debug.
 HOMEPAGE_CONFIG_FILE=result cabal run homepage
