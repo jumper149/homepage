@@ -234,7 +234,7 @@
         ];
       };
 
-    devShell.x86_64-linux =
+    devShells.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; };
       haskellPackages.shellFor {
         buildInputs = with haskellPackages; [

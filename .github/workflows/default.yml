@@ -10,7 +10,7 @@ jobs:
         output:
           [ packages.x86_64-linux.default
           , defaultConfigFile.x86_64-linux
-          , devShell.x86_64-linux
+          , devShells.x86_64-linux.default
           , packages.x86_64-linux.blog
           , packages.x86_64-linux.files
           , packages.x86_64-linux.homepage
