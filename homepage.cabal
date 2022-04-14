@@ -75,7 +75,7 @@ library
     , wai-app-static
     , wai-control
     , warp
-  hs-source-dirs: source
+  hs-source-dirs: source/library
   default-language: Haskell2010
   default-extensions:
     BangPatterns
@@ -217,9 +217,10 @@ library
         -- ^ Generate data for 'weeder'.
 
 executable homepage
-  main-is: Main.hs
   build-depends:
     , homepage
+  main-is: Main.hs
+  hs-source-dirs: source/executable
   default-language: Haskell2010
   default-extensions:
     NoImplicitPrelude
