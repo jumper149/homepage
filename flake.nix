@@ -29,9 +29,8 @@
 
     packages.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; };
-      let config = writeText "homepage.json" (builtins.toJSON self.config);
-      in writeScriptBin "homepage-full" ''
-        HOMEPAGE_CONFIG_FILE="${config}" ${self.packages.x86_64-linux.homepage}/bin/homepage
+      writeScriptBin "homepage-full" ''
+        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.packages.x86_64-linux.homepage}/bin/homepage
       '';
 
     packages.x86_64-linux.config =
