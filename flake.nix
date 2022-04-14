@@ -197,6 +197,24 @@
         ];
       };
 
+    checks.x86_64-linux.fourmolu =
+      with import nixpkgs { system = "x86_64-linux"; };
+      stdenv.mkDerivation {
+        name = "fourmolu"; # TODO: Necessary to avoid segmentation fault.
+        src = ./.;
+        buildPhase = ''
+          fourmolu --cabal-default-extensions --mode check $(find source -name '*.hs')
+        '';
+        installPhase = ''
+          mkdir $out
+        '';
+        buildInputs = [
+        ];
+        nativeBuildInputs = [
+          haskellPackages.fourmolu
+        ];
+      };
+
     checks.x86_64-linux.hlint =
       with import nixpkgs { system = "x86_64-linux"; };
       stdenv.mkDerivation {
