@@ -73,7 +73,7 @@ articleHandler blogId = do
   blogs <- configBlogEntries <$> configuration
   case lookupBlog blogId blogs of
     Nothing -> do
-      logWarn $ "Failed to serve blog article: " <> T.pack (show blogId)
+      logInfo $ "Failed to serve blog article: " <> T.pack (show blogId)
       respond . WithStatus @404 =<< html404
     Just blog -> do
       baseUrl <- configBaseUrl <$> configuration

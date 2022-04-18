@@ -18,7 +18,7 @@ application404 ::
   ApplicationT m
 application404 _req rsp = do
   html404' <- html404
-  logWarn "Serve generic 404 page."
+  logInfo "Serve generic 404 page."
   rsp . responseBuilder status404 [(,) "Content-Type" "text/html"] $
     lazyByteString $ renderHtml html404'
 
