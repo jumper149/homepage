@@ -187,7 +187,7 @@
           done
 
           echo "Compile CSS."
-          lessc stylesheet.css stylesheet.css
+          lessc stylesheet.less stylesheet.css
         '';
         installPhase = ''
           mkdir -p $out
