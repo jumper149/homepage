@@ -1,335 +1,293 @@
 :root {
-    /* colors from ~/.Xresources */
-
-    /* black */
-    --color0:         #282a2e;
-    --color8:         #373b41;
-
-    /* red */
-    --color1:         #a54242;
-    --color9:         #cc6666;
-
-    /* green */
-    --color2:         #8c9440;
-    --color2alt:      #5a630d;
-    --colora:         #b5bd68;
-
-    /* yellow */
-    --color3:         #de935f;
-    --color3alt:      #965424;
-    --colorb:         #f0c674;
-
-    /* blue */
-    --color4:         #5f819d;
-    --color4alt:      #254862;
-    --colorc:         #81a2be;
-
-    /* magenta */
-    --color5:         #85678f;
-    --color5alt:      #41274b;
-    --colord:         #b294bb;
-
-    /* cyan */
-    --color6:         #5e8d87;
-    --color6alt:      #1a4944;
-    --colore:         #8abeb7;
-    --colorealt:      #4f827b;
-
-    /* white */
-    --color7:         #707880;
-    --colorf:         #c5c8c6;
+  /* colors from ~/.Xresources */
+  /* black */
+  --color0: #282a2e;
+  --color8: #373b41;
+  /* red */
+  --color1: #a54242;
+  --color9: #cc6666;
+  /* green */
+  --color2: #8c9440;
+  --color2alt: #5a630d;
+  --colora: #b5bd68;
+  /* yellow */
+  --color3: #de935f;
+  --color3alt: #965424;
+  --colorb: #f0c674;
+  /* blue */
+  --color4: #5f819d;
+  --color4alt: #254862;
+  --colorc: #81a2be;
+  /* magenta */
+  --color5: #85678f;
+  --color5alt: #41274b;
+  --colord: #b294bb;
+  /* cyan */
+  --color6: #5e8d87;
+  --color6alt: #1a4944;
+  --colore: #8abeb7;
+  --colorealt: #4f827b;
+  /* white */
+  --color7: #707880;
+  --colorf: #c5c8c6;
 }
-
 html {
-    background-color: var(--color0);
-    color:            var(--color7);
-    font-family:      sans-serif;
-    overflow-y:       overlay;
+  background-color: var(--color0);
+  color: var(--color7);
+  font-family: sans-serif;
+  overflow-y: overlay;
 }
 @media (prefers-color-scheme: light) {
-    html {
-        background-color: var(--colorf);
-        color: var(--color0);
-    }
+  html {
+    background-color: var(--colorf);
+    color: var(--color0);
+  }
 }
-
 body {
-    max-width:     800px;
-    min-width:     500px;
-    margin-left:   auto;
-    margin-right:  auto;
-    padding-left:  20px;
-    padding-right: 20px;
-
-    margin-top:    25px;
-    margin-bottom: 25px;
-    font-size:     16px;
+  max-width: 800px;
+  min-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  font-size: 16px;
 }
-
 p {
-    text-align: justify;
+  text-align: justify;
 }
-
-h1, h2, h3 {
-    font-weight: normal;
-    margin-bottom: -10px;
-}
-
-h1 {
-    color: var(--color2);
-}
-@media (prefers-color-scheme: light) {
-    h1 {
-        color: var(--color2alt);
-    }
-}
-
-h2 {
-    color: var(--color3);
-}
-@media (prefers-color-scheme: light) {
-    h2 {
-        color: var(--color3alt);
-    }
-}
-
+h1,
+h2,
 h3 {
-    color: var(--color5);
+  font-weight: normal;
+  margin-bottom: -10px;
+}
+h1 {
+  color: var(--color2);
 }
 @media (prefers-color-scheme: light) {
-    h3 {
-        color: var(--color5alt);
-    }
+  h1 {
+    color: var(--color2alt);
+  }
 }
-
+h2 {
+  color: var(--color3);
+}
+@media (prefers-color-scheme: light) {
+  h2 {
+    color: var(--color3alt);
+  }
+}
+h3 {
+  color: var(--color5);
+}
+@media (prefers-color-scheme: light) {
+  h3 {
+    color: var(--color5alt);
+  }
+}
 a {
-    color:           var(--color6);
-    text-decoration: none;
+  color: var(--color6);
+  text-decoration: none;
 }
 @media (prefers-color-scheme: light) {
-    a {
-        color:           var(--color6alt);
-        text-decoration: none;
-    }
+  a {
+    color: var(--color6alt);
+    text-decoration: none;
+  }
 }
-
 a:hover {
-    color:           var(--colore);
+  color: var(--colore);
+  text-decoration: none;
+}
+@media (prefers-color-scheme: light) {
+  a:hover {
+    color: var(--colorealt);
     text-decoration: none;
+  }
 }
-@media (prefers-color-scheme: light) {
-    a:hover {
-        color:           var(--colorealt);
-        text-decoration: none;
-    }
-}
-
 hr {
-    border-color: var(--color7);
+  border-color: var(--color7);
 }
 @media (prefers-color-scheme: light) {
-     hr {
-         border-color: var(--color8);
-     }
+  hr {
+    border-color: var(--color8);
+  }
 }
-
 figure {
-    width: 85%;
+  width: 85%;
 }
-
 .portrait {
-    float: right;
-    width: 30%;
-    margin-left: 20px;
-    margin-top: 20px;
-    margin-bottom: 20px;
+  float: right;
+  width: 30%;
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
-
 .bar {
-    overflow:            hidden;
-    white-space:         nowrap;
-    height:              40px;
-    border-bottom-style: solid;
+  overflow: hidden;
+  white-space: nowrap;
+  height: 40px;
+  border-bottom-style: solid;
 }
-
 .bar:hover {
-    border-bottom-color: var(--color2);
+  border-bottom-color: var(--color2);
 }
-
 .bar a {
-    float:      left;
-    padding:    11px 18px;
-    margin:     0px 0px;
-    text-align: center;
-    font-size:  18px;
+  float: left;
+  padding: 11px 18px;
+  margin: 0px 0px;
+  text-align: center;
+  font-size: 18px;
 }
-
 .bar span {
-    float: right;
+  float: right;
 }
-
 .bar span a {
-    margin:           12px 18px 12px 10px;
-    padding:          0px 0px;
-    font-size:        16px;
+  margin: 12px 18px 12px 10px;
+  padding: 0px 0px;
+  font-size: 16px;
 }
-
 .bar span a.icon {
-    font-size: 20px;
-    padding:   0px 0px;
-    margin:    10px 5px;
+  font-size: 20px;
+  padding: 0px 0px;
+  margin: 10px 5px;
 }
-
 .bar span a.icon img.icon {
-    height:  20px;
-    width:   20px;
-    padding: 0px 0px;
-    margin:  0px 0px;
+  height: 20px;
+  width: 20px;
+  padding: 0px 0px;
+  margin: 0px 0px;
 }
-
 .bar {
-    border-bottom-color: var(--color7);
+  border-bottom-color: var(--color7);
 }
 @media (prefers-color-scheme: light) {
-    .bar {
-        border-bottom-color: var(--color8);
-    }
+  .bar {
+    border-bottom-color: var(--color8);
+  }
 }
-
 @media (prefers-color-scheme: light) {
-    .bar:hover {
-        border-bottom-color: var(--color2alt);
-    }
+  .bar:hover {
+    border-bottom-color: var(--color2alt);
+  }
 }
-
 .bar a {
-    color:      var(--color7);
+  color: var(--color7);
 }
 @media (prefers-color-scheme: light) {
-    .bar a {
-        color: var(--color8);
-    }
+  .bar a {
+    color: var(--color8);
+  }
 }
-
 .bar a:hover {
-    color:            var(--color0);
-    background-color: var(--color2);
+  color: var(--color0);
+  background-color: var(--color2);
 }
 @media (prefers-color-scheme: light) {
-    .bar a:hover {
-        color:            var(--colorf);
-        background-color: var(--color2alt);
-    }
+  .bar a:hover {
+    color: var(--colorf);
+    background-color: var(--color2alt);
+  }
 }
-
 .bar a.active {
-    color:            var(--color0);
-    background-color: var(--color7);
+  color: var(--color0);
+  background-color: var(--color7);
 }
 @media (prefers-color-scheme: light) {
-    .bar a.active {
-        color:            var(--colorf);
-        background-color: var(--color8);
-    }
+  .bar a.active {
+    color: var(--colorf);
+    background-color: var(--color8);
+  }
 }
-
 .bar a.active:hover {
-    color:            var(--color0);
-    background-color: var(--color2);
+  color: var(--color0);
+  background-color: var(--color2);
 }
 @media (prefers-color-scheme: light) {
-    .bar a.active:hover {
-        color:            var(--colorf);
-        background-color: var(--color2alt);
-    }
+  .bar a.active:hover {
+    color: var(--colorf);
+    background-color: var(--color2alt);
+  }
 }
-
 .bar span a {
-    background-color: transparent;
-    color:            var(--color7);
+  background-color: transparent;
+  color: var(--color7);
 }
 @media (prefers-color-scheme: light) {
-    .bar span a {
-        background-color: transparent;
-        color:            var(--color8);
-    }
+  .bar span a {
+    background-color: transparent;
+    color: var(--color8);
+  }
 }
-
 .bar span a:hover {
-    color:            var(--color2);
+  color: var(--color2);
+  background-color: transparent;
+  text-decoration: none;
+}
+@media (prefers-color-scheme: light) {
+  .bar span a:hover {
+    color: var(--color2alt);
     background-color: transparent;
-    text-decoration:  none;
+    text-decoration: none;
+  }
 }
-@media (prefers-color-scheme: light) {
-    .bar span a:hover {
-        color:            var(--color2alt);
-        background-color: transparent;
-        text-decoration:  none;
-    }
-}
-
 .bar span a.icon img.icon {
-    filter:  grayscale(100%) brightness(1000%) opacity(50%);
+  filter: grayscale(100%) brightness(1000%) opacity(50%);
 }
 @media (prefers-color-scheme: light) {
-    .bar span a.icon img.icon {
-        filter:  grayscale(100%) brightness(0%) opacity(50%);
-    }
+  .bar span a.icon img.icon {
+    filter: grayscale(100%) brightness(0%) opacity(50%);
+  }
 }
-
 .bar span a.icon:hover img.icon {
-    filter:  grayscale(25%) opacity(75%);
+  filter: grayscale(25%) opacity(75%);
 }
 @media (prefers-color-scheme: light) {
-    .bar span a.icon:hover img.icon {
-        filter:  grayscale(15%) opacity(75%);
-    }
+  .bar span a.icon:hover img.icon {
+    filter: grayscale(15%) opacity(75%);
+  }
 }
-
 .footer {
-    height:           20px;
-    padding-top:      10px;
-    padding-bottom:   10px;
-    border-top-style: solid;
-    text-align:       right;
+  height: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-top-style: solid;
+  text-align: right;
 }
-
 .footer a {
-    margin-right: 12px;
+  margin-right: 12px;
 }
-
 .footer {
-    border-top-color: var(--color7);
+  border-top-color: var(--color7);
 }
 @media (prefers-color-scheme: light) {
-    .footer {
-        border-top-color: var(--color8);
-    }
+  .footer {
+    border-top-color: var(--color8);
+  }
 }
-
 .footer:hover {
-    border-top-color: var(--color2);
+  border-top-color: var(--color2);
 }
 @media (prefers-color-scheme: light) {
-    .footer:hover {
-        border-top-color: var(--color2alt);
-    }
+  .footer:hover {
+    border-top-color: var(--color2alt);
+  }
 }
-
 .footer a {
-    color:        var(--color7);
+  color: var(--color7);
 }
 @media (prefers-color-scheme: light) {
-    .footer a {
-        color: var(--color8);
-    }
+  .footer a {
+    color: var(--color8);
+  }
 }
-
 .footer a:hover {
-    color: var(--color2);
+  color: var(--color2);
 }
 @media (prefers-color-scheme: light) {
-    .footer a:hover {
-        color: var(--color2alt);
-    }
+  .footer a:hover {
+    color: var(--color2alt);
+  }
 }

@@ -261,6 +261,7 @@
           haskell-language-server
           hlint
           hnix
+          lessc
           pkgs.imagemagick
           implicit-hie
           rnix-lsp
