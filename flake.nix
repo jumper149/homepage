@@ -185,6 +185,9 @@
           do
             resizeIcon "$icon"
           done
+
+          echo "Compile CSS."
+          lessc stylesheet.css stylesheet.css
         '';
         installPhase = ''
           mkdir -p $out
@@ -194,6 +197,7 @@
         ];
         nativeBuildInputs = [
           imagemagick
+          lessc
         ];
       };
 
