@@ -158,7 +158,7 @@
             convert favicon.xpm -scale "''${resolution}" "favicon-''${resolution}.png"
           done
 
-          echo "Remove 'favicon.xpm'"
+          echo "Remove 'favicon.xpm'."
           rm favicon.xpm
 
           echo "Add link 'favicon.png'."
@@ -171,7 +171,7 @@
             ICON_NAME="$1"
             if [ -f "$ICON_NAME" ]
             then
-              echo "Icon exists: '$ICON_NAME'"
+              echo "Icon exists: '$ICON_NAME'."
 
               echo "Resize icon: '$ICON_NAME'."
               convert "$ICON_NAME" -resize 128x128 "$ICON_NAME"
@@ -188,6 +188,9 @@
 
           echo "Compile CSS."
           lessc stylesheet.less stylesheet.css
+
+          echo "Remove 'stylesheet.less'."
+          rm stylesheet.less
         '';
         installPhase = ''
           mkdir -p $out
