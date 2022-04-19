@@ -11,23 +11,29 @@
 
     /* green */
     --color2:         #8c9440;
+    --color2alt:      #5a630d;
     --colora:         #b5bd68;
 
     /* yellow */
     --color3:         #de935f;
+    --color3alt:      #965424;
     --colorb:         #f0c674;
 
     /* blue */
     --color4:         #5f819d;
+    --color4alt:      #254862;
     --colorc:         #81a2be;
 
     /* magenta */
     --color5:         #85678f;
+    --color5alt:      #41274b;
     --colord:         #b294bb;
 
     /* cyan */
     --color6:         #5e8d87;
+    --color6alt:      #1a4944;
     --colore:         #8abeb7;
+    --colorealt:      #4f827b;
 
     /* white */
     --color7:         #707880;
@@ -36,9 +42,15 @@
 
 html {
     background-color: var(--color0);
-    color:            var(--colorf);
+    color:            var(--color7);
     font-family:      sans-serif;
     overflow-y:       overlay;
+}
+@media (prefers-color-scheme: light) {
+    html {
+        background-color: var(--colorf);
+        color: var(--color0);
+    }
 }
 
 body {
@@ -66,27 +78,59 @@ h1, h2, h3 {
 h1 {
     color: var(--color2);
 }
+@media (prefers-color-scheme: light) {
+    h1 {
+        color: var(--color2alt);
+    }
+}
 
 h2 {
     color: var(--color3);
 }
+@media (prefers-color-scheme: light) {
+    h2 {
+        color: var(--color3alt);
+    }
+}
 
 h3 {
     color: var(--color5);
+}
+@media (prefers-color-scheme: light) {
+    h3 {
+        color: var(--color5alt);
+    }
 }
 
 a {
     color:           var(--color6);
     text-decoration: none;
 }
+@media (prefers-color-scheme: light) {
+    a {
+        color:           var(--color6alt);
+        text-decoration: none;
+    }
+}
 
 a:hover {
     color:           var(--colore);
     text-decoration: none;
 }
+@media (prefers-color-scheme: light) {
+    a:hover {
+        color:           var(--colorealt);
+        text-decoration: none;
+    }
+}
 
 hr {
     border-color: var(--color7);
+}
+@media (prefers-color-scheme: light) {
+     hr {
+         border-color: var(--color8);
+     }
 }
 
 figure {
@@ -106,7 +150,6 @@ figure {
     white-space:         nowrap;
     height:              40px;
     border-bottom-style: solid;
-    border-bottom-color: var(--color7);
 }
 
 .bar:hover {
@@ -119,22 +162,6 @@ figure {
     margin:     0px 0px;
     text-align: center;
     font-size:  18px;
-    color:      var(--color7);
-}
-
-.bar a:hover {
-    color:            var(--color0);
-    background-color: var(--color2);
-}
-
-.bar a.active {
-    color:            var(--color0);
-    background-color: var(--color7);
-}
-
-.bar a.active:hover {
-    color:            var(--color0);
-    background-color: var(--color2);
 }
 
 .bar span {
@@ -145,14 +172,6 @@ figure {
     margin:           12px 18px 12px 10px;
     padding:          0px 0px;
     font-size:        16px;
-    color:            var(--color7);
-    background-color: transparent;
-}
-
-.bar span a:hover {
-    color:            var(--color2);
-    background-color: transparent;
-    text-decoration:  none;
 }
 
 .bar span a.icon {
@@ -166,11 +185,105 @@ figure {
     width:   20px;
     padding: 0px 0px;
     margin:  0px 0px;
+}
+
+.bar {
+    border-bottom-color: var(--color7);
+}
+@media (prefers-color-scheme: light) {
+    .bar {
+        border-bottom-color: var(--color8);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    .bar:hover {
+        border-bottom-color: var(--color2alt);
+    }
+}
+
+.bar a {
+    color:      var(--color7);
+}
+@media (prefers-color-scheme: light) {
+    .bar a {
+        color: var(--color8);
+    }
+}
+
+.bar a:hover {
+    color:            var(--color0);
+    background-color: var(--color2);
+}
+@media (prefers-color-scheme: light) {
+    .bar a:hover {
+        color:            var(--colorf);
+        background-color: var(--color2alt);
+    }
+}
+
+.bar a.active {
+    color:            var(--color0);
+    background-color: var(--color7);
+}
+@media (prefers-color-scheme: light) {
+    .bar a.active {
+        color:            var(--colorf);
+        background-color: var(--color8);
+    }
+}
+
+.bar a.active:hover {
+    color:            var(--color0);
+    background-color: var(--color2);
+}
+@media (prefers-color-scheme: light) {
+    .bar a.active:hover {
+        color:            var(--colorf);
+        background-color: var(--color2alt);
+    }
+}
+
+.bar span a {
+    background-color: transparent;
+    color:            var(--color7);
+}
+@media (prefers-color-scheme: light) {
+    .bar span a {
+        background-color: transparent;
+        color:            var(--color8);
+    }
+}
+
+.bar span a:hover {
+    color:            var(--color2);
+    background-color: transparent;
+    text-decoration:  none;
+}
+@media (prefers-color-scheme: light) {
+    .bar span a:hover {
+        color:            var(--color2alt);
+        background-color: transparent;
+        text-decoration:  none;
+    }
+}
+
+.bar span a.icon img.icon {
     filter:  grayscale(100%) brightness(1000%) opacity(50%);
+}
+@media (prefers-color-scheme: light) {
+    .bar span a.icon img.icon {
+        filter:  grayscale(100%) brightness(0%) opacity(50%);
+    }
 }
 
 .bar span a.icon:hover img.icon {
     filter:  grayscale(25%) opacity(75%);
+}
+@media (prefers-color-scheme: light) {
+    .bar span a.icon:hover img.icon {
+        filter:  grayscale(15%) opacity(75%);
+    }
 }
 
 .footer {
@@ -178,19 +291,45 @@ figure {
     padding-top:      10px;
     padding-bottom:   10px;
     border-top-style: solid;
-    border-top-color: var(--color7);
     text-align:       right;
+}
+
+.footer a {
+    margin-right: 12px;
+}
+
+.footer {
+    border-top-color: var(--color7);
+}
+@media (prefers-color-scheme: light) {
+    .footer {
+        border-top-color: var(--color8);
+    }
 }
 
 .footer:hover {
     border-top-color: var(--color2);
 }
+@media (prefers-color-scheme: light) {
+    .footer:hover {
+        border-top-color: var(--color2alt);
+    }
+}
 
 .footer a {
-    margin-right: 12px;
     color:        var(--color7);
+}
+@media (prefers-color-scheme: light) {
+    .footer a {
+        color: var(--color8);
+    }
 }
 
 .footer a:hover {
     color: var(--color2);
+}
+@media (prefers-color-scheme: light) {
+    .footer a:hover {
+        color: var(--color2alt);
+    }
 }
