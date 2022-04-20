@@ -142,14 +142,6 @@ figure {
     @media (prefers-color-scheme: light) {
       color: @color8;
     }
-  }
-}
-.bar span {
-  float: right;
-  a {
-    margin: 12px 18px 12px 10px;
-    padding: 0px 0px;
-    font-size: 16px;
     &:hover {
       color: @color0;
       background-color: @color2;
@@ -158,20 +150,24 @@ figure {
         background-color: @color2alt;
       }
     }
+  }
+}
+.bar span {
+  float: right;
+  a {
+    margin: 12px 18px 12px 10px;
+    padding: 0px 0px;
+    font-size: 16px;
     background-color: transparent;
     color: @color7;
     @media (prefers-color-scheme: light) {
-      background-color: transparent;
       color: @color8;
     }
     &:hover {
-      color: @color2;
       background-color: transparent;
-      text-decoration: none;
+      color: @color2;
       @media (prefers-color-scheme: light) {
         color: @color2alt;
-        background-color: transparent;
-        text-decoration: none;
       }
     }
   }
