@@ -115,13 +115,12 @@ figure {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
 .bar {
   overflow: hidden;
   white-space: nowrap;
   height: 40px;
   border-bottom-style: solid;
-}
-.bar {
   border-bottom-color: @color7;
   @media (prefers-color-scheme: light) {
     border-bottom-color: @color8;
@@ -150,65 +149,63 @@ figure {
         background-color: @color2alt;
       }
     }
-  }
-}
-.bar span {
-  float: right;
-  a {
-    margin: 12px 18px 12px 10px;
-    padding: 0px 0px;
-    font-size: 16px;
-    background-color: transparent;
-    color: @color7;
-    @media (prefers-color-scheme: light) {
-      color: @color8;
-    }
-    &:hover {
-      background-color: transparent;
-      color: @color2;
+    &.active {
+      color: @color0;
+      background-color: @color7;
       @media (prefers-color-scheme: light) {
-        color: @color2alt;
+        color: @colorf;
+        background-color: @color8;
+      }
+      &:hover {
+        color: @color0;
+        background-color: @color2;
+        @media (prefers-color-scheme: light) {
+          color: @colorf;
+          background-color: @color2alt;
+        }
       }
     }
   }
-}
-.bar span a.icon {
-  font-size: 20px;
-  padding: 0px 0px;
-  margin: 10px 5px;
-}
-.bar span a.icon img.icon {
-  height: 20px;
-  width: 20px;
-  padding: 0px 0px;
-  margin: 0px 0px;
-}
-.bar a.active {
-  color: @color0;
-  background-color: @color7;
-  @media (prefers-color-scheme: light) {
-    color: @colorf;
-    background-color: @color8;
-  }
-}
-.bar a.active:hover {
-  color: @color0;
-  background-color: @color2;
-  @media (prefers-color-scheme: light) {
-    color: @colorf;
-    background-color: @color2alt;
-  }
-}
-.bar span a.icon img.icon {
-  filter: grayscale(100%) brightness(1000%) opacity(50%);
-  @media (prefers-color-scheme: light) {
-    filter: grayscale(100%) brightness(0%) opacity(50%);
-  }
-}
-.bar span a.icon:hover img.icon {
-  filter: grayscale(25%) opacity(75%);
-  @media (prefers-color-scheme: light) {
-    filter: grayscale(15%) opacity(75%);
+  span {
+    float: right;
+    a {
+      margin: 12px 18px 12px 10px;
+      padding: 0px 0px;
+      font-size: 16px;
+      background-color: transparent;
+      color: @color7;
+      @media (prefers-color-scheme: light) {
+        color: @color8;
+      }
+      &:hover {
+        background-color: transparent;
+        color: @color2;
+        @media (prefers-color-scheme: light) {
+          color: @color2alt;
+        }
+      }
+      &.icon {
+        font-size: 20px;
+        padding: 0px 0px;
+        margin: 10px 5px;
+        img.icon {
+          height: 20px;
+          width: 20px;
+          padding: 0px 0px;
+          margin: 0px 0px;
+          filter: grayscale(100%) brightness(1000%) opacity(50%);
+          @media (prefers-color-scheme: light) {
+            filter: grayscale(100%) brightness(0%) opacity(50%);
+          }
+        }
+        &:hover img.icon {
+          filter: grayscale(25%) opacity(75%);
+          @media (prefers-color-scheme: light) {
+            filter: grayscale(15%) opacity(75%);
+          }
+        }
+      }
+    }
   }
 }
 
