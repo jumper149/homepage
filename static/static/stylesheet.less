@@ -87,19 +87,16 @@ h3 {
   }
 }
 a {
-  color: @color6;
   text-decoration: none;
+  color: @color6;
   @media (prefers-color-scheme: light) {
     color: @color6alt;
-    text-decoration: none;
   }
-}
-a:hover {
-  color: @colore;
-  text-decoration: none;
-  @media (prefers-color-scheme: light) {
-    color: @colorealt;
-    text-decoration: none;
+  &:hover {
+    color: @colore;
+    @media (prefers-color-scheme: light) {
+      color: @colorealt;
+    }
   }
 }
 hr {
@@ -124,8 +121,17 @@ figure {
   height: 40px;
   border-bottom-style: solid;
 }
-.bar:hover {
-  border-bottom-color: @color2;
+.bar {
+  border-bottom-color: @color7;
+  @media (prefers-color-scheme: light) {
+    border-bottom-color: @color8;
+  }
+  &:hover {
+    border-bottom-color: @color2;
+    @media (prefers-color-scheme: light) {
+      border-bottom-color: @color2alt;
+    }
+  }
 }
 .bar a {
   float: left;
@@ -152,17 +158,6 @@ figure {
   width: 20px;
   padding: 0px 0px;
   margin: 0px 0px;
-}
-.bar {
-  border-bottom-color: @color7;
-  @media (prefers-color-scheme: light) {
-    border-bottom-color: @color8;
-  }
-}
-@media (prefers-color-scheme: light) {
-  .bar:hover {
-    border-bottom-color: @color2alt;
-  }
 }
 .bar a {
   color: @color7;
