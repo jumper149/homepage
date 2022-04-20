@@ -8,33 +8,35 @@
 
 // green
 @color2: #8c9440;
-@color2alt: #5a630d;
+@color2alt: darken(@color2, @altPercentage);
 @colora: #b5bd68;
 
 // yellow
 @color3: #de935f;
-@color3alt: #965424;
+@color3alt: darken(@color3, @altPercentage);
 @colorb: #f0c674;
 
 // blue
 @color4: #5f819d;
-@color4alt: #254862;
+@color4alt: darken(@color4, @altPercentage);
 @colorc: #81a2be;
 
 // magenta
 @color5: #85678f;
-@color5alt: #41274b;
+@color5alt: darken(@color5, @altPercentage);
 @colord: #b294bb;
 
 // cyan
 @color6: #5e8d87;
-@color6alt: #1a4944;
+@color6alt: darken(@color6, @altPercentage);
 @colore: #8abeb7;
-@colorealt: #4f827b;
+@colorealt: darken(@colore, @altPercentage);
 
 // white
 @color7: #707880;
 @colorf: #c5c8c6;
+
+@altPercentage: 20%;
 
 html {
   background-color: @color0;
@@ -42,7 +44,7 @@ html {
   font-family: sans-serif;
   overflow-y: overlay;
   @media (prefers-color-scheme: light) {
-    background-color: @colorf;
+    background-color: lighten(@colorf, 10%);
     color: @color0;
   }
 }
