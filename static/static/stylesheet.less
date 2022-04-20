@@ -132,21 +132,49 @@ figure {
       border-bottom-color: @color2alt;
     }
   }
-}
-.bar a {
-  float: left;
-  padding: 11px 18px;
-  margin: 0px 0px;
-  text-align: center;
-  font-size: 18px;
+  a {
+    float: left;
+    padding: 11px 18px;
+    margin: 0px 0px;
+    text-align: center;
+    font-size: 18px;
+    color: @color7;
+    @media (prefers-color-scheme: light) {
+      color: @color8;
+    }
+  }
 }
 .bar span {
   float: right;
-}
-.bar span a {
-  margin: 12px 18px 12px 10px;
-  padding: 0px 0px;
-  font-size: 16px;
+  a {
+    margin: 12px 18px 12px 10px;
+    padding: 0px 0px;
+    font-size: 16px;
+    &:hover {
+      color: @color0;
+      background-color: @color2;
+      @media (prefers-color-scheme: light) {
+        color: @colorf;
+        background-color: @color2alt;
+      }
+    }
+    background-color: transparent;
+    color: @color7;
+    @media (prefers-color-scheme: light) {
+      background-color: transparent;
+      color: @color8;
+    }
+    &:hover {
+      color: @color2;
+      background-color: transparent;
+      text-decoration: none;
+      @media (prefers-color-scheme: light) {
+        color: @color2alt;
+        background-color: transparent;
+        text-decoration: none;
+      }
+    }
+  }
 }
 .bar span a.icon {
   font-size: 20px;
@@ -158,20 +186,6 @@ figure {
   width: 20px;
   padding: 0px 0px;
   margin: 0px 0px;
-}
-.bar a {
-  color: @color7;
-  @media (prefers-color-scheme: light) {
-    color: @color8;
-  }
-}
-.bar a:hover {
-  color: @color0;
-  background-color: @color2;
-  @media (prefers-color-scheme: light) {
-    color: @colorf;
-    background-color: @color2alt;
-  }
 }
 .bar a.active {
   color: @color0;
@@ -187,24 +201,6 @@ figure {
   @media (prefers-color-scheme: light) {
     color: @colorf;
     background-color: @color2alt;
-  }
-}
-.bar span a {
-  background-color: transparent;
-  color: @color7;
-  @media (prefers-color-scheme: light) {
-    background-color: transparent;
-    color: @color8;
-  }
-}
-.bar span a:hover {
-  color: @color2;
-  background-color: transparent;
-  text-decoration: none;
-  @media (prefers-color-scheme: light) {
-    color: @color2alt;
-    background-color: transparent;
-    text-decoration: none;
   }
 }
 .bar span a.icon img.icon {
