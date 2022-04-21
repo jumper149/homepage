@@ -158,16 +158,14 @@ figure {
           width: $font-size;
           margin: 0px 0px;
           padding: 0px 0px;
-          filter: grayscale(100%) brightness(1000%) opacity(50%);
-          @media (prefers-color-scheme: light) {
-            filter: grayscale(100%) brightness(0%) opacity(50%);
-          }
+          @dark-filter: grayscale(100%) brightness(1000%) opacity(50%);
+          @light-filter: grayscale(100%) brightness(10%) opacity(60%);
+          .prop-dark-light(filter; @dark-filter; @light-filter);
         }
         &:hover img.icon {
-          filter: grayscale(25%) opacity(75%);
-          @media (prefers-color-scheme: light) {
-            filter: grayscale(15%) opacity(75%);
-          }
+          @dark-filter: grayscale(15%) brightness(100%) saturate(100%) contrast(100%) opacity(75%);
+          @light-filter: grayscale(0%) brightness(55%) saturate(160%) contrast(120%) opacity(75%);
+          .prop-dark-light(filter; @dark-filter; @light-filter);
         }
       }
     }
