@@ -39,6 +39,7 @@ library
     , Homepage.Server.Route.Donate
     , Homepage.Server.Route.Files
     , Homepage.Server.Route.Home
+    , Homepage.Server.Route.Redirect
     , Homepage.Server.Route.Static
     , Homepage.Server.Tab
   other-modules:
