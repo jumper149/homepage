@@ -151,13 +151,13 @@ figure {
       }
       &.icon {
         font-size: 20px;
-        padding: 0px 0px;
         margin: 10px 5px;
+        padding: 0px 0px;
         img.icon {
-          height: 20px;
-          width: 20px;
-          padding: 0px 0px;
+          height: $font-size;
+          width: $font-size;
           margin: 0px 0px;
+          padding: 0px 0px;
           filter: grayscale(100%) brightness(1000%) opacity(50%);
           @media (prefers-color-scheme: light) {
             filter: grayscale(100%) brightness(0%) opacity(50%);
@@ -176,8 +176,7 @@ figure {
 
 .footer {
   height: 20px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding: 10px 0px;
   border-top-style: solid;
   text-align: right;
   .prop-dark-light(border-top-color; @color7; @color8);
