@@ -51,6 +51,7 @@ html {
   .prop-dark-light(color; @color7; @color0);
   .prop-dark-light(background-color; @color0; lighten(@colorf; 10%));
 }
+
 body {
   max-width: 800px;
   min-width: 500px;
@@ -62,14 +63,13 @@ body {
   margin-bottom: 25px;
   font-size: 16px;
 }
+
 p {
   text-align: justify;
 }
-h1,
-h2,
-h3 {
+
+h1, h2, h3, h4, h5, h6{
   font-weight: normal;
-  margin-bottom: -10px;
 }
 h1 {
   .prop-dark-light(color; @color2; @color2alt);
@@ -80,6 +80,10 @@ h2 {
 h3 {
   .prop-dark-light(color; @color5; @color5alt);
 }
+h4, h5, h6 {
+  .prop-dark-light(color; @color4; @color4alt);
+}
+
 a {
   text-decoration: none;
   .prop-dark-light(color; @color6; @color6alt);
@@ -87,12 +91,15 @@ a {
     .prop-dark-light(color; @colore; @colorealt);
   }
 }
+
 hr {
   .prop-dark-light(border-color; @color7; @color8);
 }
+
 figure {
   width: 85%;
 }
+
 .portrait {
   float: right;
   width: 30%;
