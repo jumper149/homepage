@@ -8,29 +8,29 @@
 
 // green
 @color2: #8c9440;
-@color2alt: darken(@color2, @altPercentage);
+@color2alt: darken(@color2; @altPercentage);
 @colora: #b5bd68;
 
 // yellow
 @color3: #de935f;
-@color3alt: darken(@color3, @altPercentage);
+@color3alt: darken(@color3; @altPercentage);
 @colorb: #f0c674;
 
 // blue
 @color4: #5f819d;
-@color4alt: darken(@color4, @altPercentage);
+@color4alt: darken(@color4; @altPercentage);
 @colorc: #81a2be;
 
 // magenta
 @color5: #85678f;
-@color5alt: darken(@color5, @altPercentage);
+@color5alt: darken(@color5; @altPercentage);
 @colord: #b294bb;
 
 // cyan
 @color6: #5e8d87;
-@color6alt: darken(@color6, @altPercentage);
+@color6alt: darken(@color6; @altPercentage);
 @colore: #8abeb7;
-@colorealt: darken(@colore, @altPercentage);
+@colorealt: darken(@colore; @altPercentage);
 
 // white
 @color7: #707880;
@@ -38,15 +38,18 @@
 
 @altPercentage: 20%;
 
+.prop-dark-light(@property; @dark-value; @light-value) {
+    @{property}: @dark-value;
+    @media (prefers-color-scheme: light) {
+      @{property}: @light-value;
+    }
+}
+
 html {
   font-family: sans-serif;
   overflow-y: overlay;
-  background-color: @color0;
-  color: @color7;
-  @media (prefers-color-scheme: light) {
-    background-color: lighten(@colorf, 10%);
-    color: @color0;
-  }
+  .prop-dark-light(color; @color7; @color0);
+  .prop-dark-light(background-color; @color0; lighten(@colorf; 10%));
 }
 body {
   max-width: 800px;
@@ -69,41 +72,23 @@ h3 {
   margin-bottom: -10px;
 }
 h1 {
-  color: @color2;
-  @media (prefers-color-scheme: light) {
-    color: @color2alt;
-  }
+  .prop-dark-light(color; @color2; @color2alt);
 }
 h2 {
-  color: @color3;
-  @media (prefers-color-scheme: light) {
-    color: @color3alt;
-  }
+  .prop-dark-light(color; @color3; @color3alt);
 }
 h3 {
-  color: @color5;
-  @media (prefers-color-scheme: light) {
-    color: @color5alt;
-  }
+  .prop-dark-light(color; @color5; @color5alt);
 }
 a {
   text-decoration: none;
-  color: @color6;
-  @media (prefers-color-scheme: light) {
-    color: @color6alt;
-  }
+  .prop-dark-light(color; @color6; @color6alt);
   &:hover {
-    color: @colore;
-    @media (prefers-color-scheme: light) {
-      color: @colorealt;
-    }
+    .prop-dark-light(color; @colore; @colorealt);
   }
 }
 hr {
-  border-color: @color7;
-  @media (prefers-color-scheme: light) {
-    border-color: @color8;
-  }
+  .prop-dark-light(border-color; @color7; @color8);
 }
 figure {
   width: 85%;
@@ -121,15 +106,9 @@ figure {
   white-space: nowrap;
   height: 40px;
   border-bottom-style: solid;
-  border-bottom-color: @color7;
-  @media (prefers-color-scheme: light) {
-    border-bottom-color: @color8;
-  }
+  .prop-dark-light(border-bottom-color; @color7; @color8);
   &:hover {
-    border-bottom-color: @color2;
-    @media (prefers-color-scheme: light) {
-      border-bottom-color: @color2alt;
-    }
+    .prop-dark-light(border-bottom-color; @color2; @color2alt);
   }
   a {
     float: left;
@@ -137,32 +116,17 @@ figure {
     margin: 0px 0px;
     text-align: center;
     font-size: 18px;
-    color: @color7;
-    @media (prefers-color-scheme: light) {
-      color: @color8;
-    }
+    .prop-dark-light(color; @color7; @color8);
     &:hover {
-      color: @color0;
-      background-color: @color2;
-      @media (prefers-color-scheme: light) {
-        color: @colorf;
-        background-color: @color2alt;
-      }
+      .prop-dark-light(color; @color0; @colorf);
+      .prop-dark-light(background-color; @color2; @color2alt);
     }
     &.active {
-      color: @color0;
-      background-color: @color7;
-      @media (prefers-color-scheme: light) {
-        color: @colorf;
-        background-color: @color8;
-      }
+      .prop-dark-light(color; @color0; @colorf);
+      .prop-dark-light(background-color; @color7; @color8);
       &:hover {
-        color: @color0;
-        background-color: @color2;
-        @media (prefers-color-scheme: light) {
-          color: @colorf;
-          background-color: @color2alt;
-        }
+        .prop-dark-light(color; @color0; @colorf);
+        .prop-dark-light(background-color; @color2; @color2alt);
       }
     }
   }
@@ -173,16 +137,10 @@ figure {
       padding: 0px 0px;
       font-size: 16px;
       background-color: transparent;
-      color: @color7;
-      @media (prefers-color-scheme: light) {
-        color: @color8;
-      }
+      .prop-dark-light(color; @color7; @color8);
       &:hover {
         background-color: transparent;
-        color: @color2;
-        @media (prefers-color-scheme: light) {
-          color: @color2alt;
-        }
+        .prop-dark-light(color; @color2; @color2alt);
       }
       &.icon {
         font-size: 20px;
@@ -215,27 +173,15 @@ figure {
   padding-bottom: 10px;
   border-top-style: solid;
   text-align: right;
-  border-top-color: @color7;
-  @media (prefers-color-scheme: light) {
-    border-top-color: @color8;
-  }
+  .prop-dark-light(border-top-color; @color7; @color8);
   &:hover {
-    border-top-color: @color2;
-    @media (prefers-color-scheme: light) {
-      border-top-color: @color2alt;
-    }
+    .prop-dark-light(border-top-color; @color2; @color2alt);
   }
   a {
     margin-right: 12px;
-    color: @color7;
-    @media (prefers-color-scheme: light) {
-      color: @color8;
-    }
+    .prop-dark-light(color; @color7; @color8);
     &:hover {
-      color: @color2;
-      @media (prefers-color-scheme: light) {
-        color: @color2alt;
-      }
+      .prop-dark-light(color; @color2; @color2alt);
     }
   }
 }
