@@ -60,6 +60,8 @@ middleware application req resp = do
         resp $ responseBuilder status302 [(hLocation, location)] mempty
   case T.unsnoc path of
     Nothing -> found302Builder "/"
-    Just ("", '/') -> application req resp
-    Just (xs, '/') -> found302Builder xs
+    Just (xs, '/') -> case T.unsnoc xs of
+      Nothing -> application req resp
+      Just (_, '/') -> application req resp
+      Just (_, _) -> found302Builder xs
     _ -> application req resp
