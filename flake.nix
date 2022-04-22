@@ -287,13 +287,7 @@
       in {
         options = {
           services.homepage = {
-            enable = lib.mkOption {
-              default = false;
-              type = with lib.types; bool;
-              description = ''
-                Felix Springer's Homepage.
-              '';
-            };
+            enable = lib.mkEnableOption "Felix Springer's Homepage.";
             config = lib.mkOption {
               default = { };
               type = with lib.types; attrsOf anything;
