@@ -7,11 +7,15 @@ import Deriving.Aeson qualified as A
 import GHC.Generics
 
 displayBaseUrl :: BaseUrl -> T.Text
-displayBaseUrl BaseUrl {baseUrlScheme, baseUrlAuthority, baseUrlPath} =
-  let absolutePath = case baseUrlPath of
-        [] -> "/"
-        segments -> "/" <> T.intercalate "/" segments <> "/"
+displayBaseUrl baseUrl@BaseUrl {baseUrlScheme, baseUrlAuthority} =
+  let absolutePath = displayBaseUrlPath baseUrl <> "/"
    in baseUrlScheme <> ":" <> maybe "" displayBaseUrlAuthority baseUrlAuthority <> absolutePath
+
+displayBaseUrlPath :: BaseUrl -> T.Text
+displayBaseUrlPath BaseUrl {baseUrlPath} =
+  case baseUrlPath of
+    [] -> ""
+    segments -> "/" <> T.intercalate "/" segments
 
 data BaseUrl = BaseUrl
   { baseUrlScheme :: T.Text

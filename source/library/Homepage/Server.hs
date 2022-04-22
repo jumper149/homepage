@@ -3,6 +3,7 @@ module Homepage.Server where
 import Homepage.Application.Blog.Class
 import Homepage.Application.Configured.Class
 import Homepage.Configuration
+import Homepage.Configuration.BaseUrl
 import Homepage.Handler
 import Homepage.Server.Route
 
@@ -48,12 +49,13 @@ server = do
       serveWithContextT (Proxy @WrappedAPI) EmptyContext (liftBase . runInIO) $
         hoistServerRunHandlerT $ genericServerT routes
 
-middleware :: MonadLogger m => MiddlewareT m
+middleware :: (MonadConfigured m, MonadLogger m) => MiddlewareT m
 middleware application req resp = do
   logDebug $ "Received HTTP request: " <> T.pack (show req)
   let path = T.decodeLatin1 $ rawPathInfo req
       found302Builder locationPath = do
-        let location = B.pack (T.unpack locationPath) <> rawQueryString req
+        baseUrl <- configBaseUrl <$> configuration
+        let location = B.pack (T.unpack $ displayBaseUrlPath baseUrl <> locationPath) <> rawQueryString req
         logInfo $ "Redirect HTTP request to new location: " <> T.pack (show location)
         resp $ responseBuilder status302 [(hLocation, location)] mempty
   case T.unsnoc path of
