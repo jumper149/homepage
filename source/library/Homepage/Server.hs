@@ -10,9 +10,11 @@ import Control.Monad
 import Control.Monad.Base
 import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Control.Identity
-import Data.ByteString qualified as B
+import Data.Bifunctor
+import Data.ByteString.Char8 qualified as B
 import Data.Proxy
 import Data.Text qualified as T
+import Data.Text.Encoding qualified as T
 import Network.HTTP.Types
 import Network.Wai
 import Network.Wai.Handler.Warp
@@ -50,13 +52,13 @@ server = do
 middleware :: MonadLogger m => MiddlewareT m
 middleware application req resp = do
   logDebug $ "Received HTTP request: " <> T.pack (show req)
-  let rawPath = rawPathInfo req
+  let rawPath = T.decodeLatin1 $ rawPathInfo req
       found302Builder locationPath = do
-        let location = locationPath <> rawQueryString req
+        let location = B.pack (T.unpack locationPath) <> rawQueryString req
         logInfo $ "Redirect HTTP request to new location: " <> T.pack (show location)
         resp $ responseBuilder status302 [(hLocation, location)] mempty
-  case fmap (\(x, xs) -> (B.pack [x], B.reverse xs)) $ B.uncons $ B.reverse rawPath of
+  case fmap (second T.reverse) $ T.uncons $ T.reverse rawPath of
     Nothing -> found302Builder "/"
-    Just ("/", "") -> application req resp
-    Just ("/", xs) -> found302Builder xs
+    Just ('/', "") -> application req resp
+    Just ('/', xs) -> found302Builder xs
     _ -> application req resp
