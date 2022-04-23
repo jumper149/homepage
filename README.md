@@ -114,3 +114,15 @@ cabal build all
 # Run weeder.
 weeder
 ```
+
+### `graphmod`
+
+The module dependency graph can be visualised using `graphmod`.
+
+```
+# Enter development shell.
+nix develop
+
+# Run graphmod.
+find source -name '*.hs' | xargs graphmod -q | xdot -
+```

@@ -264,15 +264,18 @@
         buildInputs = with haskellPackages; [
           asciidoctor
           blaze-from-html
+          pkgs.findutils
           ghcid
+          graphmod
           haskell-language-server
           hlint
           hnix
-          lessc
           pkgs.imagemagick
           implicit-hie
+          lessc
           rnix-lsp
           weeder
+          pkgs.xdot
         ];
         packages = haskellPackages: [
           self.packages.x86_64-linux.homepage
