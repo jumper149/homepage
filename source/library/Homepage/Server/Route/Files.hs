@@ -3,6 +3,7 @@ module Homepage.Server.Route.Files where
 import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Server.Err404
+import Homepage.Server.FileServer
 import Homepage.Server.Html.Document
 import Homepage.Server.Html.Files
 import Homepage.Server.Tab
@@ -16,7 +17,6 @@ import Servant.HTML.Blaze
 import Servant.RawM.Server qualified as RawM
 import Servant.Server.Generic
 import Text.Blaze.Html5
-import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 
 data Routes route = Routes
@@ -54,4 +54,5 @@ filesHandler = do
   directory <- configDirectoryFiles <$> configuration
   fallbackApplication <- runApplicationT application404
   logInfo "Serve file download."
-  RawM.serveDirectoryWith (defaultFileServerSettings directory) {ss404Handler = Just fallbackApplication}
+  settings <- fileServerSettings directory
+  RawM.serveDirectoryWith settings {ss404Handler = Just fallbackApplication}

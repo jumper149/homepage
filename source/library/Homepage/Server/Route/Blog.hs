@@ -5,6 +5,7 @@ import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Configuration.Blog
 import Homepage.Server.Err404
+import Homepage.Server.FileServer
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
@@ -23,7 +24,6 @@ import Servant.Server.Generic
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes qualified as HA
 import Text.Blaze.Html5.Extra
-import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 
 data Routes route = Routes
@@ -109,4 +109,5 @@ rawHandler = do
   directory <- configDirectoryBlog <$> configuration
   fallbackApplication <- runApplicationT application404
   logInfo "Serve blog download."
-  RawM.serveDirectoryWith (defaultFileServerSettings directory) {ss404Handler = Just fallbackApplication}
+  settings <- fileServerSettings directory
+  RawM.serveDirectoryWith settings {ss404Handler = Just fallbackApplication}
