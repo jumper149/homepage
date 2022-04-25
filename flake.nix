@@ -87,7 +87,8 @@
                 --attribute author="${config.contact-information.name}" \
                 --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
                 --backend html5 \
-                --attribute nofooter
+                --attribute nofooter \
+                --attribute webfonts!
               sed -i 's/^<head>$/<head>\n<base target="_parent">/' "static/$ARTICLE_NAME.html"
 
               echo "PDF: '$ARTICLE_NAME'"
