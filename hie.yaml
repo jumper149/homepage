@@ -3,5 +3,8 @@ cradle:
     - path: "source/library"
       component: "lib:homepage"
 
+    - path: "source/test-application"
+      component: "homepage:test:test-application"
+
     - path: "source/executable/Main.hs"
       component: "homepage:exe:homepage"
