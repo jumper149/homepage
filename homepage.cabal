@@ -5,79 +5,7 @@ version: 0
 flag cabal2nix
   default: False
 
-library
-  exposed-modules:
-    , Homepage
-    , Homepage.Application
-    , Homepage.Application.Blog
-    , Homepage.Application.Blog.Class
-    , Homepage.Application.Configured
-    , Homepage.Application.Configured.Acquisition
-    , Homepage.Application.Configured.Class
-    , Homepage.Application.Environment
-    , Homepage.Application.Environment.Acquisition
-    , Homepage.Application.Environment.Class
-    , Homepage.Application.Logging
-    , Homepage.Configuration
-    , Homepage.Configuration.BaseUrl
-    , Homepage.Configuration.Blog
-    , Homepage.Configuration.Contact
-    , Homepage.Configuration.Files
-    , Homepage.Environment
-    , Homepage.Handler
-    , Homepage.Handler.RequestHash
-    , Homepage.Server
-    , Homepage.Server.Err404
-    , Homepage.Server.FileServer
-    , Homepage.Server.Html.Blog
-    , Homepage.Server.Html.Depth
-    , Homepage.Server.Html.Document
-    , Homepage.Server.Html.Files
-    , Homepage.Server.Html.Header
-    , Homepage.Server.Route
-    , Homepage.Server.Route.Blog
-    , Homepage.Server.Route.Blog.Atom
-    , Homepage.Server.Route.Donate
-    , Homepage.Server.Route.Files
-    , Homepage.Server.Route.Home
-    , Homepage.Server.Route.Redirect
-    , Homepage.Server.Route.Static
-    , Homepage.Server.Tab
-  other-modules:
-    , Control.Monad.Logger.OrphanInstances
-    , Control.Monad.Trans.Compose.Infix
-    , Text.Blaze.Html5.Extra
-  build-depends:
-    , aeson
-    , base
-    , blaze-html
-    , blaze-markup
-    , bytestring
-    , containers
-    , deriving-aeson
-    , deriving-trans
-    , feed
-    , hashable
-    , http-media
-    , http-types
-    , monad-control
-    , monad-control-identity
-    , monad-logger
-    , mtl
-    , servant
-    , servant-blaze
-    , servant-rawm-server
-    , servant-server
-    , text
-    , time
-    , transformers
-    , transformers-base
-    , unix
-    , wai
-    , wai-app-static
-    , wai-control
-    , warp
-  hs-source-dirs: source/library
+common language
   default-language: Haskell2010
   default-extensions:
     BangPatterns
@@ -216,6 +144,82 @@ library
       -fdefer-typed-holes
       -fwrite-ide-info
         -- ^ Generate data for 'weeder'.
+
+library
+  import:
+    , language
+  exposed-modules:
+    , Homepage
+    , Homepage.Application
+    , Homepage.Application.Blog
+    , Homepage.Application.Blog.Class
+    , Homepage.Application.Configured
+    , Homepage.Application.Configured.Acquisition
+    , Homepage.Application.Configured.Class
+    , Homepage.Application.Environment
+    , Homepage.Application.Environment.Acquisition
+    , Homepage.Application.Environment.Class
+    , Homepage.Application.Logging
+    , Homepage.Configuration
+    , Homepage.Configuration.BaseUrl
+    , Homepage.Configuration.Blog
+    , Homepage.Configuration.Contact
+    , Homepage.Configuration.Files
+    , Homepage.Environment
+    , Homepage.Handler
+    , Homepage.Handler.RequestHash
+    , Homepage.Server
+    , Homepage.Server.Err404
+    , Homepage.Server.FileServer
+    , Homepage.Server.Html.Blog
+    , Homepage.Server.Html.Depth
+    , Homepage.Server.Html.Document
+    , Homepage.Server.Html.Files
+    , Homepage.Server.Html.Header
+    , Homepage.Server.Route
+    , Homepage.Server.Route.Blog
+    , Homepage.Server.Route.Blog.Atom
+    , Homepage.Server.Route.Donate
+    , Homepage.Server.Route.Files
+    , Homepage.Server.Route.Home
+    , Homepage.Server.Route.Redirect
+    , Homepage.Server.Route.Static
+    , Homepage.Server.Tab
+  other-modules:
+    , Control.Monad.Logger.OrphanInstances
+    , Control.Monad.Trans.Compose.Infix
+    , Text.Blaze.Html5.Extra
+  build-depends:
+    , aeson
+    , base
+    , blaze-html
+    , blaze-markup
+    , bytestring
+    , containers
+    , deriving-aeson
+    , deriving-trans
+    , feed
+    , hashable
+    , http-media
+    , http-types
+    , monad-control
+    , monad-control-identity
+    , monad-logger
+    , mtl
+    , servant
+    , servant-blaze
+    , servant-rawm-server
+    , servant-server
+    , text
+    , time
+    , transformers
+    , transformers-base
+    , unix
+    , wai
+    , wai-app-static
+    , wai-control
+    , warp
+  hs-source-dirs: source/library
 
 executable homepage
   build-depends:
