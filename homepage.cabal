@@ -145,8 +145,41 @@ common language
       -fwrite-ide-info
         -- ^ Generate data for 'weeder'.
 
+common dependencies
+  build-depends:
+    , aeson
+    , base
+    , blaze-html
+    , blaze-markup
+    , bytestring
+    , containers
+    , deriving-aeson
+    , deriving-trans
+    , feed
+    , hashable
+    , http-media
+    , http-types
+    , monad-control
+    , monad-control-identity
+    , monad-logger
+    , mtl
+    , servant
+    , servant-blaze
+    , servant-rawm-server
+    , servant-server
+    , text
+    , time
+    , transformers
+    , transformers-base
+    , unix
+    , wai
+    , wai-app-static
+    , wai-control
+    , warp
+
 library
   import:
+    , dependencies
     , language
   exposed-modules:
     , Homepage
@@ -189,36 +222,6 @@ library
     , Control.Monad.Logger.OrphanInstances
     , Control.Monad.Trans.Compose.Infix
     , Text.Blaze.Html5.Extra
-  build-depends:
-    , aeson
-    , base
-    , blaze-html
-    , blaze-markup
-    , bytestring
-    , containers
-    , deriving-aeson
-    , deriving-trans
-    , feed
-    , hashable
-    , http-media
-    , http-types
-    , monad-control
-    , monad-control-identity
-    , monad-logger
-    , mtl
-    , servant
-    , servant-blaze
-    , servant-rawm-server
-    , servant-server
-    , text
-    , time
-    , transformers
-    , transformers-base
-    , unix
-    , wai
-    , wai-app-static
-    , wai-control
-    , warp
   hs-source-dirs: source/library
 
 executable homepage
