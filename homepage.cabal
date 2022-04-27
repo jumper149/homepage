@@ -233,6 +233,8 @@ test-suite test-application
   type: exitcode-stdio-1.0
   main-is: Main.hs
   hs-source-dirs: source/test-application
+  ghc-options:
+    -Wno-unused-packages
 
 executable homepage
   build-depends:
