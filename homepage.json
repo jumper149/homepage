@@ -69,6 +69,10 @@
     { "timestamp": "2022-04-11"
     , "title": "an Interface for accessing Environment Variables"
     }
+  , "beans":
+    { "timestamp": "2022-05-01"
+    , "title": "Recipe: Beans"
+    }
   }
 , "blog-preview-max-length": 5
 , "atom-max-length": null
