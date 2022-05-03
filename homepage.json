@@ -36,42 +36,52 @@
   { "myWayToCoreboot":
     { "timestamp": "2019-04-04"
     , "title": "my Way to Coreboot"
+    , "discussion": []
     }
   , "myOwnImplementationOfIExpressions":
     { "timestamp": "2019-06-30"
     , "title": "my own Implementation of I-Expressions"
+    , "discussion": []
     }
   , "aSmallShowcaseOfBlucontrol":
     { "timestamp": "2021-09-27"
     , "title": "a small Showcase of blucontrol"
+    , "discussion": []
     }
   , "projectsOnMyHomepage":
     { "timestamp": "2021-11-13"
     , "title": "Projects on my Homepage"
+    , "discussion": []
     }
   , "composingTransformers":
     { "timestamp": "2021-12-17"
     , "title": "composing Transformers"
+    , "discussion": []
     }
   , "beyondTypeclassopedia":
     { "timestamp": "2022-01-15"
     , "title": "beyond Typeclassopedia"
+    , "discussion": []
     }
   , "derivingTrans":
     { "timestamp": "2022-02-02"
     , "title": "Showcase: deriving-trans"
+    , "discussion": []
     }
   , "jsonFormatting":
     { "timestamp": "2022-02-13"
     , "title": "JSON Formatting"
+    , "discussion": []
     }
   , "anInterfaceForAccessingEnvironmentVariables":
     { "timestamp": "2022-04-11"
     , "title": "an Interface for accessing Environment Variables"
+    , "discussion": []
     }
   , "beans":
     { "timestamp": "2022-05-01"
     , "title": "Recipe: Beans"
+    , "discussion": []
     }
   }
 , "blog-preview-max-length": 5

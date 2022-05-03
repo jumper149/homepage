@@ -101,6 +101,14 @@ articleHandler blogId = do
             ! HA.target "_parent"
             ! HA.style "border: none;"
             $ mempty
+          case blogDiscussion blog of
+            [] -> mempty
+            links -> do
+              h3 "Discussion"
+              ul . toMarkup $ markupLink <$> links
+ where
+  markupLink BlogLink {blogLinkDescription, blogLinkUrl} =
+    li $ a ! HA.href (toValue blogLinkUrl) $ text blogLinkDescription
 
 rawHandler ::
   (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m) =>

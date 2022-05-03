@@ -15,9 +15,19 @@ newtype BlogId = BlogId {unBlogId :: T.Text}
   deriving newtype (A.FromJSONKey, A.ToJSONKey)
   deriving newtype (S.FromHttpApiData, S.ToHttpApiData)
 
+data BlogLink = BlogLink
+  { blogLinkDescription :: T.Text
+  , blogLinkUrl :: T.Text
+  }
+  deriving stock (Eq, Generic, Ord, Read, Show)
+  deriving
+    (A.FromJSON, A.ToJSON)
+    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "blogLink", A.CamelToKebab], A.RejectUnknownFields] BlogLink
+
 data BlogEntry = BlogEntry
   { blogTitle :: T.Text
   , blogTimestamp :: Day
+  , blogDiscussion :: [BlogLink]
   }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
