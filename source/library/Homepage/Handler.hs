@@ -6,7 +6,6 @@ module Homepage.Handler where
 import Homepage.Application.Blog.Class
 import Homepage.Application.Configured.Class
 import Homepage.Handler.RequestHash
-import Homepage.Server.Route
 
 import Control.Monad.Base
 import Control.Monad.Error.Class
@@ -19,14 +18,6 @@ import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
 import Control.Monad.Trans.Elevator
 import Control.Monad.Trans.Identity
-import Servant
-import Servant.API.Generic
-
-type API = ToServantApi Routes
-type WrappedAPI = RequestHash :> API
-
-hoistServerRunHandlerT :: MonadLogger m => ServerT API (HandlerT m) -> ServerT WrappedAPI m
-hoistServerRunHandlerT server randomHash = hoistServer (Proxy @API) (runHandlerT randomHash) server
 
 type StackT =
   Elevator IdentityT

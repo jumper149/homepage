@@ -5,6 +5,7 @@ import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Configuration.BaseUrl
 import Homepage.Handler
+import Homepage.Handler.RequestHash
 import Homepage.Server.Route
 
 import Control.Monad
@@ -19,9 +20,17 @@ import Network.HTTP.Types
 import Network.Wai
 import Network.Wai.Handler.Warp
 import Network.Wai.Trans
+import Servant.API
+import Servant.API.Generic
 import Servant.Server
 import Servant.Server.Generic
 import System.Posix.Signals
+
+type API = ToServantApi Routes
+type WrappedAPI = RequestHash :> API
+
+hoistServerRunHandlerT :: MonadLogger m => ServerT API (HandlerT m) -> ServerT WrappedAPI m
+hoistServerRunHandlerT handler randomHash = hoistServer (Proxy @API) (runHandlerT randomHash) handler
 
 server :: (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadLogger m) => m ()
 server = do
