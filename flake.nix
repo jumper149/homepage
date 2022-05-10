@@ -265,6 +265,7 @@
         buildInputs = with haskellPackages; [
           asciidoctor
           blaze-from-html
+          calligraphy
           pkgs.findutils
           ghcid
           graphmod

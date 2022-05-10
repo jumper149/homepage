@@ -126,3 +126,19 @@ nix develop
 # Run graphmod.
 find source -name '*.hs' | xargs graphmod -q | xdot -
 ```
+
+### `calligraphy`
+
+The function call graph can be visualised using `calligraphy`.
+
+```
+# Enter development shell.
+nix develop
+
+# Prepare additional information for calligraphy.
+cabal clean
+cabal build all
+
+# Run calligraphy.
+calligraphy --output-stdout | xdot -
+```
