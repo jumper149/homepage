@@ -86,6 +86,7 @@
               asciidoctor "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
                 --attribute author="${config.contact-information.name}" \
                 --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
+                --attribute imagesdir="$ARTICLE_NAME" \
                 --backend html5 \
                 --attribute nofooter \
                 --attribute webfonts!
@@ -95,6 +96,7 @@
               asciidoctor-pdf "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
                 --attribute author="${config.contact-information.name}" \
                 --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
+                --attribute imagesdir="$ARTICLE_NAME" \
                 --attribute pdf-theme="style/pdf-theme.yml"
 
               if [ -d "$ARTICLE_NAME" ]
