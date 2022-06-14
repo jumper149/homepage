@@ -1,4 +1,4 @@
-:revdate: 2022-06-14
+:revdate: 2022-06-15
 = Zurihac 2022
 
 https://zfoh.ch/zurihac2022/[Zurihac 2022] happened and I happened to be a part of it.
@@ -8,7 +8,7 @@ This was the first Zurihac and also the first Haskell community event, I've ever
 [TIP]
 ====
 If you are not sure, whether you should go to such an event.
-Definetely try it out.
+Definitely try it out.
 My experience was awesome.
 ====
 
