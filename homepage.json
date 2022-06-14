@@ -109,6 +109,11 @@
     , "title": "Recipe: Beans"
     , "discussion": []
     }
+  , "zurihac2022":
+    { "timestamp": "2022-06-14"
+    , "title": "Zurihac 2022"
+    , "discussion": []
+    }
   }
 , "blog-preview-max-length": 5
 , "atom-max-length": null

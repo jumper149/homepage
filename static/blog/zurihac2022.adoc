@@ -1,0 +1,56 @@
+:revdate: 2022-06-14
+= Zurihac 2022
+
+https://zfoh.ch/zurihac2022/[Zurihac 2022] happened and I happened to be a part of it.
+
+This was the first Zurihac and also the first Haskell community event, I've ever attended.
+
+[TIP]
+====
+If you are not sure, whether you should go to such an event.
+Definetely try it out.
+My experience was awesome.
+====
+
+== my timeline and highlights
+
+=== Saturday
+
+I travelled together with my colleague by car.
+We arrived just after the first talk, but that was totally fine.
+
+Everyone who was already there was really approachable and always up for a quick chat.
+After grabbing Egyptian food from the food truck I attended my first talk there.
+
+https://www.uu.nl/staff/gkkeller[Gabriele Keller] talked about http://www.acceleratehs.org/[Accelerate], which is a Haskell DSL for parallel computing (on GPUs for example).
+This was a really nice talk on a topic, that is kind of underrepresented in the Haskell community.
+
+The rest of the day went by rather quickly and in the evening we had some barbecue.
+Even until late we were able to sit at Lake Zurich and then we checked in to our hotel.
+
+=== Sunday
+
+On Sunday https://www.microsoft.com/en-us/research/people/simonpj/publications/[Simon Peyton Jones] held his talk about GHC internals, Haskell Core and some of GHCs optimizations.
+I guess everyone loved it, because nobody dared to leave, even though the talk took an extra half of an hour.
+
+This day also had awesome weather so most people (including me) used this day to swim in the lake.
+
+image::atLake.jpg[Enjoying the sun]
+
+=== Monday
+
+On the last day of Zurihac there was some more time to hack, but I actually spent most of my time talking to people from all sorts of backgrounds.
+
+After a long chat about cryptocurrencies we finally headed back to Germany.
+
+== It was awesome
+
+The best part overall is definitely the community.
+Thank you to everyone for being awesome and approachable!
+
+There was also a lot of other fun stuff going on I didn't talk about.
+
+A special thank you to the organizers, sponsors and everyone who made it happen.
+I'll surely attend more Haskell community events now.
+
+See you at Munihac (I guess this is the next one)! :D
