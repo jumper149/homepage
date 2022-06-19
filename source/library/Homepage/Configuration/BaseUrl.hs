@@ -12,10 +12,7 @@ displayBaseUrl baseUrl@BaseUrl {baseUrlScheme, baseUrlAuthority} =
    in baseUrlScheme <> ":" <> maybe "" displayBaseUrlAuthority baseUrlAuthority <> absolutePath
 
 displayBaseUrlPath :: BaseUrl -> T.Text
-displayBaseUrlPath BaseUrl {baseUrlPath} =
-  case baseUrlPath of
-    [] -> ""
-    segments -> "/" <> T.intercalate "/" segments
+displayBaseUrlPath BaseUrl {baseUrlPath} = T.concat $ map ("/" <>) baseUrlPath
 
 data BaseUrl = BaseUrl
   { baseUrlScheme :: T.Text
