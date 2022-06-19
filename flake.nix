@@ -86,7 +86,7 @@
               asciidoctor "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
                 --attribute author="${config.contact-information.name}" \
                 --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
-                --attribute imagesdir="$ARTICLE_NAME" \
+                --attribute imagesdir="${(import source/library/Homepage/Configuration/BaseUrl.nix) config.base-url}/blog/raw/$ARTICLE_NAME" \
                 --backend html5 \
                 --attribute nofooter \
                 --attribute webfonts!
