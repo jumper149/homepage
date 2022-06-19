@@ -4,12 +4,14 @@
 , "directory-static": "./static/static"
 , "port": 8008
 , "base-url":
-  { "scheme": "http"
+  { "scheme": "https"
   , "authority":
-    { "host": "localhost"
-    , "port": 8008
+    { "host": "felixspringer.xyz"
+    , "port": null
     }
-  , "path": []
+  , "path":
+    [ "homepage"
+    ]
   }
 , "contact-information":
   { "header-icons":
