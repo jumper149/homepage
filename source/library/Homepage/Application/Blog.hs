@@ -33,7 +33,7 @@ instance (MonadBaseControl IO m, MonadConfigured m, MonadLogger m) => MonadBlog 
     lift . (restoreM =<<) $
       liftBaseWith $ \runInBase ->
         catchError (runInBase $ liftBase $ T.readFile file) $ \err -> runInBase $ do
-          logWarn $ "Failed to read HTML for blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
+          logError $ "Failed to read HTML for blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
           pure (undefined :: T.Text)
 
 deriving via
