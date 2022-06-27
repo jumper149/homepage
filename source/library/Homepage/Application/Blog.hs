@@ -51,12 +51,15 @@ runAppBlogT ::
   (MonadBaseControl IO m, MonadConfigured m, MonadLogger m) =>
   BlogT m a ->
   m a
-runAppBlogT tma = runBlogT $ do
-  entries <- lift $ M.toList . unBlogEntries . configBlogEntries <$> configuration
-  traverse_ (uncurry checkBlogEntry) entries
-  tma
+runAppBlogT tma = runBlogT $ checkBlogEntries >> tma
  where
-  checkBlogEntry :: BlogId -> BlogEntry -> BlogT m ()
-  checkBlogEntry blogId blogEntry = do
-    lift $ logInfo $ "Checking blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
-    void $ readBlogEntryHtml blogId
+  checkBlogEntries = do
+    lift $ logInfo "Probing configured blog entries."
+    entries <- lift $ M.toList . unBlogEntries . configBlogEntries <$> configuration
+    traverse_ (uncurry checkBlogEntry) entries
+    lift $ logInfo "Probing configured blog entries."
+   where
+    checkBlogEntry :: BlogId -> BlogEntry -> BlogT m ()
+    checkBlogEntry blogId blogEntry = do
+      lift $ logInfo $ "Checking blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
+      void $ readBlogEntryHtml blogId
