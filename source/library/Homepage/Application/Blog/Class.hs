@@ -9,7 +9,6 @@ import Data.Kind
 import Data.Text qualified as T
 
 class Monad m => MonadBlog m where
-  blogEntries :: m BlogEntries
   readBlogEntryHtml :: BlogId -> m T.Text
 
 instance
@@ -19,7 +18,6 @@ instance
   ) =>
   MonadBlog (Elevator t m)
   where
-  blogEntries = lift blogEntries
   readBlogEntryHtml = lift . readBlogEntryHtml
 
 deriving via

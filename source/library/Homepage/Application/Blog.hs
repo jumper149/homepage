@@ -27,7 +27,6 @@ newtype BlogT m a = BlogT {unBlogT :: IdentityT m a}
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
 instance (MonadBaseControl IO m, MonadConfigured m, MonadLogger m) => MonadBlog (BlogT m) where
-  blogEntries = lift $ configBlogEntries <$> configuration
   readBlogEntryHtml blogId = do
     dir <- lift $ configDirectoryBlog <$> configuration
     let file = dir <> "/" <> T.unpack (unBlogId blogId) <> ".html"
@@ -53,7 +52,7 @@ runAppBlogT ::
   BlogT m a ->
   m a
 runAppBlogT tma = runBlogT $ do
-  entries <- M.toList . unBlogEntries <$> blogEntries
+  entries <- lift $ M.toList . unBlogEntries . configBlogEntries <$> configuration
   traverse_ (uncurry checkBlogEntry) entries
   tma
  where
