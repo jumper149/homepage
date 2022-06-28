@@ -13,6 +13,8 @@ import Homepage.Application.Logging
 
 import Control.Monad.Base
 import Control.Monad.Except
+import Control.Monad.IO.Unlift
+import Control.Monad.IO.Unlift.OrphanInstances ()
 import Control.Monad.Identity
 import Control.Monad.Logger.CallStack
 import Control.Monad.Logger.OrphanInstances ()
@@ -35,6 +37,7 @@ newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
   deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
+  deriving newtype (MonadIO, MonadUnliftIO)
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
 

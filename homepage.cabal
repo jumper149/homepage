@@ -172,6 +172,8 @@ common dependencies
     , transformers
     , transformers-base
     , unix
+    , unliftio
+    , unliftio-core
     , wai
     , wai-app-static
     , wai-control
@@ -219,6 +221,7 @@ library
     , Homepage.Server.Route.Static
     , Homepage.Server.Tab
   other-modules:
+    , Control.Monad.IO.Unlift.OrphanInstances
     , Control.Monad.Logger.OrphanInstances
     , Control.Monad.Trans.Compose.Infix
     , Text.Blaze.Html5.Extra
