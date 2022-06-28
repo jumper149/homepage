@@ -41,7 +41,7 @@ newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT m a}
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
 
-deriving newtype instance (MonadUnliftIO m) => MonadBlog (ApplicationT m)
+deriving newtype instance MonadUnliftIO m => MonadBlog (ApplicationT m)
 
 deriving via
   Elevator ApplicationT m
