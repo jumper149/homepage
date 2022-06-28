@@ -31,7 +31,7 @@ deriving via
     MonadIO (t2 m) => MonadLogger (ComposeT TimedLoggingT t2 m)
 
 runTimedLoggingT ::
-  (MonadIO m, MonadBaseControl IO m) =>
+  (MonadBaseControl IO m, MonadIO m) =>
   Maybe FilePath ->
   LogLevel ->
   TimedLoggingT m a ->

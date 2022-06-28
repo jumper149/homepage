@@ -41,7 +41,7 @@ newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT m a}
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
 
-deriving newtype instance (MonadBaseControl IO m, MonadIO m) => MonadBlog (ApplicationT m)
+deriving newtype instance (MonadUnliftIO m) => MonadBlog (ApplicationT m)
 
 deriving via
   Elevator ApplicationT m
@@ -49,7 +49,7 @@ deriving via
     MonadError Servant.ServerError m => MonadError Servant.ServerError (ApplicationT m)
 
 runApplicationT ::
-  (MonadIO m, MonadBaseControlIdentity IO m) =>
+  (MonadBaseControlIdentity IO m, MonadUnliftIO m) =>
   ApplicationT m a ->
   m a
 runApplicationT app = do
