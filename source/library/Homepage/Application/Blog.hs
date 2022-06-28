@@ -57,9 +57,10 @@ runAppBlogT tma = runBlogT $ checkBlogEntries >> tma
     lift $ logInfo "Probing configured blog entries."
     entries <- lift $ M.toList . unBlogEntries . configBlogEntries <$> configuration
     traverse_ (uncurry checkBlogEntry) entries
-    lift $ logInfo "Probing configured blog entries."
+    lift $ logInfo "Finished probing configured blog entries."
    where
     checkBlogEntry :: BlogId -> BlogEntry -> BlogT m ()
     checkBlogEntry blogId blogEntry = do
       lift $ logInfo $ "Checking blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
       void $ readBlogEntryHtml blogId
+      lift $ logInfo $ "Checked blog entry '" <> T.pack (show (blogId, blogEntry)) <> "'."
