@@ -7,7 +7,6 @@ import Homepage.Server.Route.Home.Type qualified
 import Homepage.Server.Route.Redirect.Type qualified
 import Homepage.Server.Route.Static.Type qualified
 
-import GHC.Generics
 import Servant
 import Servant.API.Generic
 

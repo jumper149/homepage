@@ -1,11 +1,7 @@
 module Homepage.Server.Route.Redirect.Type where
 
-import GHC.Generics
 import Servant
 import Servant.API.Generic
-
-type Found302Content = Headers '[Header "Location" String] NoContent
-type Found302 = Verb 'GET 302 '[PlainText] Found302Content
 
 data Routes route = Routes
   { routeFeed :: route :- "feed" :> Found302
@@ -21,3 +17,6 @@ data Routes route = Routes
   , routeBlogAtom :: route :- "blog" :> "atom" :> Found302
   }
   deriving stock (Generic)
+
+type Found302Content = Headers '[Header "Location" String] NoContent
+type Found302 = Verb 'GET 302 '[PlainText] Found302Content
