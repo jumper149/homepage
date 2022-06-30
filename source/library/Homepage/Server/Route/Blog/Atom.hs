@@ -43,15 +43,20 @@ handler = do
   atomMaxLength <- configAtomMaxLength <$> configuration
   let recentBlogs = recentBlogEntries atomMaxLength blogs
   let entryList = L.sortOn (Down . blogTimestamp . snd) $ M.toList (unBlogEntries recentBlogs)
-  entries <- traverse (uncurry atomEntry) entryList
-  feed <- Feed.AtomFeed <$> atomFeed entries
-  case Feed.textFeed feed of
+  maybeEntries <- traverse (uncurry atomEntry) entryList
+  case sequence @[] @Maybe maybeEntries of
     Nothing -> do
-      logError "Failed to serialize Atom feed."
+      logError "Failed to serialize atleast one Atom feed entry."
       respond $ WithStatus @500 NoContent
-    Just text -> do
-      logInfo "Serve Atom feed."
-      respond . WithStatus @200 $ AtomFeed text
+    Just entries -> do
+      feed <- Feed.AtomFeed <$> atomFeed entries
+      case Feed.textFeed feed of
+        Nothing -> do
+          logError "Failed to serialize Atom feed."
+          respond $ WithStatus @500 NoContent
+        Just text -> do
+          logInfo "Serve Atom feed."
+          respond . WithStatus @200 $ AtomFeed text
 
 atomFeed ::
   MonadConfigured m =>
@@ -113,42 +118,45 @@ atomEntry ::
   (MonadBlog m, MonadConfigured m, MonadLogger m) =>
   BlogId ->
   BlogEntry ->
-  m Atom.Entry
+  m (Maybe Atom.Entry)
 atomEntry blogId BlogEntry {blogTitle, blogTimestamp} = do
   baseUrl <- configBaseUrl <$> configuration
   person <- atomPerson
   logInfo $ "Read blog article from file: " <> T.pack (show blogId)
-  content <- readBlogEntryHtml blogId
-  pure
-    Atom.Entry
-      { Atom.entryId = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId
-      , Atom.entryTitle = Atom.TextString blogTitle
-      , Atom.entryUpdated = T.pack $ T.formatTime T.defaultTimeLocale "%0Y-%0m-%0dT12:00:00+01:00" blogTimestamp
-      , Atom.entryAuthors = [person]
-      , Atom.entryCategories = []
-      , Atom.entryContent = Just $ Atom.HTMLContent content
-      , Atom.entryContributor = []
-      , Atom.entryLinks =
-          [ Atom.Link
-              { Atom.linkHref = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId
-              , Atom.linkRel = Just $ Left "alternate"
-              , Atom.linkType = Just "text/html"
-              , Atom.linkHrefLang = Nothing
-              , Atom.linkTitle = Nothing
-              , Atom.linkLength = Nothing
-              , Atom.linkAttrs = []
-              , Atom.linkOther = []
-              }
-          ]
-      , Atom.entryPublished = Nothing
-      , Atom.entryRights = Nothing
-      , Atom.entrySource = Nothing
-      , Atom.entrySummary = Nothing
-      , Atom.entryInReplyTo = Nothing
-      , Atom.entryInReplyTotal = Nothing
-      , Atom.entryAttrs = []
-      , Atom.entryOther = []
-      }
+  maybeContent <- readBlogEntryHtml blogId
+  pure $ case maybeContent of
+    Nothing -> Nothing
+    Just content ->
+      Just
+        Atom.Entry
+          { Atom.entryId = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId
+          , Atom.entryTitle = Atom.TextString blogTitle
+          , Atom.entryUpdated = T.pack $ T.formatTime T.defaultTimeLocale "%0Y-%0m-%0dT12:00:00+01:00" blogTimestamp
+          , Atom.entryAuthors = [person]
+          , Atom.entryCategories = []
+          , Atom.entryContent = Just $ Atom.HTMLContent content
+          , Atom.entryContributor = []
+          , Atom.entryLinks =
+              [ Atom.Link
+                  { Atom.linkHref = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId
+                  , Atom.linkRel = Just $ Left "alternate"
+                  , Atom.linkType = Just "text/html"
+                  , Atom.linkHrefLang = Nothing
+                  , Atom.linkTitle = Nothing
+                  , Atom.linkLength = Nothing
+                  , Atom.linkAttrs = []
+                  , Atom.linkOther = []
+                  }
+              ]
+          , Atom.entryPublished = Nothing
+          , Atom.entryRights = Nothing
+          , Atom.entrySource = Nothing
+          , Atom.entrySummary = Nothing
+          , Atom.entryInReplyTo = Nothing
+          , Atom.entryInReplyTotal = Nothing
+          , Atom.entryAttrs = []
+          , Atom.entryOther = []
+          }
 
 atomPerson ::
   MonadConfigured m =>

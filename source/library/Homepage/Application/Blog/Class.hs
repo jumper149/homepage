@@ -9,7 +9,7 @@ import Data.Kind
 import Data.Text qualified as T
 
 class Monad m => MonadBlog m where
-  readBlogEntryHtml :: BlogId -> m T.Text
+  readBlogEntryHtml :: BlogId -> m (Maybe T.Text)
 
 instance
   ( Monad (t m)
