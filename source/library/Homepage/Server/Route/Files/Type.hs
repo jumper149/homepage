@@ -1,6 +1,6 @@
 module Homepage.Server.Route.Files.Type where
 
-import Servant
+import Servant.API
 import Servant.API.Generic
 import Servant.HTML.Blaze
 import Servant.RawM qualified as RawM

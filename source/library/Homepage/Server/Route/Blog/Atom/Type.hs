@@ -4,7 +4,7 @@ import Data.Text.Lazy qualified as LT
 import Data.Text.Lazy.Encoding qualified as LT
 import GHC.Generics
 import Network.HTTP.Media qualified as Media
-import Servant
+import Servant.API
 
 type API = UVerb 'GET '[Atom] '[WithStatus 200 AtomFeed, WithStatus 500 NoContent]
 

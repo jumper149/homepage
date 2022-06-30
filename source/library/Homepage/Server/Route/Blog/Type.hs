@@ -3,7 +3,7 @@ module Homepage.Server.Route.Blog.Type where
 import Homepage.Configuration.Blog
 import Homepage.Server.Route.Blog.Atom.Type qualified as Atom
 
-import Servant
+import Servant.API
 import Servant.API.Generic
 import Servant.HTML.Blaze
 import Servant.RawM qualified as RawM

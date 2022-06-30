@@ -1,6 +1,6 @@
 module Homepage.Server.Route.Redirect.Type where
 
-import Servant
+import Servant.API
 import Servant.API.Generic
 
 data Routes route = Routes

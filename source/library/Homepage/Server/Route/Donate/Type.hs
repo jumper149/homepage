@@ -1,6 +1,6 @@
 module Homepage.Server.Route.Donate.Type where
 
-import Servant
+import Servant.API
 import Servant.API.Generic
 import Servant.HTML.Blaze
 import Text.Blaze.Html5

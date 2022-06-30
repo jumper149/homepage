@@ -17,7 +17,7 @@ import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Control.Identity
 import Data.Text qualified as T
 import Network.Wai.Trans
-import Servant hiding (serveDirectoryWith)
+import Servant
 import Servant.RawM.Server qualified as RawM
 import Servant.Server.Generic
 import Text.Blaze.Html5
