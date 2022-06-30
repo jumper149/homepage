@@ -10,6 +10,7 @@ import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import Homepage.Server.Route.Blog.Atom qualified as Atom
+import Homepage.Server.Route.Blog.Type
 import Homepage.Server.Tab
 
 import Control.Monad.Logger.CallStack
@@ -17,25 +18,12 @@ import Control.Monad.Trans.Control.Identity
 import Data.Text qualified as T
 import Network.Wai.Trans
 import Servant hiding (serveDirectoryWith)
-import Servant.API.Generic
-import Servant.HTML.Blaze
 import Servant.RawM.Server qualified as RawM
 import Servant.Server.Generic
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes qualified as HA
 import Text.Blaze.Html5.Extra
 import WaiAppStatic.Types
-
-data Routes route = Routes
-  { routeRaw :: route :- "raw" :> RawM.RawM
-  , routeFeed :: route :- "atom.xml" :> Atom.API
-  , routeArticle ::
-      route
-        :- Capture "article" BlogId
-        :> UVerb 'GET '[HTML] '[WithStatus 200 Html, WithStatus 404 Html]
-  , routeOverview :: route :- Get '[HTML] Html
-  }
-  deriving stock (Generic)
 
 routes ::
   (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadLogger m) =>

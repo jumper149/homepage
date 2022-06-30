@@ -7,6 +7,7 @@ import Homepage.Configuration.Contact
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
+import Homepage.Server.Route.Home.Type
 import Homepage.Server.Tab
 
 import Control.Monad.Logger.CallStack
@@ -14,12 +15,9 @@ import Data.Foldable
 import Data.List qualified as L
 import Data.Maybe
 import Servant
-import Servant.HTML.Blaze
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
 import Text.Blaze.Html5.Extra
-
-type API = Get '[HTML] Html
 
 handler ::
   (MonadConfigured m, MonadLogger m) =>

@@ -214,11 +214,18 @@ library
     , Homepage.Server.Route
     , Homepage.Server.Route.Blog
     , Homepage.Server.Route.Blog.Atom
+    , Homepage.Server.Route.Blog.Atom.Type
+    , Homepage.Server.Route.Blog.Type
     , Homepage.Server.Route.Donate
+    , Homepage.Server.Route.Donate.Type
     , Homepage.Server.Route.Files
+    , Homepage.Server.Route.Files.Type
     , Homepage.Server.Route.Home
+    , Homepage.Server.Route.Home.Type
     , Homepage.Server.Route.Redirect
+    , Homepage.Server.Route.Redirect.Type
     , Homepage.Server.Route.Static
+    , Homepage.Server.Route.Static.Type
     , Homepage.Server.Route.Type
     , Homepage.Server.Tab
   other-modules:

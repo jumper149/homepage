@@ -6,22 +6,14 @@ import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Contact
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
+import Homepage.Server.Route.Donate.Type
 
 import Control.Monad.Logger.CallStack
 import Data.List qualified as L
 import Data.Maybe
-import Servant
-import Servant.API.Generic
-import Servant.HTML.Blaze
 import Servant.Server.Generic
 import Text.Blaze.Html5 as H
 import Text.Blaze.Html5.Attributes as HA
-
-data Routes route = Routes
-  { routeDonate :: route :- Get '[HTML] Html
-  , routeThankYou :: route :- "thankYou" :> Get '[HTML] Html
-  }
-  deriving stock (Generic)
 
 routes ::
   (MonadConfigured m, MonadLogger m) =>

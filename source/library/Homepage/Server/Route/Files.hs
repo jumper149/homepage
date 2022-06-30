@@ -6,24 +6,17 @@ import Homepage.Server.Err404
 import Homepage.Server.FileServer
 import Homepage.Server.Html.Document
 import Homepage.Server.Html.Files
+import Homepage.Server.Route.Files.Type
 import Homepage.Server.Tab
 
 import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Control.Identity
 import Network.Wai.Trans
 import Servant
-import Servant.API.Generic
-import Servant.HTML.Blaze
 import Servant.RawM.Server qualified as RawM
 import Servant.Server.Generic
 import Text.Blaze.Html5
 import WaiAppStatic.Types
-
-data Routes route = Routes
-  { routeOverview :: route :- Get '[HTML] Html
-  , routeFiles :: route :- RawM.RawM
-  }
-  deriving stock (Generic)
 
 routes ::
   (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m) =>
