@@ -3,7 +3,7 @@ module Homepage.Server.Route.Files.Type where
 import Servant
 import Servant.API.Generic
 import Servant.HTML.Blaze
-import Servant.RawM.Server qualified as RawM
+import Servant.RawM qualified as RawM
 import Text.Blaze.Html5
 
 data Routes route = Routes

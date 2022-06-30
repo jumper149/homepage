@@ -165,6 +165,7 @@ common dependencies
     , mtl
     , servant
     , servant-blaze
+    , servant-rawm
     , servant-rawm-server
     , servant-server
     , text
