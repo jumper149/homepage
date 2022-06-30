@@ -7,6 +7,7 @@ import Homepage.Configuration.BaseUrl
 import Homepage.Handler
 import Homepage.Handler.RequestHash
 import Homepage.Server.Route
+import Homepage.Server.Route.Type
 
 import Control.Monad
 import Control.Monad.Base

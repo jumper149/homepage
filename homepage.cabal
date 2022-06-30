@@ -219,6 +219,7 @@ library
     , Homepage.Server.Route.Home
     , Homepage.Server.Route.Redirect
     , Homepage.Server.Route.Static
+    , Homepage.Server.Route.Type
     , Homepage.Server.Tab
   other-modules:
     , Control.Monad.IO.Unlift.OrphanInstances
