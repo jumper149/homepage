@@ -11,6 +11,7 @@ import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import Homepage.Server.Route.Blog.Atom qualified as Atom
 import Homepage.Server.Route.Blog.Type
+import Homepage.Server.Route.Type qualified
 import Homepage.Server.Tab
 
 import Control.Monad.Logger.CallStack
@@ -49,9 +50,11 @@ overviewHandler = do
     h2 "my Blog"
     p $ do
       "My blog is available as an "
-      a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ s "RSS" <> "/Atom Feed"
+      a ! hrefWithDepth baseUrl (Just 0) (stringValue $ show $ linkURI blogFeedLink) $ s "RSS" <> "/Atom Feed"
       "."
     blogList baseUrl (Just 0) blogs
+ where
+  blogFeedLink = routeFeed . Homepage.Server.Route.Type.routeBlog $ allFieldLinks
 
 articleHandler ::
   (MonadConfigured m, MonadLogger m) =>
