@@ -7,7 +7,11 @@ import Homepage.Configuration.Contact
 import Homepage.Server.Html.Blog
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
+import Homepage.Server.Route.Blog.Type qualified
+import Homepage.Server.Route.Donate.Type qualified
+import Homepage.Server.Route.Files.Type qualified
 import Homepage.Server.Route.Home.Type
+import Homepage.Server.Route.Type qualified
 import Homepage.Server.Tab
 
 import Control.Monad.Logger.CallStack
@@ -55,18 +59,18 @@ handler = do
     h2 "recent Blog"
     p $ do
       "You can stay up to date by subscribing to this "
-      a ! hrefWithDepth baseUrl (Just 0) "blog/atom.xml" $ s "RSS" <> "/Atom Feed"
+      a ! hrefWithDepth baseUrl (Just 0) (stringValue $ show $ linkURI blogFeedLink) $ s "RSS" <> "/Atom Feed"
       "."
     blogList baseUrl (Just 0) $ recentBlogEntries blogPreviewMaxLength blogs
     p $ do
       "The full list of blog articles can be accessed "
-      a ! hrefWithDepth baseUrl (Just 0) "blog" $ "here"
+      a ! hrefWithDepth baseUrl (Just 0) (stringValue $ show $ linkURI blogOverviewLink) $ "here"
       "."
 
     h2 "shared Files"
     p $ do
       "You can download some of my shared files "
-      a ! hrefWithDepth baseUrl (Just 0) "files" $ "here"
+      a ! hrefWithDepth baseUrl (Just 0) (stringValue $ show $ linkURI filesLink) $ "here"
       "."
 
     h2 "Contact"
@@ -75,8 +79,13 @@ handler = do
     h2 "Donate"
     p $ do
       "If you want to support me, you can donate to me "
-      a ! hrefWithDepth baseUrl (Just 0) "donate" $ "here"
+      a ! hrefWithDepth baseUrl (Just 0) (stringValue $ show $ linkURI donateLink) $ "here"
       "."
+ where
+  blogFeedLink = Homepage.Server.Route.Blog.Type.routeFeed . Homepage.Server.Route.Type.routeBlog $ allFieldLinks
+  blogOverviewLink = Homepage.Server.Route.Blog.Type.routeOverview . Homepage.Server.Route.Type.routeBlog $ allFieldLinks
+  donateLink = Homepage.Server.Route.Donate.Type.routeDonate . Homepage.Server.Route.Type.routeDonate $ allFieldLinks
+  filesLink = Homepage.Server.Route.Files.Type.routeOverview . Homepage.Server.Route.Type.routeFiles $ allFieldLinks
 
 contactHtml :: ContactInformation -> Html
 contactHtml
