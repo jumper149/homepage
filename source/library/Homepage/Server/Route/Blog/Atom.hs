@@ -7,6 +7,8 @@ import Homepage.Configuration.BaseUrl
 import Homepage.Configuration.Blog
 import Homepage.Configuration.Contact
 import Homepage.Server.Route.Blog.Atom.Type
+import Homepage.Server.Route.Blog.Type qualified
+import Homepage.Server.Route.Type qualified
 
 import Control.Monad.Logger.CallStack
 import Data.List qualified as L
@@ -52,7 +54,13 @@ atomFeed entries = do
   person <- atomPerson
   pure
     Atom.Feed
-      { Atom.feedId = displayBaseUrl baseUrl <> "blog/atom.xml"
+      { Atom.feedId =
+          (displayBaseUrl baseUrl <>)
+            . T.pack
+            . show
+            . linkURI
+            . Homepage.Server.Route.Blog.Type.routeFeed
+            $ Homepage.Server.Route.Type.routeBlog allFieldLinks
       , Atom.feedTitle = Atom.TextString $ personName <> "'s Blog"
       , Atom.feedUpdated = case entries of
           [] -> "1997-09-14T12:00:00+01:00" -- This is just a fallback in case there aren't any entries.
@@ -70,7 +78,13 @@ atomFeed entries = do
       , Atom.feedIcon = Just $ displayBaseUrl baseUrl <> "favicon.png"
       , Atom.feedLinks =
           [ Atom.Link
-              { Atom.linkHref = displayBaseUrl baseUrl <> "blog/atom.xml"
+              { Atom.linkHref =
+                  (displayBaseUrl baseUrl <>)
+                    . T.pack
+                    . show
+                    . linkURI
+                    . Homepage.Server.Route.Blog.Type.routeFeed
+                    $ Homepage.Server.Route.Type.routeBlog allFieldLinks
               , Atom.linkRel = Just $ Left "self"
               , Atom.linkType = Just "application/atom+xml"
               , Atom.linkHrefLang = Nothing
@@ -80,7 +94,13 @@ atomFeed entries = do
               , Atom.linkOther = []
               }
           , Atom.Link
-              { Atom.linkHref = displayBaseUrl baseUrl <> "blog"
+              { Atom.linkHref =
+                  (displayBaseUrl baseUrl <>)
+                    . T.pack
+                    . show
+                    . linkURI
+                    . Homepage.Server.Route.Blog.Type.routeOverview
+                    $ Homepage.Server.Route.Type.routeBlog allFieldLinks
               , Atom.linkRel = Just $ Left "alternate"
               , Atom.linkType = Just "text/html"
               , Atom.linkHrefLang = Nothing
@@ -113,7 +133,14 @@ atomEntry blogId BlogEntry {blogTitle, blogTimestamp} = do
     Just content ->
       Just
         Atom.Entry
-          { Atom.entryId = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId
+          { Atom.entryId =
+              (displayBaseUrl baseUrl <>)
+                . T.pack
+                . show
+                . linkURI
+                $ Homepage.Server.Route.Blog.Type.routeArticle
+                  (Homepage.Server.Route.Type.routeBlog allFieldLinks)
+                  blogId
           , Atom.entryTitle = Atom.TextString blogTitle
           , Atom.entryUpdated = T.pack $ T.formatTime T.defaultTimeLocale "%0Y-%0m-%0dT12:00:00+01:00" blogTimestamp
           , Atom.entryAuthors = [person]
@@ -122,7 +149,14 @@ atomEntry blogId BlogEntry {blogTitle, blogTimestamp} = do
           , Atom.entryContributor = []
           , Atom.entryLinks =
               [ Atom.Link
-                  { Atom.linkHref = displayBaseUrl baseUrl <> "blog/" <> unBlogId blogId
+                  { Atom.linkHref =
+                      (displayBaseUrl baseUrl <>)
+                        . T.pack
+                        . show
+                        . linkURI
+                        $ Homepage.Server.Route.Blog.Type.routeArticle
+                          (Homepage.Server.Route.Type.routeBlog allFieldLinks)
+                          blogId
                   , Atom.linkRel = Just $ Left "alternate"
                   , Atom.linkType = Just "text/html"
                   , Atom.linkHrefLang = Nothing
