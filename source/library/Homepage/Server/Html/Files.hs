@@ -52,5 +52,5 @@ fileFormatList baseUrl depth FileEntry {fileIdentifier, fileFormats} = do
   " ]"
  where
   fileFormat FileFormat {fileFormatName, fileFormatExtension} =
-    a ! hrefWithDepth baseUrl depth (textValue $ "files/" <> fileIdentifier <> maybe "" ("." <>) fileFormatExtension) $
+    a ! hrefWithDepth baseUrl depth (textValue $ "files/" <> fileIdentifier <> maybe "" ("." <>) fileFormatExtension) $ -- TODO: Use `Servant.Links`.
       toMarkup fileFormatName

@@ -76,16 +76,16 @@ articleHandler blogId = do
           h2 $ text $ blogTitle blog
           p $ do
             "View blog entry: "
-            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> unBlogId blogId <> ".html") $ "HTML"
+            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> unBlogId blogId <> ".html") $ "HTML" -- TODO: Use `Servant.Links`.
             " | "
-            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> unBlogId blogId <> ".pdf") $ "PDF"
+            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> unBlogId blogId <> ".pdf") $ "PDF" -- TODO: Use `Servant.Links`.
           hr
           script ! HA.type_ "text/javascript" $
             "function resizeIframe(iframe) {\
             \  iframe.height = `${iframe.contentWindow.document.body.scrollHeight + 30}` + \"px\";\
             \}"
           iframe
-            ! HA.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> unBlogId blogId <> ".html")
+            ! HA.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> unBlogId blogId <> ".html") -- TODO: Use `Servant.Links`.
             ! HA.name "blog article (HTML)"
             ! HA.width "100%"
             ! HA.onload "resizeIframe(this)"
