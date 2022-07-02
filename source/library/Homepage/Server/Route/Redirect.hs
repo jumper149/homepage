@@ -10,24 +10,24 @@ import Servant.Server.Generic
 routes :: Applicative m => Routes (AsServerT m)
 routes =
   Routes
-    { routeFeed = pure $ headers $ show $ linkURI blogFeedLink
-    , routeFeedXml = pure $ headers $ show $ linkURI blogFeedLink
-    , routeRss = pure $ headers $ show $ linkURI blogFeedLink
-    , routeRssXml = pure $ headers $ show $ linkURI blogFeedLink
-    , routeAtom = pure $ headers $ show $ linkURI blogFeedLink
-    , routeAtomXml = pure $ headers $ show $ linkURI blogFeedLink
-    , routeBlogFeed = pure $ headers $ show $ linkURI feedLink
-    , routeBlogFeedXml = pure $ headers $ show $ linkURI feedLink
-    , routeBlogRss = pure $ headers $ show $ linkURI feedLink
-    , routeBlogRssXml = pure $ headers $ show $ linkURI feedLink
-    , routeBlogAtom = pure $ headers $ show $ linkURI feedLink
+    { routeFeed = pure $ headers blogFeedLink
+    , routeFeedXml = pure $ headers blogFeedLink
+    , routeRss = pure $ headers blogFeedLink
+    , routeRssXml = pure $ headers blogFeedLink
+    , routeAtom = pure $ headers blogFeedLink
+    , routeAtomXml = pure $ headers blogFeedLink
+    , routeBlogFeed = pure $ headers feedLink
+    , routeBlogFeedXml = pure $ headers feedLink
+    , routeBlogRss = pure $ headers feedLink
+    , routeBlogRssXml = pure $ headers feedLink
+    , routeBlogAtom = pure $ headers feedLink
     }
  where
-  headers :: String -> Found302Content
-  headers loc =
+  headers :: Link -> Found302Content
+  headers link =
     Headers
       { getResponse = NoContent
-      , getHeadersHList = HCons (Header loc) HNil
+      , getHeadersHList = HCons (Header $ show $ linkURI link) HNil
       }
   blogFeedLink = Homepage.Server.Route.Blog.Type.routeFeed . Homepage.Server.Route.Type.routeBlog $ allFieldLinks
   feedLink = Homepage.Server.Route.Blog.Type.routeFeed allFieldLinks
