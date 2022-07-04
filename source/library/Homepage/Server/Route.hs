@@ -12,11 +12,10 @@ import Homepage.Server.Route.Type
 
 import Control.Monad.IO.Unlift
 import Control.Monad.Logger
-import Control.Monad.Trans.Control.Identity
 import Servant.Server.Generic
 
 routes ::
-  (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
+  (MonadBlog m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
   Routes (AsServerT m)
 routes =
   Routes

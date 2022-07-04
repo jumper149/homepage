@@ -8,14 +8,13 @@ import Homepage.Server.Route.Static.Type
 
 import Control.Monad.IO.Unlift
 import Control.Monad.Logger.CallStack
-import Control.Monad.Trans.Control.Identity
 import Network.Wai.Trans
 import Servant
 import Servant.RawM.Server qualified as RawM
 import WaiAppStatic.Types
 
 handler ::
-  (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
+  (MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
   ServerT API m
 handler = do
   directory <- configDirectoryStatic <$> configuration

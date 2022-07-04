@@ -16,7 +16,6 @@ import Homepage.Server.Tab
 
 import Control.Monad.IO.Unlift
 import Control.Monad.Logger.CallStack
-import Control.Monad.Trans.Control.Identity
 import Data.Text qualified as T
 import Network.Wai.Trans
 import Servant
@@ -28,7 +27,7 @@ import Text.Blaze.Html5.Extra
 import WaiAppStatic.Types
 
 routes ::
-  (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
+  (MonadBlog m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
   Routes (AsServerT m)
 routes =
   Routes
@@ -104,7 +103,7 @@ articleHandler blogId = do
     li $ a ! HA.href (toValue blogLinkUrl) $ text blogLinkDescription
 
 rawHandler ::
-  (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
+  (MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
   ServerT RawM.RawM m
 rawHandler = do
   directory <- configDirectoryBlog <$> configuration

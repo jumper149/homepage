@@ -65,7 +65,29 @@
       "inputs": {
         "deriving-trans": "deriving-trans",
         "monad-control-identity": "monad-control-identity",
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "wai-control": "wai-control"
+      }
+    },
+    "wai-control": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1656971679,
+        "narHash": "sha256-n2EmUCpR5fy4gK+EcvkuBeplL3dh9XDnWcvLBagl3oo=",
+        "owner": "jumper149",
+        "repo": "wai-control",
+        "rev": "c5f8552bdc060321cc231a61f8b57e7f51725de9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jumper149",
+        "ref": "v0.2.0.0",
+        "repo": "wai-control",
+        "type": "github"
       }
     }
   },

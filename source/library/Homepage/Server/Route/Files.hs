@@ -11,7 +11,6 @@ import Homepage.Server.Tab
 
 import Control.Monad.IO.Unlift
 import Control.Monad.Logger.CallStack
-import Control.Monad.Trans.Control.Identity
 import Network.Wai.Trans
 import Servant
 import Servant.RawM.Server qualified as RawM
@@ -20,7 +19,7 @@ import Text.Blaze.Html5
 import WaiAppStatic.Types
 
 routes ::
-  (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
+  (MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
   Routes (AsServerT m)
 routes =
   Routes
@@ -42,7 +41,7 @@ overviewHandler = do
     fileList baseUrl (Just 0) fileEntries
 
 filesHandler ::
-  (MonadBaseControlIdentity IO m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
+  (MonadConfigured m, MonadLogger m, MonadUnliftIO m) =>
   ServerT RawM.RawM m
 filesHandler = do
   directory <- configDirectoryFiles <$> configuration
