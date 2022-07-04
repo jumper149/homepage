@@ -11,6 +11,7 @@ import Homepage.Server.Route.Type
 
 import Control.Monad
 import Control.Monad.Base
+import Control.Monad.IO.Unlift
 import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Control.Identity
 import Data.ByteString.Char8 qualified as B
@@ -33,7 +34,7 @@ type WrappedAPI = RequestHash :> API
 hoistServerRunHandlerT :: MonadLogger m => ServerT API (HandlerT m) -> ServerT WrappedAPI m
 hoistServerRunHandlerT handler randomHash = hoistServer (Proxy @API) (runHandlerT randomHash) handler
 
-server :: (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadLogger m) => m ()
+server :: (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) => m ()
 server = do
   logInfo "Configure warp."
   withPort <- setPort . fromEnum . configPort <$> configuration

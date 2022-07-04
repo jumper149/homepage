@@ -1,17 +1,17 @@
 module Homepage.Server.FileServer where
 
+import Control.Monad.IO.Unlift
 import Control.Monad.Logger.CallStack
-import Control.Monad.Trans.Control.Identity
 import Data.Text qualified as T
 import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
 
 fileServerSettings ::
-  (MonadBaseControlIdentity IO m, MonadLogger m) =>
+  (MonadLogger m, MonadUnliftIO m) =>
   FilePath ->
   m StaticSettings
 fileServerSettings path =
-  liftBaseWithIdentity $ \runInIO ->
+  withRunInIO $ \runInIO ->
     pure $ case defaultFileServerSettings path of
       defaultSettings@StaticSettings {ssLookupFile, ssGetMimeType} ->
         defaultSettings
