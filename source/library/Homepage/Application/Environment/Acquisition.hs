@@ -72,7 +72,7 @@ checkConsumedEnvironment ::
   [(String, String)] ->
   m ()
 checkConsumedEnvironment env = do
-  logDebug $ "Check unconsumed environment for left-over environment variables: " <> T.pack (show env)
+  logDebug $ "Checking unconsumed environment for left-over environment variables: " <> T.pack (show env)
   case filter isSuspicious env of
     [] -> logInfo "Unconsumed environment doesn't contain any anomalies."
     anomalies -> logWarn $ "Unconsumed environment contains anomalies: " <> T.pack (show anomalies)
