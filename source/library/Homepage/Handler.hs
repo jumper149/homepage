@@ -9,6 +9,8 @@ import Homepage.Handler.RequestHash
 
 import Control.Monad.Base
 import Control.Monad.Error.Class
+import Control.Monad.IO.Unlift
+import Control.Monad.IO.Unlift.OrphanInstances ()
 import Control.Monad.Logger.CallStack
 import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Trans.Class
@@ -27,6 +29,7 @@ newtype HandlerT m a = HandlerT {unHandlerT :: StackT m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
   deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
+  deriving newtype (MonadIO, MonadUnliftIO)
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
