@@ -13,7 +13,6 @@ import Control.Monad
 import Control.Monad.Base
 import Control.Monad.IO.Unlift
 import Control.Monad.Logger.CallStack
-import Control.Monad.Trans.Control.Identity
 import Data.ByteString.Char8 qualified as B
 import Data.Proxy
 import Data.Text qualified as T
@@ -34,11 +33,11 @@ type WrappedAPI = RequestHash :> API
 hoistServerRunHandlerT :: MonadLogger m => ServerT API (HandlerT m) -> ServerT WrappedAPI m
 hoistServerRunHandlerT handler randomHash = hoistServer (Proxy @API) (runHandlerT randomHash) handler
 
-server :: (MonadBaseControlIdentity IO m, MonadBlog m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) => m ()
+server :: (MonadBlog m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) => m ()
 server = do
   logInfo "Configure warp."
   withPort <- setPort . fromEnum . configPort <$> configuration
-  withShutdownHandler <- liftBaseWithIdentity $ \runInIO ->
+  withShutdownHandler <- withRunInIO $ \runInIO ->
     pure . setInstallShutdownHandler $ \closeSocket -> do
       let catchOnceShutdown sig = CatchOnce $ do
             runInIO $ do
@@ -55,7 +54,7 @@ server = do
   addMiddleware <- runMiddlewareT middleware
 
   logInfo "Start server."
-  liftBaseWithIdentity $ \runInIO ->
+  withRunInIO $ \runInIO ->
     runSettings settings . addMiddleware $
       serveWithContextT (Proxy @WrappedAPI) EmptyContext (liftBase . runInIO) $
         hoistServerRunHandlerT $ genericServerT routes
