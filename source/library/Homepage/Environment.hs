@@ -1,45 +1,42 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeFamilyDependencies #-}
 
 module Homepage.Environment where
 
 import Control.Applicative
 import Control.Monad.Logger
 import Data.Kind
-import Data.Proxy
+import Data.Singletons.TH
+import GHC.Generics
 import GHC.TypeLits
 import Text.Read
 
-data EnvVarKind :: Symbol -> Type -> Type where
-  EnvVarConfigFile :: EnvVarKind "HOMEPAGE_CONFIG_FILE" FilePath
-  EnvVarLogFile :: EnvVarKind "HOMEPAGE_LOG_FILE" (Maybe FilePath)
-  EnvVarLogLevel :: EnvVarKind "HOMEPAGE_LOG_LEVEL" LogLevel
+data EnvVar
+  = EnvVarConfigFile
+  | EnvVarLogFile
+  | EnvVarLogLevel
+  deriving stock (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
-deriving stock instance Show (EnvVarKind name value)
+$(genSingletons [''EnvVar])
 
-instance KnownEnvVar 'EnvVarConfigFile where
-  parseEnvVar _ = Just
-  defaultEnvVar _ = "./homepage.json"
-  caseEnvVar _ = EnvVarConfigFile
+type family EnvVarName (envVar :: EnvVar) = (name :: Symbol) | name -> envVar where
+  EnvVarName 'EnvVarConfigFile = "HOMEPAGE_CONFIG_FILE"
+  EnvVarName 'EnvVarLogFile = "HOMEPAGE_LOG_FILE"
+  EnvVarName 'EnvVarLogLevel = "HOMEPAGE_LOG_LEVEL"
 
-instance KnownEnvVar 'EnvVarLogFile where
-  parseEnvVar _ = Just . Just
-  defaultEnvVar _ = Nothing
-  caseEnvVar _ = EnvVarLogFile
+type family EnvVarValue (envVar :: EnvVar) = (value :: Type) where
+  EnvVarValue 'EnvVarConfigFile = FilePath
+  EnvVarValue 'EnvVarLogFile = Maybe FilePath
+  EnvVarValue 'EnvVarLogLevel = LogLevel
 
-instance KnownEnvVar 'EnvVarLogLevel where
-  parseEnvVar _ = readMaybe
-  defaultEnvVar _ = LevelDebug
-  caseEnvVar _ = EnvVarLogLevel
+parseEnvVar :: Sing envVar -> String -> Maybe (EnvVarValue envVar)
+parseEnvVar SEnvVarConfigFile = Just
+parseEnvVar SEnvVarLogFile = Just . Just
+parseEnvVar SEnvVarLogLevel = readMaybe
 
-class
-  KnownSymbol name =>
-  KnownEnvVar (envVar :: EnvVarKind name value)
-    | name -> envVar
-    , envVar -> name
-    , envVar -> value
-  where
-  parseEnvVar :: Proxy name -> String -> Maybe value
-  defaultEnvVar :: Proxy name -> value
-  caseEnvVar :: Proxy name -> EnvVarKind name value
+defaultEnvVar :: Sing envVar -> EnvVarValue envVar
+defaultEnvVar SEnvVarConfigFile = "./homepage.json"
+defaultEnvVar SEnvVarLogFile = Nothing
+defaultEnvVar SEnvVarLogLevel = LevelDebug
 
-newtype Environment = MkEnvironment {getEnvironment :: forall name value. EnvVarKind name value -> Const value name}
+newtype Environment = MkEnvironment {getEnvironment :: forall envVar. Sing envVar -> Const (EnvVarValue envVar) (Sing envVar)}

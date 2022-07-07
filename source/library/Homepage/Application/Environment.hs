@@ -13,7 +13,7 @@ import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
 import Control.Monad.Trans.Reader
 import Data.Kind
-import Data.Proxy
+import Data.Singletons
 
 newtype EnvironmentT m a = EnvironmentT {unEnvironmentT :: ReaderT Environment m a}
   deriving newtype (Applicative, Functor, Monad)
@@ -21,14 +21,14 @@ newtype EnvironmentT m a = EnvironmentT {unEnvironmentT :: ReaderT Environment m
 
 instance Monad m => MonadEnvironment (EnvironmentT m) where
   environmentVariable ::
-    forall name val (envVar :: EnvVarKind name val).
-    KnownEnvVar envVar =>
-    EnvVar name ->
-    EnvironmentT m val
+    forall envVar.
+    SingI envVar =>
+    ProxyEnvVarName (EnvVarName envVar) ->
+    EnvironmentT m (EnvVarValue envVar)
   environmentVariable _ = do
     environment <- EnvironmentT ask
     let accessEnvVar = getEnvironment environment
-    pure $ getConst $ accessEnvVar $ caseEnvVar $ Proxy @name
+    pure $ getConst $ accessEnvVar $ sing @envVar
 
 deriving via
   EnvironmentT ((t2 :: (Type -> Type) -> Type -> Type) m)

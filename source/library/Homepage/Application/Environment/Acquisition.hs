@@ -11,7 +11,7 @@ import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Trans.Elevator
 import Control.Monad.Trans.State
 import Data.List qualified as L
-import Data.Proxy
+import Data.Singletons
 import Data.Text qualified as T
 import GHC.TypeLits
 import System.Posix.Env qualified as System
@@ -25,25 +25,25 @@ acquireEnvironment = do
   logDebug $ "Looked up environment variables: " <> T.pack (show env)
 
   (environment, unconsumedEnv) <- flip runStateT env . descend $ do
-    configFile <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_CONFIG_FILE"
-    logFile <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_LOG_FILE"
-    logLevel <- lookupEnvironmentVariable $ Proxy @"HOMEPAGE_LOG_LEVEL"
+    configFile <- lookupEnvironmentVariable SEnvVarConfigFile
+    logFile <- lookupEnvironmentVariable SEnvVarLogFile
+    logLevel <- lookupEnvironmentVariable SEnvVarLogLevel
 
     let environment = MkEnvironment $ \case
-          EnvVarConfigFile -> configFile
-          EnvVarLogFile -> logFile
-          EnvVarLogLevel -> logLevel
+          SEnvVarConfigFile -> configFile
+          SEnvVarLogFile -> logFile
+          SEnvVarLogLevel -> logLevel
     pure environment
 
   checkConsumedEnvironment unconsumedEnv
   pure environment
 
 lookupEnvironmentVariable ::
-  forall name value (envVar :: EnvVarKind name value) m.
-  (KnownEnvVar envVar, MonadLogger m, Show value) =>
-  Proxy name ->
-  Elevator (StateT [(String, String)]) m (Const value name)
-lookupEnvironmentVariable proxy = do
+  forall (envVar :: EnvVar) m.
+  (KnownSymbol (EnvVarName envVar), MonadLogger m, Show (EnvVarValue envVar)) =>
+  Sing envVar ->
+  Elevator (StateT [(String, String)]) m (Const (EnvVarValue envVar) (Sing envVar))
+lookupEnvironmentVariable singEnvVar = do
   logInfo $ "Inspecting environment variable: " <> T.pack (show envVarName)
   env <- Ascend get
   case lookup envVarName env of
@@ -55,7 +55,7 @@ lookupEnvironmentVariable proxy = do
       logInfo $ "Spotted environment variable: " <> T.pack (show envVarName)
       Ascend $ modify $ L.deleteBy (\x y -> fst x == fst y) (envVarName, undefined)
       logDebug $ "Parsing environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show str)
-      case parseEnvVar proxy str of
+      case parseEnvVar singEnvVar str of
         Nothing -> do
           logError $ "Failed to parse environment variable: " <> T.pack (show envVarName)
           logWarn $ "Falling back to default value for environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show envVarDefault)
@@ -64,8 +64,8 @@ lookupEnvironmentVariable proxy = do
           logInfo $ "Parsed environment variable '" <> T.pack (show envVarName) <> "': " <> T.pack (show val)
           pure $ Const val
  where
-  envVarName = symbolVal proxy
-  envVarDefault = defaultEnvVar proxy
+  envVarName = symbolVal $ Proxy @(EnvVarName envVar)
+  envVarDefault = defaultEnvVar singEnvVar
 
 checkConsumedEnvironment ::
   MonadLogger m =>

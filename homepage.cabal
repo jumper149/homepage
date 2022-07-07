@@ -168,6 +168,9 @@ common dependencies
     , servant-rawm
     , servant-rawm-server
     , servant-server
+    , singletons
+    , singletons-base
+    , singletons-th
     , text
     , time
     , transformers

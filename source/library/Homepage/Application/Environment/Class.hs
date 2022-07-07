@@ -6,14 +6,15 @@ import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Elevator
 import Data.Kind
+import Data.Singletons
 import GHC.TypeLits
 
 class Monad m => MonadEnvironment m where
   environmentVariable ::
-    forall name val (envVar :: EnvVarKind name val).
-    KnownEnvVar envVar =>
-    EnvVar name ->
-    m val
+    forall envVar.
+    SingI envVar =>
+    ProxyEnvVarName (EnvVarName envVar) ->
+    m (EnvVarValue envVar)
 
 instance
   ( Monad (t m)
@@ -34,4 +35,4 @@ deriving via
     ) =>
     MonadEnvironment (ComposeT t1 t2 m)
 
-data EnvVar (name :: Symbol) = EnvVar
+data ProxyEnvVarName (name :: Symbol) = EnvVar
