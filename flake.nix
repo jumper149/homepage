@@ -278,6 +278,7 @@
           cabal-install
           calligraphy
           pkgs.findutils
+          fourmolu
           ghcid
           graphmod
           haskell-language-server
