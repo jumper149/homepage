@@ -3,7 +3,6 @@
 
 module Homepage.Environment where
 
-import Control.Applicative
 import Control.Monad.Logger
 import Data.Kind
 import Data.Singletons.TH
@@ -41,4 +40,4 @@ defaultEnvVar = \case
   SEnvVarLogFile -> Nothing
   SEnvVarLogLevel -> LevelDebug
 
-newtype Environment = MkEnvironment {getEnvironment :: forall envVar. Sing envVar -> Const (EnvVarValue envVar) (Sing envVar)}
+newtype Environment = MkEnvironment {getEnvironment :: forall envVar. Sing envVar -> EnvVarValue envVar}

@@ -6,7 +6,6 @@ module Homepage.Application.Environment where
 import Homepage.Application.Environment.Class
 import Homepage.Environment
 
-import Control.Applicative
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
@@ -28,7 +27,7 @@ instance Monad m => MonadEnvironment (EnvironmentT m) where
   environmentVariable _ = do
     environment <- EnvironmentT ask
     let accessEnvVar = getEnvironment environment
-    pure $ getConst $ accessEnvVar $ sing @envVar
+    pure $ accessEnvVar $ sing @envVar
 
 deriving via
   EnvironmentT ((t2 :: (Type -> Type) -> Type -> Type) m)
