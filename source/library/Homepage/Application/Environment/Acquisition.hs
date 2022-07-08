@@ -29,7 +29,7 @@ acquireEnvironment = do
     logFile <- lookupEnvironmentVariable SEnvVarLogFile
     logLevel <- lookupEnvironmentVariable SEnvVarLogLevel
 
-    let environment :: Sing envVar -> Const (EnvVarValue envVar) (Sing envVar)
+    let environment :: Sing envVar -> Const (EnvVarValue envVar) envVar
         environment = \case
           SEnvVarConfigFile -> configFile
           SEnvVarLogFile -> logFile
@@ -43,7 +43,7 @@ lookupEnvironmentVariable ::
   forall (envVar :: EnvVar) m.
   (KnownSymbol (EnvVarName envVar), MonadLogger m, Show (EnvVarValue envVar)) =>
   Sing envVar ->
-  Elevator (StateT [(String, String)]) m (Const (EnvVarValue envVar) (Sing envVar))
+  Elevator (StateT [(String, String)]) m (Const (EnvVarValue envVar) envVar)
 lookupEnvironmentVariable singEnvVar = do
   logInfo $ "Inspecting environment variable: " <> T.pack (show envVarName)
   env <- Ascend get
