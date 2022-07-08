@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE TypeFamilies #-}
 
 module Homepage.Application.Environment.Acquisition where
 
