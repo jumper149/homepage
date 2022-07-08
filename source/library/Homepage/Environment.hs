@@ -28,14 +28,14 @@ type family EnvVarValue (envVar :: EnvVar) = (value :: Type) where
   EnvVarValue 'EnvVarLogFile = Maybe FilePath
   EnvVarValue 'EnvVarLogLevel = LogLevel
 
-parseEnvVar :: Sing envVar -> String -> Maybe (EnvVarValue envVar)
-parseEnvVar = \case
+envVarParse :: Sing envVar -> String -> Maybe (EnvVarValue envVar)
+envVarParse = \case
   SEnvVarConfigFile -> Just
   SEnvVarLogFile -> Just . Just
   SEnvVarLogLevel -> readMaybe
 
-defaultEnvVar :: Sing envVar -> EnvVarValue envVar
-defaultEnvVar = \case
+envVarDefault :: Sing envVar -> EnvVarValue envVar
+envVarDefault = \case
   SEnvVarConfigFile -> "./homepage.json"
   SEnvVarLogFile -> Nothing
   SEnvVarLogLevel -> LevelDebug
