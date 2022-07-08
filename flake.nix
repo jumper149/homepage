@@ -274,7 +274,6 @@
       haskellPackages.shellFor {
         buildInputs = with haskellPackages; [
           asciidoctor
-          blaze-from-html
           cabal-install
           calligraphy
           pkgs.findutils
