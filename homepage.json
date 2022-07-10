@@ -116,6 +116,11 @@
     , "title": "Zurihac 2022"
     , "discussion": []
     }
+  , "singletonsInHaskell":
+    { "timestamp": "2022-07-10"
+    , "title": "Singletons in Haskell"
+    , "discussion": []
+    }
   }
 , "blog-preview-max-length": 5
 , "atom-max-length": null
