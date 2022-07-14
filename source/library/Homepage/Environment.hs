@@ -16,7 +16,7 @@ data EnvVar
   | EnvVarLogLevel
   deriving stock (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
-$(genSingletons [''EnvVar])
+genSingletons [''EnvVar]
 
 type family EnvVarName (envVar :: EnvVar) = (name :: Symbol) | name -> envVar where
   EnvVarName 'EnvVarConfigFile = "HOMEPAGE_CONFIG_FILE"
