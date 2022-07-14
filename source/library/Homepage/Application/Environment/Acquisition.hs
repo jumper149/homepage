@@ -34,9 +34,10 @@ acquireEnvironment = do
           SEnvVarConfigFile -> configFile
           SEnvVarLogFile -> logFile
           SEnvVarLogLevel -> logLevel
+
     pure $ MkEnvironment $ getConst . environment
 
-  checkConsumedEnvironment unconsumedEnv
+  checkUnconsumedEnvironment unconsumedEnv
   pure environment
 
 lookupEnvironmentVariable ::
@@ -68,11 +69,11 @@ lookupEnvironmentVariable singEnvVar = do
   envVarName = symbolVal $ Proxy @(EnvVarName envVar)
   envVarDefaultValue = envVarDefault singEnvVar
 
-checkConsumedEnvironment ::
+checkUnconsumedEnvironment ::
   MonadLogger m =>
   [(String, String)] ->
   m ()
-checkConsumedEnvironment env = do
+checkUnconsumedEnvironment env = do
   logDebug $ "Checking unconsumed environment for left-over environment variables: " <> T.pack (show env)
   case filter isSuspicious env of
     [] -> logInfo "Unconsumed environment doesn't contain any anomalies."
