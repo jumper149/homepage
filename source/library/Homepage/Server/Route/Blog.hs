@@ -92,12 +92,13 @@ articleHandler blogId = do
             ! HA.target "_parent"
             ! HA.style "border: none;"
             $ mempty
-          hr
           case blogDiscussion blog of
             [] -> mempty
-            links -> p $ do
-              "Follow the discussion about this article:"
-              ul . toMarkup $ markupLink <$> links
+            links -> do
+              hr
+              p $ do
+                "Follow the discussion about this article:"
+                ul . toMarkup $ markupLink <$> links
  where
   markupLink BlogLink {blogLinkDescription, blogLinkUrl} =
     li $ a ! HA.href (toValue blogLinkUrl) $ text blogLinkDescription
