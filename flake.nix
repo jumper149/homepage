@@ -19,7 +19,7 @@
       type = "github";
       owner = "jumper149";
       repo = "deriving-trans";
-      ref = "monad-control-identity";
+      ref = "master";
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.monad-control-identity.follows = "monad-control-identity";
     };
