@@ -23,16 +23,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.monad-control-identity.follows = "monad-control-identity";
     };
-    wai-control = {
-      type = "github";
-      owner = "jumper149";
-      repo = "wai-control";
-      ref = "v0.2.0.0";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, monad-control-identity, deriving-trans, wai-control }: {
+  outputs = { self, nixpkgs, monad-control-identity, deriving-trans }: {
 
     packages.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; };
@@ -59,7 +52,6 @@
         overlay = self: super: {
           monad-control-identity = self.callCabal2nix "monad-control-identity" monad-control-identity.outPath {};
           deriving-trans = self.callCabal2nix "deriving-trans" deriving-trans.outPath {};
-          wai-control = self.callCabal2nix "wai-control" wai-control.outPath {};
         };
       in (haskellPackages.extend overlay).callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
 
