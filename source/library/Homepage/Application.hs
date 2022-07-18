@@ -27,7 +27,7 @@ import Data.Foldable
 import Servant qualified
 
 type StackT =
-  IdentityT
+  Elevator IdentityT
     .| EnvironmentT
     .| TimedLoggingT
     .| ConfiguredT
@@ -57,7 +57,7 @@ runApplicationT app = do
     acquireEnvironment
 
   let runStackT =
-        runIdentityT
+        runIdentityT . descend
           .| runEnvironmentT env
           .| runAppTimedLoggingT . (traverse_ logLine preLog >>)
           .| runAppConfiguredT
