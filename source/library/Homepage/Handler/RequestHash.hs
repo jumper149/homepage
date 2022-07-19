@@ -30,7 +30,7 @@ instance MonadLogger m => MonadLogger (RequestHashT m) where
     reqHash <- RequestHashT ask
     let reqInfo = "@[" <> show (getHash reqHash) <> "]"
     lift . monadLoggerLog loc logSource logLevel . toLogStr $
-      fromLogStr (toLogStr logStr) <> " " <> B.pack reqInfo
+      B.pack reqInfo <> " " <> fromLogStr (toLogStr logStr)
 
 deriving via
   RequestHashT ((t2 :: (Type -> Type) -> Type -> Type) m)
