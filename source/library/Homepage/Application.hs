@@ -15,10 +15,9 @@ import Control.Monad.Base
 import Control.Monad.Except
 import Control.Monad.IO.Unlift
 import Control.Monad.IO.Unlift.OrphanInstances ()
-import Control.Monad.Identity
 import Control.Monad.Logger.CallStack
 import Control.Monad.Logger.OrphanInstances ()
-import Control.Monad.Trans.Compose
+import Control.Monad.Trans.Compose.Empty
 import Control.Monad.Trans.Compose.Infix
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
@@ -27,7 +26,7 @@ import Data.Foldable
 import Servant qualified
 
 type StackT =
-  Elevator IdentityT
+  EmptyT
     .| EnvironmentT
     .| TimedLoggingT
     .| ConfiguredT
@@ -57,7 +56,7 @@ runApplicationT app = do
     acquireEnvironment
 
   let runStackT =
-        runIdentityT . descend
+        runEmptyT
           .| runEnvironmentT env
           .| runAppTimedLoggingT . (traverse_ logLine preLog >>)
           .| runAppConfiguredT

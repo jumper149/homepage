@@ -14,15 +14,13 @@ import Control.Monad.IO.Unlift.OrphanInstances ()
 import Control.Monad.Logger.CallStack
 import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Trans.Class
-import Control.Monad.Trans.Compose
+import Control.Monad.Trans.Compose.Empty
 import Control.Monad.Trans.Compose.Infix
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
-import Control.Monad.Trans.Elevator
-import Control.Monad.Trans.Identity
 
 type StackT =
-  Elevator IdentityT
+  EmptyT
     .| RequestHashT
 
 newtype HandlerT m a = HandlerT {unHandlerT :: StackT m a}
@@ -39,5 +37,5 @@ runHandlerT :: MonadLogger m => Hash -> HandlerT m a -> m a
 runHandlerT randomHash = runStackT . unHandlerT
  where
   runStackT =
-    runIdentityT . descend
+    runEmptyT
       .| runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)
