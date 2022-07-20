@@ -55,11 +55,10 @@ runApplicationT app = do
     acquireEnvironment
 
   let runAppStackT =
-        runStackT $
-          RunTransparentT
-            `RunNextT` runEnvironmentT env
-            `RunNextT` (runAppTimedLoggingT . (traverse_ logLine preLog >>))
-            `RunNextT` runAppConfiguredT
-            `RunNextT` runAppBlogT
+        RunTransparentT
+          `RunNextT` runEnvironmentT env
+          `RunNextT` (runAppTimedLoggingT . (traverse_ logLine preLog >>))
+          `RunNextT` runAppConfiguredT
+          `RunNextT` runAppBlogT
 
-  runAppStackT $ unApplicationT app
+  runStackT runAppStackT $ unApplicationT app
