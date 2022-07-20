@@ -14,16 +14,15 @@ import Control.Monad.IO.Unlift.OrphanInstances ()
 import Control.Monad.Logger.CallStack
 import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Trans.Class
-import Control.Monad.Trans.Compose.Infix
-import Control.Monad.Trans.Compose.Transparent
+import Control.Monad.Trans.Compose.Stack
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
 
-type StackT =
-  TransparentT
-    .| RequestHashT
+type Stack =
+  '[ RequestHashT
+   ]
 
-newtype HandlerT m a = HandlerT {unHandlerT :: StackT m a}
+newtype HandlerT m a = HandlerT {unHandlerT :: StackT Stack m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
   deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
@@ -34,8 +33,9 @@ newtype HandlerT m a = HandlerT {unHandlerT :: StackT m a}
   deriving newtype (MonadError e)
 
 runHandlerT :: MonadLogger m => Hash -> HandlerT m a -> m a
-runHandlerT randomHash = runStackT . unHandlerT
+runHandlerT randomHash = runHandlerStackT . unHandlerT
  where
-  runStackT =
-    runTransparentT
-      .| runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)
+  runHandlerStackT =
+    runStackT $
+      RunTransparentT
+        `RunNextT` (runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>))
