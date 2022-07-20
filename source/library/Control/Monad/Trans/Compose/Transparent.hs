@@ -1,6 +1,9 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module Control.Monad.Trans.Compose.Transparent where
+module Control.Monad.Trans.Compose.Transparent (
+  TransparentT,
+  runTransparentT,
+) where
 
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Control
