@@ -18,3 +18,5 @@ runStackT (RunNextT runRemainingStackT runNextT) = runStackT runRemainingStackT 
 data RunStackT :: [(Type -> Type) -> Type -> Type] -> (Type -> Type) -> Type -> Type where
   RunTransparentT :: RunStackT '[] m a
   RunNextT :: RunStackT ts m a -> (t (StackT ts m) a -> StackT ts m a) -> RunStackT (t ': ts) m a
+
+infixl 1 `RunNextT`

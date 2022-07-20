@@ -37,4 +37,4 @@ runHandlerT randomHash = runStackT runHandlerStackT . unHandlerT
  where
   runHandlerStackT =
     RunTransparentT
-      `RunNextT` (runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>))
+      `RunNextT` runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)

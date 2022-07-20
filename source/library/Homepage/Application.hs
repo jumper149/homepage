@@ -57,7 +57,7 @@ runApplicationT app = do
   let runAppStackT =
         RunTransparentT
           `RunNextT` runEnvironmentT env
-          `RunNextT` (runAppTimedLoggingT . (traverse_ logLine preLog >>))
+          `RunNextT` runAppTimedLoggingT . (traverse_ logLine preLog >>)
           `RunNextT` runAppConfiguredT
           `RunNextT` runAppBlogT
 
