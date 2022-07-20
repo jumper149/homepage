@@ -234,8 +234,8 @@ library
   other-modules:
     , Control.Monad.IO.Unlift.OrphanInstances
     , Control.Monad.Logger.OrphanInstances
-    , Control.Monad.Trans.Compose.Empty
     , Control.Monad.Trans.Compose.Infix
+    , Control.Monad.Trans.Compose.Transparent
     , Text.Blaze.Html5.Extra
   hs-source-dirs: source/library
 
