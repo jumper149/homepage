@@ -24,14 +24,14 @@ import Control.Monad.Trans.Elevator
 import Data.Foldable
 import Servant qualified
 
-type Stack =
-  '[ BlogT
-   , ConfiguredT
-   , TimedLoggingT
-   , EnvironmentT
-   ]
+type Transformers =
+  'NilT
+    ':||> EnvironmentT
+    ':||> TimedLoggingT
+    ':||> ConfiguredT
+    ':||> BlogT
 
-newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT Stack m a}
+newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT Transformers m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
   deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
@@ -55,10 +55,10 @@ runApplicationT app = do
     acquireEnvironment
 
   let runAppStackT =
-        RunTransparentT
-          `RunNextT` runEnvironmentT env
-          `RunNextT` runAppTimedLoggingT . (traverse_ logLine preLog >>)
-          `RunNextT` runAppConfiguredT
-          `RunNextT` runAppBlogT
+        RunNilT
+          :..> runEnvironmentT env
+          :..> runAppTimedLoggingT . (traverse_ logLine preLog >>)
+          :..> runAppConfiguredT
+          :..> runAppBlogT
 
   runStackT runAppStackT $ unApplicationT app

@@ -18,11 +18,11 @@ import Control.Monad.Trans.Compose.Stack
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
 
-type Stack =
-  '[ RequestHashT
-   ]
+type Transformers =
+  'NilT
+    ':||> RequestHashT
 
-newtype HandlerT m a = HandlerT {unHandlerT :: StackT Stack m a}
+newtype HandlerT m a = HandlerT {unHandlerT :: StackT Transformers m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
   deriving newtype (MonadBase b, MonadBaseControl b, MonadBaseControlIdentity b)
@@ -36,5 +36,5 @@ runHandlerT :: MonadLogger m => Hash -> HandlerT m a -> m a
 runHandlerT randomHash = runStackT runHandlerStackT . unHandlerT
  where
   runHandlerStackT =
-    RunTransparentT
-      `RunNextT` runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)
+    RunNilT
+      :..> runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)
