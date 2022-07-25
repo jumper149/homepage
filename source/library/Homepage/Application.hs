@@ -26,10 +26,10 @@ import Servant qualified
 
 type Transformers =
   'NilT
-    ':||> EnvironmentT
-    ':||> TimedLoggingT
-    ':||> ConfiguredT
-    ':||> BlogT
+    ':.|> EnvironmentT
+    ':.|> TimedLoggingT
+    ':.|> ConfiguredT
+    ':.|> BlogT
 
 newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT Transformers m a}
   deriving newtype (Applicative, Functor, Monad)

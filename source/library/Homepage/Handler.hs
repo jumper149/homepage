@@ -20,7 +20,7 @@ import Control.Monad.Trans.Control.Identity
 
 type Transformers =
   'NilT
-    ':||> RequestHashT
+    ':.|> RequestHashT
 
 newtype HandlerT m a = HandlerT {unHandlerT :: StackT Transformers m a}
   deriving newtype (Applicative, Functor, Monad)
