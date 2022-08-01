@@ -42,8 +42,8 @@
 @color7: #707880;
 @colorf: #c5c8c6;
 
-.prop-dark-light(@property; @dark-value; @light-value) {
-    @{property}: @dark-value;
+.prop-dark-light(@property; @normal-value; @light-value) {
+    @{property}: @normal-value;
     @media (prefers-color-scheme: light) {
       @{property}: @light-value;
     }
