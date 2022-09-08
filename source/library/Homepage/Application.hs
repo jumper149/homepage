@@ -20,9 +20,7 @@ import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Trans.Compose.Stack
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
-import Control.Monad.Trans.Elevator
 import Data.Foldable
-import Servant qualified
 
 type Transformers =
   'NilT
@@ -39,11 +37,6 @@ newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT Transformers m
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
-
-deriving via
-  Elevator ApplicationT m
-  instance
-    MonadError Servant.ServerError m => MonadError Servant.ServerError (ApplicationT m)
 
 runApplicationT ::
   (MonadBaseControlIdentity IO m, MonadUnliftIO m) =>
