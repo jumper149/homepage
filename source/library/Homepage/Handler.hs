@@ -8,7 +8,6 @@ import Homepage.Application.Configured.Class
 import Homepage.Handler.RequestHash
 
 import Control.Monad.Base
-import Control.Monad.Error.Class
 import Control.Monad.IO.Unlift
 import Control.Monad.IO.Unlift.OrphanInstances ()
 import Control.Monad.Logger.CallStack
@@ -30,7 +29,6 @@ newtype HandlerT m a = HandlerT {unHandlerT :: StackT Transformers m a}
   deriving newtype (MonadLogger)
   deriving newtype (MonadConfigured)
   deriving newtype (MonadBlog)
-  deriving newtype (MonadError e)
 
 runHandlerT :: MonadLogger m => Hash -> HandlerT m a -> m a
 runHandlerT randomHash = runStackT runHandlerStackT . unHandlerT
