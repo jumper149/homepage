@@ -34,7 +34,7 @@ handler = do
   blogPreviewMaxLength <- configBlogPreviewMaxLength <$> configuration
   logInfo "Serve main page."
   pure . document baseUrl contactInformation revision (Just 0) (Just TabHome) $ do
-    img ! src "portrait.jpg" ! class_ "portrait" ! alt ("Portrait of "<> textValue (contactName contactInformation))
+    img ! src "portrait.jpg" ! class_ "portrait" ! alt ("Portrait of " <> textValue (contactName contactInformation))
     h1 $ toMarkup $ contactName contactInformation
 
     h2 "Welcome"
