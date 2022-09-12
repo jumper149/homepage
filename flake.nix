@@ -304,7 +304,6 @@
           ghcid
           haskell-language-server
           hlint
-          hnix
           pkgs.imagemagick
           implicit-hie
           lessc
