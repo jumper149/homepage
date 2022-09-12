@@ -261,6 +261,37 @@
         ];
       };
 
+    checks.x86_64-linux.graphmod =
+      with import nixpkgs { system = "x86_64-linux"; };
+      stdenv.mkDerivation {
+        name = "graphmod"; # TODO: Necessary to avoid segmentation fault.
+        src = ./.;
+        buildPhase = ''
+          graphmod > graphmod.out
+          dot -Tdot graphmod.out > graphmod.dot
+          dot -Tpdf graphmod.out > graphmod.pdf
+        '';
+        installPhase = ''
+          mkdir $out
+          cp graphmod.dot $out
+          cp graphmod.pdf $out
+        '';
+        nativeBuildInputs = [
+          # TODO: Use overlay for recent graphmod version.
+          (haskellPackages.graphmod.overrideAttrs
+            (oldAttrs: {
+              src = fetchFromGitHub {
+                owner = "yav";
+                repo = "graphmod";
+                rev = "79cc6502b48e577632d57b3a9b479436b0739726";
+                sha256 = "sha256-0G4a/Tid95/Mn4Ip1EQ/43iPLd2Iq1Ph+pfFevMi8I0=";
+              };
+            })
+          )
+          pkgs.graphviz
+        ];
+      };
+
     devShells.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; };
       haskellPackages.shellFor {
@@ -271,7 +302,6 @@
           pkgs.findutils
           fourmolu
           ghcid
-          graphmod
           haskell-language-server
           hlint
           hnix

@@ -124,7 +124,11 @@ The module dependency graph can be visualised using `graphmod`.
 nix develop
 
 # Run graphmod.
-find source -name '*.hs' | xargs graphmod -q | xdot -
+nix build .#checks.x86_64-linux.graphmod
+
+# View graph with xdot or your PDF viewer.
+xdot result/graphmod.dot
+zathura result/graphmod.pdf
 ```
 
 ### `calligraphy`
