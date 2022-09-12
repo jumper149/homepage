@@ -318,7 +318,7 @@
         withHoogle = true;
       };
 
-    nixosModule = { config, lib, ... }:
+    nixosModules.default = { config, lib, ... }:
       let
         cfg = config.services.homepage;
         homepageConfig = lib.recursiveUpdate self.config cfg.config;

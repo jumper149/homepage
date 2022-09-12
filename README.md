@@ -31,7 +31,7 @@ Install with a NixOS system flake and enable the service.
       modules = [
         ({ config, pkgs, lib, inputs, ... }: {
           imports = [
-            inputs.homepage.nixosModule
+            inputs.homepage.nixosModules.default
           ];
           services.homepage = {
             enable = true;
