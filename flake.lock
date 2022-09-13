@@ -1,50 +1,5 @@
 {
   "nodes": {
-    "deriving-trans": {
-      "inputs": {
-        "monad-control-identity": [
-          "monad-control-identity"
-        ],
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1658759159,
-        "narHash": "sha256-U/kf/j3/eyPx0I3TSFTlIYHeC2gyMiG/eXhBIO+nZsc=",
-        "owner": "jumper149",
-        "repo": "deriving-trans",
-        "rev": "1fedb64607995bc5d618df1b30aac447c7d37475",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jumper149",
-        "ref": "master",
-        "repo": "deriving-trans",
-        "type": "github"
-      }
-    },
-    "monad-control-identity": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1657659838,
-        "narHash": "sha256-NKhgGt2/Dl0puoTIMbVZaSCnzU7OYN6tSfV5QK26/30=",
-        "owner": "jumper149",
-        "repo": "monad-control-identity",
-        "rev": "9f9c3e2fe8a0ba0c3bb0dda49f097474e489941c",
-        "type": "github"
-      },
-      "original": {
-        "owner": "jumper149",
-        "ref": "master",
-        "repo": "monad-control-identity",
-        "type": "github"
-      }
-    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1662096612,
@@ -63,8 +18,6 @@
     },
     "root": {
       "inputs": {
-        "deriving-trans": "deriving-trans",
-        "monad-control-identity": "monad-control-identity",
         "nixpkgs": "nixpkgs"
       }
     }

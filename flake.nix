@@ -8,24 +8,9 @@
       repo = "nixpkgs";
       ref = "nixpkgs-unstable";
     };
-    monad-control-identity = {
-      type = "github";
-      owner = "jumper149";
-      repo = "monad-control-identity";
-      ref = "master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    deriving-trans = {
-      type = "github";
-      owner = "jumper149";
-      repo = "deriving-trans";
-      ref = "master";
-      inputs.nixpkgs.follows = "nixpkgs";
-      inputs.monad-control-identity.follows = "monad-control-identity";
-    };
   };
 
-  outputs = { self, nixpkgs, monad-control-identity, deriving-trans }: {
+  outputs = { self, nixpkgs }: {
 
     overlays.default= self: super: {
       haskellPackages = super.haskellPackages.extend (haskellSelf: haskellSuper: {
@@ -37,8 +22,6 @@
             sha256 = "sha256-0G4a/Tid95/Mn4Ip1EQ/43iPLd2Iq1Ph+pfFevMi8I0=";
           };
         }));
-        monad-control-identity = haskellSelf.callCabal2nix "monad-control-identity" monad-control-identity.outPath {};
-        deriving-trans = haskellSelf.callCabal2nix "deriving-trans" deriving-trans.outPath {};
       });
     };
 
