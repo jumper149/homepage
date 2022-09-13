@@ -12,10 +12,10 @@
 
   outputs = { self, nixpkgs }: {
 
-    overlays.default= self: super: {
-      haskellPackages = super.haskellPackages.extend (haskellSelf: haskellSuper: {
+    overlays.default= final: prev: {
+      haskellPackages = prev.haskellPackages.extend (haskellSelf: haskellSuper: {
         graphmod = (haskellSuper.graphmod.overrideAttrs (oldAttrs: {
-          src = super.fetchFromGitHub {
+          src = prev.fetchFromGitHub {
             owner = "yav";
             repo = "graphmod";
             rev = "79cc6502b48e577632d57b3a9b479436b0739726";
