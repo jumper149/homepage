@@ -29,6 +29,14 @@
 
     overlays.default= self: super: {
       haskellPackages = super.haskellPackages.extend (haskellSelf: haskellSuper: {
+        graphmod = (haskellSuper.graphmod.overrideAttrs (oldAttrs: {
+          src = super.fetchFromGitHub {
+            owner = "yav";
+            repo = "graphmod";
+            rev = "79cc6502b48e577632d57b3a9b479436b0739726";
+            sha256 = "sha256-0G4a/Tid95/Mn4Ip1EQ/43iPLd2Iq1Ph+pfFevMi8I0=";
+          };
+        }));
         monad-control-identity = haskellSelf.callCabal2nix "monad-control-identity" monad-control-identity.outPath {};
         deriving-trans = haskellSelf.callCabal2nix "deriving-trans" deriving-trans.outPath {};
       });
@@ -279,17 +287,7 @@
           cp graphmod.pdf $out
         '';
         nativeBuildInputs = [
-          # TODO: Use overlay for recent graphmod version.
-          (haskellPackages.graphmod.overrideAttrs
-            (oldAttrs: {
-              src = fetchFromGitHub {
-                owner = "yav";
-                repo = "graphmod";
-                rev = "79cc6502b48e577632d57b3a9b479436b0739726";
-                sha256 = "sha256-0G4a/Tid95/Mn4Ip1EQ/43iPLd2Iq1Ph+pfFevMi8I0=";
-              };
-            })
-          )
+          haskellPackages.graphmod
           pkgs.graphviz
         ];
       };
