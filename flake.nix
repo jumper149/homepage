@@ -27,14 +27,21 @@
 
   outputs = { self, nixpkgs, monad-control-identity, deriving-trans }: {
 
+    overlays.default= self: super: {
+      haskellPackages = super.haskellPackages.extend (haskellSelf: haskellSuper: {
+        monad-control-identity = haskellSelf.callCabal2nix "monad-control-identity" monad-control-identity.outPath {};
+        deriving-trans = haskellSelf.callCabal2nix "deriving-trans" deriving-trans.outPath {};
+      });
+    };
+
     packages.x86_64-linux.default =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       writeScriptBin "homepage-full" ''
         HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.packages.x86_64-linux.homepage}/bin/homepage
       '';
 
     packages.x86_64-linux.config =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       writeText "homepage.json" (builtins.toJSON self.config);
 
     config =
@@ -46,17 +53,12 @@
       };
 
     packages.x86_64-linux.homepage =
-      with import nixpkgs { system = "x86_64-linux"; };
-      let
-        src = nix-gitignore.gitignoreSource [] ./.;
-        overlay = self: super: {
-          monad-control-identity = self.callCabal2nix "monad-control-identity" monad-control-identity.outPath {};
-          deriving-trans = self.callCabal2nix "deriving-trans" deriving-trans.outPath {};
-        };
-      in (haskellPackages.extend overlay).callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      let src = nix-gitignore.gitignoreSource [] ./.;
+      in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
 
     packages.x86_64-linux.blog =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       let config = builtins.fromJSON (builtins.readFile ./homepage.json);
       in stdenv.mkDerivation {
         name = "blog"; # TODO: Necessary to avoid segmentation fault.
@@ -128,7 +130,7 @@
       };
 
     packages.x86_64-linux.files =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       stdenv.mkDerivation {
         name = "files"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/files;
@@ -145,7 +147,7 @@
       };
 
     packages.x86_64-linux.static =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       stdenv.mkDerivation {
         name = "static"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/static;
@@ -208,7 +210,7 @@
       };
 
     checks.x86_64-linux.fourmolu =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       stdenv.mkDerivation {
         name = "fourmolu"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
@@ -226,7 +228,7 @@
       };
 
     checks.x86_64-linux.hlint =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       stdenv.mkDerivation {
         name = "hlint"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
@@ -244,7 +246,7 @@
       };
 
     checks.x86_64-linux.hie-yaml =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       stdenv.mkDerivation {
         name = "hie-yaml"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
@@ -262,7 +264,7 @@
       };
 
     checks.x86_64-linux.graphmod =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       stdenv.mkDerivation {
         name = "graphmod"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
@@ -293,7 +295,7 @@
       };
 
     devShells.x86_64-linux.default =
-      with import nixpkgs { system = "x86_64-linux"; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       haskellPackages.shellFor {
         buildInputs = with haskellPackages; [
           asciidoctor
