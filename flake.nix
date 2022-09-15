@@ -13,7 +13,8 @@
   outputs = { self, nixpkgs }: {
 
     overlays.default = final: prev: {
-      haskellPackages = prev.haskellPackages.extend (haskellFinal: haskellPrev: {
+      haskellPackages = prev.haskell.packages.ghc924.extend (haskellFinal: haskellPrev: { # TODO: Using GHC 9.2.4.
+        singletons-th = haskellPrev.callHackage "singletons-th" "3.1" {}; # TODO: Required for GHC 9.2.
         graphmod = (haskellPrev.graphmod.overrideAttrs (oldAttrs: {
           src = prev.fetchFromGitHub {
             owner = "yav";
