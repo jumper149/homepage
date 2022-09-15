@@ -12,7 +12,7 @@
 
   outputs = { self, nixpkgs }: {
 
-    overlays.default= final: prev: {
+    overlays.default = final: prev: {
       haskellPackages = prev.haskellPackages.extend (haskellFinal: haskellPrev: {
         graphmod = (haskellPrev.graphmod.overrideAttrs (oldAttrs: {
           src = prev.fetchFromGitHub {
