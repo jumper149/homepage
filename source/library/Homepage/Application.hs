@@ -21,7 +21,9 @@ import Control.Monad.Trans.Compose.Stack
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
 import Data.Foldable
+import Data.Kind
 
+type Transformers :: Stack
 type Transformers =
   'NilT
     ':.|> EnvironmentT
@@ -29,6 +31,7 @@ type Transformers =
     ':.|> ConfiguredT
     ':.|> BlogT
 
+type ApplicationT :: (Type -> Type) -> Type -> Type
 newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT Transformers m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)

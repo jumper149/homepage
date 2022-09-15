@@ -16,11 +16,13 @@ import Network.Wai
 import Servant
 import Servant.Server.Internal.Delayed
 
+type Hash :: Type
 newtype Hash = MkHash {getHash :: Word}
 
 requestHash :: Request -> Hash
 requestHash = MkHash . fromIntegral . hash . show
 
+type RequestHashT :: (Type -> Type) -> Type -> Type
 newtype RequestHashT m a = RequestHashT {unRequestHashT :: ReaderT Hash m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
@@ -40,6 +42,7 @@ deriving via
 runRequestHashT :: Hash -> RequestHashT m a -> m a
 runRequestHashT reqHash = flip runReaderT reqHash . unRequestHashT
 
+type RequestHash :: Type
 data RequestHash
 
 instance HasServer api context => HasServer (RequestHash :> api) context where

@@ -8,6 +8,7 @@ import Control.Monad.Trans.Elevator
 import Data.Kind
 import Data.Text qualified as T
 
+type MonadBlog :: (Type -> Type) -> Constraint
 class Monad m => MonadBlog m where
   readBlogEntryHtml :: BlogId -> m (Maybe T.Text)
 

@@ -15,6 +15,7 @@ import Data.ByteString.Char8 qualified as B
 import Data.Kind
 import Data.Time qualified as T
 
+type TimedLoggingT :: (Type -> Type) -> Type -> Type
 newtype TimedLoggingT m a = TimedLoggingT {unTimedLoggingT :: LoggingT m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)

@@ -1,6 +1,7 @@
 module Homepage.Configuration.Files where
 
 import Data.Aeson qualified as A
+import Data.Kind
 import Data.Map qualified as M
 import Data.Set qualified as S
 import Data.Text qualified as T
@@ -8,6 +9,7 @@ import Data.Time.Calendar
 import Deriving.Aeson qualified as A
 import GHC.Generics
 
+type FileFormat :: Type
 data FileFormat = FileFormat
   { fileFormatName :: T.Text
   , fileFormatExtension :: Maybe T.Text
@@ -17,6 +19,7 @@ data FileFormat = FileFormat
     (A.FromJSON, A.ToJSON)
     via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "fileFormat", A.CamelToKebab], A.RejectUnknownFields] FileFormat
 
+type FileEntry :: Type
 data FileEntry = FileEntry
   { fileIdentifier :: T.Text
   , fileFormats :: [FileFormat]
@@ -29,6 +32,7 @@ data FileEntry = FileEntry
     (A.FromJSON, A.ToJSON)
     via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "file", A.CamelToKebab], A.RejectUnknownFields] FileEntry
 
+type FileEntries :: Type
 newtype FileEntries = FileEntries {unFileEntries :: S.Set FileEntry}
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving

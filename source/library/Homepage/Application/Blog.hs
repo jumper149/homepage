@@ -21,6 +21,7 @@ import Data.Text qualified as T
 import Data.Text.IO qualified as T
 import UnliftIO qualified
 
+type BlogT :: (Type -> Type) -> Type -> Type
 newtype BlogT m a = BlogT {unBlogT :: IdentityT m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)

@@ -7,6 +7,7 @@ import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Elevator
 import Data.Kind
 
+type MonadConfigured :: (Type -> Type) -> Constraint
 class Monad m => MonadConfigured m where
   configuration :: m Configuration
 

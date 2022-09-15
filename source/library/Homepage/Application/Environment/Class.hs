@@ -9,6 +9,7 @@ import Data.Kind
 import Data.Singletons
 import GHC.TypeLits
 
+type MonadEnvironment :: (Type -> Type) -> Constraint
 class Monad m => MonadEnvironment m where
   environmentVariable ::
     forall envVar.
@@ -35,4 +36,5 @@ deriving via
     ) =>
     MonadEnvironment (ComposeT t1 t2 m)
 
-data ProxyEnvVarName (name :: Symbol) = EnvVar
+type ProxyEnvVarName :: Symbol -> Type
+data ProxyEnvVarName name = EnvVar

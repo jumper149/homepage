@@ -1,6 +1,7 @@
 module Homepage.Configuration.BaseUrl where
 
 import Data.Aeson qualified as A
+import Data.Kind
 import Data.Text qualified as T
 import Data.Word
 import Deriving.Aeson qualified as A
@@ -14,6 +15,7 @@ displayBaseUrl baseUrl@BaseUrl {baseUrlScheme, baseUrlAuthority} =
 displayBaseUrlPath :: BaseUrl -> T.Text
 displayBaseUrlPath BaseUrl {baseUrlPath} = T.concat $ map ("/" <>) baseUrlPath
 
+type BaseUrl :: Type
 data BaseUrl = BaseUrl
   { baseUrlScheme :: T.Text
   , baseUrlAuthority :: Maybe BaseUrlAuthority
@@ -28,6 +30,7 @@ displayBaseUrlAuthority :: BaseUrlAuthority -> T.Text
 displayBaseUrlAuthority BaseUrlAuthority {baseUrlAuthorityHost, baseUrlAuthorityPort} =
   "//" <> baseUrlAuthorityHost <> maybe "" ((":" <>) . T.pack . show) baseUrlAuthorityPort
 
+type BaseUrlAuthority :: Type
 data BaseUrlAuthority = BaseUrlAuthority
   { baseUrlAuthorityHost :: T.Text
   , baseUrlAuthorityPort :: Maybe Word16

@@ -14,6 +14,7 @@ import Control.Monad.Base
 import Control.Monad.IO.Unlift
 import Control.Monad.Logger.CallStack
 import Data.ByteString.Char8 qualified as B
+import Data.Kind
 import Data.Proxy
 import Data.Text qualified as T
 import Data.Text.Encoding qualified as T
@@ -27,7 +28,9 @@ import Servant.Server
 import Servant.Server.Generic
 import System.Posix.Signals
 
+type API :: Type
 type API = ToServantApi Routes
+type WrappedAPI :: Type
 type WrappedAPI = RequestHash :> API
 
 hoistServerRunHandlerT :: MonadLogger m => ServerT API (HandlerT m) -> ServerT WrappedAPI m

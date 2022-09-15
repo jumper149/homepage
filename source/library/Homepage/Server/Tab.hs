@@ -1,14 +1,17 @@
 module Homepage.Server.Tab where
 
+import Data.Kind
 import Data.Text qualified as T
 import GHC.Generics
 
+type Tab :: Type
 data Tab
   = TabHome
   | TabBlog
   | TabFiles
   deriving stock (Bounded, Enum, Eq, Generic, Ord, Read, Show)
 
+type TabDescription :: Type
 data TabDescription = TabDescription
   { tabName :: T.Text
   , tabPath :: T.Text

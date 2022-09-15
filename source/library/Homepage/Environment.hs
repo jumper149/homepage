@@ -10,6 +10,7 @@ import GHC.Generics
 import GHC.TypeLits
 import Text.Read
 
+type EnvVar :: Type
 data EnvVar
   = EnvVarConfigFile
   | EnvVarLogFile
@@ -18,12 +19,14 @@ data EnvVar
 
 genSingletons [''EnvVar]
 
-type family EnvVarName (envVar :: EnvVar) = (name :: Symbol) | name -> envVar where
+type EnvVarName :: EnvVar -> Symbol
+type family EnvVarName envVar = name | name -> envVar where
   EnvVarName 'EnvVarConfigFile = "HOMEPAGE_CONFIG_FILE"
   EnvVarName 'EnvVarLogFile = "HOMEPAGE_LOG_FILE"
   EnvVarName 'EnvVarLogLevel = "HOMEPAGE_LOG_LEVEL"
 
-type family EnvVarValue (envVar :: EnvVar) = (value :: Type) where
+type EnvVarValue :: EnvVar -> Type
+type family EnvVarValue envVar = value where
   EnvVarValue 'EnvVarConfigFile = FilePath
   EnvVarValue 'EnvVarLogFile = Maybe FilePath
   EnvVarValue 'EnvVarLogLevel = LogLevel
@@ -40,4 +43,5 @@ envVarDefault = \case
   SEnvVarLogFile -> Nothing
   SEnvVarLogLevel -> LevelDebug
 
+type Environment :: Type
 newtype Environment = MkEnvironment {getEnvironment :: forall envVar. SEnvVar envVar -> EnvVarValue envVar}
