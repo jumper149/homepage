@@ -6,128 +6,20 @@ flag cabal2nix
   default: False
 
 common language
-  default-language: Haskell2010
+  default-language: GHC2021
   default-extensions:
-    BangPatterns
-      -- ^ implied by GHC2021
-    BinaryLiterals
-      -- ^ implied by GHC2021
-    ConstrainedClassMethods
-      -- ^ implied by GHC2021
-    ConstraintKinds
-      -- ^ implied by GHC2021
-    -- CUSKs
-      -- ^ implied by Haskell2010
-      -- ^ TODO: deprecated
-    -- DatatypeContexts
-      -- ^ implied by Haskell2010
-      -- ^ TODO: deprecated
     DataKinds
     DeriveAnyClass
-    DeriveDataTypeable
-      -- ^ implied by GHC2021
-    DeriveFoldable
-      -- ^ implied by GHC2021
-    DeriveFunctor
-      -- ^ implied by GHC2021
-    DeriveGeneric
-      -- ^ implied by GHC2021
-    DeriveLift
-      -- ^ implied by GHC2021
-    DeriveTraversable
-      -- ^ implied by GHC2021
     DerivingStrategies
     DerivingVia
-    DoAndIfThenElse
-      -- ^ implied by Haskell2010
-      -- ^ implied by GHC2021
-    EmptyCase
-      -- ^ implied by GHC2021
-    EmptyDataDecls
-      -- ^ implied by Haskell2010
-      -- ^ implied by GHC2021
-    EmptyDataDeriving
-      -- ^ implied by GHC2021
-    ExistentialQuantification
-      -- ^ implied by GHC2021
-    ExplicitForAll
-      -- ^ implied by GHC2021
     ExplicitNamespaces
-    -- FieldSelectors
-      -- ^ implied by GHC2021
-      -- ^ TODO: unreleased
-    FlexibleContexts
-      -- ^ implied by GHC2021
-    FlexibleInstances
-      -- ^ implied by GHC2021
-    ForeignFunctionInterface
-      -- ^ implied by Haskell2010
-      -- ^ implied by GHC2021
     FunctionalDependencies
-    GADTSyntax
-      -- ^ implied by GHC2021
-    GeneralisedNewtypeDeriving
-      -- ^ implied by GHC2021
-    HexFloatLiterals
-      -- ^ implied by GHC2021
-    ImplicitPrelude
-      -- ^ implied by Haskell2010
-      -- ^ implied by GHC2021
-    ImportQualifiedPost
-      -- ^ implied by GHC2021
-    InstanceSigs
-      -- ^ implied by GHC2021
-    KindSignatures
-      -- ^ implied by GHC2021
     LambdaCase
     LexicalNegation
-    MonomorphismRestriction
-      -- ^ implied by Haskell2010
-      -- ^ implied by GHC2021
-    MultiParamTypeClasses
-      -- ^ implied by GHC2021
-    NamedFieldPuns
-      -- ^ implied by GHC2021
-    NamedWildCards
-      -- ^ implied by GHC2021
     NumDecimals
-    NumericUnderscores
-      -- ^ implied by GHC2021
     OverloadedStrings
-    -- PatternGuards
-      -- ^ implied by Haskell2010
-      -- ^ implied by GHC2021
     NoPatternGuards
-    PolyKinds
-      -- ^ implied by GHC2021
-    PostfixOperators
-      -- ^ implied by GHC2021
-    RankNTypes
-      -- ^ implied by GHC2021
-    RelaxedPolyRec
-      -- ^ implied by Haskell2010
-      -- ^ implied by GHC2021
-    ScopedTypeVariables
-      -- ^ implied by GHC2021
-    StandaloneDeriving
-      -- ^ implied by GHC2021
-    StandaloneKindSignatures
-      -- ^ implied by GHC2021
-    -- StarIsType
-      -- ^ implied by Haskell2010
-      -- ^ implied by GHC2021
     NoStarIsType
-    TraditionalRecordSyntax
-      -- ^ implied by Haskell2010
-      -- ^ implied by GHC2021
-    TupleSections
-      -- ^ implied by GHC2021
-    TypeApplications
-      -- ^ implied by GHC2021
-    TypeOperators
-      -- ^ implied by GHC2021
-    TypeSynonymInstances
-      -- ^ implied by GHC2021
   ghc-options:
     -Weverything
     -Wno-all-missed-specialisations
