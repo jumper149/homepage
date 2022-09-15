@@ -13,8 +13,8 @@
   outputs = { self, nixpkgs }: {
 
     overlays.default= final: prev: {
-      haskellPackages = prev.haskellPackages.extend (haskellSelf: haskellSuper: {
-        graphmod = (haskellSuper.graphmod.overrideAttrs (oldAttrs: {
+      haskellPackages = prev.haskellPackages.extend (haskellFinal: haskellPrev: {
+        graphmod = (haskellPrev.graphmod.overrideAttrs (oldAttrs: {
           src = prev.fetchFromGitHub {
             owner = "yav";
             repo = "graphmod";
