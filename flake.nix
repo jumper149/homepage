@@ -19,8 +19,8 @@
           src = prev.fetchFromGitHub {
             owner = "yav";
             repo = "graphmod";
-            rev = "79cc6502b48e577632d57b3a9b479436b0739726";
-            sha256 = "sha256-0G4a/Tid95/Mn4Ip1EQ/43iPLd2Iq1Ph+pfFevMi8I0=";
+            rev = "776b1ba174177b773c8fe31aa37cfc20a7e89628";
+            sha256 = "sha256-Vok2kJ3oTxCkt69d7uI72D9Vg6v25vXCwRas8dwq37g=";
           };
         }));
       });
