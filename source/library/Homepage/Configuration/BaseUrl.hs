@@ -24,7 +24,7 @@ data BaseUrl = BaseUrl
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "baseUrl", A.CamelToKebab], A.RejectUnknownFields] BaseUrl
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "baseUrl", A.CamelToKebab], A.RejectUnknownFields] BaseUrl
 
 displayBaseUrlAuthority :: BaseUrlAuthority -> T.Text
 displayBaseUrlAuthority BaseUrlAuthority {baseUrlAuthorityHost, baseUrlAuthorityPort} =
@@ -38,4 +38,4 @@ data BaseUrlAuthority = BaseUrlAuthority
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "baseUrlAuthority", A.CamelToKebab], A.RejectUnknownFields] BaseUrlAuthority
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "baseUrlAuthority", A.CamelToKebab], A.RejectUnknownFields] BaseUrlAuthority

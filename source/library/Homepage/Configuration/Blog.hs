@@ -25,7 +25,7 @@ data BlogLink = BlogLink
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "blogLink", A.CamelToKebab], A.RejectUnknownFields] BlogLink
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "blogLink", A.CamelToKebab], A.RejectUnknownFields] BlogLink
 
 type BlogEntry :: Type
 data BlogEntry = BlogEntry
@@ -36,14 +36,14 @@ data BlogEntry = BlogEntry
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "blog", A.CamelToKebab], A.RejectUnknownFields] BlogEntry
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "blog", A.CamelToKebab], A.RejectUnknownFields] BlogEntry
 
 type BlogEntries :: Type
 newtype BlogEntries = BlogEntries {unBlogEntries :: M.Map BlogId BlogEntry}
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.UnwrapUnaryRecords, A.RejectUnknownFields] BlogEntries
+    via A.CustomJSON [A.UnwrapUnaryRecords, A.RejectUnknownFields] BlogEntries
 
 lookupBlog :: BlogId -> BlogEntries -> Maybe BlogEntry
 lookupBlog k = M.lookup k . unBlogEntries

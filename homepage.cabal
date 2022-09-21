@@ -120,6 +120,7 @@ common language
     -Wno-missing-import-lists
     -Wno-missing-safe-haskell-mode
     -Wno-unsafe
+    -Wno-unticked-promoted-constructors
   if flag(cabal2nix)
     ghc-options:
       -Werror

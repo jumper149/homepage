@@ -17,7 +17,7 @@ data FileFormat = FileFormat
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "fileFormat", A.CamelToKebab], A.RejectUnknownFields] FileFormat
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "fileFormat", A.CamelToKebab], A.RejectUnknownFields] FileFormat
 
 type FileEntry :: Type
 data FileEntry = FileEntry
@@ -30,14 +30,14 @@ data FileEntry = FileEntry
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "file", A.CamelToKebab], A.RejectUnknownFields] FileEntry
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "file", A.CamelToKebab], A.RejectUnknownFields] FileEntry
 
 type FileEntries :: Type
 newtype FileEntries = FileEntries {unFileEntries :: S.Set FileEntry}
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.UnwrapUnaryRecords, A.RejectUnknownFields] FileEntries
+    via A.CustomJSON [A.UnwrapUnaryRecords, A.RejectUnknownFields] FileEntries
 
 groupFiles :: S.Set FileEntry -> M.Map (Maybe T.Text) (S.Set FileEntry)
 groupFiles entries = M.fromList $ sectionGroup <$> S.toList sections

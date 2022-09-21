@@ -24,7 +24,7 @@ data ContactInformation = ContactInformation
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "contact", A.CamelToKebab], A.RejectUnknownFields] ContactInformation
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "contact", A.CamelToKebab], A.RejectUnknownFields] ContactInformation
 
 type HeaderIcons :: Type
 data HeaderIcons = HeaderIcons
@@ -35,7 +35,7 @@ data HeaderIcons = HeaderIcons
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "headerIcon", A.CamelToKebab], A.RejectUnknownFields] HeaderIcons
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "headerIcon", A.CamelToKebab], A.RejectUnknownFields] HeaderIcons
 
 type DonateInformation :: Type
 data DonateInformation = DonateInformation
@@ -45,4 +45,4 @@ data DonateInformation = DonateInformation
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
     (A.FromJSON, A.ToJSON)
-    via A.CustomJSON '[A.FieldLabelModifier '[A.StripPrefix "donate", A.CamelToKebab], A.RejectUnknownFields] DonateInformation
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "donate", A.CamelToKebab], A.RejectUnknownFields] DonateInformation

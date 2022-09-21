@@ -20,8 +20,8 @@ import Data.Kind
 
 type Transformers :: Stack
 type Transformers =
-  'NilT
-    ':.|> RequestHashT
+  NilT
+    :.|> RequestHashT
 
 type HandlerT :: (Type -> Type) -> Type -> Type
 newtype HandlerT m a = HandlerT {unHandlerT :: StackT Transformers m a}

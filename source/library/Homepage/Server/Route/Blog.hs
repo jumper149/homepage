@@ -59,7 +59,7 @@ overviewHandler = do
 articleHandler ::
   (MonadConfigured m, MonadLogger m) =>
   BlogId ->
-  m (Union '[WithStatus 200 Html, WithStatus 404 Html])
+  m (Union [WithStatus 200 Html, WithStatus 404 Html])
 articleHandler blogId = do
   blogs <- configBlogEntries <$> configuration
   case lookupBlog blogId blogs of

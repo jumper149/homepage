@@ -25,11 +25,11 @@ import Data.Kind
 
 type Transformers :: Stack
 type Transformers =
-  'NilT
-    ':.|> EnvironmentT
-    ':.|> TimedLoggingT
-    ':.|> ConfiguredT
-    ':.|> BlogT
+  NilT
+    :.|> EnvironmentT
+    :.|> TimedLoggingT
+    :.|> ConfiguredT
+    :.|> BlogT
 
 type ApplicationT :: (Type -> Type) -> Type -> Type
 newtype ApplicationT m a = ApplicationT {unApplicationT :: StackT Transformers m a}

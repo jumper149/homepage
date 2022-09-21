@@ -21,15 +21,15 @@ genSingletons [''EnvVar]
 
 type EnvVarName :: EnvVar -> Symbol
 type family EnvVarName envVar = name | name -> envVar where
-  EnvVarName 'EnvVarConfigFile = "HOMEPAGE_CONFIG_FILE"
-  EnvVarName 'EnvVarLogFile = "HOMEPAGE_LOG_FILE"
-  EnvVarName 'EnvVarLogLevel = "HOMEPAGE_LOG_LEVEL"
+  EnvVarName EnvVarConfigFile = "HOMEPAGE_CONFIG_FILE"
+  EnvVarName EnvVarLogFile = "HOMEPAGE_LOG_FILE"
+  EnvVarName EnvVarLogLevel = "HOMEPAGE_LOG_LEVEL"
 
 type EnvVarValue :: EnvVar -> Type
 type family EnvVarValue envVar = value where
-  EnvVarValue 'EnvVarConfigFile = FilePath
-  EnvVarValue 'EnvVarLogFile = Maybe FilePath
-  EnvVarValue 'EnvVarLogLevel = LogLevel
+  EnvVarValue EnvVarConfigFile = FilePath
+  EnvVarValue EnvVarLogFile = Maybe FilePath
+  EnvVarValue EnvVarLogLevel = LogLevel
 
 envVarParse :: SEnvVar envVar -> String -> Maybe (EnvVarValue envVar)
 envVarParse = \case

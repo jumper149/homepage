@@ -23,4 +23,4 @@ data Routes route = Routes
 type Found302Content :: Type
 type Found302Content = Headers '[Header "Location" String] NoContent
 type Found302 :: Type
-type Found302 = Verb 'GET 302 '[PlainText] Found302Content
+type Found302 = Verb GET 302 '[PlainText] Found302Content

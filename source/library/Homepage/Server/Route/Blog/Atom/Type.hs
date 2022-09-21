@@ -8,7 +8,7 @@ import Network.HTTP.Media qualified as Media
 import Servant.API
 
 type API :: Type
-type API = UVerb 'GET '[Atom] '[WithStatus 200 AtomFeed, WithStatus 500 NoContent]
+type API = UVerb GET '[Atom] [WithStatus 200 AtomFeed, WithStatus 500 NoContent]
 
 type Atom :: Type
 data Atom
