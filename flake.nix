@@ -17,10 +17,10 @@
         singletons-th = haskellPrev.callHackage "singletons-th" "3.1" {}; # TODO: Required for GHC 9.2.
         graphmod = (haskellPrev.graphmod.overrideAttrs (oldAttrs: {
           src = prev.fetchFromGitHub {
-            owner = "yav";
+            owner = "jumper149";
             repo = "graphmod";
-            rev = "776b1ba174177b773c8fe31aa37cfc20a7e89628";
-            sha256 = "sha256-Vok2kJ3oTxCkt69d7uI72D9Vg6v25vXCwRas8dwq37g=";
+            rev = "b684ce4d6af97179eccb65d2567d6165d43fa3e0";
+            sha256 = "sha256-I5OfUGV9TbxLCyc8LhdZODhw5EpJXyXeFdaN7gMmhC8=";
           };
         }));
       });
