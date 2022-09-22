@@ -116,6 +116,7 @@ common language
     -Weverything
     -Wno-all-missed-specialisations
     -Wno-implicit-prelude
+    -Wno-missed-specialisations
     -Wno-missing-export-lists
     -Wno-missing-import-lists
     -Wno-missing-safe-haskell-mode
