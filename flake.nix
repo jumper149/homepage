@@ -205,9 +205,9 @@
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       stdenv.mkDerivation {
         name = "fourmolu"; # TODO: Necessary to avoid segmentation fault.
-        src = ./.;
+        src = ./server;
         buildPhase = ''
-          fourmolu --cabal-default-extensions --mode check $(find server/source -name '*.hs')
+          fourmolu --cabal-default-extensions --mode check $(find source -name '*.hs')
         '';
         installPhase = ''
           mkdir $out
@@ -241,7 +241,7 @@
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       stdenv.mkDerivation {
         name = "hie-yaml"; # TODO: Necessary to avoid segmentation fault.
-        src = ./.;
+        src = ./server;
         buildPhase = ''
           diff --report-identical-files ./hie.yaml <(gen-hie)
         '';
