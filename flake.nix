@@ -8,28 +8,21 @@
       repo = "nixpkgs";
       ref = "nixpkgs-unstable";
     };
+    server = {
+      url = "path:server";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs }: {
+  outputs = { self, nixpkgs, server }: {
 
     overlays.default = final: prev: {
-      haskellPackages = prev.haskell.packages.ghc924.extend (haskellFinal: haskellPrev: { # TODO: Using GHC 9.2.4.
-        singletons-th = haskellPrev.callHackage "singletons-th" "3.1" {}; # TODO: Required for GHC 9.2.
-        graphmod = (haskellPrev.graphmod.overrideAttrs (oldAttrs: {
-          src = prev.fetchFromGitHub {
-            owner = "jumper149";
-            repo = "graphmod";
-            rev = "b684ce4d6af97179eccb65d2567d6165d43fa3e0";
-            sha256 = "sha256-I5OfUGV9TbxLCyc8LhdZODhw5EpJXyXeFdaN7gMmhC8=";
-          };
-        }));
-      });
     };
 
     packages.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       writeScriptBin "homepage-full" ''
-        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.packages.x86_64-linux.server}/bin/homepage
+        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${server.packages.x86_64-linux.server}/bin/homepage
       '';
 
     packages.x86_64-linux.config =
@@ -43,11 +36,6 @@
         directory-files = "${self.packages.x86_64-linux.files}";
         directory-static = "${self.packages.x86_64-linux.static}";
       };
-
-    packages.x86_64-linux.server =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
-      let src = nix-gitignore.gitignoreSource [] ./server;
-      in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
 
     packages.x86_64-linux.blog =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
@@ -201,105 +189,7 @@
         ];
       };
 
-    checks.x86_64-linux.fourmolu =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
-      stdenv.mkDerivation {
-        name = "fourmolu"; # TODO: Necessary to avoid segmentation fault.
-        src = ./server;
-        buildPhase = ''
-          fourmolu --cabal-default-extensions --mode check $(find source -name '*.hs')
-        '';
-        installPhase = ''
-          mkdir $out
-        '';
-        buildInputs = [
-        ];
-        nativeBuildInputs = [
-          haskellPackages.fourmolu
-        ];
-      };
-
-    checks.x86_64-linux.hlint =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
-      stdenv.mkDerivation {
-        name = "hlint"; # TODO: Necessary to avoid segmentation fault.
-        src = ./.;
-        buildPhase = ''
-          hlint ./server/source
-        '';
-        installPhase = ''
-          mkdir $out
-        '';
-        buildInputs = [
-        ];
-        nativeBuildInputs = [
-          haskellPackages.hlint
-        ];
-      };
-
-    checks.x86_64-linux.hie-yaml =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
-      stdenv.mkDerivation {
-        name = "hie-yaml"; # TODO: Necessary to avoid segmentation fault.
-        src = ./server;
-        buildPhase = ''
-          diff --report-identical-files ./hie.yaml <(gen-hie)
-        '';
-        installPhase = ''
-          mkdir $out
-        '';
-        buildInputs = [
-        ];
-        nativeBuildInputs = [
-          haskellPackages.implicit-hie
-        ];
-      };
-
-    checks.x86_64-linux.graphmod =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
-      stdenv.mkDerivation {
-        name = "graphmod"; # TODO: Necessary to avoid segmentation fault.
-        src = ./.;
-        buildPhase = ''
-          graphmod > graphmod.out
-          dot -Tdot graphmod.out > graphmod.dot
-          dot -Tpdf graphmod.out > graphmod.pdf
-        '';
-        installPhase = ''
-          mkdir $out
-          cp graphmod.dot $out
-          cp graphmod.pdf $out
-        '';
-        nativeBuildInputs = [
-          haskellPackages.graphmod
-          pkgs.graphviz
-        ];
-      };
-
-    devShells.x86_64-linux.default =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
-      haskellPackages.shellFor {
-        buildInputs = with haskellPackages; [
-          asciidoctor
-          cabal-install
-          calligraphy
-          pkgs.findutils
-          fourmolu
-          ghcid
-          haskell-language-server
-          hlint
-          pkgs.imagemagick
-          implicit-hie
-          lessc
-          rnix-lsp
-          weeder
-          pkgs.xdot
-        ];
-        packages = haskellPackages: [
-          self.packages.x86_64-linux.server
-        ];
-        withHoogle = true;
-      };
+    # TODO: Add development shell: asciidoctor pkgs.imagemagick lessc rnix-lsp
 
     nixosModules.default = { config, lib, ... }:
       let
@@ -337,7 +227,7 @@
             ];
             serviceConfig = {
               DynamicUser = true;
-              ExecStart = "${self.packages.x86_64-linux.server}/bin/homepage";
+              ExecStart = "${server.packages.x86_64-linux.server}/bin/homepage";
               LogsDirectory = "homepage";
             };
           };
