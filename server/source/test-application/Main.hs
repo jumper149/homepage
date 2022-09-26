@@ -1,6 +1,4 @@
 module Main (main) where
 
-import Homepage.Application
-
 main :: IO ()
-main = runApplicationT $ pure ()
+main = pure () -- TODO: Use `runApplicationT` again to actually check the config and initialization.
