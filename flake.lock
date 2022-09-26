@@ -30,12 +30,12 @@
       },
       "locked": {
         "lastModified": 1,
-        "narHash": "sha256-5PJ7R5WSlkMDTmvR2y4TueOkC+bXJhl/Ivl8KYou3uQ=",
-        "path": "server",
+        "narHash": "sha256-mf4IMZVyDWG8/te2izb+5UxUDhwBbzhzXhxcU4msiFo=",
+        "path": "./server",
         "type": "path"
       },
       "original": {
-        "path": "server",
+        "path": "./server",
         "type": "path"
       }
     }

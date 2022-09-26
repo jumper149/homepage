@@ -9,7 +9,7 @@
       ref = "nixpkgs-unstable";
     };
     server = {
-      url = "path:server";
+      url = "path:./server";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
