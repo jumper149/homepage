@@ -1,6 +1,4 @@
 {
-  description = "Felix Springer's Homepage Server";
-
   inputs = {
     nixpkgs = {
       type = "github";
