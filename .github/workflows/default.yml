@@ -13,7 +13,7 @@ jobs:
           , devShells.x86_64-linux.default
           , packages.x86_64-linux.blog
           , packages.x86_64-linux.files
-          , packages.x86_64-linux.homepage
+          , packages.x86_64-linux.server
           , packages.x86_64-linux.static
           ]
     steps:
@@ -43,6 +43,6 @@ jobs:
     - name: "Set up nix"
       uses: cachix/install-nix-action@v17
     - name: "Prepare weeder"
-      run: nix develop --command cabal build all
+      run: nix develop --command "cd server && cabal build all"
     - name: "Run weeder"
-      run: nix develop --command weeder
+      run: nix develop --command "cd server && weeder"
