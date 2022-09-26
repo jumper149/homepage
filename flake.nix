@@ -29,7 +29,7 @@
     packages.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
       writeScriptBin "homepage-full" ''
-        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.packages.x86_64-linux.homepage}/bin/homepage
+        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.packages.x86_64-linux.server}/bin/homepage
       '';
 
     packages.x86_64-linux.config =
@@ -44,9 +44,9 @@
         directory-static = "${self.packages.x86_64-linux.static}";
       };
 
-    packages.x86_64-linux.homepage =
+    packages.x86_64-linux.server =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
-      let src = nix-gitignore.gitignoreSource [] ./.;
+      let src = nix-gitignore.gitignoreSource [] ./server;
       in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
 
     packages.x86_64-linux.blog =
@@ -80,7 +80,7 @@
               asciidoctor "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
                 --attribute author="${config.contact-information.name}" \
                 --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
-                --attribute imagesdir="${(import source/library/Homepage/Configuration/BaseUrl.nix) config.base-url}/blog/raw/$ARTICLE_NAME" \
+                --attribute imagesdir="${(import server/source/library/Homepage/Configuration/BaseUrl.nix) config.base-url}/blog/raw/$ARTICLE_NAME" \
                 --backend html5 \
                 --attribute nofooter \
                 --attribute webfonts!
@@ -207,7 +207,7 @@
         name = "fourmolu"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
         buildPhase = ''
-          fourmolu --cabal-default-extensions --mode check $(find source -name '*.hs')
+          fourmolu --cabal-default-extensions --mode check $(find server/source -name '*.hs')
         '';
         installPhase = ''
           mkdir $out
@@ -225,7 +225,7 @@
         name = "hlint"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
         buildPhase = ''
-          hlint ./source
+          hlint ./server/source
         '';
         installPhase = ''
           mkdir $out
@@ -296,7 +296,7 @@
           pkgs.xdot
         ];
         packages = haskellPackages: [
-          self.packages.x86_64-linux.homepage
+          self.packages.x86_64-linux.server
         ];
         withHoogle = true;
       };
@@ -337,7 +337,7 @@
             ];
             serviceConfig = {
               DynamicUser = true;
-              ExecStart = "${self.packages.x86_64-linux.homepage}/bin/homepage";
+              ExecStart = "${self.packages.x86_64-linux.server}/bin/homepage";
               LogsDirectory = "homepage";
             };
           };
