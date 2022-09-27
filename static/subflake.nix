@@ -1,6 +1,6 @@
 { nixpkgs, setup }: {
 
-  packages.x86_64-linux.static =
+  packages.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
     stdenv.mkDerivation {
       name = "static"; # TODO: Necessary to avoid segmentation fault.
