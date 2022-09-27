@@ -25,15 +25,6 @@ nix develop ..#subflakes.server.devShells.x86_64-linux.default
 fourmolu --cabal-default-extensions --mode inplace $(find source -name '*.hs')
 ```
 
-### Linting
-
-Linting is configured in `flake.nix`.
-
-```
-# Test and lint.
-nix flake check ..
-```
-
 ### `weeder`
 
 Running `weeder` should be a part of linting, but requires manual execution at the moment.
