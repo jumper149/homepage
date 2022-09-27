@@ -1,4 +1,4 @@
-{ nixpkgs, setup }: rec {
+{ self, nixpkgs, setup }: rec {
 
   packages.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };

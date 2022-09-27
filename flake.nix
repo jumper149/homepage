@@ -15,7 +15,7 @@
     subflakes = rec {
       setup = import ./setup/subflake.nix { };
       server = import ./server/subflake.nix { inherit nixpkgs setup; };
-      blog = import ./blog/subflake.nix { inherit nixpkgs setup; };
+      blog = import ./blog/subflake.nix { inherit self nixpkgs setup; };
       files = import ./files/subflake.nix { inherit nixpkgs setup; };
       static = import ./static/subflake.nix { inherit nixpkgs setup; };
     };
