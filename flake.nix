@@ -11,20 +11,20 @@
   };
 
   outputs = { self, nixpkgs }:
-  let server = (import ./server/subflake.nix) { inherit nixpkgs; };
+  let setup = (import ./setup/subflake.nix) { };
+      server = (import ./server/subflake.nix) { inherit nixpkgs setup; };
   in {
 
-    overlays.default = final: prev: {
-    };
+    overlays.default = setup.overlays.default;
 
     packages.x86_64-linux.default =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
       writeScriptBin "homepage-full" ''
         HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${server.packages.x86_64-linux.server}/bin/homepage
       '';
 
     packages.x86_64-linux.config =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
       writeText "homepage.json" (builtins.toJSON self.config);
 
     config =
@@ -36,7 +36,7 @@
       };
 
     packages.x86_64-linux.blog =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
       let config = builtins.fromJSON (builtins.readFile ./homepage.json);
       in stdenv.mkDerivation {
         name = "blog"; # TODO: Necessary to avoid segmentation fault.
@@ -108,7 +108,7 @@
       };
 
     packages.x86_64-linux.files =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
       stdenv.mkDerivation {
         name = "files"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/files;
@@ -125,7 +125,7 @@
       };
 
     packages.x86_64-linux.static =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
       stdenv.mkDerivation {
         name = "static"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/static;
