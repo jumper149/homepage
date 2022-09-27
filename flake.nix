@@ -10,22 +10,21 @@
     };
   };
 
-  outputs = { self, nixpkgs }:
-  let
-    # TODO: It would be nice, if `combine` threw an error, when an attribute gets redefined. Currently this is silently allowed.
-    combine = __foldl' (import nixpkgs { system = "x86_64-linux"; }).lib.recursiveUpdate { };
-    setup = (import ./setup/subflake.nix) { };
-    server = (import ./server/subflake.nix) { inherit nixpkgs setup; };
-  in combine [ setup server {
+  outputs = { self, nixpkgs }: {
+
+    subflakes = rec {
+      setup = (import ./setup/subflake.nix) { };
+      server = (import ./server/subflake.nix) { inherit nixpkgs setup; };
+    };
 
     packages.x86_64-linux.default =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       writeScriptBin "homepage-full" ''
-        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${server.packages.x86_64-linux.server}/bin/homepage
+        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.subflakes.server.packages.x86_64-linux.server}/bin/homepage
       '';
 
     packages.x86_64-linux.config =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       writeText "homepage.json" (builtins.toJSON self.config);
 
     config =
@@ -37,7 +36,7 @@
       };
 
     packages.x86_64-linux.blog =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       let config = builtins.fromJSON (builtins.readFile ./homepage.json);
       in stdenv.mkDerivation {
         name = "blog"; # TODO: Necessary to avoid segmentation fault.
@@ -109,7 +108,7 @@
       };
 
     packages.x86_64-linux.files =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       stdenv.mkDerivation {
         name = "files"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/files;
@@ -126,7 +125,7 @@
       };
 
     packages.x86_64-linux.static =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       stdenv.mkDerivation {
         name = "static"; # TODO: Necessary to avoid segmentation fault.
         src = ./static/static;
@@ -226,12 +225,12 @@
             ];
             serviceConfig = {
               DynamicUser = true;
-              ExecStart = "${server.packages.x86_64-linux.server}/bin/homepage";
+              ExecStart = "${self.subflakes.server.packages.x86_64-linux.server}/bin/homepage";
               LogsDirectory = "homepage";
             };
           };
         };
       };
 
-  }];
+  };
 }
