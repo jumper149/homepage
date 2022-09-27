@@ -1,5 +1,5 @@
 { nixpkgs, setup }: {
-  packages.x86_64-linux.blog =
+  packages.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
     let config = builtins.fromJSON (builtins.readFile ../homepage.json);
     in stdenv.mkDerivation {
