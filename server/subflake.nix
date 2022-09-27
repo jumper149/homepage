@@ -17,7 +17,6 @@
         haskell-language-server
         hlint
         implicit-hie
-        rnix-lsp
         weeder
         pkgs.xdot
       ];
