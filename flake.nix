@@ -20,7 +20,7 @@
     packages.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       writeScriptBin "homepage-full" ''
-        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.subflakes.server.packages.x86_64-linux.server}/bin/homepage
+        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.subflakes.server.packages.x86_64-linux.default}/bin/homepage
       '';
 
     packages.x86_64-linux.config =
@@ -225,7 +225,7 @@
             ];
             serviceConfig = {
               DynamicUser = true;
-              ExecStart = "${self.subflakes.server.packages.x86_64-linux.server}/bin/homepage";
+              ExecStart = "${self.subflakes.server.packages.x86_64-linux.default}/bin/homepage";
               LogsDirectory = "homepage";
             };
           };

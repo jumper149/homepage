@@ -13,7 +13,7 @@ jobs:
           , packages.x86_64-linux.blog
           , packages.x86_64-linux.files
           , packages.x86_64-linux.static
-          , subflakes.server.packages.x86_64-linux.server
+          , subflakes.server.packages.x86_64-linux.default
           , subflakes.server.devShells.x86_64-linux.default
           ]
     steps:

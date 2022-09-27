@@ -1,6 +1,6 @@
 { nixpkgs, setup }: rec {
 
-  packages.x86_64-linux.server =
+  packages.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
     let src = nix-gitignore.gitignoreSource [] ./.;
     in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
@@ -97,7 +97,7 @@
         pkgs.xdot
       ];
       packages = haskellPackages: [
-        packages.x86_64-linux.server
+        packages.x86_64-linux.default
       ];
       withHoogle = true;
     };
