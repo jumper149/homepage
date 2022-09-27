@@ -5,6 +5,28 @@
     let src = nix-gitignore.gitignoreSource [] ./.;
     in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
 
+  devShells.x86_64-linux.default =
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    haskellPackages.shellFor {
+      buildInputs = with haskellPackages; [
+        cabal-install
+        calligraphy
+        pkgs.findutils
+        fourmolu
+        ghcid
+        haskell-language-server
+        hlint
+        implicit-hie
+        rnix-lsp
+        weeder
+        pkgs.xdot
+      ];
+      packages = haskellPackages: [
+        packages.x86_64-linux.default
+      ];
+      withHoogle = true;
+    };
+
   checks.x86_64-linux.fourmolu =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
     stdenv.mkDerivation {
@@ -78,28 +100,6 @@
         haskellPackages.graphmod
         pkgs.graphviz
       ];
-    };
-
-  devShells.x86_64-linux.default =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
-    haskellPackages.shellFor {
-      buildInputs = with haskellPackages; [
-        cabal-install
-        calligraphy
-        pkgs.findutils
-        fourmolu
-        ghcid
-        haskell-language-server
-        hlint
-        implicit-hie
-        rnix-lsp
-        weeder
-        pkgs.xdot
-      ];
-      packages = haskellPackages: [
-        packages.x86_64-linux.default
-      ];
-      withHoogle = true;
     };
 
 }
