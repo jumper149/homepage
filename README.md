@@ -65,84 +65,22 @@ Install with a NixOS system flake and enable the service.
 }
 ```
 
+## Subflakes
+
+The source code is split up into subflakes, which have their own development environments.
+
 ## Development
 
-Enter a development shell.
-Development tools are configured in `flake.nix`.
+You can enter a development shell.
 
 ```
-# Set up development environment with nix flakes.
 nix develop
-
-# Generate static files and configuration.
-nix build .#config
-
-# Run to debug.
-HOMEPAGE_CONFIG_FILE=result cabal run homepage
 ```
 
-### Formatting
+## Tests
 
-Use `fourmolu` to format Haskell.
-
-```
-# Format Haskell.
-fourmolu --cabal-default-extensions --mode inplace $(find source -name '*.hs')
-```
-
-### Linting
-
-Linting is configured in `flake.nix`.
+Nix flake checks are used for tests.
 
 ```
-# Test and lint.
 nix flake check
-```
-
-### `weeder`
-
-Running `weeder` should be a part of linting, but requires manual execution at the moment.
-
-```
-# Enter development shell.
-nix develop
-
-# Prepare additional information for weeder.
-cabal clean
-cabal build all
-
-# Run weeder.
-weeder
-```
-
-### `graphmod`
-
-The module dependency graph can be visualised using `graphmod`.
-
-```
-# Enter development shell.
-nix develop
-
-# Run graphmod.
-nix build .#checks.x86_64-linux.graphmod
-
-# View graph with xdot or your PDF viewer.
-xdot result/graphmod.dot
-zathura result/graphmod.pdf
-```
-
-### `calligraphy`
-
-The function call graph can be visualised using `calligraphy`.
-
-```
-# Enter development shell.
-nix develop
-
-# Prepare additional information for calligraphy.
-cabal clean
-cabal build all
-
-# Run calligraphy.
-calligraphy --output-stdout | xdot -
 ```
