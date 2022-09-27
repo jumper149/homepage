@@ -16,6 +16,7 @@
       setup = import ./setup/subflake.nix { };
       server = import ./server/subflake.nix { inherit nixpkgs setup; };
       blog = import ./blog/subflake.nix { inherit nixpkgs setup; };
+      files = import ./files/subflake.nix { inherit nixpkgs setup; };
     };
 
     checks.x86_64-linux.subflakes =
@@ -44,25 +45,8 @@
       builtins.fromJSON (builtins.readFile ./homepage.json) // {
         revision = if self ? rev then self.rev else null;
         directory-blog = "${self.subflakes.blog.packages.x86_64-linux.default}";
-        directory-files = "${self.packages.x86_64-linux.files}";
+        directory-files = "${self.subflakes.files.packages.x86_64-linux.files}";
         directory-static = "${self.packages.x86_64-linux.static}";
-      };
-
-    packages.x86_64-linux.files =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
-      stdenv.mkDerivation {
-        name = "files"; # TODO: Necessary to avoid segmentation fault.
-        src = ./static/files;
-        buildPhase = ''
-        '';
-        installPhase = ''
-          cp --recursive . $out
-        '';
-        buildInputs = [
-        ];
-        nativeBuildInputs = [
-          asciidoctor
-        ];
       };
 
     packages.x86_64-linux.static =
