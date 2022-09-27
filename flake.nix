@@ -12,11 +12,11 @@
 
   outputs = { self, nixpkgs }:
   let
+    # TODO: It would be nice, if `combine` threw an error, when an attribute gets redefined. Currently this is silently allowed.
+    combine = __foldl' (import nixpkgs { system = "x86_64-linux"; }).lib.recursiveUpdate { };
     setup = (import ./setup/subflake.nix) { };
     server = (import ./server/subflake.nix) { inherit nixpkgs setup; };
-  in {
-
-    overlays.default = setup.overlays.default;
+  in combine [ setup server {
 
     packages.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
@@ -188,16 +188,6 @@
         ];
       };
 
-    checks.x86_64-linux.fourmolu = server.checks.x86_64-linux.fourmolu;
-
-    checks.x86_64-linux.hlint = server.checks.x86_64-linux.hlint;
-
-    checks.x86_64-linux.hie-yaml = server.checks.x86_64-linux.hie-yaml;
-
-    checks.x86_64-linux.graphmod = server.checks.x86_64-linux.graphmod;
-
-    devShells.x86_64-linux.default = server.devShells.x86_64-linux.default;
-
     # TODO: Add development shell: asciidoctor pkgs.imagemagick lessc rnix-lsp
 
     nixosModules.default = { config, lib, ... }:
@@ -243,5 +233,5 @@
         };
       };
 
-  };
+  }];
 }
