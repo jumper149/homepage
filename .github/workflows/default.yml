@@ -2,16 +2,18 @@ name: "Default"
 on:
   push:
 jobs:
-  build-homepage:
-    name: "Build Homepage"
+  build:
+    name: "Build"
     runs-on: ubuntu-latest
     strategy:
       matrix:
         output:
           [ packages.x86_64-linux.default
           , packages.x86_64-linux.config
+          , devShells.x86_64-linux.default
           , packages.x86_64-linux.blog
           , packages.x86_64-linux.files
+          , packages.x86_64-linux.server
           , packages.x86_64-linux.static
           ]
     steps:
@@ -21,58 +23,26 @@ jobs:
       uses: cachix/install-nix-action@v17
     - name: "Build"
       run: nix build --print-build-logs .\#${{ matrix.output }}
-  check-homepage:
-    name: "Check Homepage Flake"
+  check:
+    name: "Check Flake"
     runs-on: ubuntu-latest
     steps:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v3.0.2
     - name: "Set up nix"
       uses: cachix/install-nix-action@v17
-    - name: "Check"
-      run: nix flake check --keep-going --print-build-logs
-  build-server:
-    name: "Build Server"
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        output:
-          [ packages.x86_64-linux.server
-          , devShells.x86_64-linux.default
-          ]
-    steps:
-    - name: "Set up GitHub Actions"
-      uses: actions/checkout@v3.0.2
-    - name: "Set up nix"
-      uses: cachix/install-nix-action@v17
-    - name: "Enter server directory"
-      run: cd server
-    - name: "Build"
-      run: nix build --print-build-logs .\#${{ matrix.output }}
-  check-server:
-    name: "Check Server Flake"
-    runs-on: ubuntu-latest
-    steps:
-    - name: "Set up GitHub Actions"
-      uses: actions/checkout@v3.0.2
-    - name: "Set up nix"
-      uses: cachix/install-nix-action@v17
-    - name: "Enter server directory"
-      run: cd server
     - name: "Check"
       run: nix flake check --keep-going --print-build-logs
   # TODO: Run weeder using `nix flake check` instead.
   weeder:
-    name: "Detect dead Haskell code"
+    name: "Detect dead code"
     runs-on: ubuntu-latest
     steps:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v3.0.2
     - name: "Set up nix"
       uses: cachix/install-nix-action@v17
-    - name: "Enter server directory"
-      run: cd server
     - name: "Prepare weeder"
-      run: nix develop --command cabal build all
+      run: nix develop --command "cd server && cabal build all"
     - name: "Run weeder"
-      run: nix develop --command weeder
+      run: nix develop --command "cd server && weeder"
