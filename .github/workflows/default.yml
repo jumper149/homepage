@@ -42,7 +42,9 @@ jobs:
       uses: actions/checkout@v3.0.2
     - name: "Set up nix"
       uses: cachix/install-nix-action@v17
+    - name: "Enter server directory"
+      run: cd server
     - name: "Prepare weeder"
-      run: nix develop --command "cd server && cabal build all"
+      run: nix develop .. --command cabal build all
     - name: "Run weeder"
-      run: nix develop --command "cd server && weeder"
+      run: nix develop .. --command weeder
