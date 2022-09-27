@@ -67,7 +67,13 @@ Install with a NixOS system flake and enable the service.
 
 ## Subflakes
 
-The source code is split up into subflakes, which have their own development environments.
+The source code is split up into subflakes, which also have their own development environments and checks.
+
+* [Setup:](./setup) Nix overlays
+* [Server:](./server) HTTP server executable
+* [Blog:](./blog) Blog articles and related content
+* [Files:](./files) Downloadable files
+* [Static:](./files) Static files directly visible from HTML
 
 ## Development
 
