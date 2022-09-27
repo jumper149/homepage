@@ -10,11 +10,6 @@
       installPhase = ''
         cp --recursive . $out
       '';
-      buildInputs = [
-      ];
-      nativeBuildInputs = [
-        asciidoctor
-      ];
     };
 
 }
