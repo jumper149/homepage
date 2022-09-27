@@ -1,14 +1,4 @@
-{
-  inputs = {
-    nixpkgs = {
-      type = "github";
-      owner = "NixOS";
-      repo = "nixpkgs";
-      ref = "nixpkgs-unstable";
-    };
-  };
-
-  outputs = { self, nixpkgs }: {
+{ nixpkgs }: rec {
 
     overlays.default = final: prev: {
       haskellPackages = prev.haskell.packages.ghc924.extend (haskellFinal: haskellPrev: { # TODO: Using GHC 9.2.4.
@@ -25,12 +15,12 @@
     };
 
     packages.x86_64-linux.server =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ overlays.default ]; };
       let src = nix-gitignore.gitignoreSource [] ./.;
       in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
 
     checks.x86_64-linux.fourmolu =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ overlays.default ]; };
       stdenv.mkDerivation {
         name = "fourmolu"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
@@ -48,7 +38,7 @@
       };
 
     checks.x86_64-linux.hlint =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ overlays.default ]; };
       stdenv.mkDerivation {
         name = "hlint"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
@@ -66,7 +56,7 @@
       };
 
     checks.x86_64-linux.hie-yaml =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ overlays.default ]; };
       stdenv.mkDerivation {
         name = "hie-yaml"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
@@ -84,7 +74,7 @@
       };
 
     checks.x86_64-linux.graphmod =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ overlays.default ]; };
       stdenv.mkDerivation {
         name = "graphmod"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
@@ -105,7 +95,7 @@
       };
 
     devShells.x86_64-linux.default =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.overlays.default ]; };
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ overlays.default ]; };
       haskellPackages.shellFor {
         buildInputs = with haskellPackages; [
           cabal-install
@@ -121,10 +111,9 @@
           pkgs.xdot
         ];
         packages = haskellPackages: [
-          self.packages.x86_64-linux.server
+          packages.x86_64-linux.server
         ];
         withHoogle = true;
       };
 
-  };
 }

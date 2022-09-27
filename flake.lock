@@ -18,25 +18,7 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
-        "server": "server"
-      }
-    },
-    "server": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1,
-        "narHash": "sha256-mf4IMZVyDWG8/te2izb+5UxUDhwBbzhzXhxcU4msiFo=",
-        "path": "./server",
-        "type": "path"
-      },
-      "original": {
-        "path": "./server",
-        "type": "path"
+        "nixpkgs": "nixpkgs"
       }
     }
   },

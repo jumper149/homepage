@@ -8,13 +8,11 @@
       repo = "nixpkgs";
       ref = "nixpkgs-unstable";
     };
-    server = {
-      url = "path:./server";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  outputs = { self, nixpkgs, server }: {
+  outputs = { self, nixpkgs }:
+  let server = (import ./server/subflake.nix) { inherit nixpkgs; };
+  in {
 
     overlays.default = final: prev: {
     };
@@ -188,6 +186,16 @@
           lessc
         ];
       };
+
+    checks.x86_64-linux.fourmolu = server.checks.x86_64-linux.fourmolu;
+
+    checks.x86_64-linux.hlint = server.checks.x86_64-linux.hlint;
+
+    checks.x86_64-linux.hie-yaml = server.checks.x86_64-linux.hie-yaml;
+
+    checks.x86_64-linux.graphmod = server.checks.x86_64-linux.graphmod;
+
+    devShells.x86_64-linux.default = server.devShells.x86_64-linux.default;
 
     # TODO: Add development shell: asciidoctor pkgs.imagemagick lessc rnix-lsp
 
