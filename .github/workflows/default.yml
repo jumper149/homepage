@@ -35,16 +35,16 @@ jobs:
       run: nix flake check --keep-going --print-build-logs
   # TODO: Run weeder using `nix flake check` instead.
   weeder:
-    name: "Detect dead code"
+    name: "Detect dead Haskell code"
     runs-on: ubuntu-latest
     steps:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v3.0.2
     - name: "Set up nix"
       uses: cachix/install-nix-action@v17
-    - name: "Enter server directory"
-      run: cd server
     - name: "Prepare weeder"
-      run: nix develop .. --command cabal build all
+      run: nix develop "..#subflakes.server.devShells.x86_64-linux.default" --command cabal build all
+      working-directory: ./server
     - name: "Run weeder"
-      run: nix develop .. --command weeder
+      run: nix develop "..#subflakes.server.devShells.x86_64-linux.default" --command weeder
+      working-directory: ./server
