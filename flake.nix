@@ -11,8 +11,9 @@
   };
 
   outputs = { self, nixpkgs }:
-  let setup = (import ./setup/subflake.nix) { };
-      server = (import ./server/subflake.nix) { inherit nixpkgs setup; };
+  let
+    setup = (import ./setup/subflake.nix) { };
+    server = (import ./server/subflake.nix) { inherit nixpkgs setup; };
   in {
 
     overlays.default = setup.overlays.default;
