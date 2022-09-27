@@ -223,13 +223,12 @@ library
     , Text.Blaze.Html5.Extra
   hs-source-dirs: source/library
 
-test-suite test-application
+executable homepage-test-application
   import:
     , dependencies
     , language
   build-depends:
     , homepage
-  type: exitcode-stdio-1.0
   main-is: Main.hs
   hs-source-dirs: source/test-application
   ghc-options:
