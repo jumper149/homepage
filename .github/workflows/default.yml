@@ -2,15 +2,6 @@ name: "Default"
 on:
   push:
 jobs:
-  check-nix-version:
-    runs-on: ubuntu-latest
-    steps:
-    - name: "Set up GitHub Actions"
-      uses: actions/checkout@v3.0.2
-    - name: "Set up nix"
-      uses: cachix/install-nix-action@v17
-    - name: "Check"
-      run: nix --version
   build-homepage:
     name: "Build Homepage"
     runs-on: ubuntu-latest
