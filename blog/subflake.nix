@@ -42,7 +42,7 @@
               --attribute author="${config.contact-information.name}" \
               --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
               --attribute imagesdir="$ARTICLE_NAME" \
-              --attribute pdf-theme="style/pdf-theme.yml"
+              --attribute pdf-theme="pdf-theme.yml"
 
             if [ -d "$ARTICLE_NAME" ]
             then
