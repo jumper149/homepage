@@ -23,7 +23,8 @@
       pkgs.mkShell {
         packages =
           let
-            checkableSubflakes = lib.filterAttrs (name: value: __elem "checks" (__attrNames value) && __elem "x86_64-linux" (__attrNames value.checks)) self.subflakes;
+            hasChecks = name: value: __elem "checks" (__attrNames value) && __elem "x86_64-linux" (__attrNames value.checks);
+            checkableSubflakes = lib.filterAttrs hasChecks self.subflakes;
             checksBySubflake = __mapAttrs (name: value: value.checks.x86_64-linux) checkableSubflakes;
             checks = __foldl' (a: b: a ++ b) [ ] (map __attrValues (__attrValues checksBySubflake));
           in checks;
