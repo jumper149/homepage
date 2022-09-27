@@ -13,8 +13,8 @@
   outputs = { self, nixpkgs }: {
 
     subflakes = rec {
-      setup = (import ./setup/subflake.nix) { };
-      server = (import ./server/subflake.nix) { inherit nixpkgs setup; };
+      setup = import ./setup/subflake.nix { };
+      server = import ./server/subflake.nix { inherit nixpkgs setup; };
     };
 
     packages.x86_64-linux.default =
