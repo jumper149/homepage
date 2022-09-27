@@ -5,7 +5,7 @@
     let config = builtins.fromJSON (builtins.readFile ../homepage.json);
     in stdenv.mkDerivation {
       name = "blog"; # TODO: Necessary to avoid segmentation fault.
-      src = ./source;
+      src = ./.;
       # TODO: Use `base-url` to set `homepage`.
       buildPhase = ''
         mkdir -p static
@@ -23,12 +23,12 @@
         compileArticle() {
           ARTICLE_NAME="$1"
 
-          if [ -f "$ARTICLE_NAME.adoc" ]
+          if [ -f "source/$ARTICLE_NAME.adoc" ]
           then
             echo "Article exists: '$ARTICLE_NAME'"
 
             echo "HTML: '$ARTICLE_NAME'"
-            asciidoctor "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
+            asciidoctor "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
               --attribute author="${config.contact-information.name}" \
               --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
               --attribute imagesdir="${(import ../server/source/library/Homepage/Configuration/BaseUrl.nix) config.base-url}/blog/raw/$ARTICLE_NAME" \
@@ -38,16 +38,16 @@
             sed -i 's/^<head>$/<head>\n<base target="_parent">/' "static/$ARTICLE_NAME.html"
 
             echo "PDF: '$ARTICLE_NAME'"
-            asciidoctor-pdf "$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
+            asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
               --attribute author="${config.contact-information.name}" \
               --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
               --attribute imagesdir="$ARTICLE_NAME" \
               --attribute pdf-theme="pdf-theme.yml"
 
-            if [ -d "$ARTICLE_NAME" ]
+            if [ -d "source/$ARTICLE_NAME" ]
             then
               echo "Additional directory exists: '$ARTICLE_NAME'"
-              cp -r $ARTICLE_NAME static
+              cp -r source/$ARTICLE_NAME static
             else
               echo "Additional directory doesn't exist: '$ARTICLE_NAME'"
             fi
