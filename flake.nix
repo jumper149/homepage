@@ -198,7 +198,16 @@
         ];
       };
 
-    # TODO: Add development shell: asciidoctor pkgs.imagemagick lessc rnix-lsp
+    devShells.x86_64-linux.default =
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
+      self.subflakes.server.devShells.x86_64-linux.default.overrideAttrs (oldAttrs: {
+        buildInputs = oldAttrs.buildInputs ++ [
+          pkgs.asciidoctor
+          pkgs.imagemagick
+          pkgs.lessc
+          pkgs.rnix-lsp
+        ];
+      });
 
     nixosModules.default = { config, lib, ... }:
       let
