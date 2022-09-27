@@ -45,7 +45,7 @@
       builtins.fromJSON (builtins.readFile ./homepage.json) // {
         revision = if self ? rev then self.rev else null;
         directory-blog = "${self.subflakes.blog.packages.x86_64-linux.default}";
-        directory-files = "${self.subflakes.files.packages.x86_64-linux.files}";
+        directory-files = "${self.subflakes.files.packages.x86_64-linux.default}";
         directory-static = "${self.packages.x86_64-linux.static}";
       };
 
