@@ -1,4 +1,7 @@
-# Executable
+# Server
+
+The server executable is written in Haskell using wai and servant for the HTTP interface.
+The executable expects environment variables and a configuration file.
 
 ## Development
 
@@ -50,7 +53,7 @@ The module dependency graph can be visualised using `graphmod`.
 nix develop ..#subflakes.server.devShells.x86_64-linux.default
 
 # Run graphmod.
-nix build .#checks.x86_64-linux.graphmod
+nix build ..#subflakes.server.checks.x86_64-linux.graphmod
 
 # View graph with xdot or your PDF viewer.
 xdot result/graphmod.dot
