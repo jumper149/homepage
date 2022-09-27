@@ -72,7 +72,7 @@ The function call graph can be visualised using `calligraphy`.
 
 ```
 # Enter development shell.
-nix develop
+nix develop ..#subflakes.server.devShells.x86_64-linux.default
 
 # Prepare additional information for calligraphy.
 cabal clean
