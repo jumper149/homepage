@@ -18,6 +18,7 @@
       blog = import ./blog/subflake.nix { inherit self nixpkgs setup; };
       files = import ./files/subflake.nix { inherit nixpkgs setup; };
       static = import ./static/subflake.nix { inherit nixpkgs setup; };
+      config = import ./config/subflake.nix { inherit self nixpkgs setup blog files static; };
     };
 
     checks.x86_64-linux.subflakes =
@@ -35,20 +36,8 @@
     packages.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       writeScriptBin "homepage-full" ''
-        HOMEPAGE_CONFIG_FILE="${self.packages.x86_64-linux.config}" ${self.subflakes.server.packages.x86_64-linux.default}/bin/homepage
+        HOMEPAGE_CONFIG_FILE="${self.subflakes.config.packages.x86_64-linux.default}" ${self.subflakes.server.packages.x86_64-linux.default}/bin/homepage
       '';
-
-    packages.x86_64-linux.config =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
-      writeText "homepage.json" (builtins.toJSON self.config);
-
-    config =
-      builtins.fromJSON (builtins.readFile ./homepage.json) // {
-        revision = if self ? rev then self.rev else null;
-        directory-blog = "${self.subflakes.blog.packages.x86_64-linux.default}";
-        directory-files = "${self.subflakes.files.packages.x86_64-linux.default}";
-        directory-static = "${self.subflakes.static.packages.x86_64-linux.default}";
-      };
 
     devShells.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
@@ -64,7 +53,7 @@
     nixosModules.default = { config, lib, ... }:
       let
         cfg = config.services.homepage;
-        homepageConfig = lib.recursiveUpdate self.config cfg.config;
+        homepageConfig = lib.recursiveUpdate self.subflakes.config.config cfg.config;
       in {
         options = {
           services.homepage = {

@@ -2,7 +2,7 @@
 
   packages.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
-    let config = builtins.fromJSON (builtins.readFile ../homepage.json);
+    let config = builtins.fromJSON (builtins.readFile ../config/homepage.json);
     in stdenv.mkDerivation {
       name = "blog"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
