@@ -93,5 +93,43 @@
         };
       };
 
+    packages.x86_64-linux.homepage-test-application =
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
+      writeScriptBin "homepage-test-application-full" ''
+        HOMEPAGE_CONFIG_FILE="${self.subflakes.config.packages.x86_64-linux.default}" ${self.subflakes.server.packages.x86_64-linux.test-application}/bin/homepage-test-application
+      '';
+
+    checks.x86_64-linux.homepage-test-application =
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
+      stdenv.mkDerivation {
+        name = "homepage-test-application"; # TODO: Necessary to avoid segmentation fault.
+        src = ./.;
+        buildPhase = ''
+          INIT_LOG=$(homepage-test-application-full)
+          echo "$INIT_LOG"
+
+          ERROR_LOG=$(echo $"INIT_LOG" | grep "^[Error]")
+          WARN_LOG=$(echo $"INIT_LOG" | grep "^[Warn]")
+
+          if [ -z "$ERROR_LOG"  ]
+          then
+            exit 0
+          else
+            exit 1
+
+          if [ -z "$WARN_LOG"  ]
+          then
+            exit 0
+          else
+            exit 1
+        '';
+        installPhase = ''
+          mkdir $out
+        '';
+        buildInputs = [
+          self.packages.x86_64-linux.homepage-test-application
+        ];
+      };
+
   };
 }

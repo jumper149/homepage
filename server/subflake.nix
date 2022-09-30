@@ -5,6 +5,11 @@
     let src = nix-gitignore.gitignoreSource [] ./.;
     in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
 
+  packages.x86_64-linux.test-application =
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    let src = nix-gitignore.gitignoreSource [] ./.;
+    in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
+
   devShells.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
     haskellPackages.shellFor {
