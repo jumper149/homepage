@@ -14,11 +14,12 @@ import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
 import Control.Monad.Trans.Identity
+import Data.ByteString qualified as BS
 import Data.Kind
 import Data.Map qualified as M
 import Data.Maybe
 import Data.Text qualified as T
-import Data.Text.IO qualified as T
+import Data.Text.Encoding qualified as T
 import UnliftIO qualified
 
 type BlogT :: (Type -> Type) -> Type -> Type
@@ -31,7 +32,7 @@ instance (MonadConfigured m, MonadLogger m, MonadUnliftIO m) => MonadBlog (BlogT
     dir <- lift $ configDirectoryBlog <$> configuration
     let file = dir <> "/" <> T.unpack (unBlogId blogId) <> ".html"
     lift $
-      UnliftIO.catchIO (liftIO $ Just <$> T.readFile file) $ \err -> do
+      UnliftIO.catchIO (liftIO $ Just . T.decodeUtf8 <$> BS.readFile file) $ \err -> do
         logError $ "Failed to read HTML for blog entry '" <> T.pack (show blogId) <> "' with '" <> T.pack (show err) <> "'."
         pure Nothing
 
