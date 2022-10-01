@@ -69,12 +69,12 @@ Install with a NixOS system flake and enable the service.
 
 The source code is split up into subflakes, which also have their own development environments and checks.
 
-* [Setup:](./setup) Nix overlays
+* [Setup:](./setup) Nix overlays and configuration
 * [Server:](./server) HTTP server executable
 * [Blog:](./blog) Blog articles and related content
 * [Files:](./files) Downloadable files
 * [Static:](./files) Static files directly visible from HTML
-* [Config:](./config) Runtime configuration
+* [Config:](./config) Runtime configuration with static files
 * [Final:](./final) Wrapper and NixOS module
 
 ## Development
