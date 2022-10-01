@@ -2,11 +2,9 @@
 
   packages.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
-    let config = builtins.fromJSON (builtins.readFile ../config/homepage.json);
-    in stdenv.mkDerivation {
+    stdenv.mkDerivation {
       name = "blog"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
-      # TODO: Use `base-url` to set `homepage`.
       buildPhase = ''
         mkdir -p static
 
@@ -15,7 +13,7 @@
           "--safe-mode server"
           "--attribute source-highlighter=rouge"
           "--attribute prewrap!"
-          "--attribute email=${config.contact-information.email-address}"
+          "--attribute email=${config.email-address}"
           "--attribute revnumber="${if self ? rev then self.rev else "unknown-revision"}""
         )
         ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
@@ -29,9 +27,9 @@
 
             echo "HTML: '$ARTICLE_NAME'"
             asciidoctor "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
-              --attribute author="${config.contact-information.name}" \
-              --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
-              --attribute imagesdir="${(import ../server/source/library/Homepage/Configuration/BaseUrl.nix) config.base-url}/blog/raw/$ARTICLE_NAME" \
+              --attribute author="${config.name}" \
+              --attribute homepage="${config.homepage-url}[${config.homepage-label}]" \
+              --attribute imagesdir="${config.base-url}/blog/raw/$ARTICLE_NAME" \
               --backend html5 \
               --attribute nofooter \
               --attribute webfonts!
@@ -39,8 +37,8 @@
 
             echo "PDF: '$ARTICLE_NAME'"
             asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
-              --attribute author="${config.contact-information.name}" \
-              --attribute homepage="https://felixspringer.xyz[${config.contact-information.homepage-label}]" \
+              --attribute author="${config.name}" \
+              --attribute homepage="${config.homepage-url}[${config.homepage-label}]" \
               --attribute imagesdir="$ARTICLE_NAME" \
               --attribute pdf-theme="pdf-theme.yml"
 
@@ -72,6 +70,8 @@
       ];
     };
 
+  config = builtins.fromJSON (builtins.readFile ./config.json);
+
   entries = builtins.fromJSON (builtins.readFile ./entries.json);
 
   devShells.x86_64-linux.default =
@@ -88,14 +88,14 @@
               "--safe-mode server"
               "--attribute source-highlighter=rouge"
               "--attribute prewrap!"
-              "--attribute email=roman-bestseller@example.com"
+              "--attribute email=${config.email-address}"
               "--attribute revnumber="unknown-revision""
             )
             ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
 
             asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "out/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
-              --attribute author="Roman Bestseller" \
-              --attribute homepage="https://example.com[example.com]" \
+              --attribute author="${config.name}" \
+              --attribute homepage="${config.homepage-url}[${config.homepage-label}]" \
               --attribute imagesdir="$ARTICLE_NAME" \
               --attribute pdf-theme="pdf-theme.yml"
           ''
