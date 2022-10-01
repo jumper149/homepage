@@ -13,7 +13,7 @@
           "--safe-mode server"
           "--attribute source-highlighter=rouge"
           "--attribute prewrap!"
-          "--attribute email=${config.email-address}"
+          "--attribute email=${setup.config.contact-information.email-address}"
           "--attribute revnumber="${if self ? rev then self.rev else "unknown-revision"}""
         )
         ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
@@ -27,9 +27,9 @@
 
             echo "HTML: '$ARTICLE_NAME'"
             asciidoctor "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
-              --attribute author="${config.name}" \
-              --attribute homepage="${config.homepage-url}[${config.homepage-label}]" \
-              --attribute imagesdir="${config.base-url}/blog/raw/$ARTICLE_NAME" \
+              --attribute author="${setup.config.contact-information.name}" \
+              --attribute homepage="${import ../server/source/library/Homepage/Configuration/BaseUrl.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
+              --attribute imagesdir="${import ../server/source/library/Homepage/Configuration/BaseUrl.nix setup.config.base-url}/blog/raw/$ARTICLE_NAME" \
               --backend html5 \
               --attribute nofooter \
               --attribute webfonts!
@@ -37,8 +37,8 @@
 
             echo "PDF: '$ARTICLE_NAME'"
             asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
-              --attribute author="${config.name}" \
-              --attribute homepage="${config.homepage-url}[${config.homepage-label}]" \
+              --attribute author="${setup.config.contact-information.name}" \
+              --attribute homepage="${import ../server/source/library/Homepage/Configuration/BaseUrl.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
               --attribute imagesdir="$ARTICLE_NAME" \
               --attribute pdf-theme="pdf-theme.yml"
 
@@ -88,14 +88,14 @@
               "--safe-mode server"
               "--attribute source-highlighter=rouge"
               "--attribute prewrap!"
-              "--attribute email=${config.email-address}"
+              "--attribute email=${setup.config.contact-information.email-address}"
               "--attribute revnumber="unknown-revision""
             )
             ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
 
             asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "out/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
-              --attribute author="${config.name}" \
-              --attribute homepage="${config.homepage-url}[${config.homepage-label}]" \
+              --attribute author="${setup.config.contact-information.name}" \
+              --attribute homepage="${import ../server/source/library/Homepage/Configuration/BaseUrl.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
               --attribute imagesdir="$ARTICLE_NAME" \
               --attribute pdf-theme="pdf-theme.yml"
           ''
