@@ -77,6 +77,27 @@
     pkgs.mkShell {
       packages = [
         pkgs.asciidoctor
+        (
+          writeScriptBin "asciidoctor-pdf-blog" ''
+            ARTICLE_NAME="$1"
+
+            ASCIIDOCTOR_FLAG_LIST=(
+              "--doctype article"
+              "--safe-mode server"
+              "--attribute source-highlighter=rouge"
+              "--attribute prewrap!"
+              "--attribute email=roman-bestseller@example.com"
+              "--attribute revnumber="unknown-revision""
+            )
+            ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
+
+            asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "out/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
+              --attribute author="Roman Bestseller" \
+              --attribute homepage="https://example.com[example.com]" \
+              --attribute imagesdir="$ARTICLE_NAME" \
+              --attribute pdf-theme="pdf-theme.yml"
+          ''
+        )
       ];
     };
 
