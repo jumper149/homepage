@@ -28,8 +28,8 @@
             echo "HTML: '$ARTICLE_NAME'"
             asciidoctor "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
               --attribute author="${setup.config.contact-information.name}" \
-              --attribute homepage="${import ../server/source/library/Homepage/Configuration/BaseUrl.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
-              --attribute imagesdir="${import ../server/source/library/Homepage/Configuration/BaseUrl.nix setup.config.base-url}/blog/raw/$ARTICLE_NAME" \
+              --attribute homepage="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
+              --attribute imagesdir="${import ./base-url.nix setup.config.base-url}/blog/raw/$ARTICLE_NAME" \
               --backend html5 \
               --attribute nofooter \
               --attribute webfonts!
@@ -38,7 +38,7 @@
             echo "PDF: '$ARTICLE_NAME'"
             asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
               --attribute author="${setup.config.contact-information.name}" \
-              --attribute homepage="${import ../server/source/library/Homepage/Configuration/BaseUrl.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
+              --attribute homepage="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
               --attribute imagesdir="$ARTICLE_NAME" \
               --attribute pdf-theme="pdf-theme.yml"
 
@@ -95,7 +95,7 @@
 
             asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "out/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
               --attribute author="${setup.config.contact-information.name}" \
-              --attribute homepage="${import ../server/source/library/Homepage/Configuration/BaseUrl.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
+              --attribute homepage="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
               --attribute imagesdir="$ARTICLE_NAME" \
               --attribute pdf-theme="pdf-theme.yml"
           ''
