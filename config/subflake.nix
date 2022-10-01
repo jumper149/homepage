@@ -5,7 +5,7 @@
     writeText "homepage.json" (builtins.toJSON config);
 
   config =
-    builtins.fromJSON (builtins.readFile ./homepage.json) // {
+    setup.config // {
       revision = if self ? rev then self.rev else null;
       directory-blog = "${blog.packages.x86_64-linux.default}";
       directory-files = "${files.packages.x86_64-linux.default}";

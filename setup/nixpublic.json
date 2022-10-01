@@ -1,8 +1,4 @@
-{ "revision": null
-, "directory-blog": "./static/blog"
-, "directory-files": "./static/files"
-, "directory-static": "./static/static"
-, "port": 8008
+{ "port": 8008
 , "base-url":
   { "scheme": "https"
   , "authority":
@@ -34,8 +30,6 @@
   , "hackage-username": "jumper149"
   , "aur-username": "jumper149"
   }
-, "blog-entries": {}
 , "blog-preview-max-length": 5
 , "atom-max-length": null
-, "file-entries": []
 }

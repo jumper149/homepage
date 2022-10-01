@@ -14,4 +14,6 @@
     });
   };
 
+  config = builtins.fromJSON (builtins.readFile ./nixpublic.json);
+
 }
