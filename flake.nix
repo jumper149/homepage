@@ -19,6 +19,7 @@
       files = import ./files/subflake.nix { inherit nixpkgs setup; };
       static = import ./static/subflake.nix { inherit nixpkgs setup; };
       config = import ./config/subflake.nix { inherit self nixpkgs setup blog files static; };
+      final = import ./final/subflake.nix { inherit nixpkgs setup server config; };
     };
 
     checks.x86_64-linux.subflakes =
@@ -33,11 +34,7 @@
           in checks;
       };
 
-    packages.x86_64-linux.default =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
-      writeScriptBin "homepage-full" ''
-        HOMEPAGE_CONFIG_FILE="${self.subflakes.config.packages.x86_64-linux.default}" ${self.subflakes.server.packages.x86_64-linux.default}/bin/homepage
-      '';
+    packages.x86_64-linux.default = self.subflakes.final.packages.x86_64-linux.default;
 
     devShells.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
@@ -50,48 +47,7 @@
         ];
       });
 
-    nixosModules.default = { config, lib, ... }:
-      let
-        cfg = config.services.homepage;
-        homepageConfig = lib.recursiveUpdate self.subflakes.config.config cfg.config;
-      in {
-        options = {
-          services.homepage = {
-            enable = lib.mkEnableOption "Felix Springer's Homepage.";
-            config = lib.mkOption {
-              default = { };
-              type = with lib.types; attrsOf anything;
-              description = ''
-                Configuration, that will be merged with default options and serialized to JSON.
-                `lib.recursiveUpdate` is used to merge these changes.
-              '';
-            };
-          };
-        };
-        config = lib.mkIf cfg.enable {
-          environment = {
-            etc."homepage.json".text = builtins.toJSON homepageConfig;
-          };
-          systemd.services.homepage = {
-            wantedBy = [ "multi-user.target" ];
-            after = [ "network.target" ];
-            description = "Homepage";
-            environment = {
-              HOMEPAGE_CONFIG_FILE = "/etc/homepage.json";
-              HOMEPAGE_LOG_FILE = "/var/log/homepage/access.log";
-              HOMEPAGE_LOG_LEVEL = "LevelInfo";
-            };
-            restartTriggers = [
-              config.environment.etc."homepage.json".source
-            ];
-            serviceConfig = {
-              DynamicUser = true;
-              ExecStart = "${self.subflakes.server.packages.x86_64-linux.default}/bin/homepage";
-              LogsDirectory = "homepage";
-            };
-          };
-        };
-      };
+    nixosModules.default = self.subflakes.final.nixosModules.default;
 
     packages.x86_64-linux.homepage-test-application =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
