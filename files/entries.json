@@ -1,0 +1,47 @@
+[ { "identifier": "Felix_Springer-cv"
+  , "formats":
+    [ { "name": "PDF"
+      , "extension": "pdf"
+      }
+    ]
+  , "name": "curriculum vitae"
+  , "section": null
+  , "timestamp": "2022-03-10"
+  }
+, { "identifier": "Felix_Springer-publickey-mail"
+  , "formats":
+    [ { "name": "GPG"
+      , "extension": "gpg"
+      }
+    ]
+  , "name": "mail signing key"
+  , "section": null
+  , "timestamp": "2020-09-02"
+  }
+, { "identifier": "Felix_Springer-Unitary"
+  , "formats":
+    [ { "name": "WAV"
+      , "extension": "wav"
+      }
+    , { "name": "FLAC"
+      , "extension": "flac"
+      }
+    , { "name": "MP3"
+      , "extension": "mp3"
+      }
+    ]
+  , "name": "Felix Springer - Unitary"
+  , "section": "Music"
+  , "timestamp": "2022-08-18"
+  }
+, { "identifier": "Felix_Springer-Storage_Register_Design_for_an_Ion_Trap_Quantum_Processor"
+  , "formats":
+    [ { "name": "PDF"
+      , "extension": "pdf"
+      }
+    ]
+  , "name": "Storage Register Design for an Ion Trap Quantum Processor"
+  , "section": "Publications"
+  , "timestamp": "2021-04-07"
+  }
+]

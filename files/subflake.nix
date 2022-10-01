@@ -12,4 +12,6 @@
       '';
     };
 
+  entries = builtins.fromJSON (builtins.readFile ./entries.json);
+
 }
