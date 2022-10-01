@@ -10,6 +10,7 @@
       directory-blog = "${blog.packages.x86_64-linux.default}";
       directory-files = "${files.packages.x86_64-linux.default}";
       directory-static = "${static.packages.x86_64-linux.default}";
+      blog-entries = blog.entries;
     };
 
 }
