@@ -3,6 +3,19 @@
 The server executable is written in Haskell using wai and servant for the HTTP interface.
 The executable expects environment variables and a configuration file.
 
+## Configuration
+
+Environment variables and a configuration file change the runtime behaviour.
+
+### Environment
+
+Environment variables are checked early during the initialization.
+The options are set (./source/library/Homepage/Environment.hs)[here].
+
+### Configuration file
+
+The configuration file is written in JSON and is specified in (./source/library/Homepage/Configuration.hs)[here]
+
 ## Development
 
 ```
