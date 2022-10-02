@@ -10,11 +10,11 @@ Environment variables and a configuration file change the runtime behaviour.
 ### Environment
 
 Environment variables are checked early during the initialization.
-The options are set (./source/library/Homepage/Environment.hs)[here].
+The options are set [here](./source/library/Homepage/Environment.hs).
 
 ### Configuration file
 
-The configuration file is written in JSON and is specified in (./source/library/Homepage/Configuration.hs)[here]
+The configuration file is written in JSON and is specified in [here](./source/library/Homepage/Configuration.hs).
 
 ## Development
 
