@@ -6,6 +6,14 @@
       HOMEPAGE_CONFIG_FILE="${config.packages.x86_64-linux.default}" ${server.packages.x86_64-linux.default}/bin/homepage
     '';
 
+  packages.x86_64-linux.homepage-test-application =
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    writeScriptBin "homepage-test-application-full" ''
+      export HOMEPAGE_CONFIG_FILE="${config.packages.x86_64-linux.default}"
+      export HOMEPAGE_LOG_LEVEL=LevelWarn
+      ${server.packages.x86_64-linux.test-application}/bin/homepage-test-application
+    '';
+
   nixosModules.default = let configSubflake = config; in { config, lib, ... }:
     let
       cfg = config.services.homepage;
@@ -48,14 +56,6 @@
         };
       };
     };
-
-  packages.x86_64-linux.homepage-test-application =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
-    writeScriptBin "homepage-test-application-full" ''
-      export HOMEPAGE_CONFIG_FILE="${config.packages.x86_64-linux.default}"
-      export HOMEPAGE_LOG_LEVEL=LevelWarn
-      ${server.packages.x86_64-linux.test-application}/bin/homepage-test-application
-    '';
 
   checks.x86_64-linux.homepage-test-application =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
