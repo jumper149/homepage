@@ -11,7 +11,7 @@
     writeScriptBin "homepage-test-application-full" ''
       export HOMEPAGE_CONFIG_FILE="${config.packages.x86_64-linux.default}"
       export HOMEPAGE_LOG_LEVEL=LevelWarn
-      ${server.packages.x86_64-linux.test-application}/bin/homepage-test-application
+      ${server.packages.x86_64-linux.default}/bin/homepage-test-application
     '';
 
   nixosModules.default = let configSubflake = config; in { config, lib, ... }:
