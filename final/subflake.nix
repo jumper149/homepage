@@ -17,15 +17,15 @@
   overlays.default = final: prev: {
     homepage-jumper149.exe = server.packages.x86_64-linux.default;
     homepage-jumper149.full = packages.x86_64-linux.default;
-    homepage-jumper149.config = config.config;
+    homepage-jumper149.config.default = config.config;
   };
 
-  nixosModules.default = let configSubflake = config; in { config, lib, ... }:
-    let
-      cfg = config.services.homepage;
-      homepageConfig = lib.recursiveUpdate configSubflake.config cfg.config;
-    in {
+  nixosModules.default = { config, lib, pkgs, ... }:
+    {
       options = {
+        nixpkgs.overlays = [
+          overlays.default
+        ];
         services.homepage = {
           enable = lib.mkEnableOption "Felix Springer's Homepage.";
           config = lib.mkOption {
@@ -38,9 +38,11 @@
           };
         };
       };
-      config = lib.mkIf cfg.enable {
+      config = lib.mkIf config.services.homepage.enable {
         environment = {
-          etc."homepage.json".text = builtins.toJSON homepageConfig;
+          etc."homepage.json".text = builtins.toJSON (
+            lib.recursiveUpdate pkgs.homepage-jumper149.config.default config.services.homepage.config
+          );
         };
         systemd.services.homepage = {
           wantedBy = [ "multi-user.target" ];
@@ -56,7 +58,7 @@
           ];
           serviceConfig = {
             DynamicUser = true;
-            ExecStart = "${server.packages.x86_64-linux.default}/bin/homepage";
+            ExecStart = "${pkgs.homepage-jumper149.exe}/bin/homepage";
             LogsDirectory = "homepage";
           };
         };
