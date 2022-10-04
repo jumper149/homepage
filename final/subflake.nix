@@ -15,9 +15,11 @@
     '';
 
   overlays.default = final: prev: {
-    homepage-jumper149.exe = server.packages.x86_64-linux.default;
-    homepage-jumper149.full = packages.x86_64-linux.default;
-    homepage-jumper149.config.default = config.config;
+    homepage-jumper149 = {
+      exe = server.packages.x86_64-linux.default;
+      full = packages.x86_64-linux.default;
+      config.default = config.config;
+    };
   };
 
   nixosModules.default = import ./module.nix {
