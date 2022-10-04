@@ -14,6 +14,12 @@
       ${server.packages.x86_64-linux.default}/bin/homepage-test-application
     '';
 
+  overlays.default = final: prev: {
+    homepage-jumper149.exe = server.packages.x86_64-linux.default;
+    homepage-jumper149.full = packages.x86_64-linux.default;
+    homepage-jumper149.config = config.config;
+  };
+
   nixosModules.default = let configSubflake = config; in { config, lib, ... }:
     let
       cfg = config.services.homepage;
