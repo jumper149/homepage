@@ -2,7 +2,7 @@
   { config, lib, pkgs, ... }: {
     options = {
       nixpkgs.overlays = [
-        overlays.default
+        finalOverlay
       ];
       services.homepage = {
         enable = lib.mkEnableOption "Felix Springer's Homepage.";
