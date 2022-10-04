@@ -1,9 +1,6 @@
 { finalOverlay }:
   { config, lib, pkgs, ... }: {
     options = {
-      nixpkgs.overlays = [
-        finalOverlay
-      ];
       services.homepage = {
         enable = lib.mkEnableOption "Felix Springer's Homepage.";
         config = lib.mkOption {
@@ -22,6 +19,9 @@
           lib.recursiveUpdate pkgs.homepage-jumper149.config.default config.services.homepage.config
         );
       };
+      nixpkgs.overlays = [
+        finalOverlay
+      ];
       systemd.services.homepage = {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
