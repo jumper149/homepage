@@ -47,6 +47,8 @@
           ;
       });
 
+    overlays.default = self.subflakes.final.overlays.default;
+
     nixosModules.default = self.subflakes.final.nixosModules.default;
 
   };
