@@ -50,11 +50,11 @@ runApplicationT app = do
     logInfo "Startup."
     acquireEnvironment
 
-  let runAppStackT =
+  let runTransformers =
         RunNilT
           :..> runEnvironmentT env
           :..> runAppTimedLoggingT . (traverse_ logLine preLog >>)
           :..> runAppConfiguredT
           :..> runAppBlogT
 
-  runStackT runAppStackT $ unApplicationT app
+  runStackT runTransformers $ unApplicationT app

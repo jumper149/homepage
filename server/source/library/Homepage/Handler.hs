@@ -34,8 +34,8 @@ newtype HandlerT m a = HandlerT {unHandlerT :: StackT Transformers m a}
   deriving newtype (MonadBlog)
 
 runHandlerT :: MonadLogger m => Hash -> HandlerT m a -> m a
-runHandlerT randomHash = runStackT runHandlerStackT . unHandlerT
+runHandlerT randomHash = runStackT runTransformers . unHandlerT
  where
-  runHandlerStackT =
+  runTransformers =
     RunNilT
       :..> runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)
