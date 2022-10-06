@@ -20,7 +20,8 @@ application404 _req rsp = do
   html404' <- html404
   logInfo "Serve generic 404 page."
   rsp . responseBuilder status404 [(,) "Content-Type" "text/html"] $
-    lazyByteString $ renderHtml html404'
+    lazyByteString $
+      renderHtml html404'
 
 html404 ::
   MonadConfigured m =>

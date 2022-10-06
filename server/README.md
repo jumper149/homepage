@@ -38,7 +38,7 @@ Use `fourmolu` to format Haskell.
 nix develop ..#subflakes.server.devShells.x86_64-linux.default
 
 # Format Haskell.
-fourmolu --cabal-default-extensions --mode inplace $(find source -name '*.hs')
+fourmolu --mode inplace ./source
 ```
 
 ### `weeder`

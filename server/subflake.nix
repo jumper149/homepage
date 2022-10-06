@@ -32,7 +32,7 @@
       name = "fourmolu"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
       buildPhase = ''
-        fourmolu --cabal-default-extensions --mode check $(find source -name '*.hs')
+        fourmolu --mode check ./source
       '';
       installPhase = ''
         mkdir $out

@@ -38,4 +38,5 @@ runHandlerT randomHash = runStackT runTransformers . unHandlerT
  where
   runTransformers =
     RunNilT
-      :..> runRequestHashT randomHash . (logInfo "Starting HTTP request handler." >>)
+      :..> runRequestHashT randomHash
+      . (logInfo "Starting HTTP request handler." >>)

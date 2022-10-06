@@ -17,7 +17,7 @@ data Routes route = Routes
   , routeArticle ::
       route
         :- Capture "article" BlogId
-        :> UVerb GET '[HTML] [WithStatus 200 Html, WithStatus 404 Html]
+          :> UVerb GET '[HTML] [WithStatus 200 Html, WithStatus 404 Html]
   , routeOverview :: route :- Get '[HTML] Html
   }
   deriving stock (Generic)

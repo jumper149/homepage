@@ -53,7 +53,8 @@ runApplicationT app = do
   let runTransformers =
         RunNilT
           :..> runEnvironmentT env
-          :..> runAppTimedLoggingT . (traverse_ logLine preLog >>)
+          :..> runAppTimedLoggingT
+          . (traverse_ logLine preLog >>)
           :..> runAppConfiguredT
           :..> runAppBlogT
 
