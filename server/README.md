@@ -1,7 +1,7 @@
 # Server
 
 The server executable is written in Haskell using wai and servant for the HTTP interface.
-The executable expects environment variables and a configuration file.
+This application uses mtl-style effects.
 
 ## Configuration
 
