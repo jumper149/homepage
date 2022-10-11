@@ -6,52 +6,22 @@
       name = "blog"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
       buildPhase = ''
-        mkdir -p static
-
-        ASCIIDOCTOR_FLAG_LIST=(
-          "--doctype article"
-          "--safe-mode server"
-          "--attribute source-highlighter=rouge"
-          "--attribute prewrap!"
-          "--attribute email=${setup.config.contact-information.email-address}"
-          "--attribute revnumber="${if self ? rev then self.rev else "unknown-revision"}""
-        )
-        ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
+        export AUTHOR="${setup.config.contact-information.name}"
+        export BASEURL="${import ./base-url.nix setup.config.base-url}"
+        export EMAIL="${setup.config.contact-information.email-address}"
+        export HOMEPAGE="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]"
+        export REVNUMBER="${if self ? rev then self.rev else "unknown-revision"}"
 
         compileArticle() {
           ARTICLE_NAME="$1"
-
-          if [ -f "source/$ARTICLE_NAME.adoc" ]
+          make "build/$ARTICLE_NAME.html"
+          make "build/$ARTICLE_NAME.pdf"
+          if [ -d "source/$ARTICLE_NAME" ]
           then
-            echo "Article exists: '$ARTICLE_NAME'"
-
-            echo "HTML: '$ARTICLE_NAME'"
-            asciidoctor "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.html" $ASCIIDOCTOR_FLAGS \
-              --attribute author="${setup.config.contact-information.name}" \
-              --attribute homepage="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
-              --attribute imagesdir="${import ./base-url.nix setup.config.base-url}/blog/raw/$ARTICLE_NAME" \
-              --backend html5 \
-              --attribute nofooter \
-              --attribute webfonts!
-            sed -i 's/^<head>$/<head>\n<base target="_parent">/' "static/$ARTICLE_NAME.html"
-
-            echo "PDF: '$ARTICLE_NAME'"
-            asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "static/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
-              --attribute author="${setup.config.contact-information.name}" \
-              --attribute homepage="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
-              --attribute imagesdir="$ARTICLE_NAME" \
-              --attribute pdf-theme="pdf-theme.yml"
-
-            if [ -d "source/$ARTICLE_NAME" ]
-            then
-              echo "Additional directory exists: '$ARTICLE_NAME'"
-              cp -r source/$ARTICLE_NAME static
-            else
-              echo "Additional directory doesn't exist: '$ARTICLE_NAME'"
-            fi
-            else
-              echo "Article doesn't exist: '$ARTICLE_NAME'"
-              exit 2
+            echo "Additional directory exists: '$ARTICLE_NAME'"
+            cp -r source/$ARTICLE_NAME build
+          else
+            echo "Additional directory doesn't exist: '$ARTICLE_NAME'"
           fi
         }
 
@@ -61,7 +31,7 @@
         done
       '';
       installPhase = ''
-        cp --recursive static $out
+        cp --recursive build $out
       '';
       buildInputs = [
       ];
@@ -79,27 +49,6 @@
     pkgs.mkShell {
       packages = [
         pkgs.asciidoctor
-        (
-          writeScriptBin "asciidoctor-pdf-blog" ''
-            ARTICLE_NAME="$1"
-
-            ASCIIDOCTOR_FLAG_LIST=(
-              "--doctype article"
-              "--safe-mode server"
-              "--attribute source-highlighter=rouge"
-              "--attribute prewrap!"
-              "--attribute email=${setup.config.contact-information.email-address}"
-              "--attribute revnumber="unknown-revision""
-            )
-            ASCIIDOCTOR_FLAGS="$(for flag in "''${ASCIIDOCTOR_FLAG_LIST[*]}"; do echo $flag; done)"
-
-            asciidoctor-pdf "source/$ARTICLE_NAME.adoc" --out-file "out/$ARTICLE_NAME.pdf" $ASCIIDOCTOR_FLAGS \
-              --attribute author="${setup.config.contact-information.name}" \
-              --attribute homepage="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]" \
-              --attribute imagesdir="$ARTICLE_NAME" \
-              --attribute pdf-theme="pdf-theme.yml"
-          ''
-        )
       ];
     };
 

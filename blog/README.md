@@ -9,5 +9,5 @@ The articles are generated using Asciidoctor.
 nix develop ..#subflakes.blog.devShells.x86_64-linux.default
 
 # Generate a PDF preview of a new article `example.adoc`.
-asciidoctor-pdf-blog example
+make build/example.pdf
 ```
