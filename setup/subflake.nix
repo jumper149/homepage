@@ -1,4 +1,4 @@
-{ }: rec {
+{ self }: rec {
 
   overlays.default = final: prev: {
     haskellPackages = prev.haskell.packages.ghc924.extend (haskellFinal: haskellPrev: { # TODO: Using GHC 9.2.4.

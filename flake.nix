@@ -12,15 +12,19 @@
 
   outputs = { self, nixpkgs }: {
 
-    subflakes = rec {
-      setup = import ./setup/subflake.nix { };
-      server = import ./server/subflake.nix { self = { subflakes = { inherit setup; }; }; inherit nixpkgs; };
-      blog = import ./blog/subflake.nix { self = { subflakes = { inherit setup; }; inherit (self) rev; }; inherit nixpkgs; };
-      files = import ./files/subflake.nix { self = { subflakes = { inherit setup; }; }; inherit nixpkgs; };
-      static = import ./static/subflake.nix { self = { subflakes = { inherit setup; }; }; inherit nixpkgs; };
-      config = import ./config/subflake.nix { self = { subflakes = { inherit setup blog files static; }; inherit (self) rev; }; inherit nixpkgs; };
-      final = import ./final/subflake.nix { self = { subflakes = { inherit setup server config; }; }; inherit nixpkgs; };
-    };
+    subflakes =
+      let
+        importSubflake = path: inputs: subflakeInputs:
+          import path (inputs // { self = (if self ? rev then { inherit (self) rev; } else { }) // { subflakes = subflakeInputs; }; });
+      in rec {
+          setup = importSubflake ./setup/subflake.nix { } { };
+          server = importSubflake ./server/subflake.nix { inherit nixpkgs; } { inherit setup; };
+          blog = importSubflake ./blog/subflake.nix { inherit nixpkgs; } { inherit setup; };
+          files = importSubflake ./files/subflake.nix { inherit nixpkgs; } { inherit setup; };
+          static = importSubflake ./static/subflake.nix { inherit nixpkgs; } { inherit setup; };
+          config = importSubflake ./config/subflake.nix { inherit nixpkgs; } { inherit setup blog files static; };
+          final = importSubflake ./final/subflake.nix { inherit nixpkgs; } { inherit setup server config; };
+        };
 
     packages.x86_64-linux.default = self.subflakes.final.packages.x86_64-linux.default;
 
