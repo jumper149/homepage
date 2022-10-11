@@ -41,6 +41,7 @@
       in stdenv.mkDerivation {
         name = "homepage-development"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
+        installPhase = "touch $out";
         buildInputs = fullBuildInputs;
         nativeBuildInputs = fullNativeBuildInputs;
         shellHook = fullShellHook;
