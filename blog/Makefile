@@ -32,15 +32,27 @@ ASCIIDOCTOR_FLAGS = $\
 	--attribute homepage="$(HOMEPAGE)" $\
 	--attribute revnumber=$(REVNUMBER)
 
+ASCIIDOCTOR_HTML_FLAGS = $\
+	--out-file "$(BUILD)/$*.html" $\
+	--attribute imagesdir="$(BASEURL)/blog/raw/$*" $\
+	--backend html5 $\
+	--attribute nofooter $\
+	--attribute webfonts!
+
+ASCIIDOCTOR_PDF_FLAGS = $\
+	--out-file "$(BUILD)/$*.pdf" $\
+	--attribute imagesdir="$*" $\
+	--attribute pdf-theme="pdf-theme.yml"
+
 $(BUILD)/%.html: $(SOURCE)/%.adoc
 	mkdir -p $(BUILD)
-	asciidoctor "$(SOURCE)/$*.adoc" --out-file "$(BUILD)/$*.html" $(ASCIIDOCTOR_FLAGS) --attribute imagesdir="$(BASEURL)/blog/raw/$*" --backend html5 --attribute nofooter --attribute webfonts!
+	asciidoctor "$(SOURCE)/$*.adoc" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_HTML_FLAGS)
 	sed -i 's/^<head>$$/<head>\n<base target="_parent">/' "$(BUILD)/$*.html"
 	if [ -d "$(SOURCE)/$*" ]; then cp --recursive "$(SOURCE)/$*" "$(BUILD)/$*"; fi
 
 $(BUILD)/%.pdf: $(SOURCE)/%.adoc
 	mkdir -p $(BUILD)
-	asciidoctor-pdf "$(SOURCE)/$*.adoc" --out-file "$(BUILD)/$*.pdf" $(ASCIIDOCTOR_FLAGS) --attribute imagesdir="$*" --attribute pdf-theme="pdf-theme.yml"
+	asciidoctor-pdf "$(SOURCE)/$*.adoc" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_PDF_FLAGS)
 
 .PHONY: clean
 clean:
