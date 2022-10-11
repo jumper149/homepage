@@ -6,11 +6,7 @@
       name = "blog"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
       buildPhase = ''
-        export AUTHOR="${setup.config.contact-information.name}"
-        export BASEURL="${import ./base-url.nix setup.config.base-url}"
-        export EMAIL="${setup.config.contact-information.email-address}"
-        export HOMEPAGE="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]"
-        export REVNUMBER="${if self ? rev then self.rev else "unknown-revision"}"
+        source ${packages.x86_64-linux.initBuildEnvironment}
 
         compileArticle() {
           ARTICLE_NAME="$1"
@@ -40,6 +36,16 @@
       ];
     };
 
+  packages.x86_64-linux.initBuildEnvironment =
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    writeShellScript "environmentVariables" ''
+      export AUTHOR="${setup.config.contact-information.name}"
+      export BASEURL="${import ./base-url.nix setup.config.base-url}"
+      export EMAIL="${setup.config.contact-information.email-address}"
+      export HOMEPAGE="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]"
+      export REVNUMBER="${if self ? rev then self.rev else "unknown-revision"}"
+    '';
+
   config = builtins.fromJSON (builtins.readFile ./config.json);
 
   entries = builtins.fromJSON (builtins.readFile ./entries.json);
@@ -51,11 +57,7 @@
         pkgs.asciidoctor
       ];
       shellHook = ''
-        export AUTHOR="${setup.config.contact-information.name}"
-        export BASEURL="${import ./base-url.nix setup.config.base-url}"
-        export EMAIL="${setup.config.contact-information.email-address}"
-        export HOMEPAGE="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]"
-        export REVNUMBER="${if self ? rev then self.rev else "unknown-revision"}"
+        source ${packages.x86_64-linux.initBuildEnvironment}
       '';
     };
 
