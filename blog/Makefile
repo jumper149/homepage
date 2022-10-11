@@ -45,6 +45,7 @@ ASCIIDOCTOR_PDF_FLAGS = $\
 	--backend pdf $\
 	--attribute pdf-theme="pdf-theme.yml"
 
+# TODO: This has an optional pre-requisite `$(SOURCE)/%` producing the optional target `$(BUILD)/%`.
 $(BUILD)/%.html: $(SOURCE)/%.adoc
 	mkdir -p $(BUILD)
 	asciidoctor "$(SOURCE)/$*.adoc" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_HTML_FLAGS)
