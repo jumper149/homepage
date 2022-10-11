@@ -8,22 +8,10 @@
       buildPhase = ''
         source ${packages.x86_64-linux.initBuildEnvironment}
 
-        compileArticle() {
-          ARTICLE_NAME="$1"
-          make "build/$ARTICLE_NAME.html"
-          make "build/$ARTICLE_NAME.pdf"
-          if [ -d "source/$ARTICLE_NAME" ]
-          then
-            echo "Additional directory exists: '$ARTICLE_NAME'"
-            cp -r source/$ARTICLE_NAME build
-          else
-            echo "Additional directory doesn't exist: '$ARTICLE_NAME'"
-          fi
-        }
-
         for blogId in ${lib.strings.escapeShellArgs (builtins.attrNames entries)}
         do
-          compileArticle "$blogId"
+          make "build/$blogId.html"
+          make "build/$blogId.pdf"
         done
       '';
       installPhase = ''

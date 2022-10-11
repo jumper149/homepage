@@ -22,7 +22,6 @@ ifndef REVNUMBER
 $(error REVNUMBER is not set)
 endif
 
-ASCIIDOC_COMPILER = asciidoctor
 ASCIIDOCTOR_FLAGS = $\
 	--doctype article $\
 	--safe-mode server $\
@@ -37,10 +36,12 @@ $(BUILD)/%.html: $(SOURCE)/%.adoc
 	mkdir -p $(BUILD)
 	asciidoctor "$(SOURCE)/$*.adoc" --out-file "$(BUILD)/$*.html" $(ASCIIDOCTOR_FLAGS) --attribute imagesdir="$(BASEURL)/blog/raw/$*" --backend html5 --attribute nofooter --attribute webfonts!
 	sed -i 's/^<head>$$/<head>\n<base target="_parent">/' "$(BUILD)/$*.html"
+	if [ -d "$(SOURCE)/$*" ]; then cp --recursive "$(SOURCE)/$*" "$(BUILD)/$*"; fi
 
 $(BUILD)/%.pdf: $(SOURCE)/%.adoc
 	mkdir -p $(BUILD)
 	asciidoctor-pdf "$(SOURCE)/$*.adoc" --out-file "$(BUILD)/$*.pdf" $(ASCIIDOCTOR_FLAGS) --attribute imagesdir="$*" --attribute pdf-theme="pdf-theme.yml"
 
+.PHONY: clean
 clean:
 	rm -r $(BUILD)
