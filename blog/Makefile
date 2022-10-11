@@ -42,6 +42,7 @@ ASCIIDOCTOR_HTML_FLAGS = $\
 ASCIIDOCTOR_PDF_FLAGS = $\
 	--out-file "$(BUILD)/$*.pdf" $\
 	--attribute imagesdir="$*" $\
+	--backend pdf $\
 	--attribute pdf-theme="pdf-theme.yml"
 
 $(BUILD)/%.html: $(SOURCE)/%.adoc
