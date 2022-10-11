@@ -9,7 +9,7 @@
   packages.x86_64-linux.homepage-test-application =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     writeScriptBin "homepage-test-application-full" ''
-      export HOMEPAGE_CONFIG_FILE="${config.packages.x86_64-linux.default}"
+      export HOMEPAGE_CONFIG_FILE="${self.subflakes.config.packages.x86_64-linux.default}"
       export HOMEPAGE_LOG_LEVEL=LevelWarn
       ${self.subflakes.server.packages.x86_64-linux.default}/bin/homepage-test-application
     '';
