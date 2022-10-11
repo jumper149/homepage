@@ -34,8 +34,6 @@
       export REVNUMBER="${if self ? rev then self.rev else "unknown-revision"}"
     '';
 
-  config = builtins.fromJSON (builtins.readFile ./config.json);
-
   entries = builtins.fromJSON (builtins.readFile ./entries.json);
 
   devShells.x86_64-linux.default =
