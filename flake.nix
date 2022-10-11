@@ -15,10 +15,10 @@
     subflakes = rec {
       setup = import ./setup/subflake.nix { };
       server = import ./server/subflake.nix { self = { subflakes = { inherit setup; }; }; inherit nixpkgs; };
-      blog = import ./blog/subflake.nix { self = { subflakes = { inherit setup; inherit (self) rev; }; }; inherit nixpkgs; };
+      blog = import ./blog/subflake.nix { self = { subflakes = { inherit setup; }; inherit (self) rev; }; inherit nixpkgs; };
       files = import ./files/subflake.nix { self = { subflakes = { inherit setup; }; }; inherit nixpkgs; };
       static = import ./static/subflake.nix { self = { subflakes = { inherit setup; }; }; inherit nixpkgs; };
-      config = import ./config/subflake.nix { self = { subflakes = { inherit setup blog files static; inherit (self) rev; }; }; inherit nixpkgs; };
+      config = import ./config/subflake.nix { self = { subflakes = { inherit setup blog files static; }; inherit (self) rev; }; inherit nixpkgs; };
       final = import ./final/subflake.nix { self = { subflakes = { inherit setup server config; }; }; inherit nixpkgs; };
     };
 
