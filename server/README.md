@@ -19,13 +19,10 @@ The configuration file is written in JSON and is specified in [here](./source/li
 ## Development
 
 ```
-# Enter development shell.
-nix develop ..#subflakes.server.devShells.x86_64-linux.default
-
 # Generate static files and configuration.
 nix build ..#config
 
-# Run to debug.
+# Use cabal to develop the application.
 HOMEPAGE_CONFIG_FILE=result cabal run homepage
 ```
 
@@ -34,9 +31,6 @@ HOMEPAGE_CONFIG_FILE=result cabal run homepage
 Use `fourmolu` to format Haskell.
 
 ```
-# Enter development shell.
-nix develop ..#subflakes.server.devShells.x86_64-linux.default
-
 # Format Haskell.
 fourmolu --mode inplace ./source
 ```
@@ -46,9 +40,6 @@ fourmolu --mode inplace ./source
 Running `weeder` should be a part of linting, but requires manual execution at the moment.
 
 ```
-# Enter development shell.
-nix develop ..#subflakes.server.devShells.x86_64-linux.default
-
 # Prepare additional information for weeder.
 cabal clean
 cabal build all
@@ -62,9 +53,6 @@ weeder
 The module dependency graph can be visualised using `graphmod`.
 
 ```
-# Enter development shell.
-nix develop ..#subflakes.server.devShells.x86_64-linux.default
-
 # Run graphmod.
 nix build ..#subflakes.server.checks.x86_64-linux.graphmod
 
@@ -78,9 +66,6 @@ zathura result/graphmod.pdf
 The function call graph can be visualised using `calligraphy`.
 
 ```
-# Enter development shell.
-nix develop ..#subflakes.server.devShells.x86_64-linux.default
-
 # Prepare additional information for calligraphy.
 cabal clean
 cabal build all

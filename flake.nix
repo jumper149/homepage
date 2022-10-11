@@ -40,13 +40,12 @@
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       let
         additionalBuildInputs = [
-          pkgs.imagemagick
-          pkgs.lessc
           pkgs.rnix-lsp
         ];
         shells = [
           self.subflakes.server.devShells.x86_64-linux.default
           self.subflakes.blog.devShells.x86_64-linux.default
+          self.subflakes.static.devShells.x86_64-linux.default
         ];
         fullBuildInputs = __concatMap (x: x.buildInputs) shells;
         fullNativeBuildInputs = __concatMap (x: x.nativeBuildInputs) shells;
