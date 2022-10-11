@@ -50,6 +50,13 @@
       packages = [
         pkgs.asciidoctor
       ];
+      shellHook = ''
+        export AUTHOR="${setup.config.contact-information.name}"
+        export BASEURL="${import ./base-url.nix setup.config.base-url}"
+        export EMAIL="${setup.config.contact-information.email-address}"
+        export HOMEPAGE="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]"
+        export REVNUMBER="${if self ? rev then self.rev else "unknown-revision"}"
+      '';
     };
 
 }
