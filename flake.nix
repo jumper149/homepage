@@ -22,18 +22,6 @@
       final = import ./final/subflake.nix { inherit nixpkgs setup server config; };
     };
 
-    checks.x86_64-linux.subflakes =
-      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
-      pkgs.mkShell {
-        packages =
-          let
-            hasChecks = name: value: __elem "checks" (__attrNames value) && __elem "x86_64-linux" (__attrNames value.checks);
-            checkableSubflakes = lib.filterAttrs hasChecks self.subflakes;
-            checksBySubflake = __mapAttrs (name: value: value.checks.x86_64-linux) checkableSubflakes;
-            checks = __foldl' (a: b: a ++ b) [ ] (map __attrValues (__attrValues checksBySubflake));
-          in checks;
-      };
-
     packages.x86_64-linux.default = self.subflakes.final.packages.x86_64-linux.default;
 
     devShells.x86_64-linux.default =
@@ -61,6 +49,18 @@
     overlays.default = self.subflakes.final.overlays.default;
 
     nixosModules.default = self.subflakes.final.nixosModules.default;
+
+    checks.x86_64-linux.subflakes =
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
+      pkgs.mkShell {
+        packages =
+          let
+            hasChecks = name: value: __elem "checks" (__attrNames value) && __elem "x86_64-linux" (__attrNames value.checks);
+            checkableSubflakes = lib.filterAttrs hasChecks self.subflakes;
+            checksBySubflake = __mapAttrs (name: value: value.checks.x86_64-linux) checkableSubflakes;
+            checks = __foldl' (a: b: a ++ b) [ ] (map __attrValues (__attrValues checksBySubflake));
+          in checks;
+      };
 
   };
 }
