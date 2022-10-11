@@ -38,14 +38,26 @@
 
     devShells.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
-      self.subflakes.server.devShells.x86_64-linux.default.overrideAttrs (oldAttrs: {
-        buildInputs = oldAttrs.buildInputs ++ [
-            pkgs.imagemagick pkgs.lessc pkgs.rnix-lsp
-          ]
-          ++ self.subflakes.blog.devShells.x86_64-linux.default.buildInputs
-          ++ self.subflakes.blog.devShells.x86_64-linux.default.nativeBuildInputs
-          ;
-      });
+      let
+        additionalBuildInputs = [
+          pkgs.imagemagick
+          pkgs.lessc
+          pkgs.rnix-lsp
+        ];
+        shells = [
+          self.subflakes.server.devShells.x86_64-linux.default
+          self.subflakes.blog.devShells.x86_64-linux.default
+        ];
+        fullBuildInputs = __concatMap (x: x.buildInputs) shells;
+        fullNativeBuildInputs = __concatMap (x: x.nativeBuildInputs) shells;
+        fullShellHook = __concatStringsSep "\n" (map (x: x.shellHook) shells);
+      in stdenv.mkDerivation {
+        name = "homepage-development"; # TODO: Necessary to avoid segmentation fault.
+        src = ./.;
+        buildInputs = fullBuildInputs;
+        nativeBuildInputs = fullNativeBuildInputs;
+        shellHook = fullShellHook;
+      };
 
     overlays.default = self.subflakes.final.overlays.default;
 
