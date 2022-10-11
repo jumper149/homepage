@@ -24,6 +24,10 @@
 
     packages.x86_64-linux.default = self.subflakes.final.packages.x86_64-linux.default;
 
+    overlays.default = self.subflakes.final.overlays.default;
+
+    nixosModules.default = self.subflakes.final.nixosModules.default;
+
     devShells.x86_64-linux.default =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       let
@@ -46,10 +50,6 @@
         nativeBuildInputs = fullNativeBuildInputs;
         shellHook = fullShellHook;
       };
-
-    overlays.default = self.subflakes.final.overlays.default;
-
-    nixosModules.default = self.subflakes.final.nixosModules.default;
 
     checks.x86_64-linux.subflakes =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
