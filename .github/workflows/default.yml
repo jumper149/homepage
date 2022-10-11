@@ -13,8 +13,8 @@ jobs:
           ]
         output:
           [ packages.x86_64-linux.default
+          , devShells.x86_64-linux.default
           , subflakes.server.packages.x86_64-linux.default
-          , subflakes.server.devShells.x86_64-linux.default
           , subflakes.blog.packages.x86_64-linux.default
           , subflakes.files.packages.x86_64-linux.default
           , subflakes.static.packages.x86_64-linux.default
