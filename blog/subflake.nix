@@ -1,7 +1,7 @@
-{ self, nixpkgs, setup }: rec {
+{ self, nixpkgs }: rec {
 
   packages.x86_64-linux.default =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     stdenv.mkDerivation {
       name = "blog"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
@@ -25,12 +25,12 @@
     };
 
   packages.x86_64-linux.initBuildEnvironment =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     writeShellScript "environmentVariables" ''
-      export AUTHOR="${setup.config.contact-information.name}"
-      export BASEURL="${import ./base-url.nix setup.config.base-url}"
-      export EMAIL="${setup.config.contact-information.email-address}"
-      export HOMEPAGE="${import ./base-url.nix setup.config.base-url}[${setup.config.contact-information.homepage-label}]"
+      export AUTHOR="${self.subflakes.setup.config.contact-information.name}"
+      export BASEURL="${import ./base-url.nix self.subflakes.setup.config.base-url}"
+      export EMAIL="${self.subflakes.setup.config.contact-information.email-address}"
+      export HOMEPAGE="${import ./base-url.nix self.subflakes.setup.config.base-url}[${self.subflakes.setup.config.contact-information.homepage-label}]"
       export REVNUMBER="${if self ? rev then self.rev else "unknown-revision"}"
     '';
 
@@ -39,7 +39,7 @@
   entries = builtins.fromJSON (builtins.readFile ./entries.json);
 
   devShells.x86_64-linux.default =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     pkgs.mkShell {
       packages = [
         pkgs.asciidoctor

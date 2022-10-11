@@ -1,12 +1,12 @@
-{ nixpkgs, setup }: rec {
+{ self, nixpkgs }: rec {
 
   packages.x86_64-linux.default =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     let src = nix-gitignore.gitignoreSource [] ./.;
     in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
 
   devShells.x86_64-linux.default =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     haskellPackages.shellFor {
       buildInputs = with haskellPackages; [
         cabal-install
@@ -27,7 +27,7 @@
     };
 
   checks.x86_64-linux.fourmolu =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     stdenv.mkDerivation {
       name = "fourmolu"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
@@ -45,7 +45,7 @@
     };
 
   checks.x86_64-linux.hlint =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     stdenv.mkDerivation {
       name = "hlint"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
@@ -63,7 +63,7 @@
     };
 
   checks.x86_64-linux.hie-yaml =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     stdenv.mkDerivation {
       name = "hie-yaml"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
@@ -81,7 +81,7 @@
     };
 
   checks.x86_64-linux.graphmod =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     stdenv.mkDerivation {
       name = "graphmod"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;

@@ -1,7 +1,7 @@
-{ nixpkgs, setup }: rec {
+{ self, nixpkgs }: rec {
 
   packages.x86_64-linux.default =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     stdenv.mkDerivation {
       name = "static"; # TODO: Necessary to avoid segmentation fault.
       src = ./static;
@@ -64,7 +64,7 @@
     };
 
   devShells.x86_64-linux.default =
-    with import nixpkgs { system = "x86_64-linux"; overlays = [ setup.overlays.default ]; };
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
     pkgs.mkShell {
       packages = [
         pkgs.imagemagick
