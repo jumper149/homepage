@@ -73,7 +73,7 @@ The source code is split up into subflakes, which also have their own developmen
 * [Server:](./server) HTTP server executable
 * [Blog:](./blog) Blog articles and related content
 * [Files:](./files) Downloadable files
-* [Static:](./files) Static files directly visible from HTML
+* [Static:](./static) Static files directly visible from HTML
 * [Config:](./config) Runtime configuration with static files
 * [Final:](./final) Wrapper and NixOS module
 
