@@ -45,17 +45,17 @@ ASCIIDOCTOR_PDF_FLAGS = $\
 	--backend pdf $\
 	--attribute pdf-theme="pdf-theme.yml"
 
-$(BUILD):
-	mkdir -p $(BUILD)
-
 # TODO: This has an optional pre-requisite `$(SOURCE)/%` producing the optional target `$(BUILD)/%`.
-$(BUILD)/%.html: $(BUILD) $(SOURCE)/%.adoc
-	asciidoctor "$(SOURCE)/$*.adoc" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_HTML_FLAGS)
+$(BUILD)/%.html: $(SOURCE)/%.adoc $(BUILD)
+	asciidoctor "$<" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_HTML_FLAGS)
 	sed -i 's/^<head>$$/<head>\n<base target="_parent">/' "$(BUILD)/$*.html"
 	if [ -d "$(SOURCE)/$*" ]; then cp --recursive "$(SOURCE)/$*" "$(BUILD)/$*"; fi
 
-$(BUILD)/%.pdf: $(BUILD) $(SOURCE)/%.adoc
-	asciidoctor-pdf "$(SOURCE)/$*.adoc" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_PDF_FLAGS)
+$(BUILD)/%.pdf: $(SOURCE)/%.adoc $(BUILD)
+	asciidoctor-pdf "$<" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_PDF_FLAGS)
+
+$(BUILD):
+	mkdir -p $(BUILD)
 
 .PHONY: clean
 clean:
