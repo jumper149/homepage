@@ -1,6 +1,9 @@
 SOURCE = source
 BUILD = build
-ARTICLES = $(wildcard $(SOURCE)/*.adoc)
+
+ARTICLES = $(patsubst $(SOURCE)/%.adoc, %, $(wildcard $(SOURCE)/*.adoc))
+BUILT_HTML_ARTICLES = $(patsubst %, $(BUILD)/%.html, $(ARTICLES))
+BUILT_PDF_ARTICLES = $(patsubst %, $(BUILD)/%.pdf, $(ARTICLES))
 
 ifndef AUTHOR
 $(error AUTHOR is not set)
@@ -45,13 +48,16 @@ ASCIIDOCTOR_PDF_FLAGS = $\
 	--backend pdf $\
 	--attribute pdf-theme="pdf-theme.yml"
 
+a:
+	echo $(ARTICLES)
+
 # TODO: This has an optional pre-requisite `$(SOURCE)/%` producing the optional target `$(BUILD)/%`.
-$(BUILD)/%.html: $(SOURCE)/%.adoc $(BUILD)
+$(BUILT_HTML_ARTICLES): $(BUILD)/%.html: $(SOURCE)/%.adoc $(BUILD)
 	asciidoctor "$<" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_HTML_FLAGS)
 	sed -i 's/^<head>$$/<head>\n<base target="_parent">/' "$(BUILD)/$*.html"
 	if [ -d "$(SOURCE)/$*" ]; then cp --recursive "$(SOURCE)/$*" "$(BUILD)/$*"; fi
 
-$(BUILD)/%.pdf: $(SOURCE)/%.adoc $(BUILD)
+$(BUILT_PDF_ARTICLES): $(BUILD)/%.pdf: $(SOURCE)/%.adoc $(BUILD)
 	asciidoctor-pdf "$<" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_PDF_FLAGS)
 
 $(BUILD):
