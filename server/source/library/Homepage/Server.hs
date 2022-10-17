@@ -27,6 +27,7 @@ import Servant.API.Generic
 import Servant.Server
 import Servant.Server.Generic
 import System.Posix.Signals
+import System.Posix.Signals.Patterns
 
 type API :: Type
 type API = ToServantApi Routes
@@ -48,9 +49,9 @@ server = do
               logWarn "Shutdown."
             closeSocket
       let installShutdownHandler sig = void $ installHandler sig (catchOnceShutdown sig) Nothing
-      installShutdownHandler sigHUP
-      installShutdownHandler sigINT
-      installShutdownHandler sigTERM
+      installShutdownHandler SIGHUP
+      installShutdownHandler SIGINT
+      installShutdownHandler SIGTERM
   let settings = withShutdownHandler $ withPort defaultSettings
 
   logInfo "Configure middleware."
