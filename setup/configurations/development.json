@@ -11,15 +11,12 @@
   { "header-icons":
     { "feed": true
     , "github": true
-    , "gitlab": false
+    , "gitlab": true
     }
   , "name": "Felix Springer"
   , "source-url": "https://github.com/jumper149/homepage"
   , "homepage-label": "felixspringer.xyz"
-  , "donate-information":
-    { "paypal-url": "https://www.paypal.com/donate?hosted_button_id=3LZQ9DCDDFFWU"
-    , "xmr-address": null
-    }
+  , "donate-information": null
   , "email-address": "contact@felixspringer.xyz"
   , "matrix": "@jumper149:matrix.org"
   , "libera-chat": "jumper149"
