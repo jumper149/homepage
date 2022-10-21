@@ -50,7 +50,7 @@
         name = "homepage-development"; # TODO: Necessary to avoid segmentation fault.
         src = ./.;
         installPhase = "touch $out";
-        buildInputs = fullBuildInputs;
+        buildInputs = fullBuildInputs ++ additionalBuildInputs;
         nativeBuildInputs = fullNativeBuildInputs;
         shellHook = fullShellHook;
       };
