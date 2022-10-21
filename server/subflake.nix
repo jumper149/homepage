@@ -2,8 +2,11 @@
 
   packages.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
-    let src = nix-gitignore.gitignoreSource [] ./.;
-    in haskellPackages.callCabal2nixWithOptions "homepage" src "-fcabal2nix" {};
+    let
+      source = nix-gitignore.gitignoreSource [] ./.;
+      package = (haskellPackages.callCabal2nixWithOptions "homepage" source "-fcabal2nix" {});
+      executables = haskell.lib.justStaticExecutables package;
+    in executables;
 
   devShells.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
