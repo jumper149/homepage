@@ -36,6 +36,7 @@
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       let
         additionalBuildInputs = [
+          pkgs.haskell.packages.ghc902.nix-tree
           pkgs.rnix-lsp
         ];
         shells = [
