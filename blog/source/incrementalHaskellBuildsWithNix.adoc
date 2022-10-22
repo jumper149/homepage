@@ -84,12 +84,12 @@ buildIncrementally =
 
 === Using this with Nix Flakes
 
-It's a bit tricky to get this to work with Flakes.
+It's a bit tricky to get this to work with flakes.
 
-Our Flake requires two inputs (`nixpkgs` and `incremental`.)
+Our flake requires two inputs (`nixpkgs` and `incremental`.)
 
 The input `incremental` is pointing to the upstream of the current git repository.
-We need this to acces a prior version of this Flake.
+We need this to acces a prior version of this flake.
 
 .Flake inputs
 [source,nix]
@@ -143,7 +143,7 @@ The packages `default` and `incremental` have already been explained.
 
 We also added `incrementalBase`, which produces the same result as `incremental`, but doesn't depend on earlier versions.
 
-CAUTION: Without `incrementalBase` we will create a loop of recursive Flakes.
+CAUTION: Without `incrementalBase` we will create a loop of recursive flakes.
 
 == Conclusion
 
@@ -153,4 +153,4 @@ With more than 1000 modules you can likely reduce your CI time by 90%.
 
 This can probably be built into `callCabal2nix`, which would make the interface a bit more comfortable.
 
-The integration with Flakes feels a bit awkward, but I guess it works.
+The integration with flakes feels a bit awkward, but I guess it works.
