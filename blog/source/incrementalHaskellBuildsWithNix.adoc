@@ -8,7 +8,7 @@ He recently wrote a https://harry.garrood.me/blog/easy-incremental-haskell-ci-bu
 
 [INFO]
 ====
-GHC will determine whether the source file had been changed by comparing the old hash to the source file's current hash.
+GHC will determine whether the source file has been changed by comparing the old hash to the source file's current hash.
 ====
 
 But how would we make use of that with Nix?
@@ -129,7 +129,10 @@ The packages `default` and `incremental` have already been explained.
 
     packages.x86_64-linux.incrementalBase =
       with import nixpkgs { system = "x86_64-linux"; };
-      with import ./nix/haskell/lib.nix { lib = pkgs.lib; haskellLib = pkgs.haskell.lib; };
+      with import ./nix/haskell/lib.nix {
+        lib = pkgs.lib;
+        haskellLib = pkgs.haskell.lib;
+      };
       buildIncrementally {
         regularPackage = self.packages.x86_64-linux.default;
       };
@@ -140,4 +143,14 @@ The packages `default` and `incremental` have already been explained.
 
 We also added `incrementalBase`, which produces the same result as `incremental`, but doesn't depend on earlier versions.
 
-CAUTION: Without `incrementalBase`, we will create a loop of recursive Flakes.
+CAUTION: Without `incrementalBase` we will create a loop of recursive Flakes.
+
+== Conclusion
+
+Overall the wrapper function `buildIncrementally` can speed up compilation a whole lot.
+The more modules you have, the more time will be saved.
+With more than 1000 modules you can likely reduce your CI time by 90%.
+
+This can probably be built into `callCabal2nix`, which would make the interface a bit more comfortable.
+
+The integration with Flakes feels a bit awkward, but I guess it works.
