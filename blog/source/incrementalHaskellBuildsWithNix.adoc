@@ -1,0 +1,49 @@
+:revdate: 2022-10-22
+= Incremental Haskell Builds with Nix
+
+You can use old build results as a starting point to speed up new builds.
+
+Together with https://harry.garrood.me/[Harry Garrood] I have been looking into speeding up Haskell builds with Nix.
+He recently wrote a https://harry.garrood.me/blog/easy-incremental-haskell-ci-builds-with-ghc-9.4/[blog post] about changes in GHC 9.4 that made this task a little bit easier.
+
+[INFO]
+====
+GHC will determine whether the source file had been changed by comparing the old hash to the source file's current hash.
+====
+
+But how would we make use of that with Nix?
+
+== The Nix Wrapper
+
+Haskell packages, that are built with `cabal`, can easily be turned into a derivation.
+
+.Regular Haskell package in a Nix Flake
+[source,haskell]
+----
+packages.x86_64-linux.default =
+  with import nixpkgs { system = "x86_64-linux"; };
+  haskellPackages.callCabal2nix "example-package" ./. {};
+----
+
+All the hard work is being done by https://github.com/NixOS/cabal2nix[cabal2nix].
+Now we will add a wrapper around `packages.x86_64-linux.default` to make use of GHCs cleverness.
+
+.Wrapped Haskell package to allow incremental builds
+[source,haskell]
+----
+packages.x86_64-linux.incremental =
+  with import nixpkgs { system = "x86_64-linux"; };
+  with import ./nix/haskell/lib.nix {
+    lib = pkgs.lib;
+    haskellLib = pkgs.haskell.lib;
+  };
+  buildIncrementally {
+    regularPackage = self.packages.x86_64-linux.default;
+    previousIncrement = incremental.packages.x86_64-linux.incremental.incremental;
+  };
+----
+
+.What is of interest here?
+`buildIncrementally`:: A wrapper function, that expects to turn a regular derivation into an incremental one.
+`previousIncrement`:: The derivation, that you previously built using `buildIncrementally`.
+You can set this to `null`, if you don't have any previous result yet.
