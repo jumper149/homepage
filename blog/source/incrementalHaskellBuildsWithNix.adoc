@@ -153,8 +153,21 @@ CAUTION: Without `incrementalBase` we will create a loop of recursive flakes.
 
 Overall the wrapper function `buildIncrementally` can speed up compilation a whole lot.
 The more modules you have, the more time will be saved.
-With more than 1000 modules you can likely reduce your CI time by 90%.
+With hundreds of modules you can likely reduce your CI time by 90% with the `incremental` output.
 
 This can probably be built into `callCabal2nix`, which would make the interface a bit more comfortable.
 
 The integration with flakes feels a bit awkward, but I guess it works.
+
+=== Example
+
+I played around with this approach https://github.com/jumper149/consuming-parser/tree/incremental[here].
+With flakes enabled you can easily try it out by building an output.
+
+[source,bash]
+----
+nix build 'github:jumper149/consuming-parser/incremental#incremental' --print-build-logs
+----
+
+You will notice that you are building `consuming-parser` twice.
+First you will build it regularly via `incrementalBase` and then you will also build `incremental`, which doesn't have to compile any modules, because they are already provided by `incrementalBase`.
