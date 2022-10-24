@@ -88,4 +88,9 @@
       }
     ]
   }
+, "incrementalHaskellBuildsWithNix":
+  { "timestamp": "2022-10-22"
+  , "title": "Incremental Haskell Builds with Nix"
+  , "discussion": []
+  }
 }
