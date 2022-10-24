@@ -1,4 +1,4 @@
-:revdate: 2022-10-22
+:revdate: 2022-10-24
 = Incremental Haskell Builds with Nix
 
 Using old build results as a starting point to speed up new builds.
@@ -28,12 +28,15 @@ But how would we make use of that with Nix?
 
 Haskell packages, that are built with `cabal`, can easily be turned into a derivation.
 
-.Regular Haskell package in a Nix Flake
+.Regular Haskell package in a Nix Flake output
 [source,nix]
 ----
-packages.x86_64-linux.default =
-  with import nixpkgs { system = "x86_64-linux"; };
-  haskellPackages.callCabal2nix "example-package" ./. {};
+{
+  packages.x86_64-linux.default =
+    with import nixpkgs { system = "x86_64-linux"; };
+    haskellPackages.callCabal2nix "example-package" ./. {};
+  # ...
+}
 ----
 
 All the hard work is being done by https://github.com/NixOS/cabal2nix[cabal2nix].
@@ -42,16 +45,20 @@ Now we will add a wrapper around `packages.x86_64-linux.default` to make use of 
 .Wrapped Haskell package to allow incremental builds
 [source,nix]
 ----
-packages.x86_64-linux.incremental =
-  with import nixpkgs { system = "x86_64-linux"; };
-  with import ./nix/haskell/lib.nix {
-    lib = pkgs.lib;
-    haskellLib = pkgs.haskell.lib;
-  };
-  buildIncrementally {
-    regularPackage = self.packages.x86_64-linux.default;
-    previousIncrement = incremental.packages.x86_64-linux.incremental.incrementalBase;
-  };
+{
+  # ...
+  packages.x86_64-linux.incremental =
+    with import nixpkgs { system = "x86_64-linux"; };
+    with import ./nix/haskell/lib.nix {
+      lib = pkgs.lib;
+      haskellLib = pkgs.haskell.lib;
+    };
+    buildIncrementally {
+      regularPackage = self.packages.x86_64-linux.default;
+      previousIncrement = incremental.packages.x86_64-linux.incremental.incrementalBase;
+    };
+  # ...
+}
 ----
 
 .What is of interest here?
@@ -72,7 +79,7 @@ Now we pass all of this information to the next incremental build by extracting 
 .Implementation of wrapper function
 [source,nix]
 ----
-buildIncrementally =
+let buildIncrementally =
   { regularPackage, previousIncrement ? null }:
     (haskellLib.overrideCabal regularPackage
       (drv: {
@@ -93,6 +100,7 @@ buildIncrementally =
     ).overrideAttrs (finalAttrs: previousAttrs: {
       outputs = previousAttrs.outputs ++ ["incremental"];
     });
+in ...
 ----
 
 === Using the Wrapper with Nix Flakes
