@@ -107,7 +107,7 @@ in ...
 
 It's a bit tricky to get this to work with flakes.
 
-Our flake requires two inputs (`nixpkgs` and `incremental`.)
+Our flake requires two inputs (`nixpkgs` and `incremental`).
 
 The input `incremental` is pointing to the upstream of the current git repository.
 We need this to access a prior version of this flake.
