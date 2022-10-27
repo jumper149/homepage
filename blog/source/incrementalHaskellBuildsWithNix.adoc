@@ -1,4 +1,4 @@
-:revdate: 2022-10-24
+:revdate: 2022-10-27
 = Incremental Haskell Builds with Nix
 
 Using old build results as a starting point to speed up new builds.
@@ -181,16 +181,18 @@ This can probably be built into `callCabal2nix`, which would make the interface 
 
 The integration with flakes feels a bit awkward, but I guess it works.
 
-=== Example
+=== Examples
 
-I played around with this approach https://github.com/jumper149/consuming-parser/tree/incremental[here].
+* I played around with this approach https://github.com/jumper149/consuming-parser/tree/incremental[here].
 With flakes enabled you can easily try it out by building an output.
-
++
 [source,bash]
 ----
 nix build --print-build-logs \
   'github:jumper149/consuming-parser/incremental#incremental'
 ----
-
++
 You will notice that you are building `consuming-parser` twice.
 First you will build it regularly via `incrementalBase` and then you will also build `incremental`, which doesn't have to compile any modules, because they are already provided by `incrementalBase`.
+
+* Harry has an even smaller https://github.com/hdgarrood/haskell-incremental-nix-example[example], that doesn't use nix flakes.
