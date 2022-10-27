@@ -91,6 +91,16 @@
 , "incrementalHaskellBuildsWithNix":
   { "timestamp": "2022-10-27"
   , "title": "Incremental Haskell Builds with Nix"
-  , "discussion": []
+  , "discussion":
+    [ { "description": "Reddit: /r/NixOS"
+      , "url": "https://www.reddit.com/r/NixOS/comments/yemw0x/incremental_haskell_builds_with_nix/"
+      }
+    , { "description": "Reddit: /r/Nix"
+      , "url": "https://www.reddit.com/r/Nix/comments/yen5g1/incremental_haskell_builds_with_nix/"
+      }
+    , { "description": "Reddit: /r/haskell"
+      , "url": "https://www.reddit.com/r/haskell/comments/yemws7/incremental_haskell_builds_with_nix/"
+      }
+    ]
   }
 }
