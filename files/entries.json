@@ -34,6 +34,22 @@
   , "section": "Music"
   , "timestamp": "2022-08-18"
   }
+, { "identifier": "Felix_Springer-Fido"
+  , "formats":
+    [ { "name": "WAV"
+      , "extension": "wav"
+      }
+    , { "name": "FLAC"
+      , "extension": "flac"
+      }
+    , { "name": "MP3"
+      , "extension": "mp3"
+      }
+    ]
+  , "name": "Felix Springer - Fido"
+  , "section": "Music"
+  , "timestamp": "2022-10-31"
+  }
 , { "identifier": "Felix_Springer-Storage_Register_Design_for_an_Ion_Trap_Quantum_Processor"
   , "formats":
     [ { "name": "PDF"
