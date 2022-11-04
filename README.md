@@ -2,9 +2,13 @@
 
 Felix Springer's Homepage hosted on [felixspringer.xyz](https://felixspringer.xyz/homepage/).
 
-## Install
+## Flake
 
-Install with a NixOS system flake and enable the service.
+You can use regular flake commands such as `nix build`, `nix develop` or `nix flake check`.
+
+### Install
+
+Use a NixOS system flake to enable the service.
 
 ```nix
 {
@@ -20,12 +24,11 @@ Install with a NixOS system flake and enable the service.
       owner = "jumper149";
       repo = "homepage";
       ref = "main";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
   outputs = { self, nixpkgs, homepage }@inputs: {
-    nixosConfiguration = nixpkgs.lib.nixosSystem {
+    nixosConfigurations.default = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       specialArgs = { inherit inputs; };
       modules = [
@@ -68,6 +71,7 @@ Install with a NixOS system flake and enable the service.
 ## Subflakes
 
 The source code is split up into subflakes, which also have their own development environments and checks.
+These are just regular nix files, but follow the naming conventions of flakes.
 
 * [Setup:](./setup) Nix overlays and configuration
 * [Server:](./server) HTTP server executable
@@ -76,19 +80,3 @@ The source code is split up into subflakes, which also have their own developmen
 * [Static:](./static) Static files directly visible from HTML
 * [Config:](./config) Runtime configuration with static files
 * [Final:](./final) Wrapper and NixOS module
-
-## Development
-
-You can enter a development shell.
-
-```
-nix develop
-```
-
-## Tests
-
-Nix flake checks are used for tests.
-
-```
-nix flake check
-```
