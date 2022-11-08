@@ -46,7 +46,7 @@ document baseUrl contactInformation maybeRev depth activeTab x =
         let withHref = case contactSourceUrl contactInformation of
               Nothing -> Prelude.id @(Html -> Html)
               Just url -> (! href (textValue url))
-        withHref a $ toMarkup $ fromMaybe "unknown-revision" maybeRev
+        withHref a $ toMarkup $ "source @ " <> fromMaybe "unknown-revision" maybeRev
  where
   titleName = maybe "Homepage" (tabPageName . describeTab) activeTab
   maybeDescription = textValue <$> (tabMetaDescription . describeTab =<< activeTab)
