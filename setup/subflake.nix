@@ -7,10 +7,10 @@
       th-desugar = haskellPrev.callHackage "th-desugar" "1.13.1" {};
       graphmod = (haskellPrev.graphmod.overrideAttrs (oldAttrs: {
         src = prev.fetchFromGitHub {
-          owner = "jumper149";
+          owner = "yav";
           repo = "graphmod";
-          rev = "b684ce4d6af97179eccb65d2567d6165d43fa3e0";
-          sha256 = "sha256-I5OfUGV9TbxLCyc8LhdZODhw5EpJXyXeFdaN7gMmhC8=";
+          rev = "ad3f136c6bcebd2b7e6fa1d5a1006436008acd3d";
+          sha256 = "sha256-2JESSCR6AedyPFo0GlQaSa9vKzzoHIJ6uxZ8IQVjYdA=";
         };
       }));
     });

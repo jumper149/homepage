@@ -23,7 +23,6 @@ import Network.Wai
 import Network.Wai.Handler.Warp
 import Network.Wai.Trans
 import Servant.API
-import Servant.API.Generic
 import Servant.Server
 import Servant.Server.Generic
 import System.Posix.Signals
