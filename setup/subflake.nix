@@ -1,7 +1,7 @@
 { self }: rec {
 
   overlays.default = final: prev: {
-    haskellPackages = prev.haskell.packages.ghc924.extend (haskellFinal: haskellPrev: { # TODO: Using GHC 9.2.4.
+    haskellPackages = prev.haskell.packages.ghc925.extend (haskellFinal: haskellPrev: { # TODO: Using GHC 9.2.5.
       singletons = haskellPrev.callHackage "singletons" "3.0.1" {};
       singletons-th = haskellPrev.callHackage "singletons-th" "3.1" {};
       th-desugar = haskellPrev.callHackage "th-desugar" "1.13.1" {};
