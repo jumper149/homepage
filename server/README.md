@@ -20,7 +20,7 @@ The configuration file is written in JSON and is specified in [here](./source/li
 
 ```
 # Generate static files and configuration.
-nix build ..#config
+nix build ..#subflakes.config.packages.x86_64-linux.default
 
 # Use cabal to develop the application.
 HOMEPAGE_CONFIG_FILE=result cabal run homepage
