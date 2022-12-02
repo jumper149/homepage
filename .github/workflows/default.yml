@@ -23,8 +23,13 @@ jobs:
     steps:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v3.0.2
-    - name: "Set up nix"
+    - name: "Set up Nix"
       uses: cachix/install-nix-action@v17
+    - name: "Set up Cachix"
+      uses: cachix/cachix-action@v12
+      with:
+        name: jumper149
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
     - name: "Set deployment"
       run: echo "\"${{ matrix.deployment }}\"" > setup/deployment.json
     - name: "Build"
@@ -35,7 +40,7 @@ jobs:
     steps:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v3.0.2
-    - name: "Set up nix"
+    - name: "Set up Nix"
       uses: cachix/install-nix-action@v17
     - name: "Check"
       run: nix flake check --keep-going --print-build-logs
@@ -46,7 +51,7 @@ jobs:
     steps:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v3.0.2
-    - name: "Set up nix"
+    - name: "Set up Nix"
       uses: cachix/install-nix-action@v17
     - name: "Prepare weeder"
       run: nix develop "..#subflakes.server.devShells.x86_64-linux.default" --command cabal build all
