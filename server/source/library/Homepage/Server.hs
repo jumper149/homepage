@@ -66,12 +66,13 @@ server = do
 middleware :: (MonadConfigured m, MonadLogger m) => MiddlewareT m
 middleware application req resp = do
   logDebug $ "Received HTTP request: " <> T.pack (show req)
-  let path = T.decodeLatin1 $ rawPathInfo req
-      found302Builder locationPath = do
-        baseUrl <- configBaseUrl <$> configuration
-        let location = B.pack (T.unpack $ displayBaseUrlPath baseUrl <> locationPath) <> rawQueryString req
-        logInfo $ "Redirect HTTP request to new location: " <> T.pack (show location)
-        resp $ responseBuilder status302 [(hLocation, location)] mempty
+  let
+    path = T.decodeLatin1 $ rawPathInfo req
+    found302Builder locationPath = do
+      baseUrl <- configBaseUrl <$> configuration
+      let location = B.pack (T.unpack $ displayBaseUrlPath baseUrl <> locationPath) <> rawQueryString req
+      logInfo $ "Redirect HTTP request to new location: " <> T.pack (show location)
+      resp $ responseBuilder status302 [(hLocation, location)] mempty
   case T.unsnoc path of
     Nothing -> found302Builder "/"
     Just (xs, '/') -> case T.unsnoc xs of

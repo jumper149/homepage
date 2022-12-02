@@ -29,11 +29,12 @@ acquireEnvironment = do
     logFile <- lookupEnvironmentVariable SEnvVarLogFile
     logLevel <- lookupEnvironmentVariable SEnvVarLogLevel
 
-    let environment :: SEnvVar envVar -> Const (EnvVarValue envVar) envVar
-        environment = \case
-          SEnvVarConfigFile -> configFile
-          SEnvVarLogFile -> logFile
-          SEnvVarLogLevel -> logLevel
+    let
+      environment :: SEnvVar envVar -> Const (EnvVarValue envVar) envVar
+      environment = \case
+        SEnvVarConfigFile -> configFile
+        SEnvVarLogFile -> logFile
+        SEnvVarLogLevel -> logLevel
 
     pure $ MkEnvironment $ getConst . environment
 
