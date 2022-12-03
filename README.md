@@ -6,12 +6,45 @@ Felix Springer's Homepage hosted on [felixspringer.xyz](https://felixspringer.xy
 
 You can use regular flake commands such as `nix build`, `nix develop` or `nix flake check`.
 
-### Install
+### Subflakes
+
+The source code is split up into subflakes, which also have their own development environments and checks.
+These are just regular nix files, but follow the naming conventions of flakes.
+
+* [Setup:](./setup) Nix overlays and configuration
+* [Server:](./server) HTTP server executable
+* [Blog:](./blog) Blog articles and related content
+* [Files:](./files) Downloadable files
+* [Static:](./static) Static files directly visible from HTML
+* [Config:](./config) Runtime configuration with static files
+* [Final:](./final) Wrapper and NixOS module
+
+## Binary Cache
+
+GitHub Actions pushes Nix results to Cachix.
+Use this binary cache to speed up your local builds.
+
+Configure your NixOS configuration to trust the binary cache.
+
+```nix
+{
+  nix.settings = {
+    substituters = [
+      "https://jumper149.cachix.org"
+    ];
+    trusted-public-keys = [
+      "jumper149.cachix.org-1:5syL4dYYDmzoPibE7g1QVj+mKC+rNZDoxyBt0P0DQ2w="
+    ];
+  };
+}
+```
+
+## Install
 
 Use a NixOS system flake to enable the service.
 
 ```nix
-{
+{ ... }: {
   inputs = {
     nixpkgs = {
       type = "github";
@@ -67,16 +100,3 @@ Use a NixOS system flake to enable the service.
   };
 }
 ```
-
-## Subflakes
-
-The source code is split up into subflakes, which also have their own development environments and checks.
-These are just regular nix files, but follow the naming conventions of flakes.
-
-* [Setup:](./setup) Nix overlays and configuration
-* [Server:](./server) HTTP server executable
-* [Blog:](./blog) Blog articles and related content
-* [Files:](./files) Downloadable files
-* [Static:](./static) Static files directly visible from HTML
-* [Config:](./config) Runtime configuration with static files
-* [Final:](./final) Wrapper and NixOS module
