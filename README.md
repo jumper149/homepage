@@ -30,10 +30,10 @@ Configure your NixOS configuration to trust the binary cache.
 {
   nix.settings = {
     substituters = [
-      "https://jumper149.cachix.org"
+      "https://jumper149-homepage.cachix.org"
     ];
     trusted-public-keys = [
-      "jumper149.cachix.org-1:5syL4dYYDmzoPibE7g1QVj+mKC+rNZDoxyBt0P0DQ2w="
+      "jumper149-homepage.cachix.org-1:6QyrYeIOaS9aVpUx0qcLHW2s0/Klv7LrvZBYHMSW4F4="
     ];
   };
 }
