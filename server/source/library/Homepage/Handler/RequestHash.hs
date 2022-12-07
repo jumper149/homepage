@@ -21,11 +21,12 @@ newtype Hash = MkHash {getHash :: Word}
 
 instance Show Hash where
   show hash = paddingString ++ hashString
-    where
-      hashString = show $ getHash hash
-      paddingString = replicate paddingLength '0'
-      paddingLength = maxHashLength - length hashString
-        where maxHashLength = length $ show $ getHash $ MkHash maxBound
+   where
+    hashString = show $ getHash hash
+    paddingString = replicate paddingLength '0'
+    paddingLength = maxHashLength - length hashString
+     where
+      maxHashLength = length $ show $ getHash $ MkHash maxBound
 
 requestHash :: Request -> Hash
 requestHash = MkHash . fromIntegral . Data.Hashable.hash . show
