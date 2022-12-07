@@ -10,7 +10,7 @@ import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity
 import Control.Monad.Trans.Reader
 import Data.ByteString.Char8 qualified as B
-import Data.Hashable
+import Data.Hashable qualified
 import Data.Kind
 import Network.Wai
 import Servant
@@ -19,8 +19,16 @@ import Servant.Server.Internal.Delayed
 type Hash :: Type
 newtype Hash = MkHash {getHash :: Word}
 
+instance Show Hash where
+  show hash = paddingString ++ hashString
+    where
+      hashString = show $ getHash hash
+      paddingString = replicate paddingLength '0'
+      paddingLength = maxHashLength - length hashString
+        where maxHashLength = length $ show $ getHash $ MkHash maxBound
+
 requestHash :: Request -> Hash
-requestHash = MkHash . fromIntegral . hash . show
+requestHash = MkHash . fromIntegral . Data.Hashable.hash . show
 
 type RequestHashT :: (Type -> Type) -> Type -> Type
 newtype RequestHashT m a = RequestHashT {unRequestHashT :: ReaderT Hash m a}
@@ -30,7 +38,7 @@ newtype RequestHashT m a = RequestHashT {unRequestHashT :: ReaderT Hash m a}
 instance MonadLogger m => MonadLogger (RequestHashT m) where
   monadLoggerLog loc logSource logLevel logStr = do
     reqHash <- RequestHashT ask
-    let reqInfo = "@[" <> show (getHash reqHash) <> "]"
+    let reqInfo = "@[" <> show reqHash <> "]"
     lift . monadLoggerLog loc logSource logLevel . toLogStr $
       B.pack reqInfo <> " " <> fromLogStr (toLogStr logStr)
 
