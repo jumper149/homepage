@@ -14,6 +14,7 @@ import Control.Monad.Trans.Control.Identity
 import Data.ByteString.Char8 qualified as B
 import Data.Kind
 import Data.Time qualified as T
+import Data.Time.Format.ISO8601 qualified as T
 
 type TimedLoggingT :: (Type -> Type) -> Type -> Type
 newtype TimedLoggingT m a = TimedLoggingT {unTimedLoggingT :: LoggingT m a}
@@ -23,9 +24,9 @@ newtype TimedLoggingT m a = TimedLoggingT {unTimedLoggingT :: LoggingT m a}
 instance MonadIO m => MonadLogger (TimedLoggingT m) where
   monadLoggerLog loc logSource logLevel logStr = do
     time <- lift $ liftIO T.getCurrentTime
-    let timeInfo = "@{" <> show time <> "}"
+    let timeInfo = T.iso8601Show time
     TimedLoggingT . monadLoggerLog loc logSource logLevel . toLogStr $
-      B.pack timeInfo <> " " <> fromLogStr (toLogStr logStr)
+      "@{" <> B.pack timeInfo <> "} " <> fromLogStr (toLogStr logStr)
 
 deriving via
   TimedLoggingT ((t2 :: (Type -> Type) -> Type -> Type) m)
