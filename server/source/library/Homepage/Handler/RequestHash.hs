@@ -39,7 +39,7 @@ newtype RequestHashT m a = RequestHashT {unRequestHashT :: ReaderT Hash m a}
 instance MonadLogger m => MonadLogger (RequestHashT m) where
   monadLoggerLog loc logSource logLevel logStr = do
     reqHash <- RequestHashT ask
-    let reqInfo = "@[" <> show reqHash <> "]"
+    let reqInfo = "#[" <> show reqHash <> "]"
     lift . monadLoggerLog loc logSource logLevel . toLogStr $
       B.pack reqInfo <> " " <> fromLogStr (toLogStr logStr)
 
