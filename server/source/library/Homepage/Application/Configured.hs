@@ -7,7 +7,7 @@ import Homepage.Application.Configured.Class
 import Homepage.Application.Environment.Class
 import Homepage.Configuration
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control

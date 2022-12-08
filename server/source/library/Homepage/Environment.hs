@@ -3,7 +3,7 @@
 
 module Homepage.Environment where
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Data.Kind
 import Data.Singletons.TH
 import GHC.Generics

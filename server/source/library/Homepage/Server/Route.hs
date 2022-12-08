@@ -11,7 +11,7 @@ import Homepage.Server.Route.Static qualified
 import Homepage.Server.Route.Type
 
 import Control.Monad.IO.Unlift
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Servant.Server.Generic
 
 routes ::

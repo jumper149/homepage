@@ -3,7 +3,7 @@
 
 module Homepage.Handler.RequestHash where
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Class
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control

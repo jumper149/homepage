@@ -2,7 +2,7 @@
 
 module Control.Monad.Logger.OrphanInstances () where
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
 import Control.Monad.Trans.Control.Identity

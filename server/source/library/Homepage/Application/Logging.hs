@@ -5,7 +5,7 @@ module Homepage.Application.Logging where
 
 import Homepage.Application.Environment.Class
 
-import Control.Monad.Logger
+import Control.Monad.Logger.CallStack
 import Control.Monad.Logger.OrphanInstances ()
 import Control.Monad.Trans
 import Control.Monad.Trans.Compose
