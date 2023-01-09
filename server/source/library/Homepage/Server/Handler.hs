@@ -1,11 +1,11 @@
 {-# LANGUAGE MonoLocalBinds #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module Homepage.Handler where
+module Homepage.Server.Handler where
 
 import Homepage.Application.Blog.Class
 import Homepage.Application.Configured.Class
-import Homepage.Handler.RequestHash
+import Homepage.Server.Handler.RequestHash
 
 import Control.Monad.Base
 import Control.Monad.IO.Unlift

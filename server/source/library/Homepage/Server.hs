@@ -4,8 +4,8 @@ import Homepage.Application.Blog.Class
 import Homepage.Application.Configured.Class
 import Homepage.Configuration
 import Homepage.Configuration.BaseUrl
-import Homepage.Handler
-import Homepage.Handler.RequestHash
+import Homepage.Server.Handler
+import Homepage.Server.Handler.RequestHash
 import Homepage.Server.Route
 import Homepage.Server.Route.Type
 

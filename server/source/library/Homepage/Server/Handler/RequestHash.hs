@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 
-module Homepage.Handler.RequestHash where
+module Homepage.Server.Handler.RequestHash where
 
 import Control.Monad.Logger.CallStack
 import Control.Monad.Trans.Class
