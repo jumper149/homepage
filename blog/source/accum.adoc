@@ -1,11 +1,13 @@
 :revdate: 2023-01-14
-= `AccumT` should have a regular `MonadAccum` instance
+= ``AccumT``'s `MonadAccum` instance
 
-The usual pattern that https://hackage.haskell.org/package/mtl[mtl] follows is, that for every kind of transformer from https://hackage.haskell.org/package/transformers[transformers] (`ExampleT`) there exists one type class (`MonadExample`) with an `instance Monad m => MonadExample (ExampleT m)`.
-`AccumT` is a new addition to transformers, that currently doesn't follow this pattern.
+https://hackage.haskell.org/package/transformers[Transformers] provides a monad transformer `AccumT`.
+https://hackage.haskell.org/package/mtl[Mtl] provides a type class `MonadAccum`.
+There should be an `instance (Monoid w, Monad m) => MonadAccum w (AccumT w m)`, but this is not the case.
 
 == `AccumT` and `MonadAccum`
-`AccumT` is isomorphic to `StateT`. It could even be defined as a newtype wrapper around `StateT`.
+
+`AccumT` is a monad transformer that's similar to `StateT` and `WriterT`.
 
 .`AccumT` definition
 [source,haskell]
@@ -13,16 +15,10 @@ The usual pattern that https://hackage.haskell.org/package/mtl[mtl] follows is, 
 newtype AccumT w m a = AccumT { runAccumT :: w -> m (a, w) }
 ----
 
-.`StateT` definition
-[source,haskell]
-----
-newtype StateT s m a = StateT { runStateT :: s -> m (a, s) }
-----
+NOTE: `AccumT` is actually isomorphic to `StateT`.
 
-NOTE: The differences between `StateT` and `AccumT` are their effects.
-
-`MonadState` allows you to modify a state `s` similar to a variable in imperative languages.
-`MonadAccum` only appends to that variable (`w` in this case) via `(<>)` from `Monoid`.
+`MonadState` allows you to modify a state (`s`) similar to a variable in imperative languages.
+`MonadAccum` only appends to that variable (`w`) via `(<>)` from `Monoid`.
 `MonadAccum` is similar to `MonadWriter` in that way, but also allows you to look at what has already been accumulated.
 
 .Minimal `MonadAccum` definition
@@ -35,16 +31,6 @@ class (Monoid w, Monad m) => MonadAccum w m | m -> w where
 
 === The current instance
 
-[INFO]
-====
-The `Functor`, `Applicative` and `Monad` instances of `AccumT` are fine.
-`Applicative` and `Monad` use a `Monoid w` constraint, but nothing really special is going on.
-====
-
-Here comes the part that annoys me...
-
-**Why is the `MonadAccum` instance restricted to `AccumT w Identity`???**
-
 .``AccumT``'s `MonadAccum` instance currently
 [source,haskell]
 ----
@@ -52,6 +38,20 @@ instance Monoid w => MonadAccum w (AccumT w Identity) where
   add w = AccumT $ \ _ -> return ((), w)
   look = AccumT $ \ w -> return (w, mempty)
 ----
+
+[NOTE]
+====
+The `Functor`, `Applicative` and `Monad` instances of `AccumT` are fine.
+`Applicative` and `Monad` use a `Monoid w` constraint and they look like a combination of `StateT` and `WriterT`, but nothing really special is going on.
+====
+
+====
+.Here comes the part that annoys me...
+--
+[.text-center]
+**Why is the `MonadAccum` instance restricted to `AccumT w Identity`???**
+--
+====
 
 We can easily implement this instance using the exact same methods, but without restricting the base monad.
 Therefore I propose to change this instance in the following way.
@@ -64,10 +64,15 @@ instance (Monoid w, Monad m) => MonadAccum w (AccumT w m) where
   look = AccumT $ \ w -> return (w, mempty)
 ----
 
-Almost every other transformer instance uses `instance Monad m => MonadExample (ExampleT m)`.
+.Almost every other transformer instance uses this pattern.
+[source,haskell]
+----
+`instance Monad m => MonadExample (ExampleT m)`
+----
+
 We should also use that pattern here.
 
-[INFO]
+[NOTE]
 ====
 There are two exceptions in transformers, that don't follow this rule.
 `ContT` doesn't need the `Monad m` constraint and `SelectT` doesn't work with any base monad that carries monadic state.
@@ -107,7 +112,7 @@ Aside from these laws, we will only need definitions.
 
 ==== Proving law 1: ``look *> look = look``
 
-Substituting the `(>>=)` definition makes the terms grow quite a bit, but we can still use a direct proof.
+Substituting the `(>>=)` definition makes the terms grow quite a bit, but we can use a direct proof.
 
 [cols="2,1"]
 |===
@@ -229,7 +234,7 @@ I guess you can probably figure out the approach by now.
 TIP: It's a direct proof.
 
 Unfortunately we will have to substitute `(>>=)` again.
-Overall the proof has the same structure as the proof for the first law.
+Overall the proof has the same structure as the proof of the first law.
 
 [cols="2,1"]
 |===
@@ -372,8 +377,14 @@ x <> mempty = x
 ----
 |===
 
-And now we have to check that the right side is equivalent to: +
-``AccumT $ \ w1 -> return (w1 <> x, x)``.
+[NOTE]
+====
+.Now we have to check that the right side is equivalent to this.
+[source,haskell]
+----
+AccumT $ \ w1 -> return (w1 <> x, x)
+----
+====
 
 [cols="2,1"]
 |===
