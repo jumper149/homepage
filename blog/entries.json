@@ -100,4 +100,13 @@
       }
     ]
   }
+, "accumtsMonadaccumInstance":
+  { "timestamp": "2023-01-14"
+  , "title": "AccumT's MonadAccum instance"
+  , "discussion":
+    [ { "description": "GitHub: haskell/mtl PR#141"
+      , "url": "https://github.com/haskell/mtl/pull/141"
+      }
+    ]
+  }
 }

@@ -67,7 +67,7 @@ instance (Monoid w, Monad m) => MonadAccum w (AccumT w m) where
 .Almost every other transformer instance uses this pattern.
 [source,haskell]
 ----
-`instance Monad m => MonadExample (ExampleT m)`
+instance Monad m => MonadExample (ExampleT m)
 ----
 
 We should also use that pattern here.
@@ -80,6 +80,8 @@ There are two exceptions in transformers, that don't follow this rule.
 
 === The laws of `MonadAccum`
 I'm going to check the laws of `MonadAccum` to make sure I don't break anything.
+
+IMPORTANT: If you find any mistakes, please let me know and I'll fix them.
 
 .`MonadAccum` laws to prove
 ____
