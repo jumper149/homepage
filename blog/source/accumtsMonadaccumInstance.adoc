@@ -421,7 +421,9 @@ a|
 [source,haskell]
 ----
 AccumT $ \ w1 -> do
-  (b, w3) <- runAccumT (add x $> w1 <> x) (w1 <> mempty)
+  (b, w3) <- runAccumT
+               (add x $> w1 <> x)
+               (w1 <> mempty)
   return (b, mempty <> w3)
 ----
 a|
@@ -451,7 +453,8 @@ a|
 .Substituting ``Functor``'s `($>)` using `Monad`.
 [source]
 ----
-a $> b = a >>= \ _ -> return b
+  a $> b
+= a >>= \ _ -> return b
 ----
 a|
 [source,haskell]
