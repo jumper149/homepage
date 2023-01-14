@@ -1,0 +1,522 @@
+:revdate: 2023-01-14
+= `AccumT` should have a regular `MonadAccum` instance
+
+The usual pattern that https://hackage.haskell.org/package/mtl[mtl] follows is, that for every kind of transformer from https://hackage.haskell.org/package/transformers[transformers] (`ExampleT`) there exists one type class (`MonadExample`) with an `instance Monad m => MonadExample (ExampleT m)`.
+`AccumT` is a new addition to transformers, that currently doesn't follow this pattern.
+
+== `AccumT` and `MonadAccum`
+`AccumT` is isomorphic to `StateT`. It could even be defined as a newtype wrapper around `StateT`.
+
+.`AccumT` definition
+[source,haskell]
+----
+newtype AccumT w m a = AccumT { runAccumT :: w -> m (a, w) }
+----
+
+.`StateT` definition
+[source,haskell]
+----
+newtype StateT s m a = StateT { runStateT :: s -> m (a, s) }
+----
+
+NOTE: The differences between `StateT` and `AccumT` are their effects.
+
+`MonadState` allows you to modify a state `s` similar to a variable in imperative languages.
+`MonadAccum` only appends to that variable (`w` in this case) via `(<>)` from `Monoid`.
+`MonadAccum` is similar to `MonadWriter` in that way, but also allows you to look at what has already been accumulated.
+
+.Minimal `MonadAccum` definition
+[source,haskell]
+----
+class (Monoid w, Monad m) => MonadAccum w m | m -> w where
+  add :: w -> m () -- Append to variable.
+  look :: m w -- Look at current state of variable.
+----
+
+=== The current instance
+
+[INFO]
+====
+The `Functor`, `Applicative` and `Monad` instances of `AccumT` are fine.
+`Applicative` and `Monad` use a `Monoid w` constraint, but nothing really special is going on.
+====
+
+Here comes the part that annoys me...
+
+**Why is the `MonadAccum` instance restricted to `AccumT w Identity`???**
+
+.``AccumT``'s `MonadAccum` instance currently
+[source,haskell]
+----
+instance Monoid w => MonadAccum w (AccumT w Identity) where
+  add w = AccumT $ \ _ -> return ((), w)
+  look = AccumT $ \ w -> return (w, mempty)
+----
+
+We can easily implement this instance using the exact same methods, but without restricting the base monad.
+Therefore I propose to change this instance in the following way.
+
+.``AccumT``'s `MonadAccum` instance proposed by me
+[source,haskell]
+----
+instance (Monoid w, Monad m) => MonadAccum w (AccumT w m) where
+  add w = AccumT $ \ _ -> return ((), w)
+  look = AccumT $ \ w -> return (w, mempty)
+----
+
+Almost every other transformer instance uses `instance Monad m => MonadExample (ExampleT m)`.
+We should also use that pattern here.
+
+[INFO]
+====
+There are two exceptions in transformers, that don't follow this rule.
+`ContT` doesn't need the `Monad m` constraint and `SelectT` doesn't work with any base monad that carries monadic state.
+====
+
+=== The laws of `MonadAccum`
+I'm going to check the laws of `MonadAccum` to make sure I don't break anything.
+
+.`MonadAccum` laws to prove
+____
+1. ``look *> look = look``
+2. ``add mempty = pure ()``
+3. ``add x *> add y = add (x <> y)``
+4. ``add x *> look = look >>= w -> add x $> w <> x``
+____
+
+To help with the proof we can use the laws of `Monoid` and `Monad`, because that's how we want to constrain the `MonadAccum` instance.
+
+.`Monoid` laws
+____
+[horizontal]
+Left identity:: ``mempty <> x = x``
+Right identity:: ``x <> mempty = x``
+Associativity:: ``x <> (y <> z) = (x <> y) <> z``
+Concatenation:: ``mconcat = foldr (<>) mempty``
+____
+
+.`Monad` laws
+____
+[horizontal]
+Left identity:: ``return a >>= k = k a``
+Right identity:: ``m >>= return = m``
+Associativity:: ``m >>= (\x -> k x >>= h) = (m >>= k) >>= h``
+____
+
+Aside from these laws, we will only need definitions.
+
+==== Proving law 1: ``look *> look = look``
+
+Substituting the `(>>=)` definition makes the terms grow quite a bit, but we can still use a direct proof.
+
+[cols="2,1"]
+|===
+a|
+[source,haskell]
+----
+look *> look
+----
+|
+a|
+[source,haskell]
+----
+look >> look
+----
+a|
+[source]
+----
+(*>) = (>>)
+----
+a|
+[source,haskell]
+----
+look >>= \ _ -> look
+----
+| Definition of `(>>)`.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (a, w2) <- runAccumT look w1
+  (b, w3) <- runAccumT ((\ _ -> look) a) (w1 <> w2)
+  return (b, w2 <> w3)
+----
+a|
+Definition of `(>>=)` from `Monad (AccumT w m)`.
+
+NOTE: ``do``-block in `m`.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (_, w2) <- return (w1, mempty)
+  (b, w3) <- return (w1 <> w2, mempty)
+  return (b, w2 <> w3)
+----
+| Definition of `look` and `runAccumT`.
+Simplification using function application.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 ->
+  return (w1 <> mempty, mempty <> mempty)
+----
+a|
+.Simplification of ``do``-block using ``Monad``'s "left identity".
+[source]
+----
+return a >>= k = k a
+----
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> return (w1, mempty)
+----
+a|
+.``Monoid``'s "right identity".
+[source]
+----
+x <> mempty = x
+----
+a|
+[source,haskell]
+----
+look
+----
+| Definition of `look`.
+|===
+
+==== Proving law 2: ``add mempty = pure ()``
+
+This is a simple direct proof.
+
+[cols="2,1"]
+|===
+a|
+[source,haskell]
+----
+add mempty
+----
+|
+a|
+[source,haskell]
+----
+AccumT $ \ _ -> return ((), mempty)
+----
+| Definition of `add`.
+a|
+[source,haskell]
+----
+return ()
+----
+| Definition of `return` from ``Monad (AccumT w m)``.
+a|
+[source,haskell]
+----
+pure ()
+----
+a|
+[source]
+----
+return = pure
+----
+|===
+
+==== Proving law 3: ``add x *> add y = add (x <> y)``
+
+I guess you can probably figure out the approach by now.
+
+TIP: It's a direct proof.
+
+Unfortunately we will have to substitute `(>>=)` again.
+Overall the proof has the same structure as the proof for the first law.
+
+[cols="2,1"]
+|===
+a|
+[source,haskell]
+----
+add x *> add y
+----
+|
+a|
+[source,haskell]
+----
+add x >> add y
+----
+a|
+[source]
+----
+(*>) = (>>)
+----
+a|
+[source,haskell]
+----
+add x >>= \ _ -> add y
+----
+| Definition of `(>>)`.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (a, w2) <- runAccumT (add x) w1
+  (b, w3) <- runAccumT ((\ _ -> add y) a) (w1 <> w2)
+  return (b, w2 <> w3)
+----
+a|
+Definition of `(>>=)` from `Monad (AccumT w m)`.
+
+NOTE: ``do``-block in `m`.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (_, w2) <- return ((), x)
+  (b, w3) <- return ((), y)
+  return (b, w2 <> w3)
+----
+| Definition of `add` and `runAccumT`.
+Simplification using function application.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> return ((), x <> y)
+----
+a|
+.Simplification of ``do``-block using ``Monad``'s "left identity".
+[source]
+----
+return a >>= k = k a
+----
+a|
+[source,haskell]
+----
+add (x <> y)
+----
+| Definition of `add`.
+|===
+
+==== Proving law 4: ``add x *> look = look >>= \ w -> add x $> w <> x``
+
+This time we will transform both sides of the equation and we will reach terms that are obviously equivalent.
+
+We are starting with the left side.
+
+[cols="2,1"]
+|===
+a|
+[source,haskell]
+----
+add x *> look
+----
+|
+a|
+[source,haskell]
+----
+add x >> look
+----
+a|
+[source]
+----
+(*>) = (>>)
+----
+a|
+[source,haskell]
+----
+add x >>= \ _ -> look
+----
+| Definition of `(>>)`.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (a, w2) <- runAccumT (add x) w1
+  (b, w3) <- runAccumT ((\ _ -> look) a) (w1 <> w2)
+  return (b, w2 <> w3)
+----
+a|
+Definition of `(>>=)` from `Monad (AccumT w m)`.
+
+NOTE: ``do``-block in `m`.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (_, w2) <- return ((), x)
+  (b, w3) <- return (w1 <> w2, mempty)
+  return (b, w2 <> w3)
+----
+| Definition of `add`, `look` and `runAccumT`.
+Simplification using function application.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> return (w1 <> x, x <> mempty)
+----
+a|
+.Simplification of ``do``-block using ``Monad``'s "left identity".
+[source]
+----
+return a >>= k = k a
+----
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> return (w1 <> x, x)
+----
+a|
+.``Monoid``'s "right identity".
+[source]
+----
+x <> mempty = x
+----
+|===
+
+And now we have to check that the right side is equivalent to: +
+``AccumT $ \ w1 -> return (w1 <> x, x)``.
+
+[cols="2,1"]
+|===
+a|
+[source,haskell]
+----
+look >>= \ w -> add x $> w <> x
+----
+|
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (a, w2) <- runAccumT look w1
+  (b, w3) <- runAccumT (add x $> a <> x) (w1 <> w2)
+  return (b, w2 <> w3)
+----
+a|
+Definition of `(>>=)` from `Monad (AccumT w m)`.
+
+NOTE: ``do``-block in `m`.
+
+Simplification using function application.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (a, w2) <- return (w1, mempty)
+  (b, w3) <- runAccumT (add x $> a <> x) (w1 <> w2)
+  return (b, w2 <> w3)
+----
+| Definition of `add` and `runAccumT`.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (b, w3) <- runAccumT (add x $> w1 <> x) (w1 <> mempty)
+  return (b, mempty <> w3)
+----
+a|
+.Simplification of ``do``-block using ``Monad``'s "left identity".
+[source]
+----
+return a >>= k = k a
+----
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (b, w3) <- runAccumT
+               (add x >>= \ _ -> return (w1 <> x))
+               (w1 <> mempty)
+  return (b, mempty <> w3)
+----
+a|
+// This is too much to fit in this blog post.
+//       a $> b
+//     = flip (fmap . const) a b
+//     = (fmap . const) b a
+//     = fmap (const b) a
+//     = a >>= return . (const b)
+//     = a >>= \ x -> return (const b x) 
+//     = a >>= \ _ -> return b
+.Substituting ``Functor``'s `($>)` using `Monad`.
+[source]
+----
+a $> b = a >>= \ _ -> return b
+----
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (b, w3) <- do
+    (_, v2) <- runAccumT
+                 (add x)
+                 (w1 <> mempty)
+    (q, v3) <- runAccumT
+                 (return (w1 <> x))
+                 ((w1 <> mempty) <> v2)
+    return (q, v2 <> v3)
+  return (b, mempty <> w3)
+----
+a|
+Definition of `(>>=)` from `Monad (AccumT w m)`.
+
+NOTE: ``do``-block in `m`.
+
+Simplification using function application.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (b, w3) <- do
+    (_, v2) <- return ((), x))
+    (q, v3) <- return (w1 <> x, mempty)
+    return (q, v2 <> v3)
+  return (b, mempty <> w3)
+----
+| Definition of `add` and `runAccumT`.
+Simplification using function application.
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> do
+  (b, w3) <- return (w1 <> x, x <> mempty)
+  return (b, mempty <> w3)
+----
+a|
+.Simplification of ``do``-block using ``Monad``'s "left identity".
+[source]
+----
+return a >>= k = k a
+----
+a|
+[source,haskell]
+----
+AccumT $ \ w1 ->
+  return (w1 <> x, mempty <> (x <> mempty))
+----
+a|
+.Simplification of ``do``-block using ``Monad``'s "left identity".
+[source]
+----
+return a >>= k = k a
+----
+a|
+[source,haskell]
+----
+AccumT $ \ w1 -> return (w1 <> x, x)
+----
+a|
+.``Monoid``'s "right identity".
+[source]
+----
+x <> mempty = x
+----
+
+.``Monoid``'s "left identity".
+[source]
+----
+mempty <> x = x
+----
+|===
+
+And thus we have reached our goal.
+Both sides of the equation are actually equivalent.
