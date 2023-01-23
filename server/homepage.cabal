@@ -19,8 +19,6 @@ common language
     LexicalNegation
     NumDecimals
     OverloadedStrings
-    NoStarIsType
-      -- ^ -Wstar-is-type will already give a warning. This actually disables the feature.
   ghc-options:
     -Weverything
     -Wno-all-missed-specialisations
