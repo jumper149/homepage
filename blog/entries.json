@@ -107,6 +107,9 @@
     [ { "description": "GitHub: haskell/mtl PR#141"
       , "url": "https://github.com/haskell/mtl/pull/141"
       }
+    , { "description": "Reddit: /r/haskell"
+      , "url": "https://www.reddit.com/r/haskell/comments/10c2ik5/accumts_monadaccum_instance/"
+      }
     ]
   }
 }
