@@ -33,7 +33,8 @@ handler = do
   blogs <- configBlogEntries <$> configuration
   blogPreviewMaxLength <- configBlogPreviewMaxLength <$> configuration
   logInfo "Serve main page."
-  pure . document baseUrl contactInformation revision (Just 0) (Just TabHome) $ do
+  let description = (describeDocument contactInformation $ Just TabHome) {documentDepth = Just 0}
+  pure . document baseUrl contactInformation revision description $ do
     img ! src "portrait.jpg" ! class_ "portrait" ! alt ("Portrait of " <> textValue (contactName contactInformation))
     h1 $ toMarkup $ contactName contactInformation
 

@@ -46,7 +46,8 @@ overviewHandler = do
   revision <- configRevision <$> configuration
   blogs <- configBlogEntries <$> configuration
   logInfo "Serve blog overview."
-  pure . document baseUrl contactInformation revision (Just 0) (Just TabBlog) $ do
+  let description = (describeDocument contactInformation $ Just TabBlog) {documentDepth = Just 0}
+  pure . document baseUrl contactInformation revision description $ do
     h2 "my Blog"
     p $ do
       "My blog is available as an "
@@ -71,8 +72,9 @@ articleHandler blogId = do
       contactInformation <- configContactInformation <$> configuration
       revision <- configRevision <$> configuration
       logInfo $ "Serve blog article: " <> T.pack (show blogId)
+      let description = (describeDocument contactInformation $ Just TabBlog) {documentDepth = Just 1}
       respond . WithStatus @200 $
-        document baseUrl contactInformation revision (Just 1) (Just TabBlog) $ do
+        document baseUrl contactInformation revision description $ do
           h2 $ text $ blogTitle blog
           p $ do
             "View blog entry: "

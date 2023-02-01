@@ -30,7 +30,8 @@ html404 = do
   baseUrl <- configBaseUrl <$> configuration
   contactInformation <- configContactInformation <$> configuration
   revision <- configRevision <$> configuration
-  pure . document baseUrl contactInformation revision Nothing Nothing $ do
+  let description = describeDocument contactInformation Nothing
+  pure . document baseUrl contactInformation revision description $ do
     h1 "404"
     h2 "You got lost?"
     p $ "My homepage is " <> (a ! hrefWithDepth baseUrl Nothing "" $ "here") <> "."

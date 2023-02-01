@@ -36,7 +36,8 @@ overviewHandler = do
   revision <- configRevision <$> configuration
   fileEntries <- configFileEntries <$> configuration
   logInfo "Serve files overview."
-  pure . document baseUrl contactInformation revision (Just 0) (Just TabFiles) $ do
+  let description = (describeDocument contactInformation $ Just TabFiles) {documentDepth = Just 0}
+  pure . document baseUrl contactInformation revision description $ do
     h2 "my Files"
     fileList baseUrl (Just 0) fileEntries
 
