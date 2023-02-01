@@ -72,7 +72,9 @@ articleHandler blogId = do
       contactInformation <- configContactInformation <$> configuration
       revision <- configRevision <$> configuration
       logInfo $ "Serve blog article: " <> T.pack (show blogId)
-      let description = (describeDocument contactInformation $ Just TabBlog) {documentDepth = Just 1}
+      let description =
+            let x = (describeDocument contactInformation $ Just TabBlog) {documentDepth = Just 1}
+             in x {documentTitle = ((blogTitle blog <> " - ") <>) <$> documentTitle x}
       respond . WithStatus @200 $
         document baseUrl contactInformation revision description $ do
           h2 $ text $ blogTitle blog
