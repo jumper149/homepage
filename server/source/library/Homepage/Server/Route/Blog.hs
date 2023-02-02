@@ -72,9 +72,10 @@ articleHandler blogId = do
       contactInformation <- configContactInformation <$> configuration
       revision <- configRevision <$> configuration
       logInfo $ "Serve blog article: " <> T.pack (show blogId)
+      let shortenText len txt = if T.length txt <= len + 3 then txt else T.take len txt <> "..."
       let description =
             let x = (describeDocument contactInformation $ Just TabBlog) {documentDepth = Just 1}
-             in x {documentTitle = ((blogTitle blog <> " - ") <>) <$> documentTitle x}
+             in x {documentTitle = ((shortenText 29 (blogTitle blog) <> " - ") <>) <$> documentTitle x}
       respond . WithStatus @200 $
         document baseUrl contactInformation revision description $ do
           h2 $ text $ blogTitle blog
