@@ -112,4 +112,9 @@
       }
     ]
   }
+, "monadTransformerCompatibility":
+  { "timestamp": "2023-02-17"
+  , "title": "Monad Transformer Compatibility"
+  , "discussion": []
+  }
 }

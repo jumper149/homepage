@@ -1,0 +1,177 @@
+:revdate: 2023-02-17
+= Monad Transformer Compatibility
+
+A monad transformer stack will provide access to many __monad type classes__.
+But you have to be careful, which transformers can be stacked.
+
+https://hackage.haskell.org/package/deriving-trans[deriving-trans] uses 3 __categories__ of monad transformers to implement instances for any monad transformer without knowing its exact definition, which solves https://hackage.haskell.org/package/mtl[mtl]'s "`n^2^ problem`".
+
+`MonadTrans`:: `lift` a monadic computation `m a` into a monad transformer `t m a`.
+`MonadTransControl`:: `liftWith` runs a transformer's computation `t m a` in the base monad `m a`, but you have to take care of the transformer's monadic state `StT t a` explicitly with `restoreT`.
+`MonadTransControlIdentity`:: `liftWithIdentity` is just like `liftWith`, but without monadic state.
+
+These 3 categories form a hierarchy where `MonadTransControlIdentity` is stronger than `MonadTransControl`, which is stronger than `MonadTrans`.
+
+== Compatibility Matrix
+
+The following table gives you two pieces of information.
+The "`__transformer category__`" tells you, which kind of transformer you can stack on top and still keep access to the type class.
+The "`__set by transformers__`" column tells you, which transformers implement the type class by themselves.
+
+NOTE: This table is valid for https://hackage.haskell.org/package/deriving-trans-0.8.0.0[deriving-trans 0.8.0.0].
+
+[%header, stripes="even", grid="all", frame="all", cols="7,16,15,16"]
+|===
+|
+| monad type class
+^| transformer category
+^| set by transformers
+
+1.3+>.^h|
+| `MonadBase b` ^| `MonadTrans` >e| set by base monad
+| `MonadBaseControl b` ^| `MonadTransControl` >e| set by base monad
+| `MonadBaseControlIdentity b` ^| `MonadTransControlIdentity` >e| set by base monad
+
+1.6+>.^h| base
+| `Alternative` ^| `MonadTransControl`
+a|
+* `CatchT`
+* `ExceptT e` with `Monoid e`
+* `MaybeT`
+| `MonadFail` ^| `MonadTrans`
+a|
+* `CatchT`
+* `MaybeT`
+| `MonadFix` ^| `MonadTransControlIdentity` |
+| `MonadIO` ^| `MonadTrans` >e| set by base monad
+| `MonadPlus` ^| `MonadTransControl` |
+| `MonadZip` ^| `MonadTransControlIdentity` |
+
+1.2+>.^h| exceptions
+| `MonadThrow` ^| `MonadTrans`
+a|
+* `CatchT`
+| `MonadCatch` ^| `MonadTransControl`
+a|
+* `CatchT`
+
+1.8+>.^h| mtl
+| `MonadAccum w` ^| `MonadTrans`
+a|
+* `AccumT w`
+| `MonadCont` ^| `MonadTransControl`
+a|
+* `ContT r`
+| `MonadError e` ^| `MonadTransControl`
+a|
+* `ExceptT e`
+| `MonadReader r` ^| `MonadTransControl`
+a|
+* `ReaderT r`
+* `RWST r w s` with `Monoid w`
+  - Lazy
+  - Strict
+  - CPS
+| `MonadRWS r w s` ^| `MonadTransControl`
+a|
+* `RWST r w s` with `Monoid w`
+  - Lazy
+  - Strict
+  - CPS
+| `MonadSelect r` ^| `MonadTrans`
+a|
+* `SelectT r`
+| `MonadState s` ^| `MonadTrans`
+a|
+* `RWST r w s` with `Monoid w`
+  - Lazy
+  - Strict
+  - CPS
+* `StateT s`
+  - Lazy
+  - Strict
+| `MonadWriter w` ^| `MonadTransControl`
+a|
+* `RWST r w s` with `Monoid w`
+  - Lazy
+  - Strict
+  - CPS
+* `WriterT w`  with `Monoid w`
+  - Lazy
+  - Strict
+  - CPS
+
+1.1+>.^h| primitive
+| `PrimMonad` ^| `MonadTrans` >e| set by base monad
+
+1.3+>.^h| random
+| `StatefulGen g` ^| `MonadTrans` |
+| `FrozenGen f` ^| `MonadTrans` |
+| `RandomGenM g r` ^| `MonadTrans` |
+
+1.1+>.^h| resourcet
+| `MonadResource` ^| `MonadTrans`
+a|
+* `ResourceT`
+
+1.1+>.^h| unliftio
+| `MonadUnliftIO` ^| `MonadTransControlIdentity` >e| set by base monad
+|===
+
+And now let me quickly explain how to make use of this table with an example.
+
+.Understanding `MonadReader r` as an example.
+====
+In the table you will find a row on `MonadReader`, which will give you the following information.
+
+____
+1. A `MonadReader r m` instance can also imply `MonadReader r (t m)` when `t` satisfies `MonadTransControl`.
+2. `ReaderT r` or `RWST r w s` can be used to implement an instance by themselves.
+____
+
+Here are some examples of transformer stacks for any `Monad m` using `(.|>)` from deriving-trans.
+
+`(TransparentT .|> ReaderT r .|> ExceptT e) m`::
+* [x] will have a `MonadReader r` instance, because `ExceptT e` satisfies `MonadTransControl`.
+
+`(TransparentT .|> ReaderT r .|> ContT r) m`::
+* [ ] won't have a `MonadReader r` instance, because `ContT r` doesn't satisfy `MonadTransControl`.
+
+`(TransparentT .|> ReaderT r1 .|> ReaderT r2) m`::
+* [x] will have a `MonadReader r2` instance.
+* [x] will also have a `MonadReader r1` instance, unless `r1 ~ r2`.
+
+`(TransparentT .|> ExceptT e) m`::
+* will have a `MonadReader r` instance, whenever `m` satisfies `MonadReader r`.
+====
+
+Feel free to use this table as a cheat sheet or learning material.
+There are some intricacies though, which are hard to express in this format.
+
+[TIP]
+====
+Some methods like `ask` from `MonadReader` don't require the "`__transformer category__`" from the table.
+In this case you might want to use your own type class, which you can call `MonadAsk` for example.
+https://github.com/haskell/mtl/issues/116[This] might actually be default in the future anyways though.
+====
+
+[NOTE]
+====
+Some monad type classes are "`__set by base monad__`".
+I chose this for a few type classes, which only make sense when the instances come from the base monad `m`.
+
+.Compare these instances to understand the difference.
+[source,haskell]
+--------
+-- recursive instance
+(MonadExample (t2 m) {-, ... -}) => MonadExample (ComposeT t1 t2 m)
+
+-- base monad instance
+(MonadExample m {-, ... -}) => MonadExample (ComposeT t1 t2 m)
+--------
+====
+
+=== Outlook
+
+Currently I don't have proofs for the compatibility matrix, so it's possible, that some instances are not lawful and will change in the future.
+I am working on supporting https://hackage.haskell.org/package/logict[logict], but in this case https://github.com/Bodigrim/logict/issues/34[I am not yet sure], whether we are allowed to lift it through any `t` satisfying `MonadTransControl`.
