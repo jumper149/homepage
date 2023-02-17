@@ -8,6 +8,7 @@ import Homepage.Server.FileServer
 import Homepage.Server.Html.Depth
 import Homepage.Server.Html.Document
 import Homepage.Server.Route.Files.Type
+import Homepage.Server.Route.Type qualified
 import Homepage.Server.Tab
 
 import Control.Monad.IO.Unlift
@@ -64,8 +65,11 @@ overviewHandler = do
             " ]"
          where
           fileFormat FileFormat {fileFormatName, fileFormatExtension} =
-            a ! hrefWithDepth baseUrl (Just 0) (textValue $ "files/" <> fileIdentifier file <> maybe "" ("." <>) fileFormatExtension) $ -- TODO: Use `Servant.Links`.
+            a ! hrefWithDepth baseUrl (Just 0) (textValue $ T.pack (show $ linkURI filesRawLink) <> fileAddress) $
               toMarkup fileFormatName
+           where
+            filesRawLink = routeFiles . Homepage.Server.Route.Type.routeFiles $ allFieldLinks
+            fileAddress = "/" <> fileIdentifier file <> maybe "" ("." <>) fileFormatExtension
     markupEntries topLevelEntries
     let markupSection (sectionName, entrySet) = do
           h2 $ text $ "my " <> sectionName
