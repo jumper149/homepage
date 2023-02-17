@@ -105,7 +105,6 @@ library
     , Homepage.Server.Html.Blog
     , Homepage.Server.Html.Depth
     , Homepage.Server.Html.Document
-    , Homepage.Server.Html.Files
     , Homepage.Server.Html.Header
     , Homepage.Server.Route
     , Homepage.Server.Route.Blog
