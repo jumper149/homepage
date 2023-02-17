@@ -81,16 +81,19 @@ articleHandler blogId = do
           h2 $ text $ blogTitle blog
           p $ do
             "View blog entry: "
-            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> unBlogId blogId <> ".html") $ "HTML" -- TODO: Use `Servant.Links`.
+            a ! hrefWithDepth baseUrl (Just 1) (textValue $ T.pack (show $ linkURI blogRawLink) <> "/" <> unBlogId blogId <> ".html") $
+              "HTML"
             " | "
-            a ! hrefWithDepth baseUrl (Just 1) (textValue $ "blog/raw/" <> unBlogId blogId <> ".pdf") $ "PDF" -- TODO: Use `Servant.Links`.
+            a
+              ! hrefWithDepth baseUrl (Just 1) (textValue $ T.pack (show $ linkURI blogRawLink) <> "/" <> unBlogId blogId <> ".pdf")
+              $ "PDF"
           hr
           script ! HA.type_ "text/javascript" $
             "function resizeIframe(iframe) {\
             \  iframe.height = `${iframe.contentWindow.document.body.scrollHeight + 30}` + \"px\";\
             \}"
           iframe
-            ! HA.src (withDepth baseUrl (Just 1) $ textValue $ "blog/raw/" <> unBlogId blogId <> ".html") -- TODO: Use `Servant.Links`.
+            ! HA.src (withDepth baseUrl (Just 1) (textValue $ T.pack (show $ linkURI blogRawLink) <> "/" <> unBlogId blogId <> ".html"))
             ! HA.name "blog article (HTML)"
             ! HA.width "100%"
             ! HA.onload "resizeIframe(this)"
@@ -105,6 +108,7 @@ articleHandler blogId = do
                 "Follow the discussion about this article:"
                 ul . toMarkup $ markupLink <$> links
  where
+  blogRawLink = routeRaw . Homepage.Server.Route.Type.routeBlog $ allFieldLinks
   markupLink BlogLink {blogLinkDescription, blogLinkUrl} =
     li $ a ! HA.href (toValue blogLinkUrl) $ text blogLinkDescription
 
