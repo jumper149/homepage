@@ -22,4 +22,5 @@ fileServerSettings path =
               mimeType <- ssGetMimeType file
               runInIO . logInfo $ "Determined mime type: " <> T.pack (show mimeType)
               pure mimeType
+          , ssAddTrailingSlash = True -- Disable directory overview without trailing slash, because some links are broken.
           }
