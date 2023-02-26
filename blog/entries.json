@@ -115,6 +115,10 @@
 , "monadTransformerCompatibility":
   { "timestamp": "2023-02-17"
   , "title": "Monad Transformer Compatibility"
-  , "discussion": []
+  , "discussion":
+    [ { "description": "Reddit: /r/haskell"
+      , "url": "https://www.reddit.com/r/haskell/comments/114l23w/monad_transformer_compatibility/"
+      }
+    ]
   }
 }
