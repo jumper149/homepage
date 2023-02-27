@@ -32,7 +32,9 @@
       name = "homepage-test-application"; # TODO: Necessary to avoid segmentation fault.
       src = ./.;
       buildPhase = ''
+        set +e
         INIT_LOG="$(homepage-test-application-full)"
+        set -e
         echo "$INIT_LOG"
 
         if [ -z "$INIT_LOG" ];
