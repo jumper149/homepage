@@ -24,7 +24,7 @@ jobs:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v3.3.0
     - name: "Set up Nix"
-      uses: cachix/install-nix-action@v18
+      uses: cachix/install-nix-action@v20
     - name: "Set up Cachix"
       uses: cachix/cachix-action@v12
       with:
@@ -41,7 +41,7 @@ jobs:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v3.3.0
     - name: "Set up Nix"
-      uses: cachix/install-nix-action@v18
+      uses: cachix/install-nix-action@v20
     - name: "Set up Cachix"
       uses: cachix/cachix-action@v12
       with:
@@ -57,7 +57,7 @@ jobs:
     - name: "Set up GitHub Actions"
       uses: actions/checkout@v3.3.0
     - name: "Set up Nix"
-      uses: cachix/install-nix-action@v18
+      uses: cachix/install-nix-action@v20
     - name: "Set up Cachix"
       uses: cachix/cachix-action@v12
       with:
