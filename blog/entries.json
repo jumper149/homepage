@@ -124,6 +124,19 @@
 , "mensamAnnouncement":
   { "timestamp": "2023-06-03"
   , "title": "Announcement: Mensam"
-  , "discussion": []
+  , "discussion":
+    [ { "description": "Reddit: /r/haskell"
+      , "url": "https://www.reddit.com/r/haskell/comments/13zqfxf/announcement_mensam/"
+      }
+    , { "description": "Reddit: /r/elm"
+      , "url": "https://www.reddit.com/r/elm/comments/13zqhc3/announcement_mensam/"
+      }
+    , { "description": "Haskell Discourse"
+      , "url": "https://discourse.haskell.org/t/announcement-mensam/6367"
+      }
+    , { "description": "Elm Discourse"
+      , "url": "https://discourse.haskell.org/t/announcement-mensam"
+      }
+    ]
   }
 }
