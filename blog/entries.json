@@ -121,4 +121,9 @@
       }
     ]
   }
+, "mensamAnnouncement":
+  { "timestamp": "2023-06-03"
+  , "title": "Announcement: Mensam"
+  , "discussion": []
+  }
 }
