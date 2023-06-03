@@ -3,6 +3,8 @@
 
 Over the last few months I was developing a desk-booking web application.
 
+image::screenshotReservation.png[alt="Requesting a desk reservation (Screenshot)",width=300,float=right]
+
 GitHub Repository:: https://github.com/jumper149/mensam
 Hosted instance::
   * https://mens.am
