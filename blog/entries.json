@@ -134,9 +134,6 @@
     , { "description": "Haskell Discourse"
       , "url": "https://discourse.haskell.org/t/announcement-mensam/6367"
       }
-    , { "description": "Elm Discourse"
-      , "url": "https://discourse.haskell.org/t/announcement-mensam"
-      }
     ]
   }
 }
