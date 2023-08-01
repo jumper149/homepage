@@ -44,6 +44,15 @@
         id3v2 --delete-all "Felix_Springer-Naptune.wav"
         id3v2 --artist "Felix Springer" --song "Naptune" --year "2023" "Felix_Springer-Naptune.wav"
 
+        id3v2 --delete-all "Felix_Springer-Canori.flac"
+        id3v2 --artist "Felix Springer" --song "Canori" --year "2023" "Felix_Springer-Canori.flac"
+
+        id3v2 --delete-all "Felix_Springer-Canori.mp3"
+        id3v2 --artist "Felix Springer" --song "Canori" --year "2023" "Felix_Springer-Canori.mp3"
+
+        id3v2 --delete-all "Felix_Springer-Canori.wav"
+        id3v2 --artist "Felix Springer" --song "Canori" --year "2023" "Felix_Springer-Canori.wav"
+
         cp --recursive . $out
       '';
       nativeBuildInputs = [
