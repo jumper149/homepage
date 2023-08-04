@@ -2,6 +2,7 @@ module Homepage.Server.FileServer where
 
 import Control.Monad.IO.Unlift
 import Control.Monad.Logger.CallStack
+import Data.Functor
 import Data.Text qualified as T
 import WaiAppStatic.Storage.Filesystem
 import WaiAppStatic.Types
@@ -19,7 +20,11 @@ fileServerSettings path =
               runInIO . logInfo $ "Looking up file: " <> T.pack (show pieces)
               ssLookupFile pieces
           , ssGetMimeType = \file -> do
-              mimeType <- ssGetMimeType file
+              mimeType <-
+                ssGetMimeType file <&> \case
+                  "audio/x-flac" -> "audio/flac"
+                  "audio/x-wav" -> "audio/wav"
+                  defaultMimeType -> defaultMimeType
               runInIO . logInfo $ "Determined mime type: " <> T.pack (show mimeType)
               pure mimeType
           , ssAddTrailingSlash = True -- Disable directory overview without trailing slash, because some links are broken.
