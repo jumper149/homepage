@@ -98,6 +98,22 @@
   , "section": "Music"
   , "timestamp": "2023-08-01"
   }
+, { "identifier": "Felix_Springer-Zeal"
+  , "formats":
+    [ { "name": "WAV"
+      , "extension": "wav"
+      }
+    , { "name": "FLAC"
+      , "extension": "flac"
+      }
+    , { "name": "MP3"
+      , "extension": "mp3"
+      }
+    ]
+  , "name": "Felix Springer - Zeal"
+  , "section": "Music"
+  , "timestamp": "2023-08-21"
+  }
 , { "identifier": "Felix_Springer-Storage_Register_Design_for_an_Ion_Trap_Quantum_Processor"
   , "formats":
     [ { "name": "PDF"
