@@ -41,7 +41,7 @@ handler = do
     h2 "Welcome"
     -- TODO: Configure author specific information.
     p $ do
-      "I am living in Augsburg (Germany) and study mathematics at "
+      "I am living in Augsburg (Germany) and study Mathematics at "
       a ! href "https://www.uni-augsburg.de/en/" $ "Augsburg University"
       "."
     p $ do
