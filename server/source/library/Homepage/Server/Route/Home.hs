@@ -41,19 +41,22 @@ handler = do
     h2 "Welcome"
     -- TODO: Configure author specific information.
     p $ do
-      "I am living in Germany and working as a Software Engineer at "
-      a ! href "https://www.possehl-analytics.com/" $ "Possehl Analytics"
-      " in Augsburg."
-    p $ do
-      "I recently completed my Bachelor's degree in Physics with a minor in Computer Science, which I studied for at "
-      a ! href "https://www.uni-hannover.de/en/" $ "Leibniz Universität Hannover"
+      "I am living in Augsburg (Germany) and study mathematics at "
+      a ! href "https://www.uni-augsburg.de/en/" $ "Augsburg University"
       "."
+    p $ do
+      "Previously I finished my Bachelor's degree in Physics with a minor in Computer Science, which I studied for at "
+      a ! href "https://www.uni-hannover.de/en/" $ "Leibniz Universität Hannover"
+      ". "
+      "I also worked as software enginner at "
+      a ! href "https://www.possehl-analytics.com/" $ "Possehl Analytics"
+      " for a few years."
     p . fold $
       L.intersperse
         " "
         [ "In my free time I like messing around with Linux and programming."
         , "I am spending most of my time with functional languages like Haskell."
-        , "If I want to take a break from the computer I enjoy playing guitar or badminton."
+        , "If I want to take a break from the computer I enjoy playing guitar or going for a swim in one of the lakes nearby."
         , "I also love green tea."
         ]
 
