@@ -56,6 +56,7 @@ document baseUrl contactInformation maybeRev description x =
         Nothing -> pure ()
         Just descriptionText -> meta ! name "description" ! content (textValue descriptionText)
       meta ! name "viewport" ! content "width=500"
+      meta ! name "color-scheme" ! content "light dark"
       case documentTitle description of
         Nothing -> pure ()
         Just titleText -> H.title $ toMarkup titleText
