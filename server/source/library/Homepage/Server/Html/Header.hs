@@ -50,7 +50,7 @@ headerTabs ::
   Maybe Natural ->
   Maybe Tab ->
   Html
-headerTabs baseUrl ContactInformation {contactHeaderIcons, contactHomepageLabel, contactGithubUsername, contactGitlabUsername, contactSpotifyArtistUrlPiece} depth activeTab =
+headerTabs baseUrl ContactInformation {contactHeaderIcons, contactHomepageLabel, contactGithubUsername, contactGitlabUsername, contactSpotifyInformation} depth activeTab =
   header $
     H.div ! class_ "bar" $ do
       headerTabsHelper baseUrl depth activeTab
@@ -59,10 +59,10 @@ headerTabs baseUrl ContactInformation {contactHeaderIcons, contactHomepageLabel,
           a ! hrefWithDepth baseUrl depth "blog/atom.xml" ! class_ "icon" $
             img ! src (withDepth baseUrl depth "icons/feed.png") ! HA.title "Feed" ! class_ "icon"
         when (headerIconSpotify contactHeaderIcons) $
-          case contactSpotifyArtistUrlPiece of
+          case contactSpotifyInformation of
             Nothing -> mempty
-            Just spotifyUrlPiece ->
-              a ! href ("https://open.spotify.com/artist/" <> textValue spotifyUrlPiece) ! class_ "icon" $
+            Just SpotifyInformation {spotifyArtistUrlPiece} ->
+              a ! href ("https://open.spotify.com/artist/" <> textValue spotifyArtistUrlPiece) ! class_ "icon" $
                 img ! src (withDepth baseUrl depth "icons/Spotify.png") ! HA.title "Spotify" ! class_ "icon"
         when (headerIconGithub contactHeaderIcons) $
           case contactGithubUsername of

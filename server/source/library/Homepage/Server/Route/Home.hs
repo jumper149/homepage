@@ -101,7 +101,7 @@ contactHtml
     , contactGitlabUsername
     , contactHackageUsername
     , contactAurUsername
-    , contactSpotifyArtistUrlPiece
+    , contactSpotifyInformation
     } = ul $ toMarkup $ li <$> contactItems
    where
     contactItems =
@@ -113,7 +113,7 @@ contactHtml
         , markupGitLab <$> contactGitlabUsername
         , markupHackage <$> contactHackageUsername
         , markupAUR <$> contactAurUsername
-        , markupSpotify <$> contactSpotifyArtistUrlPiece
+        , markupSpotify <$> contactSpotifyInformation
         ]
     markupEmailAddress emailAddress = do
       a ! href ("mailto:" <> textValue emailAddress) $ "E-Mail"
@@ -132,5 +132,6 @@ contactHtml
     markupAUR aurUsername = do
       a ! href ("https://aur.archlinux.org/packages/?K=" <> textValue aurUsername <> "&SeB=m") $ "AUR"
       ": " <> text aurUsername
-    markupSpotify spotifyArtistUrlPiece = do
+    markupSpotify SpotifyInformation {spotifyArtistName, spotifyArtistUrlPiece} = do
       a ! href ("https://open.spotify.com/artist/" <> textValue spotifyArtistUrlPiece) $ "Spotify"
+      ": " <> text spotifyArtistName

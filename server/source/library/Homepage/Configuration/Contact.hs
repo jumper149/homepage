@@ -20,7 +20,7 @@ data ContactInformation = ContactInformation
   , contactGitlabUsername :: Maybe T.Text
   , contactHackageUsername :: Maybe T.Text
   , contactAurUsername :: Maybe T.Text
-  , contactSpotifyArtistUrlPiece :: Maybe T.Text
+  , contactSpotifyInformation :: Maybe SpotifyInformation
   }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
@@ -48,3 +48,13 @@ data DonateInformation = DonateInformation
   deriving
     (A.FromJSON, A.ToJSON)
     via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "donate", A.CamelToKebab], A.RejectUnknownFields] DonateInformation
+
+type SpotifyInformation :: Type
+data SpotifyInformation = SpotifyInformation
+  { spotifyArtistName :: T.Text
+  , spotifyArtistUrlPiece :: T.Text
+  }
+  deriving stock (Eq, Generic, Ord, Read, Show)
+  deriving
+    (A.FromJSON, A.ToJSON)
+    via A.CustomJSON [A.FieldLabelModifier [A.StripPrefix "spotify", A.CamelToKebab], A.RejectUnknownFields] SpotifyInformation
