@@ -14,6 +14,7 @@
     { "feed": true
     , "github": true
     , "gitlab": false
+    , "spotify": false
     }
   , "name": "Felix Springer"
   , "source-url": "https://github.com/jumper149/homepage"
@@ -29,6 +30,7 @@
   , "gitlab-username": "jumper149"
   , "hackage-username": "jumper149"
   , "aur-username": "jumper149"
+  , "spotify-artist-url-piece": null
   }
 , "blog-preview-max-length": 5
 , "atom-max-length": null

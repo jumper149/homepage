@@ -20,6 +20,7 @@ data ContactInformation = ContactInformation
   , contactGitlabUsername :: Maybe T.Text
   , contactHackageUsername :: Maybe T.Text
   , contactAurUsername :: Maybe T.Text
+  , contactSpotifyArtistUrlPiece :: Maybe T.Text
   }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
@@ -31,6 +32,7 @@ data HeaderIcons = HeaderIcons
   { headerIconFeed :: Bool
   , headerIconGithub :: Bool
   , headerIconGitlab :: Bool
+  , headerIconSpotify :: Bool
   }
   deriving stock (Eq, Generic, Ord, Read, Show)
   deriving
