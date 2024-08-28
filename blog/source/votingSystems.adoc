@@ -1,0 +1,159 @@
+:revdate: 2024-08-28
+
+= Voting Systems
+
+After watching https://www.youtube.com/watch?v=qf7ws2DF-zk[this video] about the limitations of democratic voting systems I spent some thoughts on the matter.
+
+I feel like I came up with a pretty good systems in my head.
+The main idea is a https://en.wikipedia.org/wiki/Ranked_voting[ranked voting system] that allows you to give additional weights to your choices.
+The counting happens recursively, unlike https://en.wikipedia.org/wiki/STAR_voting[STAR voting] which uses an arbitrary two step process.
+It can be summarized as a continuously ranked voting system.
+
+[NOTE]
+====
+The limitations that are talked about in the video cannot be overcome mathematically, but some things are very unlikely to happen in the real world.
+Thus we can relax some of the properties that are used in https://en.wikipedia.org/wiki/Arrow%27s_impossibility_theorem[Arrow's impossibility theorem].
+====
+
+Let's make some stuff clear.
+
+[NOTE]
+.The problem we are talking about
+====
+There are `N` options, that you can vote for.
+Only one option will be selected after counting all votes.
+====
+
+.Assumptions
+Unanimity:: Consensus is the ultimate goal.
+Anonymity:: Equal voting power for each voter.
+Unrestricted Domain:: Any voting will deterministically result in a decision.
+Transitivity:: `A > B` and `B > C` imply `A > C`. Every voter is able to decide on a ranking satisfying a total order.
+
+.Things that can go wrong
+Independence of irrelevant alternatives::
+One of the main flaws of https://en.wikipedia.org/wiki/First-past-the-post_voting[FPTP voting] is that additional options can influence the result even though that option doesn't even win. This is not desired considering transitivity.
+System abuse to increase voting power::
+Many ranked voting systems can be abused in a way by only voting for the single most preferred option.
+A well designed ranked voting system incentivizes to actually give the desired score to each option.
+
+== My idea of continuously ranked voting
+Each voter will decide on an ordering of the options he wants to vote for.
+The voter will then distribute 100 points in a way that represents the ordering he has in mind.
+Giving the same number of points to multiple options is allowed.
+
+.A ballot could look like this
+====
+A. 10 points
+B. 10 points
+C. 0 points
+D. 30 points
+E. 50 points
+====
+
+[TIP]
+====
+Choosing the amount of exactly 100 points is very arbitrary.
+It's just important to normalize the sum of points on every ballot to the same.
+
+.The idea is to give the voter the ability to express something along these lines
+[quote]
+I like option `D` three times more than option `B`.
+====
+
+
+=== Counting continuously ranked ballots
+We will eliminate options one by one.
+The worst option gets eliminated.
+
+Let's look at an example voting.
+
+.Rows are ballots. Columns are voting options
+[cols=">3,<1,<1,<1,<1,<1"]
+|===
+|Options|A|B|C|D|E
+
+|Ballot 1|10|10|0|30|50
+|Ballot 2|0|0|100|0|0
+|Ballot 3|30|30|30|0|10
+|Ballot 4|50|50|0|0|0
+|Ballot 5|10|20|10|0|60
+||||||
+|Sum|100|110|140|30|120
+|===
+
+In this example option `D` will be eliminated first.
+Ballot 1 was the only one that voted for that option.
+To keep the voting power of Ballot 1 the same as before the 30 points that were given to option `D` will now be distributed accordingly.
+
+.Option `D` was just eliminated
+[cols=">3,<1,<1,<1,<1"]
+|===
+|Options|A|B|C|E
+
+|Ballot 1|14.286|14.286|0|71.428
+|Ballot 2|0|0|100|0
+|Ballot 3|30|30|30|10
+|Ballot 4|50|50|0|0
+|Ballot 5|10|20|10|60
+|||||
+|Sum|104.286|114.286|140|141.428
+|===
+
+Now we eliminate option `A` and distribute the points the same way as before.
+You might have noticed the recursion happening now.
+
+.Option `A` was just eliminated
+[cols=">3,<1,<1,<1"]
+|===
+|Options|B|C|E
+
+|Ballot 1|16.667|0|83.333
+|Ballot 2|0|100|0
+|Ballot 3|42.857|42.857|14.286
+|Ballot 4|100|0|0
+|Ballot 5|22.222|11.111|66.667
+||||
+|Sum|181.746|153.968|164.286
+|===
+
+We keep going. We have arrived in the final round.
+
+.Option `C` was just eliminated
+[cols=">3,<1,<1"]
+|===
+|Options|B|E
+
+|Ballot 1|16.667|83.333
+|Ballot 2|0|0
+|Ballot 3|75|25
+|Ballot 4|100|0
+|Ballot 5|25|75
+|||
+|Sum|216.667|183.333
+|===
+
+In the final round option `B` wins over option `E`.
+
+=== Pros and Cons of this voting method
+The main idea of this counting method is to make sure that irrelevant alternatives really don't change the outcome.
+It's easy to see that in each recursion step no voting power is lost. Thus it is evident, that choosing irrelevant options is not harmful.
+
+One problem is that ties can happen at any step.
+Even when the tie happens between irrelevant alternatives, you cannot just flip a coin and keep going.
+These ties can actually still affect the outcome of the overall vote.
+Luckily ties are quite unlikely.
+One could argue that this voting system doesn't work on the "Unrestricted Domain" though.
+
+Depending on the implementation, floating point rounding errors might affect the result.
+
+Unfortunately it is not evident how your personal opinion translates to accurately giving points to options.
+
+What I really like about this voting method though, is that it greatly incentivizes the use of your actual preference in your vote.
+
+If you can spot a flaw with this system please let me know!
+
+Also while writing this I stumbled upon https://en.wikipedia.org/wiki/Rated_voting[rated voting].
+So I guess one could argue that this is just one way to do rated voting.
+Maybe it even exists already?
+Maybe "range voting" is very close?
