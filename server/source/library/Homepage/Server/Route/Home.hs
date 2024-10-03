@@ -41,14 +41,14 @@ handler = do
     h2 "Welcome"
     -- TODO: Configure author specific information.
     p $ do
-      "I am living in Augsburg (Germany) and study Mathematics at "
-      a ! href "https://www.uni-augsburg.de/en/" $ "Augsburg University"
+      "I am living in Augsburg (Germany) and work as a software developer for "
+      a ! href "https://www.natuvion.com/" $ "Natuvion"
       "."
     p $ do
       "Previously I finished my Bachelor's degree in Physics with a minor in Computer Science, which I studied for at "
       a ! href "https://www.uni-hannover.de/en/" $ "Leibniz Universität Hannover"
       ". "
-      "I also worked as software enginner at "
+      "I also worked as software developer at "
       a ! href "https://www.possehl-analytics.com/" $ "Possehl Analytics"
       " for a few years."
     p . fold $
