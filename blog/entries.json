@@ -144,6 +144,19 @@
 , "mensamUpdate":
   { "timestamp": "2024-11-03"
   , "title": "Update: Mensam"
-  , "discussion": []
+  , "discussion":
+    [ { "description": "Hacker News"
+      , "url": "https://news.ycombinator.com/item?id=42035745"
+      }
+    , { "description": "Reddit: /r/haskell"
+      , "url": "https://www.reddit.com/r/haskell/comments/1givr1z/update_mensam/"
+      }
+    , { "description": "Reddit: /r/elm"
+      , "url": "https://www.reddit.com/r/elm/comments/1givrm5/update_mensam/"
+      }
+    , { "description": "Haskell Discourse"
+      , "url": "https://discourse.haskell.org/t/https-felixspringer-xyz-homepage-blog-mensamupdate/10661"
+      }
+    ]
   }
 }
