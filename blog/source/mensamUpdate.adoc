@@ -1,0 +1,43 @@
+:revdate: 2024-11-03
+= Update: Mensam
+
+After more than 1 year of features and maintenance and I felt the need to write up a summary of the state of this desk booking application.
+Visit https://felixspringer.xyz/homepage/blog/mensamAnnouncement[this blog article] if you want to take a look at the initial announcement.
+
+image::browserCapture.gif[alt="Requesting a desk reservation (Screen Capture)",width=300,float=right]
+
+
+=== Stability
+
+I checked my server logs and had an uptime of `99.98986%`.
+The server was only down for software updates, but a few times I had some minor issues with the Nix cache and the server ran out of memory, which required manual intervention.
+
+To improve this I should use a Docker container instead of NixOS to deploy it.
+
+=== Self-hosting
+
+There is a Docker image now that anyone can host themselves.
+The database is selfcontained, but make sure to configure email (optional) and a reverse proxy for HTTPS.
+
+=== Frontend
+
+At my first announcement the frontend was still pretty rough around the edges.
+By now it should be a lot better with proper touch support and generally a lot of nice UI features.
+
+=== Backend
+
+There were no major changes, just some additional HTTP routes and new database columns mostly.
+
+=== Database
+
+Using automated database migrations works wonderfully. No complaints about SQLite.
+
+== Features
+
+I honestly don't want to list everything here, but here are some of the more noticable features.
+
+* UI Dashboard.
+* Smooth experience when joining new spaces (using URL or QR-Code).
+* Drag pointer on timetable to select reservation time.
+* Room overview.
+* Email notifications.
