@@ -6,6 +6,9 @@ Visit https://felixspringer.xyz/homepage/blog/mensamAnnouncement[this blog artic
 
 image::browserCapture.gif[alt="Requesting a desk reservation (Screen Capture)",width=300,float=right]
 
+GitHub Repository:: https://github.com/jumper149/mensam
+Hosted instance:: https://mens.am
+
 
 === Stability
 
