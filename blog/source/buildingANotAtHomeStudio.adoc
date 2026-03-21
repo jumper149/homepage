@@ -1,0 +1,40 @@
+:revdate: 2026-03-21
+= Building a Not-At-Home Studio: Introduction
+
+[.normal]
+Recently I've been making a lot of music and was working from home.
+I'm living in a shared flat and was stuck in my bedroom a lot last year, which definitely was a bit frustrating.
+
+This February I pulled the trigger and I'm now renting a small office to separate living and working.
+
+image::room.jpg[What the room looks like now]
+
+Now I'll write a short series on everything related to moving into this office since it's been quite a bit of work, but I'm also quite proud of the result.
+I absolutely love walking to my office every morning and I can already tell that it has improved my quality of life signaficantly.
+
+== The basic idea
+
+There were already a few criteria to make it a nice office.
+
+* Quiet during the day.
+* Basic infrastructure like power, internet, lighting and heating.
+* A restroom.
+* A small kitchen. (optional)
+
+But I also want to record and write music there!
+
+* No noise complaints from sensitive neighbours.
+* No EMI (would lead to buzzing guitars and audio gear).
+* Acoustically viable room and the ability to add acoustic treatment.
+
+It took some time, but luckily I found a place that's literally just 5 minutes walking distance from my home and surprisingly it checks most of the boxes.
+
+== What to look forward to
+
+I'm planning to write some articles on a few topics.
+
+* Planning acoustic treatment, measuring the results and improving it.
+* Building acoustic panels.
+* Car-Sharing is awesome.
+* Cable management (currently still a mess).
+* Some (audio) gear reviews.
