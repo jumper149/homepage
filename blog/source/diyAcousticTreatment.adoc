@@ -1,0 +1,63 @@
+:revdate: 2026-03-29
+= Building a Not-At-Home Studio: DIY Acoustic Treatment
+
+You can build your own acoustic absorbers for about a third of the price of commercially available ones.
+This is how I did it.
+
+image::frames.jpg[alt="The finished absorber frames"]
+
+I built four 2m×1.2m absorbers, because the Rockwool sheets fit in there without cutting.
+
+I went with beech glued wood boards for the frame and then used smaller spruce frames to add the fabric.
+I used angle brackets to assemble the frames, which looks really nice, because it doesn't expose any screws to the outside.
+
+NOTE: I underestimated the work of building these smaller frames for just the fabric. It looks really cool in my opinion, but I'm not sure if I'd do that again.
+
+image::inProcess.jpg[alt="Beech outside frame, spruce inside frame and angle brackets",width=400,float=right]
+
+The absorbers have a depth of 20cm packing about 0.5m³ of rockwool each.
+
+I am using this depth to actually have an impact on low mid frequencies.
+Measurements showed that I have an improved frequency response down to about 150Hz.
+
+== What I learned in the process
+
+*Beech is awesome*
+
+Beech is a hard wood making drilling very accurate. It's quite a bit more expensive than spruce, but it looks and feels really nice and I'm happy that I left the beech exposed.
+Don't shy away from spending a bit more money on better wood, because it will save you time later on and the resulting frame is a lot more solid and straight than if you were using spruce planks.
+It's a lot of fun to work with this wood.
+
+image::car.jpg[alt="The rental car (It was the longest car available at the time)",width=300,float=right]
+
+*Carsharing is good enough*
+
+I had to go to the hardware a few times and used the car sharing in my city each time.
+Worked out really well.
+
+*Working with wood is fun*
+
+It was an enjoyable process overall and it just feels awesome to build stuff on your own. Especially if you can look at the result every day.
+
+
+*You don't need a table saw*
+
+Just plan ahead and ask the hardware store to cut the wood for you.
+They did a good job with the measurements and everything fit perfectly.
+
+*Get a good stapler to secure the fabric*
+
+You need a lot of staples and it will quickly get tiring to use a shitty stapler.
+
+== Additional acoustic treatment
+
+With the four DIY broadband absorbers I have two bass traps and two absorbers for first reflections.
+I also added two ceiling clouds that I ordered from Thomann, because I was worried that any DIY solution would be too heavy and I don't want the clouds to come crashing down on me.
+
+image::clouds.jpg[alt="Pulleys on the wall hold up the clouds",width=300,float=right]
+
+Because the ceiling is so high I decided to mount the clouds high up on the walls using pulleys.
+
+This setup makes the room usable. I will need to cover a bit more surface to completely get rid of high frequency echos, but that shouldn't require the 20cm absorber depth (5cm to 10cm should be enough).
+
+For low bass frequencies I've been thinking about getting an active bass trap, but they are expensive and the bass response at the time of writing is actually not that bad.
