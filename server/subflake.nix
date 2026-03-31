@@ -1,4 +1,4 @@
-{ self, nixpkgs }: rec {
+{ self, nixpkgs, weeder-nix }: rec {
 
   packages.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
@@ -102,6 +102,14 @@
         haskellPackages.graphmod
         pkgs.graphviz
       ];
+    };
+
+  checks.x86_64-linux.weeder =
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
+    weeder-nix.lib.x86_64-linux.makeWeederCheck {
+      haskellPackages = haskellPackages.extend (self: super: { homepage = packages.x86_64-linux.default; });
+      packages = [ "homepage" ];
+      weederToml = ./weeder.toml;
     };
 
 }

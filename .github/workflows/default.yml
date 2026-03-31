@@ -2,8 +2,54 @@ name: "Default"
 on:
   push:
 jobs:
+  check-matrix:
+    name: "Matrix to Check Flake"
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+    - name: "Set up GitHub Actions"
+      uses: actions/checkout@v6
+    - name: "Set up Nix"
+      uses: cachix/install-nix-action@v31
+    - name: "Set up Cachix"
+      uses: cachix/cachix-action@v17
+      with:
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+        name: jumper149-homepage
+    - id: set-matrix
+      name: "Generate Nix Matrix"
+      run: |
+        set -Eeu
+        matrix="$(nix eval --json '.#githubActions.matrix')"
+        echo "matrix=$matrix" >> "$GITHUB_OUTPUT"
+  check:
+    name: "Check Flake"
+    needs: check-matrix
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Set up GitHub Actions"
+      uses: actions/checkout@v6
+    - name: "Set up Nix"
+      uses: cachix/install-nix-action@v31
+      with:
+        extra_nix_config: sandbox = relaxed
+    - name: "Set up Cachix"
+      uses: cachix/cachix-action@v17
+      with:
+        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+        name: jumper149-homepage
+    - name: "Check"
+      run: nix build ".#${{ matrix.attr }}" --print-build-logs
+      if: ${{ matrix.sandbox }}
+    - name: "Check (without sandbox)"
+      run: nix build ".#${{ matrix.attr }}" --print-build-logs --option sandbox false
+      if: ${{ ! matrix.sandbox }}
+    strategy:
+      fail-fast: false
+      matrix: ${{fromJSON(needs.check-matrix.outputs.matrix)}}
   build:
-    name: "Build"
+    name: "Build final package"
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -11,61 +57,17 @@ jobs:
           [ nixpublic
           , development
           ]
-        output:
-          [ packages.x86_64-linux.default
-          , devShells.x86_64-linux.default
-          , subflakes.server.packages.x86_64-linux.default
-          , subflakes.blog.packages.x86_64-linux.default
-          , subflakes.files.packages.x86_64-linux.default
-          , subflakes.static.packages.x86_64-linux.default
-          , subflakes.config.packages.x86_64-linux.default
-          ]
     steps:
     - name: "Set up GitHub Actions"
-      uses: actions/checkout@v3.3.0
+      uses: actions/checkout@v6
     - name: "Set up Nix"
-      uses: cachix/install-nix-action@v20
+      uses: cachix/install-nix-action@v31
     - name: "Set up Cachix"
-      uses: cachix/cachix-action@v12
+      uses: cachix/cachix-action@v17
       with:
-        name: jumper149-homepage
         authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+        name: jumper149-homepage
     - name: "Set deployment"
       run: echo "\"${{ matrix.deployment }}\"" > setup/deployment.json
     - name: "Build"
-      run: nix build --print-build-logs .\#${{ matrix.output }}
-  check:
-    name: "Check Flake"
-    runs-on: ubuntu-latest
-    steps:
-    - name: "Set up GitHub Actions"
-      uses: actions/checkout@v3.3.0
-    - name: "Set up Nix"
-      uses: cachix/install-nix-action@v20
-    - name: "Set up Cachix"
-      uses: cachix/cachix-action@v12
-      with:
-        name: jumper149-homepage
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - name: "Check"
-      run: nix flake check --keep-going --print-build-logs
-  # TODO: Run weeder using `nix flake check` instead.
-  weeder:
-    name: "Detect dead Haskell code"
-    runs-on: ubuntu-latest
-    steps:
-    - name: "Set up GitHub Actions"
-      uses: actions/checkout@v3.3.0
-    - name: "Set up Nix"
-      uses: cachix/install-nix-action@v20
-    - name: "Set up Cachix"
-      uses: cachix/cachix-action@v12
-      with:
-        name: jumper149-homepage
-        authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
-    - name: "Prepare weeder"
-      run: nix develop "..#subflakes.server.devShells.x86_64-linux.default" --command cabal build all
-      working-directory: ./server
-    - name: "Run weeder"
-      run: nix develop "..#subflakes.server.devShells.x86_64-linux.default" --command weeder
-      working-directory: ./server
+      run: nix build --print-build-logs .\#packages.x86_64-linux.default

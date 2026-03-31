@@ -21,7 +21,6 @@ import Data.Maybe
 import Servant
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes
-import Text.Blaze.Html5.Extra
 
 handler ::
   (MonadConfigured m, MonadLogger m) =>

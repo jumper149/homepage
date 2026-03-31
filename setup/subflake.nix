@@ -1,13 +1,14 @@
 { self }: rec {
 
   overlays.default = final: prev: {
-    haskellPackages = prev.haskell.packages.ghc925.extend (haskellFinal: haskellPrev: { # TODO: Using GHC 9.2.5.
-      graphmod = (haskellPrev.graphmod.overrideAttrs (oldAttrs: {
+    haskellPackages = prev.haskellPackages.extend (haskellFinal: haskellPrev: {
+      wai-control = (haskellPrev.wai-control.overrideAttrs (oldAttrs: {
+        meta.broken = false;
         src = prev.fetchFromGitHub {
-          owner = "yav";
-          repo = "graphmod";
-          rev = "ad3f136c6bcebd2b7e6fa1d5a1006436008acd3d";
-          sha256 = "sha256-2JESSCR6AedyPFo0GlQaSa9vKzzoHIJ6uxZ8IQVjYdA=";
+          owner = "jumper149";
+          repo = "wai-control";
+          rev = "829c252c284e1153fc60b8a4358185d9d932959b";
+          sha256 = "sha256-2lFwVyeF45x1PO1VKjbJJdR3Q6QTArcqxgURjT8Khmc=";
         };
       }));
     });

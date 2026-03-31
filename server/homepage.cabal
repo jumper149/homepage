@@ -26,6 +26,7 @@ common language
     -Wno-missed-specialisations
     -Wno-missing-export-lists
     -Wno-missing-import-lists
+    -Wno-missing-role-annotations
     -Wno-missing-safe-haskell-mode
     -Wno-unsafe
     -Wno-unticked-promoted-constructors
@@ -43,7 +44,6 @@ common dependencies
     , aeson
     , base
     , blaze-html
-    , blaze-markup
     , bytestring
     , containers
     , deriving-aeson
@@ -124,10 +124,8 @@ library
     , Homepage.Server.Route.Type
     , Homepage.Server.Tab
   other-modules:
-    , Control.Monad.IO.Unlift.OrphanInstances
     , Control.Monad.Logger.OrphanInstances
     , System.Posix.Signals.Patterns
-    , Text.Blaze.Html5.Extra
   hs-source-dirs: source/library
 
 executable homepage-test-application

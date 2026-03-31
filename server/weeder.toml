@@ -1,0 +1,13 @@
+roots = [
+  "^Main.main$",
+  "^Homepage.main$",
+]
+
+type-class-roots = true
+
+root-instances = [
+  { class = "\\.IsString$" },
+  { class = "\\.IsList$" },
+]
+
+unused-types = true

@@ -23,7 +23,6 @@ import Servant.RawM.Server qualified as RawM
 import Servant.Server.Generic
 import Text.Blaze.Html5
 import Text.Blaze.Html5.Attributes qualified as HA
-import Text.Blaze.Html5.Extra
 import WaiAppStatic.Types
 
 routes ::

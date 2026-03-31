@@ -12,11 +12,10 @@ import Homepage.Application.Environment.Acquisition
 import Homepage.Application.Logging
 
 import Control.Monad.Base
-import Control.Monad.Except
 import Control.Monad.IO.Unlift
-import Control.Monad.IO.Unlift.OrphanInstances ()
 import Control.Monad.Logger.CallStack
 import Control.Monad.Logger.OrphanInstances ()
+import Control.Monad.Trans
 import Control.Monad.Trans.Compose.Stack
 import Control.Monad.Trans.Control
 import Control.Monad.Trans.Control.Identity

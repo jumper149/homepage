@@ -8,9 +8,23 @@
       repo = "nixpkgs";
       ref = "nixpkgs-unstable";
     };
+    weeder-nix = {
+      type = "github";
+      owner = "NorfairKing";
+      repo = "weeder-nix";
+      ref = "master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    nix-github-actions = {
+      type = "github";
+      owner = "nix-community";
+      repo = "nix-github-actions";
+      ref = "master";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs }: {
+  outputs = { self, nixpkgs, weeder-nix, nix-github-actions }: {
 
     subflakes =
       let
@@ -18,7 +32,7 @@
           import path (inputs // { self = (if self ? rev then { inherit (self) rev; } else { }) // { subflakes = subflakeInputs; }; });
       in rec {
           setup = importSubflake ./setup/subflake.nix { } { };
-          server = importSubflake ./server/subflake.nix { inherit nixpkgs; } { inherit setup; };
+          server = importSubflake ./server/subflake.nix { inherit nixpkgs weeder-nix; } { inherit setup; };
           blog = importSubflake ./blog/subflake.nix { inherit nixpkgs; } { inherit setup; };
           files = importSubflake ./files/subflake.nix { inherit nixpkgs; } { inherit setup; };
           static = importSubflake ./static/subflake.nix { inherit nixpkgs; } { inherit setup; };
@@ -36,14 +50,15 @@
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
       let
         additionalBuildInputs = [
-          pkgs.haskell.packages.ghc902.nix-tree
-          pkgs.rnix-lsp
+          pkgs.nil
         ];
-        shells = [
-          self.subflakes.server.devShells.x86_64-linux.default
-          self.subflakes.blog.devShells.x86_64-linux.default
-          self.subflakes.static.devShells.x86_64-linux.default
-        ];
+        shells =
+          let
+            hasDevShells = name: value: __elem "devShells" (__attrNames value) && __elem "x86_64-linux" (__attrNames value.devShells);
+            subflakesWithDevShells = lib.filterAttrs hasDevShells self.subflakes;
+            devShellsBySubflake = __mapAttrs (name: value: value.devShells.x86_64-linux) subflakesWithDevShells;
+            devShells = __foldl' (a: b: a ++ b) [ ] (map __attrValues (__attrValues devShellsBySubflake));
+          in devShells;
         fullBuildInputs = __concatMap (x: x.buildInputs) shells;
         fullNativeBuildInputs = __concatMap (x: x.nativeBuildInputs) shells;
         fullShellHook = __concatStringsSep "\n" (map (x: x.shellHook) shells);
@@ -56,16 +71,44 @@
         shellHook = fullShellHook;
       };
 
-    checks.x86_64-linux.subflakes =
+    checks.x86_64-linux =
       with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
-      pkgs.mkShell {
-        packages =
-          let
-            hasChecks = name: value: __elem "checks" (__attrNames value) && __elem "x86_64-linux" (__attrNames value.checks);
-            checkableSubflakes = lib.filterAttrs hasChecks self.subflakes;
-            checksBySubflake = __mapAttrs (name: value: value.checks.x86_64-linux) checkableSubflakes;
-            checks = __foldl' (a: b: a ++ b) [ ] (map __attrValues (__attrValues checksBySubflake));
-          in checks;
+      let
+        hasChecks = name: value: __elem "checks" (__attrNames value) && __elem "x86_64-linux" (__attrNames value.checks);
+        checkableSubflakes = lib.filterAttrs hasChecks self.subflakes;
+        checksBySubflake =
+          __mapAttrs (nameSubflake: valueSubflake:
+            lib.mapAttrs' (nameCheck: valueCheck:
+              lib.nameValuePair
+                ("subflake" + "-" + nameSubflake + "-" + nameCheck)
+                valueCheck
+            ) valueSubflake.checks.x86_64-linux
+          ) checkableSubflakes;
+        checks = __foldl' (a: b: a // b) { } (__attrValues checksBySubflake);
+      in checks;
+
+    githubActions =
+      with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
+      let
+        generated =
+          nix-github-actions.lib.mkGithubMatrix {
+            checks = self.checks;
+          };
+      in {
+        checks = generated.checks;
+        matrix = {
+          include =
+            let
+              isBrokenCheck = matrix: false;
+              removeBrokenChecks = __filter (matrix: ! isBrokenCheck matrix);
+              requiresSandboxFalse = matrix: false;
+              setSandboxField = matrix:
+                if requiresSandboxFalse matrix
+                then matrix // { sandbox = false; }
+                else matrix // { sandbox = true; };
+              setSandboxFields = map setSandboxField;
+            in setSandboxFields (removeBrokenChecks generated.matrix.include);
+        };
       };
 
   };
