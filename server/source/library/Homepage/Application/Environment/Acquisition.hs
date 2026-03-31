@@ -70,7 +70,7 @@ lookupEnvironmentVariable singEnvVar = do
   envVarDefaultValue = envVarDefault singEnvVar
 
 checkUnconsumedEnvironment ::
-  MonadLogger m =>
+  (MonadLogger m) =>
   [(String, String)] ->
   m ()
 checkUnconsumedEnvironment env = do

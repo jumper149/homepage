@@ -10,10 +10,10 @@ import Data.Singletons
 import GHC.TypeLits
 
 type MonadEnvironment :: (Type -> Type) -> Constraint
-class Monad m => MonadEnvironment m where
+class (Monad m) => MonadEnvironment m where
   environmentVariable ::
     forall envVar.
-    SingI envVar =>
+    (SingI envVar) =>
     ProxyEnvVarName (EnvVarName envVar) ->
     m (EnvVarValue envVar)
 

@@ -20,13 +20,13 @@ newtype ConfiguredT m a = ConfiguredT {unConfiguredT :: ReaderT Configuration m 
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
-instance Monad m => MonadConfigured (ConfiguredT m) where
+instance (Monad m) => MonadConfigured (ConfiguredT m) where
   configuration = ConfiguredT ask
 
 deriving via
   ConfiguredT ((t2 :: (Type -> Type) -> Type -> Type) m)
   instance
-    Monad (t2 m) => MonadConfigured (ComposeT ConfiguredT t2 m)
+    (Monad (t2 m)) => MonadConfigured (ComposeT ConfiguredT t2 m)
 
 runConfiguredT :: ConfiguredT m a -> Configuration -> m a
 runConfiguredT = runReaderT . unConfiguredT

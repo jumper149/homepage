@@ -21,7 +21,7 @@ newtype TimedLoggingT m a = TimedLoggingT {unTimedLoggingT :: LoggingT m a}
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
-instance MonadIO m => MonadLogger (TimedLoggingT m) where
+instance (MonadIO m) => MonadLogger (TimedLoggingT m) where
   monadLoggerLog loc logSource logLevel logStr = do
     time <- lift $ liftIO T.getCurrentTime
     let timeInfo = T.iso8601Show time
@@ -31,7 +31,7 @@ instance MonadIO m => MonadLogger (TimedLoggingT m) where
 deriving via
   TimedLoggingT ((t2 :: (Type -> Type) -> Type -> Type) m)
   instance
-    MonadIO (t2 m) => MonadLogger (ComposeT TimedLoggingT t2 m)
+    (MonadIO (t2 m)) => MonadLogger (ComposeT TimedLoggingT t2 m)
 
 runTimedLoggingT ::
   (MonadBaseControl IO m, MonadIO m) =>
@@ -51,7 +51,7 @@ runAppTimedLoggingT tma = do
   runTimedLoggingT maybeLogFile logLevel tma
 
 logLine ::
-  MonadLogger m =>
+  (MonadLogger m) =>
   LogLine ->
   m ()
 logLine (loc, logSource, logLevel, logStr) = monadLoggerLog loc logSource logLevel logStr

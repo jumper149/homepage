@@ -45,7 +45,7 @@ handler = do
           respond . WithStatus @200 $ AtomFeed text
 
 atomFeed ::
-  MonadConfigured m =>
+  (MonadConfigured m) =>
   [Atom.Entry] ->
   m Atom.Feed
 atomFeed entries = do
@@ -177,7 +177,7 @@ atomEntry blogId BlogEntry {blogTitle, blogTimestamp} = do
           }
 
 atomPerson ::
-  MonadConfigured m =>
+  (MonadConfigured m) =>
   m Atom.Person
 atomPerson = do
   baseUrl <- configBaseUrl <$> configuration

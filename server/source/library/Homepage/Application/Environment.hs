@@ -19,10 +19,10 @@ newtype EnvironmentT m a = EnvironmentT {unEnvironmentT :: ReaderT Environment m
   deriving newtype (Applicative, Functor, Monad)
   deriving newtype (MonadTrans, MonadTransControl, MonadTransControlIdentity)
 
-instance Monad m => MonadEnvironment (EnvironmentT m) where
+instance (Monad m) => MonadEnvironment (EnvironmentT m) where
   environmentVariable ::
     forall envVar.
-    SingI envVar =>
+    (SingI envVar) =>
     ProxyEnvVarName (EnvVarName envVar) ->
     EnvironmentT m (EnvVarValue envVar)
   environmentVariable _ = do
@@ -33,7 +33,7 @@ instance Monad m => MonadEnvironment (EnvironmentT m) where
 deriving via
   EnvironmentT ((t2 :: (Type -> Type) -> Type -> Type) m)
   instance
-    Monad (t2 m) => MonadEnvironment (ComposeT EnvironmentT t2 m)
+    (Monad (t2 m)) => MonadEnvironment (ComposeT EnvironmentT t2 m)
 
 runEnvironmentT :: Environment -> EnvironmentT m a -> m a
 runEnvironmentT env tma = runReaderT (unEnvironmentT tma) env

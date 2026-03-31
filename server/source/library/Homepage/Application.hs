@@ -53,7 +53,7 @@ runApplicationT app = do
         RunNilT
           :..> runEnvironmentT env
           :..> runAppTimedLoggingT
-          . (traverse_ logLine preLog >>)
+            . (traverse_ logLine preLog >>)
           :..> runAppConfiguredT
           :..> runAppBlogT
 

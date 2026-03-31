@@ -24,7 +24,7 @@ application404 _req rsp = do
       renderHtml html404'
 
 html404 ::
-  MonadConfigured m =>
+  (MonadConfigured m) =>
   m Html
 html404 = do
   baseUrl <- configBaseUrl <$> configuration

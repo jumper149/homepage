@@ -7,7 +7,7 @@ import Homepage.Server.Route.Type qualified
 import Servant
 import Servant.Server.Generic
 
-routes :: Applicative m => Routes (AsServerT m)
+routes :: (Applicative m) => Routes (AsServerT m)
 routes =
   Routes
     { routeFeed = pure $ headers blogFeedLink

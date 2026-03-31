@@ -33,7 +33,7 @@ type API = ToServantApi Routes
 type WrappedAPI :: Type
 type WrappedAPI = RequestHash :> API
 
-hoistServerRunHandlerT :: MonadLogger m => ServerT API (HandlerT m) -> ServerT WrappedAPI m
+hoistServerRunHandlerT :: (MonadLogger m) => ServerT API (HandlerT m) -> ServerT WrappedAPI m
 hoistServerRunHandlerT handler randomHash = hoistServer (Proxy @API) (runHandlerT randomHash) handler
 
 server :: (MonadBlog m, MonadConfigured m, MonadLogger m, MonadUnliftIO m) => m ()
