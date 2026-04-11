@@ -1,0 +1,23 @@
+:revdate: 2026-04-11
+= The sad state of Android
+
+https://source.android.com/[AOSP (Android Open Source Project)] lies at the heart of the mobile operating system's ecosystem.
+Keeping the ecosystem free and open doesn't seem to be Google's goal, unfortunately.
+
+For an extensive overview of the current topics, read through https://keepandroidopen.org/[keepandroidopen.org].
+
+NOTE: This post is supposed to raise awareness.
+
+== My coping mechanism
+
+I'm not willing to give up my digital liberty just yet.
+I've been using https://calyxos.org/[CalyxOS] for the past few years on a Pixel 4a and Pixel 8.
+I'm also using various open source Android apps such as https://newpipe.net/[NewPipe], https://getaegis.app/[Aegis Authenticator], https://github.com/thunderbird/thunderbird-android[K-9Mail/Thunderbird], https://github.com/foobnix/LibreraReader[Librera] and many more.
+CalyxOS is not actively maintained right now, so I had to switch.
+
+Now I'm running https://grapheneos.org/[GrapheneOS] on a Pixel 9 Pro and I'm also quite happy with it.
+
+Using a non-vendor operating system seems to be the only certain way to avoid Google's attempt to disallow unsigned third party apps in the future.
+
+TIP: Please consider giving the free software a try and spread awareness of what's happening.
+I have not encountered any real issues aside from the extra time you have to spend to take control of your phone.
