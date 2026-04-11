@@ -2,6 +2,7 @@ SOURCE = source
 BUILD = build
 
 ARTICLES = $(patsubst $(SOURCE)/%.adoc, %, $(wildcard $(SOURCE)/*.adoc))
+BUILT_ADOC_ARTICLES = $(patsubst %, $(BUILD)/%.adoc, $(ARTICLES))
 BUILT_HTML_ARTICLES = $(patsubst %, $(BUILD)/%.html, $(ARTICLES))
 BUILT_PDF_ARTICLES = $(patsubst %, $(BUILD)/%.pdf, $(ARTICLES))
 
@@ -40,7 +41,7 @@ ASCIIDOCTOR_HTML_FLAGS = $\
 	--attribute imagesdir="$(BASEURL)/blog/raw/$*" $\
 	--backend html5 $\
 	--attribute nofooter $\
-	--attribute webfonts!
+	--attribute stylesheet="html-stylesheet.css"
 
 ASCIIDOCTOR_PDF_FLAGS = $\
 	--out-file "$(BUILD)/$*.pdf" $\
@@ -48,17 +49,21 @@ ASCIIDOCTOR_PDF_FLAGS = $\
 	--backend pdf $\
 	--attribute pdf-theme="pdf-theme.yml"
 
+$(BUILT_ADOC_ARTICLES): $(BUILD)/%.adoc: $(SOURCE)/%.adoc $(BUILD)
+	cp "$<" "$(BUILD)/$*.adoc"
+
 # TODO: This has an optional pre-requisite `$(SOURCE)/%` producing the optional target `$(BUILD)/%`.
-$(BUILT_HTML_ARTICLES): $(BUILD)/%.html: $(SOURCE)/%.adoc $(BUILD)
+$(BUILT_HTML_ARTICLES): $(BUILD)/%.html: $(BUILD)/%.adoc
 	asciidoctor "$<" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_HTML_FLAGS)
 	sed -i 's/^<head>$$/<head>\n<base target="_parent">/' "$(BUILD)/$*.html"
 	if [ -d "$(SOURCE)/$*" ]; then cp --recursive "$(SOURCE)/$*" "$(BUILD)/$*"; fi
 
-$(BUILT_PDF_ARTICLES): $(BUILD)/%.pdf: $(SOURCE)/%.adoc $(BUILD)
+$(BUILT_PDF_ARTICLES): $(BUILD)/%.pdf: $(BUILD)/%.adoc
 	asciidoctor-pdf "$<" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_PDF_FLAGS)
 
 $(BUILD):
-	mkdir -p $(BUILD)
+	mkdir -p "$(BUILD)"
+	cp "custom-stylesheet/custom-stylesheet.css" "$(BUILD)/html-stylesheet.css"
 
 .PHONY: clean
 clean:
