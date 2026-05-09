@@ -1,0 +1,139 @@
+:revdate: 2023-01-14
+= Understanding Even and Odd Order Saturation
+
+Saturation is a tool to make music louder and wider and it can be used to either glue instruments into the mix or let them stick out.
+What kind of saturation to use is often overlooked and producers sometimes think of analog gear as magic.
+
+== What is Saturation?
+
+Saturation adds frequencies of the https://en.wikipedia.org/wiki/Harmonic_series_(music)[harmonic series] to your signal.
+It is a form of distortion.
+So for any frequency in the signal you add integer multiples of that frequency to the signal.
+The tonal character or timbre of the saturation is determined by the level of each overtone that is generated.
+
+Even-Order Saturation:: produces even multiples of the fundamental frequency (2×, 4×, 6×, ...)
+Odd-Order Saturation:: produces odd multiples of the fundamental frequency (3×, 5×, 7×, ...)
+
+NOTE: We also use words like "Distortion", "Gain" and "Grit" to describe the sound character of any effect that adds saturation.
+
+Most analog devices generate both even _and_ odd order harmonics, but depending on their design they usually lean one way or another.
+
+IMPORTANT: The distinction of even and odd order harmonics is not enough to fully capture what a saturation effect is doing, but rather it is a way to categorize two different families of timbres.
+
+To be more accurate you would have to look at the level of each multiple of the fundamental frequency.
+
+An even simpler approach is to look at just the 2nd and 3rd harmonic.
+They are representative of the other even and odd order harmonics respectively.
+
+=== Even Order Harmonics
+
+The sound of even order harmonics is usually described as natural, sweet, smooth, consonant, musical and harmonious.
+
+[[second-harmonic]]
+.Adding the 2nd Harmonic
+[.invert-when-dark]
+image::2ndHarmonic.svg[Adding the 2nd Harmonic]
+
+Even order harmonics are often created using _asymmetrical clipping_.
+That means the positive and negative halves of a waveform are shaped differently.
+
+NOTE: For playback <<second-harmonic>> means your speaker will push forwards fast and pull backwards slowly. Notice how the upwards slope rises fast, while it falls back down more slowly.
+
+=== Odd Order Harmonics
+
+The sound of odd order harmonics is usually described as aggressive, harsh, gritty and dissonant.
+
+[[third-harmonic]]
+.Adding the 3rd Harmonic
+[.invert-when-dark]
+image::3rdHarmonic.svg[Adding the 3rd Harmonic]
+
+You can see that the waveform becomes more square-ish when <<third-harmonic>>.
+In general, odd order harmonics will make the zero-crossings very steep and keep the speaker further away from its resting position most of the time.
+
+Due to that waveform odd order harmonics are also better at making your music loud while keeping the peak amplitude low.
+Square-ish waveforms actually increase https://en.wikipedia.org/wiki/Audio_power#Continuous_power_and_RMS_power[RMS] power.
+
+== Analog electronic circuits
+
+It's quite fascinating that even and odd order harmonics are fundamentally dividing opinions on what's the best gear.
+
+=== The simplest amplifier topology
+
+The simplest amplifier to build is just a single gain stage like a transistor or tube.
+
+TIP: You can often identify this with the names "Class A" or "Single-Ended".
+
+It's important to understand that a gain stage just multiplies any voltage with a factor called _gain_, but the gain stage cannot output negative voltages.
+We can just add a DC offset voltage to the signal to solve this problem -- the _bias_.
+We choose this bias, so that our signal never goes below zero.
+The signal is now oscillating while staying positive all the time.
+
+The other limitation of analog gain stages is that they have limited headroom.
+When the input voltage gets too high the output gets compressed.
+
+[[class-a]]
+.Clipping a 40Hz signal in a Class A topology
+[.invert-when-dark]
+image::classA.svg[Clipping a 40Hz signal in a Class A topology]
+
+When <<class-a>>, you are prominently generating even order harmonics.
+
+=== The other classic amplifier topology
+
+TIP: There are a few variants but the most common names include "Class B", "Class AB", "Push-Pull", "Double-Ended" and "Discrete".
+
+[[class-ab]]
+.Clipping a 40Hz signal in a Class AB topology
+[.invert-when-dark]
+image::classAB.svg[Clipping a 40Hz signal in a Class AB topology]
+
+In a class AB topology the positive and negative half of the waveform are split apart using a _phase splitter_ and amplified individually.
+After the amplification a push-pull design is the most common way to turn this back into an AC signal.
+This is superior to class A in the sense, that it can run more efficiently.
+
+Due to the identical treatment of positive and negative, the result has mostly odd order harmonics. In a perfect world without non-linear components the even order harmonics would actually fully cancel each other out.
+
+=== Comparing Class A and Class AB
+
+When <<class-a-vs-ab>> you will notice that the two outputs are not aligned in the linear region, because after galvanic isolation the waveforms lose their DC bias and the class A signal gets shifted to account for the asymmetric peaks.
+Despite this shift, the class A design clearly has less headroom for the positive amplitude peaks.
+
+[[class-a-vs-ab]]
+.Comparing the output of class A and class AB
+[.invert-when-dark]
+image::classAvsAB.svg[Comparing the output of class A and class AB]
+
+=== The prominent examples
+
+I was a bit handwavy with the names until now and I'm sure that some readers will complain, but many preamps and poweramps are fundamentally based around one of these designs.
+Some also combine multiple gain stages, but they can usually still be categorized using even and odd order harmonics.
+
+NOTE: Ignoring Class D/PWM amplification.
+
+The legendary microphone preamps that show the difference quite well are:
+
+Neve 1073:: to add even order harmonics.
+API 512/312:: to add odd order harmonics.
+
+== Choosing the best tool for the job
+
+This decision always depends on the mix and arrangement, but there are some guidelines.
+
+* To glue multiple tracks together, use saturation on the bus/master.
+* To make an individual track stick out of the mix, apply saturation on the track.
+* When you have two tracks with similar timbre, but you want to separate them in the mix, you can apply even order saturation to one and odd order saturation to the other one. (This is easier during tracking)
+* The adjectives used to describe even and odd order saturation still apply.
+  ** Even order harmonics: sweet, smooth, consonant, musical, harmonious
+  ** Odd order harmonics: aggressive, harsh, gritty and dissonant
+* Use odd order saturation for a bit of compression to achieve maximum loudness.
+* Use even order saturation if the mix feels sparse.
+* Odd order saturation usually works well on bass guitars when they play the same as the rhythm guitar. The 2nd harmonic would coincide with the fundamental frequency of the guitar, so it makes sense to put emphasis on the odd order harmonics of the bass.
+
+I'm interested in your opinion on my view of saturation. Let me know!
+
+=== A short note on real world physics
+
+I skimmed over the fact that real world gain stages are non-linear depending on level, current, temperature, frequency and time.
+This is where the real beauty in the sound lies.
+This blog is an attempt to filter out the part that is not magic.
