@@ -51,12 +51,12 @@ ASCIIDOCTOR_PDF_FLAGS = $\
 
 $(BUILT_ADOC_ARTICLES): $(BUILD)/%.adoc: $(SOURCE)/%.adoc $(BUILD)
 	cp "$<" "$(BUILD)/$*.adoc"
+	if [ -d "$(SOURCE)/$*" ]; then cp --recursive "$(SOURCE)/$*" "$(BUILD)/$*"; fi
 
 # TODO: This has an optional pre-requisite `$(SOURCE)/%` producing the optional target `$(BUILD)/%`.
 $(BUILT_HTML_ARTICLES): $(BUILD)/%.html: $(BUILD)/%.adoc
 	asciidoctor "$<" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_HTML_FLAGS)
 	sed -i 's/^<head>$$/<head>\n<base target="_parent">/' "$(BUILD)/$*.html"
-	if [ -d "$(SOURCE)/$*" ]; then cp --recursive "$(SOURCE)/$*" "$(BUILD)/$*"; fi
 
 $(BUILT_PDF_ARTICLES): $(BUILD)/%.pdf: $(BUILD)/%.adoc
 	asciidoctor-pdf "$<" $(ASCIIDOCTOR_FLAGS) $(ASCIIDOCTOR_PDF_FLAGS)
