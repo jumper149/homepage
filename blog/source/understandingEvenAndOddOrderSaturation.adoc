@@ -1,4 +1,4 @@
-:revdate: 2023-01-14
+:revdate: 2026-05-10
 = Understanding Even and Odd Order Saturation
 
 Saturation is a tool to make music louder and wider and it can be used to either glue instruments into the mix or let them stick out.
