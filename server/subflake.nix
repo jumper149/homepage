@@ -1,12 +1,15 @@
 { self, nixpkgs, weeder-nix }: rec {
 
-  packages.x86_64-linux.default =
+  packages.x86_64-linux.default = packages.x86_64-linux.staticExecutables;
+
+  packages.x86_64-linux.staticExecutables =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
-    let
-      source = nix-gitignore.gitignoreSource [] ./.;
-      package = (haskellPackages.callCabal2nixWithOptions "homepage" source "-fcabal2nix" {});
-      executables = haskell.lib.justStaticExecutables package;
-    in executables;
+    haskell.lib.justStaticExecutables packages.x86_64-linux.package;
+
+  packages.x86_64-linux.package =
+    with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
+    let source = nix-gitignore.gitignoreSource [] ./.;
+    in haskellPackages.callCabal2nixWithOptions "homepage" source "-fcabal2nix" {};
 
   devShells.x86_64-linux.default =
     with import nixpkgs { system = "x86_64-linux"; overlays = [ self.subflakes.setup.overlays.default ]; };
