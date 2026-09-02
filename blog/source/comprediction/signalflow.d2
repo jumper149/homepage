@@ -1,0 +1,30 @@
+direction: right
+
+input -> compressor.sidechain
+input -> delay -> compressor.audio
+
+compressor -> output
+
+input: {
+  label: Source
+}
+
+delay: {
+  label: Delay
+}
+
+compressor: {
+  label: Compressor
+
+  sidechain: {
+    label: "Sidechain Input"
+  }
+
+  audio: {
+    label: "Audio Input"
+  }
+}
+
+output: {
+  label: Compressor
+}

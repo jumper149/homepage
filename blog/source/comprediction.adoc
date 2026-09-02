@@ -1,0 +1,46 @@
+:revdate: 2026-09-02
+= Comprediction
+
+Well, you might have heard of lookahead compression, but what if you go even further?
+
+The basic idea is to not only perform the attack of a compressor preemptively, but also release already before the transient happens.
+This creates a pumping effect, that happens _before_ the transient instead of after it.
+
+This can easily be achieved with a sidechain compressor.
+You just use the same audio signal for both the main input and the sidechain input, but delay the main input by a few milliseconds relative to the sidechain signal.
+I was able to get some good results using ReaComp:
+
+* 100ms main signal delay relative to sidechain
+* 50ms attack
+* 25ms release
+* 4:1 ratio
+* 7dB knee
+* threshold adjusted for approximately 3 dB of gain reduction
+
+The important part is that the lookahead is long enough, so that the compressor attacks and releases again _before_ the transient actually arrives.
+
+====
+Here is an example of a mildly processed drum bus with and without the lookahead comprediction.
+
+.Raw
+audio::raw.mp3[]
+
+.Compredicted
+audio::compredicted.mp3[]
+====
+
+NOTE: This is by no means anything new. I was able to find it mentioned in an old manual of the dbx 166.
+
+.Anticipatory compression
+[quote,dbx,dbx Model 166 Professional Dynamics Processor]
+____
+If you feed the program directly into the sidechain and send the audio signal through a delay before the 166 audio input, the 166 can "anticipate" the need for gain change.
+With experimentation, the effect can become that of "zero" attack time at a given frequency.
+Additional delay beyond this "zero" time will then cause the compressor to finish reducing the gain before the leading edge of the loud passage even enters the 166, which will cause the program material preceding the loud passage to be suppressed.
+The 166 will then begin to recover from compression (it will release, in other words) before the loud passage has dropped back down toward the set threshold.
+This will cause the output level to surge as the note(s) should be decaying.
+Such a special effect sounds similar to the dynamic-envelope inversion you be familiar with from reverse tape playback.
+See diagram.
+[.invert-when-dark]
+image::signalflow.svg[]
+____
